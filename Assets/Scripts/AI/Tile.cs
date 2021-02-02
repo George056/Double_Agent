@@ -68,6 +68,15 @@ public class Tile : MonoBehaviour
         }
     }
 
+    void SetColor(Color c)
+    {
+        if (__color == Color.gray) __color = c;
+    }
+    void SetNodeCap(short n)
+    {
+        if (__max_nodes == 0) __max_nodes = n;
+    }
+
     Owner IsCaptured()
     {
         if(__sides[0] == __sides[1] && __sides[0] == __sides[2] && __sides[0] == __sides[3] && __sides[0] != Owner.Nil)

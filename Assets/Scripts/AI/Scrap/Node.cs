@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Color
-{
-    red,
-    blue,
-    yellow,
-    green,
-    gray   //this is used to denote a depleted square
-}
+//public enum Color
+//{
+//    red,
+//    blue,
+//    yellow,
+//    green,
+//    gray   //this is used to denote a depleted square
+//}
 
-public enum Owner
-{
-    US,
-    USSR,
-    Nil
-}
+//public enum Owner
+//{
+//    US,
+//    USSR,
+//    Nil
+//}
 
 public class Node : MonoBehaviour
 {

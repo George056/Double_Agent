@@ -13,12 +13,15 @@ Branches as counted from the top most one and go from left to right and top to b
 
 public class Board : MonoBehaviour
 {
-    List<Node> nodes = new List<Node>(24);
+    /*List<Node> nodes = new List<Node>(24);
     List<Branch> branches = new List<Branch>(36);
     List<short> max_nodes = new List<short>(13);
 
     Board(List<Color> cl, List<short> max_value)
     {
 
-    }
+    }*/
+
+
+    List<Tile> __tiles;
 }

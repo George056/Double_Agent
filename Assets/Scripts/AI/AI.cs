@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.MLAgents;
 
 public enum Difficulty
 {
@@ -16,9 +17,13 @@ public enum Resource
     green
 }
 
-public class AI : MonoBehaviour
+/// <summary>
+/// This class is used as the AI for the game. 
+/// It is constructed based on the Unity course at: https://learn.unity.com/course/ml-agents-hummingbirds
+/// </summary>
+public class AI : Agent
 {
-    //resources
+    [Tooltip("A list of all AI resources")]
     List<Resource> __resources;
 
     //nodes
@@ -29,12 +34,42 @@ public class AI : MonoBehaviour
     int __ai_score;
     int __human_score;
 
-    AI(Difficulty d, int ai_score, int human_score)
+    [Tooltip("Whether this is in training mode or not")]
+    public bool trainingMode;
+
+    /// <summary>
+    /// This initializes the AI
+    /// </summary>
+    public override void Initialize()
+    {
+
+        //if not in training mode, no max step
+        if (!trainingMode) MaxStep = 0;
+    }
+
+    /// <summary>
+    /// Reset the agent when an episode begins
+    /// </summary>
+    public override void OnEpisodeBegin()
+    {
+        __ai_score = 0;
+        __human_score = 0;
+    }
+
+    private void Start()
     {
         __resources = new List<Resource>();
-        __difficulty = d;
-        __ai_score = ai_score;
-        __human_score = human_score;
+        GetDifficulty();
+        __ai_score = 0;
+        __human_score = 0;
+    }
+
+    /// <summary>
+    /// This finds and sets the difficulty based on the PlayerPref Difficulty
+    /// </summary>
+    void GetDifficulty()
+    {
+        __difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty");
     }
 
     void GetResources(List<Resource> rs)

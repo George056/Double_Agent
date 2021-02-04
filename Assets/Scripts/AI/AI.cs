@@ -30,9 +30,15 @@ public class AI : Agent
 
     //board
 
-    Difficulty __difficulty;
+    [HideInInspector]
+    public Difficulty __difficulty;
+    [HideInInspector]
     int __ai_score;
+    [HideInInspector]
     int __human_score;
+
+    [Tooltip("An integer that says if the AI is orange (0) or purple (1)")]
+    public short __player;
 
     [Tooltip("Whether this is in training mode or not")]
     public bool trainingMode;
@@ -42,7 +48,7 @@ public class AI : Agent
     /// </summary>
     public override void Initialize()
     {
-
+        Start();
         //if not in training mode, no max step
         if (!trainingMode) MaxStep = 0;
     }
@@ -71,6 +77,16 @@ public class AI : Agent
     {
         __difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty");
     }
+
+    /// <summary>
+    /// This finds and sets the player position based on the PlayerPref AI_Player
+    /// </summary>
+    void GetPlayer()
+    {
+        __player = (short)PlayerPrefs.GetInt("AI_Player");
+    }
+
+    //[nodes, branches, trades] MakeMove()
 
     void GetResources(List<Resource> rs)
     {

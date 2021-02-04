@@ -24,4 +24,24 @@ public class Board : MonoBehaviour
 
 
     List<Tile> __tiles;
+
+    public bool LegalMoveNode(char location)
+    {
+        int _tile_ = (int)location / 4;
+        int _node_ = (int)location % 4;
+
+        Owner owner =__tiles[_tile_].CheckNodeColor(_node_);
+
+        return owner == Owner.Nil;
+    }
+
+    public bool LegalMoveConnector(int location)
+    {
+        int _tile_ = location / 4;
+        int _side_ = location % 4;
+
+        Owner owner = __tiles[_tile_].CheckConnectorColor(_side_);
+
+        return owner == Owner.Nil;
+    }
 }

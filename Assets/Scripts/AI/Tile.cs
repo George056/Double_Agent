@@ -41,9 +41,9 @@ public class Tile : MonoBehaviour
     [Tooltip("The owner of the tile, if not owned it is said to be Nil")]
     private Owner __captured;
     [Tooltip("An array that holds who owns the nodes of this tile")]
-    private Owner[] __nodes = new Owner[4];
+    private Owner[] __nodes = new Owner[4] { Owner.Nil, Owner.Nil, Owner.Nil, Owner.Nil };
     [Tooltip("An array that holds who owns the connectors of this tile")]
-    private Owner[] __sides = new Owner[4];
+    private Owner[] __sides = new Owner[4] { Owner.Nil, Owner.Nil, Owner.Nil, Owner.Nil };
 
     /// <summary>
     /// The default constructor for Tile
@@ -109,6 +109,26 @@ public class Tile : MonoBehaviour
     void SetNodeCap(short n)
     {
         if (__max_nodes == 0) __max_nodes = n;
+    }
+
+    /// <summary>
+    /// Checks to see what color a node is
+    /// </summary>
+    /// <param name="node">The node to be checked</param>
+    /// <returns>The color of the node</returns>
+    public Owner CheckNodeColor(int node)
+    {
+        return __nodes[node];
+    }
+
+    /// <summary>
+    /// Checks to see what color a connector is
+    /// </summary>
+    /// <param name="node">The connector to be checked</param>
+    /// <returns>The color of the connector</returns>
+    public Owner CheckConnectorColor(int node)
+    {
+        return __sides[node];
     }
 
     /// <summary>

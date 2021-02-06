@@ -21,4 +21,10 @@ public class MainMenuScript : MonoBehaviour
     {
         SceneManager.LoadScene("GameScene");
     }
+
+    public void Exit()
+    {
+        Debug.Log("Application Closed");
+        Application.Quit();
+    }
 }

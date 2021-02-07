@@ -97,7 +97,7 @@ public class Tile : MonoBehaviour
     /// Set the color of the tile
     /// </summary>
     /// <param name="c">The color of the tile</param>
-    void SetColor(Color c)
+    public void SetColor(Color c)
     {
         if (__color == Color.gray) __color = c;
     }
@@ -106,7 +106,7 @@ public class Tile : MonoBehaviour
     /// Set the max number of nodes for the tile
     /// </summary>
     /// <param name="n">The max node count</param>
-    void SetNodeCap(short n)
+    public void SetNodeCap(short n)
     {
         if (__max_nodes == 0) __max_nodes = n;
     }
@@ -135,7 +135,7 @@ public class Tile : MonoBehaviour
     /// This allows for a tile to be captured
     /// </summary>
     /// <param name="who">The player that captured the tile(s)</param>
-    void Capture(Owner who)
+    public void Capture(Owner who)
     {
         __captured = who;
     }
@@ -145,7 +145,7 @@ public class Tile : MonoBehaviour
     /// </summary>
     /// <param name="who">The player that placed the node</param>
     /// <param name="position">The location of the node on the tile</param>
-    void CaptureNode(Owner who, short position)
+    public void CaptureNode(Owner who, short position)
     {
         if (position >= 0 && position <= 3)
         {
@@ -161,7 +161,7 @@ public class Tile : MonoBehaviour
     /// </summary>
     /// <param name="who">The player that placed the connector</param>
     /// <param name="position">The location of the connector on the tile</param>
-    void CaptureBranch(Owner who, short position)
+    public void CaptureBranch(Owner who, short position)
     {
         if (position >= 0 && position <= 3)
         {
@@ -172,7 +172,7 @@ public class Tile : MonoBehaviour
     /// <summary>
     /// This checks to see if the tile is depleted and stores the result in the class variable __depleted
     /// </summary>
-    void CheckToSeeIfDepleted()
+    public void CheckToSeeIfDepleted()
     {
         if (__placed_nodes > __max_nodes && __captured == Owner.Nil) __depleted = true;
     }
@@ -182,7 +182,7 @@ public class Tile : MonoBehaviour
     /// </summary>
     /// <param name="who">The player who's node count is being calculated</param>
     /// <returns>The number of nodes the player owns on the tile</returns>
-    short GetNodesOwnedBy(Owner who)
+    public short GetNodesOwnedBy(Owner who)
     {
         short result = 0;
         for(int i = 0; i < __nodes.Length; i++)
@@ -197,7 +197,7 @@ public class Tile : MonoBehaviour
     /// </summary>
     /// <param name="who">The owner we are allocating resources for</param>
     /// <returns>An array of length 4 that has the allocated resources (if not allocated returns gray)</returns>
-    Color[] GiveResources(Owner who)
+    public Color[] GiveResources(Owner who)
     {
         Color[] result = new Color[4] { Color.gray, Color.gray, Color.gray, Color.gray };
 

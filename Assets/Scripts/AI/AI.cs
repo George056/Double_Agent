@@ -49,8 +49,14 @@ public class AI : Agent
     [Tooltip("An integer that says if the AI is orange (0) or purple (1)")]
     public short __player;
 
+    [Tooltip("The piece does the AI play, 0 = US, 1 = USSR")]
+    public Owner __piece_type;
+
     [Tooltip("Whether this is in training mode or not")]
     public bool trainingMode;
+
+    [Tooltip("Used to tell if it is the first move or not")]
+    private bool firstMove;
 
     /// <summary>
     /// This initializes the AI
@@ -141,8 +147,8 @@ public class AI : Agent
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
     {
-        //see if in a draw state
-        if(__board == __old_board && __resources == __last_resources && __player_resources == __player_last_resources)
+        //see if in a draw state, skip if not the first move
+        if(!firstMove && __board == __old_board && __resources == __last_resources && __player_resources == __player_last_resources)
         {
             OfferDraw();
             return;
@@ -183,8 +189,10 @@ public class AI : Agent
     private void Start()
     {
         GetDifficulty();
-        __ai_score = 0;
-        __human_score = 0;
+        GetPlayer();
+        UpdateScores(0, 0);
+        firstMove = __player == 0;
+        //get active board
     }
 
     /// <summary>
@@ -203,6 +211,12 @@ public class AI : Agent
         __player = (short)PlayerPrefs.GetInt("AI_Player");
     }
 
+    void GetPiece()
+    {
+        int temp = PlayerPrefs.GetInt("AI_Piece");
+        __piece_type = (Owner)temp;
+    }
+
     //[nodes, branches, trades] MakeMove()
 
     void GetResources(List<int> rs)
@@ -213,6 +227,11 @@ public class AI : Agent
         }
     }
 
+    /// <summary>
+    /// This updates the stored scores for both players
+    /// </summary>
+    /// <param name="ai">The score of the AI</param>
+    /// <param name="human">The score of the "human"</param>
     void UpdateScores(int ai, int human)
     {
         __ai_score = ai;

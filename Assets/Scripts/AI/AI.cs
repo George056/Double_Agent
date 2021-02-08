@@ -59,6 +59,17 @@ public class AI : Agent
     private bool firstMove;
 
     /// <summary>
+    /// This is the function that is called to tell the AI to make its move
+    /// </summary>
+    /// <param name="currentBoard">The current board</param>
+    /// <param name="AIResources">The resources held by the AI</param>
+    /// <param name="playerResources">The resources held by the player</param>
+    public void AIMove(Board currentBoard, List<int> AIResources, List<int> playerResources)
+    {
+
+    }
+
+    /// <summary>
     /// This initializes the AI
     /// </summary>
     public override void Initialize()

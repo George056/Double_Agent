@@ -19,9 +19,9 @@ public enum Color
 /// </summary>
 public enum Owner
 {
-    US,
-    USSR,
-    Nil
+    US = 0,
+    USSR = 1,
+    Nil = 2
 }
 
 /// <summary>

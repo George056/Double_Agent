@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
+using System;
 
 public enum Difficulty
 {
@@ -25,11 +26,18 @@ public class AI : Agent
 {
     [Tooltip("A list of all AI resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
     List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
+    [Tooltip("A list of all AI resources last turn, used in determining a draw")]
+    List<int> __last_resources = new List<int>(4) { 0, 0, 0, 0 };
 
-    //nodes
+    [Tooltip("A list of all player resources, used in determining a draw")]
+    List<int> __player_resources;
+    [Tooltip("A list of all player resources last turn, used in determining a draw")]
+    List<int> __player_last_resources;
 
-    //board
+    [Tooltip("The current board")]
     Board __board;
+    [Tooltip("The board last turn, used in determining a draw.")]
+    Board __old_board;
 
     [HideInInspector]
     public Difficulty __difficulty;
@@ -133,6 +141,13 @@ public class AI : Agent
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
     {
+        //see if in a draw state
+        if(__board == __old_board && __resources == __last_resources && __player_resources == __player_last_resources)
+        {
+            OfferDraw();
+            return;
+        }
+
         //make a trade first
         if(vectorAction[60] != 0)
         {
@@ -148,6 +163,11 @@ public class AI : Agent
 
         //place connectors
 
+    }
+
+    private void OfferDraw()
+    {
+        
     }
 
     private bool LegalMoveNode(char location)

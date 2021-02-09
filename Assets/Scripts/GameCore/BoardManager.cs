@@ -6,12 +6,25 @@ using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour
 {
+    public enum Owner
+    {
+        US = 0,
+        USSR = 1,
+        Nil = 2
+    }
+
     public int columns = 11;
     public int rows = 11;
     public GameObject node;
     public GameObject hengBranch;
     public GameObject shuBranch;
     public GameObject[] resourceList;
+    public GameObject[] nodes;
+    public GameObject[] hengBranches;
+    public GameObject[] shuBranches;
+
+    
+
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
      */
@@ -30,11 +43,14 @@ public class BoardManager : MonoBehaviour
         {'X', 'X', 'X', 'X', 'N', 'H', 'N', 'X', 'X', 'X', 'X'},
     };
 
-    private int count = 0;
+    private int resourceCount = 0;
+    private int nodeCount = 0;
+    private int branchCount = 0;
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
 
-   
+    
+
     void Shuffle(GameObject[] resourceList)
     {
         int randomNum;
@@ -54,8 +70,8 @@ public class BoardManager : MonoBehaviour
     {
         boardHolder = new GameObject("Board").transform;
         GameObject instance;
-        int hang = -40;
-        int lie = -30;
+        int hang = -27; // -40
+        int lie = -25; // -30
         for (int x = 0; x < columns; x++)
         {
             for (int y = 0; y < rows; y++)
@@ -63,13 +79,14 @@ public class BoardManager : MonoBehaviour
                 switch(Map[x ,y])
                 {
                     case 'R':
-                        instance = Instantiate(resourceList[count], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(resourceList[resourceCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
-                        count++;
+                        resourceCount++;
                         break;
                     case 'N':
-                        instance = Instantiate(node, new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(nodes[nodeCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
+                        nodeCount++;
                         break;
                     case 'H':
                         instance = Instantiate(hengBranch, new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
@@ -92,5 +109,18 @@ public class BoardManager : MonoBehaviour
         gridPositions.Clear();
         Shuffle(resourceList);
         BoardSetUp(GameBoard);
+    }
+
+    public void EnterBuildMode()
+    {
+        // Disable illegal moves
+        GetIllegalMoves();
+
+        // Highlight legal moves
+    }
+
+    void GetIllegalMoves()
+    {
+
     }
 }

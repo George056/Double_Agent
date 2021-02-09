@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7527566640709766211}
   - component: {fileID: 4515621911078546626}
+  - component: {fileID: -7934967951522677294}
   m_Layer: 0
   m_Name: BlueSquare1
   m_TagString: Untagged
@@ -71,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
   m_Color: {r: 0, g: 0.09803922, b: 1, a: 1}
   m_FlipX: 0
@@ -83,6 +84,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-7934967951522677294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5015995889806251867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6330a87da7a288148ad12916633eb26b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeColor: 2
+  numOfResource: 1
 --- !u!1 &6705606474672218702
 GameObject:
   m_ObjectHideFlags: 0

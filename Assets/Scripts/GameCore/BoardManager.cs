@@ -6,12 +6,6 @@ using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour
 {
-    public enum Owner
-    {
-        US = 0,
-        USSR = 1,
-        Nil = 2
-    }
 
     public int columns = 11;
     public int rows = 11;

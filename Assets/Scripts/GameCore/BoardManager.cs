@@ -6,6 +6,11 @@ using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour
 {
+    public struct NodeResource
+    {
+        public ResourceInfo.Color nodeColor;
+        public int nodeNum;
+    }
     public enum Owner
     {
         US = 0,
@@ -22,8 +27,9 @@ public class BoardManager : MonoBehaviour
     public GameObject[] nodes;
     public GameObject[] hengBranches;
     public GameObject[] shuBranches;
+    public NodeResource[] NodeList = new NodeResource[13];
 
-    
+
 
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
@@ -48,8 +54,10 @@ public class BoardManager : MonoBehaviour
     private int branchCount = 0;
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
+    private ResourceInfo.Color tempColor;
+    private int tempNum;
 
-    
+
 
     void Shuffle(GameObject[] resourceList)
     {
@@ -97,18 +105,32 @@ public class BoardManager : MonoBehaviour
                         instance.transform.SetParent(boardHolder);
                         break;
                     default:
-                        Debug.Log(Map[x,y]);
+                        //Debug.Log(Map[x,y]);
                         break;
                 }
             }
         }
     }
-   
+
+    void GetInfoForResource()
+    {
+
+        for (int i = 0; i < resourceList.Length; i++)
+        {
+            tempColor = resourceList[i].GetComponent<ResourceInfo>().nodeColor;
+            tempNum = resourceList[i].GetComponent<ResourceInfo>().numOfResource;
+            NodeList[i].nodeColor = tempColor;
+            NodeList[i].nodeNum = tempNum;
+        }
+    }
     public void SetupScene()
     {
         gridPositions.Clear();
         Shuffle(resourceList);
+        GetInfoForResource();
         BoardSetUp(GameBoard);
+        Debug.Log(NodeList[3].nodeColor);
+        Debug.Log(NodeList[3].nodeNum);
     }
 
     public void EnterBuildMode()

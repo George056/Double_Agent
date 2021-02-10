@@ -111,6 +111,17 @@ public class BoardManager : MonoBehaviour
         GetIllegalMoves();
 
         // Highlight legal moves
+        foreach(GameObject node in nodes)
+        {
+            // if not owned by anyone, highlight as possible move
+            if (node.GetComponent<NodeInfo>().nodeOwner == NodeInfo.Owner.Nil)
+            {
+                Debug.Log("Unclaimed Node");
+            }
+        }
+
+
+
     }
 
     void GetIllegalMoves()

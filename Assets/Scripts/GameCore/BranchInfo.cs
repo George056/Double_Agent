@@ -11,5 +11,6 @@ public class BranchInfo : MonoBehaviour
         Nil = 2
     }
 
+    public string id;
     public Owner nodeOwner;
 }

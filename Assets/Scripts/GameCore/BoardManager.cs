@@ -39,7 +39,8 @@ public class BoardManager : MonoBehaviour
 
     private int resourceCount = 0;
     private int nodeCount = 0;
-    private int branchCount = 0;
+    private int hengBranchCount = 0;
+    private int shuBranchCount = 0;
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
 
@@ -83,12 +84,14 @@ public class BoardManager : MonoBehaviour
                         nodeCount++;
                         break;
                     case 'H':
-                        instance = Instantiate(hengBranch, new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(shuBranches[hengBranchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
+                        hengBranchCount++;
                         break;
                     case 'S':
-                        instance = Instantiate(shuBranch, new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(hengBranches[shuBranchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
+                        shuBranchCount++;
                         break;
                     default:
                         Debug.Log(Map[x,y]);

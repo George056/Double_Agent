@@ -117,4 +117,83 @@ public class BoardManager : MonoBehaviour
     {
 
     }
+
+    void FirstTurnSequence()
+    {
+        Player1.embassy = 2;
+        Player1.commLine = 2;
+        Player2.embassy = 2;
+        Player2.commLine = 2;
+        Player1.MakeFirstMove();
+        Player2.MakeFirstMove();
+        Player2.MakeFirstMove();
+        Player1.MakeFirstMove();
+    }
+
+    void MakeFirstMove()
+    {
+        // pseudo code - Board, Trade, Build available to player
+       pieceSelected = piece;
+       while(pieceSelected != embassy)
+       {
+           pieceSelected = null;
+           //pseudo code - Error prompt or some indication that player must select an embassy
+           pieceSelected = piece;
+       }
+       PlaceFirstEmbassy();
+       pieceSelected = piece;
+       while(pieceSelected != commLine)
+       {
+           pieceSelected = null;
+           //pseudo code - Error prompt or some indication that player must select a commLine
+           pieceSelected = piece;
+       }
+       PlaceFirstCommLine();
+       if(submitButtonClicked())
+       {
+           endTurn(){// pseudo code - Board, Trade, Build UNavailable to player}
+       }
+    }
+
+    //EmptyNodeLocation doesn't have to be a array just a way to check if location is owned
+    void PlaceFirstEmbassy()
+    {
+        do {
+            location = clickedLocation(); //records the location of where the player wishes to place piece
+            while (location != EmptyNodeLocations[]) //Checks to see if location is already owned
+            {
+                location = EmptyNodeLocations[]
+            } 
+            location = pieceSelected; //piece is placed on the board
+            embassy--;
+            NodeInfo.Owner = //player side
+            moveMade = true;
+            if(//pseudo code - location is clicked again)
+            {
+                moveMade = false;
+                embassy++; 
+            }
+        } while(moveMade = false)    
+    }
+
+    void PlaceFirstCommLine()
+    {
+        do {
+            location = clickedLocation(); //records the location of where the player wishes to place piece
+            while (location != EmptyBranchLocations[]) //Checks to see if location is already owned
+            {
+                location = clickedLocation();
+            } 
+            location = pieceSelected; //piece is placed on the board
+            commLine--;
+            NodeInfo.Owner = //player side
+            moveMade = true;
+            if(//pseudo code - location is clicked again)
+            {
+                moveMade = false;
+                commLine++; 
+            }
+        } while(moveMade = false)    
+
+    }
 }

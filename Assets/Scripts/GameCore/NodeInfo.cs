@@ -12,4 +12,6 @@ public class NodeInfo : MonoBehaviour
     }
 
     public Owner nodeOwner;
+    public string countryAbreviation;
+    public string countryName;
 }

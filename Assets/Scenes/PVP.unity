@@ -198,8 +198,44 @@ MonoBehaviour:
   - {fileID: 7894064666338646847, guid: dad638fd35bf43f488b78d914a4e88cd, type: 3}
   - {fileID: 7894064666338646847, guid: c3459776f1c03524fb86679626f0c392, type: 3}
   - {fileID: 7894064666338646847, guid: dd38773e9fc41474397ef11a663feb39, type: 3}
-  hengBranches: []
-  shuBranches: []
+  hengBranches:
+  - {fileID: 622200039248793905, guid: 1fbe0d0a8b6ac074eb7b9cc358b4b4b6, type: 3}
+  - {fileID: 622200039248793905, guid: 27bf41a1270d5364fb0a81be2fda9f5b, type: 3}
+  - {fileID: 622200039248793905, guid: 6b472e5ce5283444da4e70802e7b3978, type: 3}
+  - {fileID: 622200039248793905, guid: b9b4bf3495b186d4a80ad52193810ea5, type: 3}
+  - {fileID: 622200039248793905, guid: cc2c053e9b8b6064ca24439cc228a680, type: 3}
+  - {fileID: 622200039248793905, guid: bcadd465ca7b48f4b969c9821539ec7b, type: 3}
+  - {fileID: 622200039248793905, guid: 10b0561a4fbab724c80f9d6c2a63955d, type: 3}
+  - {fileID: 622200039248793905, guid: 306618da3cf9c4e4e8e7f7c54a31f0ea, type: 3}
+  - {fileID: 622200039248793905, guid: 082ce1c5624226c4aaef1e191dfe6272, type: 3}
+  - {fileID: 622200039248793905, guid: 1a27e85d766686f459b04529bfc9f091, type: 3}
+  - {fileID: 622200039248793905, guid: 91563f4cffccafe4a8042d369cd43505, type: 3}
+  - {fileID: 622200039248793905, guid: 195d580801636a7489762086df58f2f4, type: 3}
+  - {fileID: 622200039248793905, guid: 7d1737e0343d51545b849e1c420f5d8c, type: 3}
+  - {fileID: 622200039248793905, guid: b47d57485914af345832891764fd355c, type: 3}
+  - {fileID: 622200039248793905, guid: 0d7bf1f8f6a14c84ea7244ece2b80b4a, type: 3}
+  - {fileID: 622200039248793905, guid: 5db1b082c05b30c429760197601a5cb4, type: 3}
+  - {fileID: 622200039248793905, guid: 8ae9ed4114317494c8d3382df252f802, type: 3}
+  - {fileID: 622200039248793905, guid: 6db8e4b9b71ab4846baba91c9a9e0a7f, type: 3}
+  shuBranches:
+  - {fileID: 453730248622727892, guid: 491bef70e6bc7934c8650686c250cd10, type: 3}
+  - {fileID: 453730248622727892, guid: 7727c08879bfb624b8b895eb458fca7f, type: 3}
+  - {fileID: 453730248622727892, guid: 09437de3a4fee114b850b966b9cbd042, type: 3}
+  - {fileID: 453730248622727892, guid: 746b793483893304d84308563a2e8502, type: 3}
+  - {fileID: 453730248622727892, guid: 74919a5eabce163468f13fe2f3705148, type: 3}
+  - {fileID: 453730248622727892, guid: 10f61b514368a7846b9af20f52abda05, type: 3}
+  - {fileID: 453730248622727892, guid: 2bfd7315806288d43b3f71df6825a69b, type: 3}
+  - {fileID: 453730248622727892, guid: 9c763780d15c3644293ae9163dbb27c1, type: 3}
+  - {fileID: 453730248622727892, guid: b0a9c653a10c7db46a5649307a310082, type: 3}
+  - {fileID: 453730248622727892, guid: e5a95e9bd4661594581d84229dd4d89c, type: 3}
+  - {fileID: 453730248622727892, guid: 809d1228e398aaf4b950835dbda8204b, type: 3}
+  - {fileID: 453730248622727892, guid: 6746c00da42094e49b9ed85c82944b9e, type: 3}
+  - {fileID: 453730248622727892, guid: 58d641a5a3f1d1b419330b89532f8955, type: 3}
+  - {fileID: 453730248622727892, guid: b1b7899667aabdd4496479eced29ab28, type: 3}
+  - {fileID: 453730248622727892, guid: d600d80e535a9264bbb83cdc98a3690a, type: 3}
+  - {fileID: 453730248622727892, guid: 9cc4e3362ee7e3e48a5b692fbf116b0b, type: 3}
+  - {fileID: 453730248622727892, guid: df382a2fb22a5984a890aeaeb0b87c09, type: 3}
+  - {fileID: 453730248622727892, guid: 21ad4f21dd3e1334b86dd011ebef039c, type: 3}
 --- !u!114 &77764162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1268,7 +1304,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1974227701}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 77764161}
+        m_TargetAssemblyTypeName: BoardManager, Assembly-CSharp
+        m_MethodName: EnterBuildMode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1974227701
 MonoBehaviour:
   m_ObjectHideFlags: 0

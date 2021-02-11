@@ -132,6 +132,47 @@ public class BoardManager : MonoBehaviour
 
     }
 
+    public void EndTurn()
+    {
+        Debug.Log("End Turn Button clicked");
+        if (true) // if (this is an initial Setup Turn)
+        {
+            Debug.Log("Setup Turn Ending");
+            if (true) // if (E & CL have been placed)
+            {
+                Debug.Log("E and CL have been placed");
+                // prompt player to confirm submission
+                if (true) // user confirms turn submission
+                {
+                    Debug.Log("Player confirms submission; turn ending");
+                    // switch internal indication of whose turn it is
+
+                    // disable Trade, Build, and End Turn buttons
+
+                    // provide player with indication that opponent is taking turn
+                }
+            }
+            else
+            {
+                
+                // prompt player to place E & CL
+            }
+        }
+
+        else // a regular turn
+        {
+            // prompt player to confirm submission
+            if (true) // user confirms turn submission
+            {
+                // switch internal indication of whose turn it is
+
+                // disable Trade, Build, and End Turn buttons
+
+                // provide player with indication that opponent is taking turn
+            }
+        }
+    }
+
     void FirstTurnSequence()
     {
         //Player1.embassy = 2;

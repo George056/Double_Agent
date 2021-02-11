@@ -17,7 +17,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] hengBranches;
     public GameObject[] shuBranches;
 
-    
+    bool isSetupTurn = true;
 
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
@@ -135,19 +135,19 @@ public class BoardManager : MonoBehaviour
     public void EndTurn()
     {
         Debug.Log("End Turn Button clicked");
-        if (true) // if (this is an initial Setup Turn)
+        if (isSetupTurn)
         {
-            Debug.Log("Setup Turn Ending");
             if (true) // if (E & CL have been placed)
             {
-                Debug.Log("E and CL have been placed");
                 // prompt player to confirm submission
-                if (true) // user confirms turn submission
+                if (true) // user confirmed turn submission
                 {
-                    Debug.Log("Player confirms submission; turn ending");
+                    Debug.Log("Player confirmed submission; turn ending");
                     // switch internal indication of whose turn it is
 
                     // disable Trade, Build, and End Turn buttons
+
+                    // Perform GameBoard Check
 
                     // provide player with indication that opponent is taking turn
                 }
@@ -162,15 +162,18 @@ public class BoardManager : MonoBehaviour
         else // a regular turn
         {
             // prompt player to confirm submission
-            if (true) // user confirms turn submission
+            if (true) // user confirmed turn submission
             {
                 // switch internal indication of whose turn it is
 
                 // disable Trade, Build, and End Turn buttons
 
+                // Perform GameBoard Check
+
                 // provide player with indication that opponent is taking turn
             }
         }
+
     }
 
     void FirstTurnSequence()

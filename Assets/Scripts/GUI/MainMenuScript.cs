@@ -22,6 +22,11 @@ public class MainMenuScript : MonoBehaviour
         SceneManager.LoadScene("PVP");
     }
 
+    public void ViewTutorial()
+    {
+        SceneManager.LoadScene("Tutorial");
+    }
+
     public void Exit()
     {
         Debug.Log("Application Closed");

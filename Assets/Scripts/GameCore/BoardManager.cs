@@ -6,7 +6,14 @@ using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour
 {
-
+    public struct ResourceItemInfo
+    {
+        public ResourceInfo.Color nodeColor;
+        public int nodeNum;
+        //safe the location
+        public int xLoc;
+        public int yLoc;
+    }
     public int columns = 11;
     public int rows = 11;
     public GameObject node;
@@ -16,7 +23,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] nodes;
     public GameObject[] hengBranches;
     public GameObject[] shuBranches;
-
+    public ResourceItemInfo[] ResourceInfoList = new ResourceItemInfo[13];
     bool isSetupTurn = true;
 
     /*
@@ -43,6 +50,8 @@ public class BoardManager : MonoBehaviour
     private int shuBranchCount = 0;
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
+    private ResourceInfo.Color tempColor; //store the color
+    private int tempNum;    //store
 
     
 
@@ -74,13 +83,20 @@ public class BoardManager : MonoBehaviour
                 switch(Map[x ,y])
                 {
                     case 'R':
+                        //get the resource's location, color, the number of resource
                         instance = Instantiate(resourceList[resourceCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
+                        ResourceInfoList[resourceCount].nodeColor = resourceList[resourceCount].GetComponent<ResourceInfo>().nodeColor;
+                        ResourceInfoList[resourceCount].nodeNum = resourceList[resourceCount].GetComponent<ResourceInfo>().numOfResource;
+                        ResourceInfoList[resourceCount].xLoc = hang + 5 * x;
+                        ResourceInfoList[resourceCount].yLoc = lie + 5 * y;
                         resourceCount++;
                         break;
                     case 'N':
                         instance = Instantiate(nodes[nodeCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
-                        instance.transform.SetParent(boardHolder);
+                        instance.transform.SetParent(boardHolder); 
+                        nodes[nodeCount].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.Nil;
+                        nodes[nodeCount].GetComponent<NodeInfo>().nodeOrder = nodeCount;
                         nodeCount++;
                         break;
                     case 'H':
@@ -107,6 +123,14 @@ public class BoardManager : MonoBehaviour
         Shuffle(resourceList);
         BoardSetUp(GameBoard);
     }
+    /*
+     *  change the owner of the node by clicking
+     */
+    public void ChangeNodeOwner(int nodeNum)
+    {
+        nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.USSR;
+        
+    }
 
     public void EnterBuildMode()
     {
@@ -114,14 +138,15 @@ public class BoardManager : MonoBehaviour
         GetIllegalMoves();
 
         // Highlight legal moves
-        foreach(GameObject node in nodes)
-        {
-            // if not owned by anyone, highlight as possible move
-            if (node.GetComponent<NodeInfo>().nodeOwner == NodeInfo.Owner.Nil)
-            {
-                Debug.Log("Unclaimed Node");
-            }
-        }
+        
+        //foreach(GameObject node in nodes)
+        //{
+        //    // if not owned by anyone, highlight as possible move
+        //    if (node.GetComponent<NodeInfo>().nodeOwner == NodeInfo.Owner.Nil)
+        //    {
+        //        Debug.Log("Unclaimed Node");
+        //    }
+        //}
 
 
 

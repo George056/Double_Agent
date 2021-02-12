@@ -61,12 +61,15 @@ public class AI : Agent
     [Tooltip("Whether this is in training mode or not")]
     public bool trainingMode;
 
+    private List<int> __myRoads;
+
     [Tooltip("Used to tell if it is the first move or not")]
     private bool firstMove;
 
     private void Start()
     {
         SetUpConnections();
+        __myRoads = new List<int>();
         GetDifficulty();
         GetPlayer();
         UpdateScores(0, 0);
@@ -273,12 +276,58 @@ public class AI : Agent
 
     private bool LegalMoveNode(char location)
     {
-        return __board.LegalMoveNode(location);
+        if(__myRoads.Count == 0)
+        {
+            return __board.LegalMoveNode(location);
+        }
+        else
+        {
+            List<int> legal = new List<int>();
+            connectionsNode.TryGetValue(location, out legal);
+            bool found = false;
+            foreach(int i in legal)
+            {
+                found = __myRoads.Contains(i);
+                if (found) break;
+            }
+
+            if (found)
+            {
+                return __board.LegalMoveNode(location);
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     private bool LegalMoveConnector(int location)
     {
-        return __board.LegalMoveConnector(location);
+        if(__myRoads.Count == 0)
+        {
+            return __board.LegalMoveConnector(location);
+        }
+        else
+        {
+            List<int> legal = new List<int>();
+            connectionsRoad.TryGetValue(location, out legal);
+            bool found = false;
+            foreach (int i in legal)
+            {
+                found = __myRoads.Contains(i);
+                if (found) break;
+            }
+
+            if (found)
+            {
+                return __board.LegalMoveConnector(location);
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     /// <summary>

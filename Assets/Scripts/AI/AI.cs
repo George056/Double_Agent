@@ -32,9 +32,9 @@ public class AI : Agent
     List<int> __last_resources = new List<int>(4) { 0, 0, 0, 0 };
 
     [Tooltip("A list of all player resources, used in determining a draw")]
-    List<int> __player_resources;
+    List<int> __player_resources = new List<int>(4) { 0, 0, 0, 0 };
     [Tooltip("A list of all player resources last turn, used in determining a draw")]
-    List<int> __player_last_resources;
+    List<int> __player_last_resources = new List<int>(4) { 0, 0, 0, 0 };
 
     [Tooltip("The current board")]
     Board __board;
@@ -213,6 +213,7 @@ public class AI : Agent
         {
             opener = false;
         }
+
         //if draw state removed remove this
         if (turns != 1)
         {
@@ -307,6 +308,10 @@ public class AI : Agent
             {
 
             }
+        }
+        else
+        {
+
         }
     }
 
@@ -500,20 +505,13 @@ public class AI : Agent
         __player = (short)PlayerPrefs.GetInt("AI_Player");
     }
 
+    /// <summary>
+    /// Find out what "color" piece you based on the PlayerPref AI_Piece
+    /// </summary>
     void GetPiece()
     {
         int temp = PlayerPrefs.GetInt("AI_Piece");
         __piece_type = (Owner)temp;
-    }
-
-    //[nodes, branches, trades] MakeMove()
-
-    void GetResources(List<int> rs)
-    {
-        for(int i = 0; i < __resources.Count; i++)
-        {
-            __resources[i] += rs[i];
-        }
     }
 
     /// <summary>

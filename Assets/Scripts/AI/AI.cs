@@ -5,6 +5,7 @@ using Unity.MLAgents;
 using System;
 using Random = UnityEngine.Random;
 using System.Linq;
+using Unity.MLAgents.Sensors;
 
 public enum Difficulty
 {
@@ -309,10 +310,25 @@ public class AI : Agent
 
             }
         }
-        else
+        else //ML move***********************************************************************************************************************
         {
-
+            //for adding a reward use AddReward() want it to be about 1 at the end of a game
         }
+    }
+
+    public void GetLongestNet()
+    {
+        //AddReward();
+    }
+
+    public void LoseLongestNet()
+    {
+        //AddReward(-);
+    }
+
+    public void CapturedTile(Color c)
+    {
+        //addReward();
     }
 
     /// <summary>
@@ -422,10 +438,34 @@ public class AI : Agent
 
         }
         
-        //place nodes
-
         //place connectors
 
+        //place nodes
+
+    }
+
+    /// <summary>
+    /// Collect vector observations from the environment
+    /// </summary>
+    /// <param name="sensor">The vector sensor</param>
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        //observe board (60 observations)
+        //sensor.AddObservation();
+
+        //observe resources (4 observations)
+
+    }
+
+    /// <summary>
+    /// When behavior type is set to "Hueristic Only" on the agent's Behavior Parameters,
+    /// this function will be called. Its return values will be fed into
+    /// <see cref="OnActionReceived(float[])"/> instead of using the neural net
+    /// </summary>
+    /// <param name="actionsOut">The output of the function, returned to OnActionReceived</param>
+    public override void Heuristic(float[] actionsOut)
+    {
+        
     }
 
     private void OfferDraw()

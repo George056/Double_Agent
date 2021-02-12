@@ -42,9 +42,15 @@ public class AI : Agent
     [HideInInspector]
     public Difficulty __difficulty;
     [HideInInspector]
-    int __ai_score;
+    public int __ai_score;
     [HideInInspector]
-    int __human_score;
+    public int __human_score;
+
+    [HideInInspector][Tooltip("The different connections between the roads")]
+    public Dictionary<int, List<int>> connectionsRoad = new Dictionary<int, List<int>>();
+
+    [HideInInspector][Tooltip("The different connections to a node")]
+    public Dictionary<char, List<int>> connectionsNode = new Dictionary<char, List<int>>();
 
     [Tooltip("An integer that says if the AI is orange (0) or purple (1)")]
     public short __player;
@@ -57,6 +63,84 @@ public class AI : Agent
 
     [Tooltip("Used to tell if it is the first move or not")]
     private bool firstMove;
+
+    private void Start()
+    {
+        SetUpConnections();
+        GetDifficulty();
+        GetPlayer();
+        UpdateScores(0, 0);
+        firstMove = __player == 0;
+        //get active board
+    }
+
+    /// <summary>
+    /// This sets up the two connection maps (dictionaries)
+    /// </summary>
+    void SetUpConnections()
+    {
+        connectionsRoad.Add(0, new List<int>() { 1, 2 });
+        connectionsRoad.Add(1, new List<int>() { 0, 3, 4, 7 });
+        connectionsRoad.Add(2, new List<int>() { 0, 4, 5, 8 });
+        connectionsRoad.Add(3, new List<int>() { 1, 4, 6, 7 });
+        connectionsRoad.Add(4, new List<int>() { 1, 2, 3, 5, 7, 8 });
+        connectionsRoad.Add(5, new List<int>() { 2, 4, 8, 9 });
+        connectionsRoad.Add(6, new List<int>() { 3, 10, 11, 16 });
+        connectionsRoad.Add(7, new List<int>() { 1, 3, 4, 11, 12, 17 });
+        connectionsRoad.Add(8, new List<int>() { 2, 4, 5, 12, 13, 18 });
+        connectionsRoad.Add(9, new List<int>() { 5, 13, 14, 19 });
+        connectionsRoad.Add(10, new List<int>() { 6, 15, 16 });
+        connectionsRoad.Add(11, new List<int>() { 6, 7, 10, 12, 16, 17 });
+        connectionsRoad.Add(12, new List<int>() { 7, 8, 11, 13, 17, 18 });
+        connectionsRoad.Add(13, new List<int>() { 8, 9, 12, 14, 18, 19 });
+        connectionsRoad.Add(14, new List<int>() { 9, 13, 19, 20 });
+        connectionsRoad.Add(15, new List<int>() { 10, 21 });
+        connectionsRoad.Add(16, new List<int>() { 6, 10, 11, 21, 22, 26 });
+        connectionsRoad.Add(17, new List<int>() { 7, 11, 12, 22, 23, 27 });
+        connectionsRoad.Add(18, new List<int>() { 8, 12, 13, 23, 24, 28 });
+        connectionsRoad.Add(19, new List<int>() { 9, 13, 14, 24, 25, 29 });
+        connectionsRoad.Add(20, new List<int>() { 14, 25 });
+        connectionsRoad.Add(21, new List<int>() { 15, 16, 22, 26 });
+        connectionsRoad.Add(22, new List<int>() { 16, 17, 21, 23, 26, 27 });
+        connectionsRoad.Add(23, new List<int>() { 17, 18, 22, 24, 27, 28 });
+        connectionsRoad.Add(24, new List<int>() { 18, 19, 23, 25, 28, 29 });
+        connectionsRoad.Add(25, new List<int>() { 19, 20, 24, 29 });
+        connectionsRoad.Add(26, new List<int>() { 21, 22, 30 });
+        connectionsRoad.Add(27, new List<int>() { 17, 22, 23, 30, 31, 33 });
+        connectionsRoad.Add(28, new List<int>() { 18, 23, 24, 31, 32, 34 });
+        connectionsRoad.Add(29, new List<int>() { 19, 24, 25, 32 });
+        connectionsRoad.Add(30, new List<int>() { 26, 27, 31, 33 });
+        connectionsRoad.Add(31, new List<int>() { 27, 28, 30, 32, 33, 34 });
+        connectionsRoad.Add(32, new List<int>() { 28, 29, 31, 34 });
+        connectionsRoad.Add(33, new List<int>() { 27, 30, 21, 35 });
+        connectionsRoad.Add(34, new List<int>() { 28, 31, 32, 35 });
+        connectionsRoad.Add(35, new List<int>() { 33, 34 });
+
+        connectionsNode.Add('a', new List<int>() { 0, 1 });
+        connectionsNode.Add('b', new List<int>() { 0, 2 });
+        connectionsNode.Add('c', new List<int>() { 3, 6 });
+        connectionsNode.Add('d', new List<int>() { 1, 3, 4, 7 });
+        connectionsNode.Add('e', new List<int>() { 2, 4, 5, 8 });
+        connectionsNode.Add('f', new List<int>() { 5, 9 });
+        connectionsNode.Add('g', new List<int>() { 10, 15 });
+        connectionsNode.Add('h', new List<int>() { 6, 10, 11, 16 });
+        connectionsNode.Add('i', new List<int>() { 7, 11, 12, 17 });
+        connectionsNode.Add('j', new List<int>() { 9, 12, 13, 18 });
+        connectionsNode.Add('k', new List<int>() { 9, 13, 14, 19 });
+        connectionsNode.Add('l', new List<int>() { 14, 20 });
+        connectionsNode.Add('m', new List<int>() { 15, 21 });
+        connectionsNode.Add('n', new List<int>() { 16, 21, 22, 26 });
+        connectionsNode.Add('o', new List<int>() { 17, 22, 23, 27 });
+        connectionsNode.Add('p', new List<int>() { 18, 23, 24, 28 });
+        connectionsNode.Add('q', new List<int>() { 19, 24, 25, 29 });
+        connectionsNode.Add('r', new List<int>() { 20, 25 });
+        connectionsNode.Add('s', new List<int>() { 26, 30 });
+        connectionsNode.Add('t', new List<int>() { 27, 30, 31, 33 });
+        connectionsNode.Add('u', new List<int>() { 28, 31, 32, 34 });
+        connectionsNode.Add('v', new List<int>() { 29, 32 });
+        connectionsNode.Add('w', new List<int>() { 33, 35 });
+        connectionsNode.Add('x', new List<int>() { 34, 35 });
+    }
 
     /// <summary>
     /// This is the function that is called to tell the AI to make its move
@@ -195,15 +279,6 @@ public class AI : Agent
     private bool LegalMoveConnector(int location)
     {
         return __board.LegalMoveConnector(location);
-    }
-
-    private void Start()
-    {
-        GetDifficulty();
-        GetPlayer();
-        UpdateScores(0, 0);
-        firstMove = __player == 0;
-        //get active board
     }
 
     /// <summary>

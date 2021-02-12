@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using System;
+using Random = UnityEngine.Random;
+using System.Linq;
 
 public enum Difficulty
 {
@@ -52,6 +54,10 @@ public class AI : Agent
     [HideInInspector][Tooltip("The different connections to a node")]
     public Dictionary<char, List<int>> connectionsNode = new Dictionary<char, List<int>>();
 
+    [HideInInspector]
+    [Tooltip("The different nodes a connector touches")]
+    public Dictionary<int, List<char>> connectionsRoadNode = new Dictionary<int, List<char>>();
+
     [Tooltip("An integer that says if the AI is orange (0) or purple (1)")]
     public short __player;
 
@@ -61,19 +67,29 @@ public class AI : Agent
     [Tooltip("Whether this is in training mode or not")]
     public bool trainingMode;
 
+    [Tooltip("This holds the numeric ID of the roads that have been captured")]
     private List<int> __myRoads;
 
     [Tooltip("Used to tell if it is the first move or not")]
-    private bool firstMove;
+    private bool opener;
+
+    [Tooltip("This tells the AI to do random moves")]
+    private bool randAI;
+
+    [Tooltip("This counts what turn it is")]
+    private int turns;
 
     private void Start()
     {
+        randAI = true;
+
         SetUpConnections();
         __myRoads = new List<int>();
-        GetDifficulty();
+        if(!randAI) GetDifficulty();
         GetPlayer();
         UpdateScores(0, 0);
-        firstMove = __player == 0;
+        opener = __player == 0;
+        turns = (int)__player;
         //get active board
     }
 
@@ -143,6 +159,43 @@ public class AI : Agent
         connectionsNode.Add('v', new List<int>() { 29, 32 });
         connectionsNode.Add('w', new List<int>() { 33, 35 });
         connectionsNode.Add('x', new List<int>() { 34, 35 });
+
+        connectionsRoadNode.Add(0, new List<char>() { 'a', 'b' });
+        connectionsRoadNode.Add(1, new List<char>() { 'a', 'd' });
+        connectionsRoadNode.Add(2, new List<char>() { 'b', 'e' });
+        connectionsRoadNode.Add(3, new List<char>() { 'c', 'd' });
+        connectionsRoadNode.Add(4, new List<char>() { 'd', 'e' });
+        connectionsRoadNode.Add(5, new List<char>() { 'e', 'f' });
+        connectionsRoadNode.Add(6, new List<char>() { 'c', 'h' });
+        connectionsRoadNode.Add(7, new List<char>() { 'd', 'i' });
+        connectionsRoadNode.Add(8, new List<char>() { 'e', 'j' });
+        connectionsRoadNode.Add(9, new List<char>() { 'f', 'k' });
+        connectionsRoadNode.Add(10, new List<char>() { 'g', 'h' });
+        connectionsRoadNode.Add(11, new List<char>() { 'h', 'i' });
+        connectionsRoadNode.Add(12, new List<char>() { 'i', 'j' });
+        connectionsRoadNode.Add(13, new List<char>() { 'j', 'k' });
+        connectionsRoadNode.Add(14, new List<char>() { 'k', 'l' });
+        connectionsRoadNode.Add(15, new List<char>() { 'g', 'm' });
+        connectionsRoadNode.Add(16, new List<char>() { 'h', 'n' });
+        connectionsRoadNode.Add(17, new List<char>() { 'i', 'o' });
+        connectionsRoadNode.Add(18, new List<char>() { 'j', 'p' });
+        connectionsRoadNode.Add(19, new List<char>() { 'k', 'q' });
+        connectionsRoadNode.Add(20, new List<char>() { 'l', 'r' });
+        connectionsRoadNode.Add(21, new List<char>() { 'm', 'n' });
+        connectionsRoadNode.Add(22, new List<char>() { 'n', 'o' });
+        connectionsRoadNode.Add(23, new List<char>() { 'o', 'p' });
+        connectionsRoadNode.Add(24, new List<char>() { 'p', 'q' });
+        connectionsRoadNode.Add(25, new List<char>() { 'q', 'r' });
+        connectionsRoadNode.Add(26, new List<char>() { 'n', 's' });
+        connectionsRoadNode.Add(27, new List<char>() { 'o', 't' });
+        connectionsRoadNode.Add(28, new List<char>() { 'p', 'u' });
+        connectionsRoadNode.Add(29, new List<char>() { 'q', 'v' });
+        connectionsRoadNode.Add(30, new List<char>() { 's', 't' });
+        connectionsRoadNode.Add(31, new List<char>() { 't', 'u' });
+        connectionsRoadNode.Add(32, new List<char>() { 'u', 'v' });
+        connectionsRoadNode.Add(33, new List<char>() { 't', 'w' });
+        connectionsRoadNode.Add(34, new List<char>() { 'u', 'x' });
+        connectionsRoadNode.Add(35, new List<char>() { 'w', 'x' });
     }
 
     /// <summary>
@@ -153,7 +206,108 @@ public class AI : Agent
     /// <param name="playerResources">The resources held by the player</param>
     public void AIMove(Board currentBoard, List<int> AIResources, List<int> playerResources)
     {
+        //update info
 
+        turns++;
+        if(turns == 5)
+        {
+            opener = false;
+        }
+        //if draw state removed remove this
+        if (turns != 1)
+        {
+            __old_board = __board;
+            __last_resources = __resources;
+            __player_last_resources = __player_resources;
+        }
+        
+        __board = currentBoard;
+        __resources = AIResources;
+        __player_resources = playerResources;
+
+        //end update info
+
+        //make move
+        if (randAI)
+        {
+            int maxNodes = Math.Min(__resources[2] % 2, __resources[3] % 2);
+            int maxCons = Math.Min(__resources[0], __resources[1]);
+            List<char> nodesPlaced = new List<char>();
+            List<int> consPlaced = new List<int>();
+            if (opener)
+            {
+                int positionCon;
+
+                do
+                {
+                    positionCon = Random.Range(0, 36);
+                } while (LegalMoveConnector(positionCon));
+                consPlaced.Add(positionCon);
+
+                char positionNode;
+
+                do
+                {
+                    positionNode = (char)Random.Range('a', 'x');
+                } while (LegalMoveNode(positionNode));
+                nodesPlaced.Add(positionNode);
+            }
+            else
+            {
+                List<char> legalNodes = new List<char>();
+                List<int> legalCon = new List<int>();
+                foreach(int i in __myRoads)
+                {
+                    if (connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
+                    if (connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
+                }
+                //remove duplicates found at: https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
+                legalNodes = legalNodes.Distinct().ToList();
+                legalCon = legalCon.Distinct().ToList();
+
+                int nodesToPlace = Random.Range(0, maxNodes);
+                int consToPlace = Random.Range(0, maxCons);
+
+                for(int i = 0; i < nodesToPlace; i++)
+                {
+                    char node = (char)Random.Range(0, legalNodes.Count);
+                    if (LegalMoveNode(node))
+                    {
+                        nodesPlaced.Add(node);
+                    }
+                    else
+                    {
+                        legalNodes.Remove(node);
+                        i--;
+                    }
+                }
+
+                for(int i = 0; i < consToPlace; i++)
+                {
+                    int con = Random.Range(0, legalCon.Count);
+                    if (LegalMoveConnector(con))
+                    {
+                        consPlaced.Add(con);
+                    }
+                    else
+                    {
+                        legalCon.Remove(con);
+                        i--;
+                    }
+                }
+            }
+
+            //place node and connector ****************************************************************************************************
+            foreach(int con in consPlaced)
+            {
+
+            }
+
+            foreach(char node in nodesPlaced)
+            {
+
+            }
+        }
     }
 
     /// <summary>
@@ -246,7 +400,7 @@ public class AI : Agent
     public override void OnActionReceived(float[] vectorAction)
     {
         //see if in a draw state, skip if not the first move
-        if(!firstMove && __board == __old_board && __resources == __last_resources && __player_resources == __player_last_resources)
+        if(!opener && __board == __old_board && __resources == __last_resources && __player_resources == __player_last_resources)
         {
             OfferDraw();
             return;

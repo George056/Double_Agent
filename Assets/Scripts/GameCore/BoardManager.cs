@@ -6,6 +6,12 @@ using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour
 {
+    public enum Ally
+    {
+        US = 0,
+        USSR = 1
+    }
+
     public struct ResourceItemInfo
     {
         public ResourceInfo.Color nodeColor;
@@ -25,6 +31,8 @@ public class BoardManager : MonoBehaviour
     public GameObject[] shuBranches;
     public ResourceItemInfo[] ResourceInfoList = new ResourceItemInfo[13];
     bool isSetupTurn = true;
+    public Ally currentPlayer;
+    public bool inBuildMode = false;
 
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
@@ -128,14 +136,31 @@ public class BoardManager : MonoBehaviour
      */
     public void ChangeNodeOwner(int nodeNum)
     {
-        nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.USSR;
-        
+        if (currentPlayer == Ally.US)
+        {
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.US;
+        }
+        else
+        {
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.USSR;
+        }
+    }
+
+    public void ChangeBranchOwner(int branchNum)
+    {
+        if (currentPlayer == Ally.US)
+        {
+            //nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.US;
+        }
+        else
+        {
+            //nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.USSR;
+        }
     }
 
     public void EnterBuildMode()
     {
-        // Disable illegal moves
-        GetIllegalMoves();
+        inBuildMode = true;
 
         // Highlight legal moves
         
@@ -152,11 +177,6 @@ public class BoardManager : MonoBehaviour
 
     }
 
-    void GetIllegalMoves()
-    {
-
-    }
-
     public void EndTurn()
     {
         Debug.Log("End Turn Button clicked");
@@ -168,7 +188,17 @@ public class BoardManager : MonoBehaviour
                 if (true) // user confirmed turn submission
                 {
                     Debug.Log("Player confirmed submission; turn ending");
-                    // switch internal indication of whose turn it is
+
+                    if (currentPlayer == Ally.US)
+                    {
+                        currentPlayer = Ally.USSR;
+                    }
+                    else
+                    {
+                        currentPlayer = Ally.US;
+                    }
+
+                    inBuildMode = false;
 
                     // disable Trade, Build, and End Turn buttons
 

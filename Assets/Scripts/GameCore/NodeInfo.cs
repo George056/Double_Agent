@@ -19,12 +19,14 @@ public class NodeInfo : MonoBehaviour
 
     void OnMouseDown()
     {
-        this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 100);
-        this.gameObject.GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
-        cc = this.gameObject.GetComponent<NodeInfo>().nodeOrder;
-        Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOrder);
-        Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOwner);
-        GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(cc);
-
+        if (GameObject.FindObjectOfType<BoardManager>().inBuildMode)
+        {
+            this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+            this.gameObject.GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
+            cc = this.gameObject.GetComponent<NodeInfo>().nodeOrder;
+            Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOrder);
+            Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOwner);
+            GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(cc);
+        }
     }
 }

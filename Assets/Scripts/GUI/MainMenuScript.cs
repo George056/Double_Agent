@@ -27,6 +27,16 @@ public class MainMenuScript : MonoBehaviour
         SceneManager.LoadScene("Tutorial");
     }
 
+    public void DisplayHelp()
+    {
+
+    }
+
+    public void DisplayAbout()
+    {
+
+    }
+
     public void Exit()
     {
         Debug.Log("Application Closed");

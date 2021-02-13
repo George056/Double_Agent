@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BranchInfo : MonoBehaviour
 {
+    private int cc;
     public enum Owner
     {
         US = 0,
@@ -12,5 +13,19 @@ public class BranchInfo : MonoBehaviour
     }
 
     public string id;
-    public Owner nodeOwner;
+    public Owner branchOwner;
+    public int branchOrder;
+
+    void OnMouseDown()
+    {
+        if (GameObject.FindObjectOfType<BoardManager>().inBuildMode)
+        {
+            this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+            this.gameObject.GetComponent<BranchInfo>().branchOwner = Owner.USSR;
+            cc = this.gameObject.GetComponent<BranchInfo>().branchOrder;
+            Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOrder);
+            Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOwner);
+            GameObject.FindObjectOfType<BoardManager>().ChangeBranchOwner(cc);
+        }
+    }
 }

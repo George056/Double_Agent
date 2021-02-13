@@ -160,7 +160,7 @@ MonoBehaviour:
   hengBranch: {fileID: 453730248622727892, guid: 963c1a5753acb17488d24b83f2bff9bc, type: 3}
   shuBranch: {fileID: 622200039248793905, guid: 62455bbaa2435304181c4cd9d066fac4, type: 3}
   resourceList:
-  - {fileID: 5015995889806251867, guid: f594f67a420bd334a8486f83c0b0e2a9, type: 3}
+  - {fileID: 5015995889806251867, guid: e47082fad11d37240b4ec5de2067a64a, type: 3}
   - {fileID: 4491759167546014283, guid: 7c31108dca5777144a08ba7b1a261d9a, type: 3}
   - {fileID: 6419327098728988727, guid: d6fcc5f6fcff9c947a79940d07cd4a73, type: 3}
   - {fileID: 6173266335864304885, guid: 7513e2053a8fa9743b03715402691c11, type: 3}
@@ -236,6 +236,8 @@ MonoBehaviour:
   - {fileID: 453730248622727892, guid: 9cc4e3362ee7e3e48a5b692fbf116b0b, type: 3}
   - {fileID: 453730248622727892, guid: df382a2fb22a5984a890aeaeb0b87c09, type: 3}
   - {fileID: 453730248622727892, guid: 21ad4f21dd3e1334b86dd011ebef039c, type: 3}
+  currentPlayer: 0
+  inBuildMode: 0
 --- !u!114 &77764162
 MonoBehaviour:
   m_ObjectHideFlags: 0

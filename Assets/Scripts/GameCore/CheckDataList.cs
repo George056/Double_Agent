@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class CheckDataList : MonoBehaviour
 {
@@ -24,12 +25,19 @@ public class CheckDataList : MonoBehaviour
     public GameObject GreenExhausted;
     public GameObject RedExhausted;
     public GameObject YellowExhausted;
+
+    [HideInInspector]
+    public ResourceInfo.Color currentColor;
+    [HideInInspector]
+    public BranchInfo.Owner longestNetOwner;
+
     private BoardManager BM;
+    private AI ai;
     private int maxResource;
     private int count = 0;
     //private int existCheck;
     private ArrayList UsedNode = new ArrayList();
-    private ResourceInfo.Color currentColor;
+    private int longestNetValue;
 
     public void DepltedResource()
     {
@@ -91,6 +99,78 @@ public class CheckDataList : MonoBehaviour
     void Awake()
     {
         BM = GetComponent<BoardManager>();
+    }
+
+    public void LongestNetCheck(BranchInfo.Owner who)
+    {
+        List<int> branches = new List<int>();
+
+        foreach(GameObject go in BM.allBranches)
+        {
+            if(go.GetComponent<BranchInfo>().branchOwner == who)
+            {
+                branches.Add(go.GetComponent<BranchInfo>().branchOrder);
+            }
+        }
+
+        List<int> longest = new List<int>();
+        List<int> count = new List<int>();
+        List<int> old = new List<int>();//store values already checked
+
+        int itr = 0;//total branches visited counter
+
+        do
+        {
+            if(longest.Count == 0)//first time
+            {
+                longest.Add(branches[0]);
+            }
+            else
+            {
+                old.AddRange(longest);
+                List<int> temp = branches;
+                foreach(int i in old)
+                {
+                    temp.Remove(i);
+                }
+                longest = new List<int>();
+                longest.Add(temp[0]);
+            }
+
+            for (int i = 0; i < longest.Count; i++)
+            {
+                List<int> temp;
+                ai.connectionsRoad.TryGetValue(longest[i], out temp);
+                for (int j = 0; j < temp.Count; j++)
+                {
+                    if (branches.Contains(temp[j]))
+                    {
+                        longest.Add(temp[j]);
+                    }
+                }
+                longest = longest.Distinct().ToList();
+            }
+            count.Add(longest.Count);
+            foreach(int i in count)
+            {
+                itr += i;
+            }
+        } while (itr > (branches.Count / 2));
+
+        int max = 0;
+        foreach(int i in count)
+        {
+            if(i > max)
+            {
+                max = i;
+            }
+        }
+
+        if(max > longestNetValue)
+        {
+            longestNetValue = max;
+            longestNetOwner = who;
+        }
     }
 
     // Update is called once per frame

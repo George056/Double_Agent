@@ -22,13 +22,11 @@ public class BoardManager : MonoBehaviour
     }
     public int columns = 11;
     public int rows = 11;
-    public GameObject node;
-    public GameObject hengBranch;
-    public GameObject shuBranch;
     public GameObject[] resourceList;
     public GameObject[] nodes;
-    public GameObject[] hengBranches;
-    public GameObject[] shuBranches;
+    public GameObject[] allBranches;
+
+    public int branchCount = 0;
     public ResourceItemInfo[] ResourceInfoList = new ResourceItemInfo[13];
     bool isSetupTurn = true;
     public Ally currentPlayer;
@@ -108,14 +106,18 @@ public class BoardManager : MonoBehaviour
                         nodeCount++;
                         break;
                     case 'H':
-                        instance = Instantiate(shuBranches[hengBranchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(allBranches[branchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
-                        hengBranchCount++;
+                        allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
+                        allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = BranchInfo.Owner.Nil;
+                        branchCount++;
                         break;
                     case 'S':
-                        instance = Instantiate(hengBranches[shuBranchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(allBranches[branchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
-                        shuBranchCount++;
+                        allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
+                        allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = BranchInfo.Owner.Nil;
+                        branchCount++;
                         break;
                     default:
                         Debug.Log(Map[x,y]);

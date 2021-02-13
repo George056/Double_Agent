@@ -6,10 +6,11 @@ using Random = UnityEngine.Random;
 
 public class BoardManager : MonoBehaviour
 {
-    public enum Ally
+    public enum Owner
     {
         US = 0,
-        USSR = 1
+        USSR = 1,
+        Nil = 2
     }
 
     public struct ResourceItemInfo
@@ -26,10 +27,9 @@ public class BoardManager : MonoBehaviour
     public GameObject[] nodes;
     public GameObject[] allBranches;
 
-    public int branchCount = 0;
     public ResourceItemInfo[] ResourceInfoList = new ResourceItemInfo[13];
-    bool isSetupTurn = true;
-    public Ally currentPlayer;
+    bool isSetupTurn = false;
+    public Owner currentPlayer;
     public bool inBuildMode = false;
 
     /*
@@ -52,8 +52,7 @@ public class BoardManager : MonoBehaviour
 
     private int resourceCount = 0;
     private int nodeCount = 0;
-    private int hengBranchCount = 0;
-    private int shuBranchCount = 0;
+    public int branchCount = 0;
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
     private ResourceInfo.Color tempColor; //store the color
@@ -101,7 +100,7 @@ public class BoardManager : MonoBehaviour
                     case 'N':
                         instance = Instantiate(nodes[nodeCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder); 
-                        nodes[nodeCount].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.Nil;
+                        nodes[nodeCount].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOrder = nodeCount;
                         nodeCount++;
                         break;
@@ -109,14 +108,14 @@ public class BoardManager : MonoBehaviour
                         instance = Instantiate(allBranches[branchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
-                        allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = BranchInfo.Owner.Nil;
+                        allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         branchCount++;
                         break;
                     case 'S':
                         instance = Instantiate(allBranches[branchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
-                        allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = BranchInfo.Owner.Nil;
+                        allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         branchCount++;
                         break;
                     default:
@@ -138,25 +137,25 @@ public class BoardManager : MonoBehaviour
      */
     public void ChangeNodeOwner(int nodeNum)
     {
-        if (currentPlayer == Ally.US)
+        if (currentPlayer == Owner.US)
         {
-            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.US;
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
         }
         else
         {
-            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.USSR;
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
         }
     }
 
     public void ChangeBranchOwner(int branchNum)
     {
-        if (currentPlayer == Ally.US)
+        if (currentPlayer == Owner.US)
         {
-            //nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.US;
+            //nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
         }
         else
         {
-            //nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = NodeInfo.Owner.USSR;
+            //  nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
         }
     }
 
@@ -181,7 +180,6 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurn()
     {
-        Debug.Log("End Turn Button clicked");
         if (isSetupTurn)
         {
             if (true) // if (E & CL have been placed)
@@ -191,13 +189,13 @@ public class BoardManager : MonoBehaviour
                 {
                     Debug.Log("Player confirmed submission; turn ending");
 
-                    if (currentPlayer == Ally.US)
+                    if (currentPlayer == Owner.US)
                     {
-                        currentPlayer = Ally.USSR;
+                        currentPlayer = Owner.USSR;
                     }
                     else
                     {
-                        currentPlayer = Ally.US;
+                        currentPlayer = Owner.US;
                     }
 
                     inBuildMode = false;
@@ -221,7 +219,18 @@ public class BoardManager : MonoBehaviour
             // prompt player to confirm submission
             if (true) // user confirmed turn submission
             {
-                // switch internal indication of whose turn it is
+                Debug.Log("Player confirmed submission; turn ending");
+
+                if (currentPlayer == Owner.US)
+                {
+                    currentPlayer = Owner.USSR;
+                }
+                else
+                {
+                    currentPlayer = Owner.US;
+                }
+
+                inBuildMode = false;
 
                 // disable Trade, Build, and End Turn buttons
 

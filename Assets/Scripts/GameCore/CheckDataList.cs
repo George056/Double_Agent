@@ -29,7 +29,7 @@ public class CheckDataList : MonoBehaviour
     [HideInInspector]
     public ResourceInfo.Color currentColor;
     [HideInInspector]
-    public BranchInfo.Owner longestNetOwner;
+    public BoardManager.Owner longestNetOwner;
 
     private BoardManager BM;
     private AI ai;
@@ -45,7 +45,7 @@ public class CheckDataList : MonoBehaviour
         for (int i = 0; i < 24; i++)
         {
             //Debug.Log(BM.nodeList[i].GetComponent<NodeInfo>().nodeOwner);
-            if (BM.nodes[i].GetComponent<NodeInfo>().nodeOwner != NodeInfo.Owner.Nil)
+            if (BM.nodes[i].GetComponent<NodeInfo>().nodeOwner != BoardManager.Owner.Nil)
             {
                 UsedNode.Add(i);
             }
@@ -101,7 +101,7 @@ public class CheckDataList : MonoBehaviour
         BM = GetComponent<BoardManager>();
     }
 
-    public void LongestNetCheck(BranchInfo.Owner who)
+    public void LongestNetCheck(BoardManager.Owner who)
     {
         List<int> branches = new List<int>();
 

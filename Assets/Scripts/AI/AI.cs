@@ -270,6 +270,7 @@ public class AI : Agent
                 int nodesToPlace = Random.Range(0, maxNodes);
                 int consToPlace = Random.Range(0, maxCons);
 
+                //posible error from calculating legal nodes before placing legal branches
                 for(int i = 0; i < nodesToPlace; i++)
                 {
                     char node = (char)Random.Range(0, legalNodes.Count);

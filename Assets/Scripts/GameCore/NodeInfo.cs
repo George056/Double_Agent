@@ -12,10 +12,20 @@ public class NodeInfo : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (GameObject.FindObjectOfType<BoardManager>().inBuildMode)
+        if (GameObject.FindObjectOfType<BoardManager>().inBuildMode &&
+            this.gameObject.GetComponent<NodeInfo>().nodeOwner == BoardManager.Owner.Nil)
         {
-            this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
-            this.gameObject.GetComponent<NodeInfo>().nodeOwner = BoardManager.Owner.USSR;
+            if (GameObject.FindObjectOfType<BoardManager>().activeSide == BoardManager.Owner.US)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+                this.gameObject.GetComponent<NodeInfo>().nodeOwner = BoardManager.Owner.US;
+            }
+            else if (GameObject.FindObjectOfType<BoardManager>().activeSide == BoardManager.Owner.USSR)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+                this.gameObject.GetComponent<NodeInfo>().nodeOwner = BoardManager.Owner.USSR;
+            }
+
             cc = this.gameObject.GetComponent<NodeInfo>().nodeOrder;
             Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOrder);
             Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOwner);

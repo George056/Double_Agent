@@ -158,8 +158,8 @@ MonoBehaviour:
   rows: 11
   resourceList:
   - {fileID: 5015995889806251867, guid: e47082fad11d37240b4ec5de2067a64a, type: 3}
-  - {fileID: 4491759167546014283, guid: 7c31108dca5777144a08ba7b1a261d9a, type: 3}
-  - {fileID: 6419327098728988727, guid: d6fcc5f6fcff9c947a79940d07cd4a73, type: 3}
+  - {fileID: 5015995889806251867, guid: 3bd43f384b156ce449ec5c9a13ff414e, type: 3}
+  - {fileID: 5015995889806251867, guid: e6fb8dad733e13543abe0abff4d55c41, type: 3}
   - {fileID: 6173266335864304885, guid: 7513e2053a8fa9743b03715402691c11, type: 3}
   - {fileID: 4621552165167000240, guid: d1d34493598ba3a408d718fc0a4cde37, type: 3}
   - {fileID: 1638990005283070878, guid: c3ccc7a980455fd4ca2c2e24d55d13df, type: 3}
@@ -232,9 +232,8 @@ MonoBehaviour:
   - {fileID: 622200039248793905, guid: 8ae9ed4114317494c8d3382df252f802, type: 3}
   - {fileID: 622200039248793905, guid: 6db8e4b9b71ab4846baba91c9a9e0a7f, type: 3}
   - {fileID: 453730248622727892, guid: 21ad4f21dd3e1334b86dd011ebef039c, type: 3}
-  currentPlayer: 0
+  activeSide: 0
   inBuildMode: 0
-  branchCount: 0
 --- !u!114 &77764162
 MonoBehaviour:
   m_ObjectHideFlags: 0

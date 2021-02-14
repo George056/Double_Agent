@@ -29,7 +29,7 @@ public class BoardManager : MonoBehaviour
 
     public ResourceItemInfo[] ResourceInfoList = new ResourceItemInfo[13];
     bool isSetupTurn = false;
-    public Owner currentPlayer;
+    public Owner activeSide;
     public bool inBuildMode = false;
 
     /*
@@ -52,7 +52,7 @@ public class BoardManager : MonoBehaviour
 
     private int resourceCount = 0;
     private int nodeCount = 0;
-    public int branchCount = 0;
+    private int branchCount = 0;
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
     private ResourceInfo.Color tempColor; //store the color
@@ -107,15 +107,17 @@ public class BoardManager : MonoBehaviour
                     case 'H':
                         instance = Instantiate(allBranches[branchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
-                        allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
+                        allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
+                        Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
                         branchCount++;
                         break;
                     case 'S':
                         instance = Instantiate(allBranches[branchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
-                        allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
+                        allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
+                        Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
                         branchCount++;
                         break;
                     default:
@@ -137,7 +139,7 @@ public class BoardManager : MonoBehaviour
      */
     public void ChangeNodeOwner(int nodeNum)
     {
-        if (currentPlayer == Owner.US)
+        if (activeSide == Owner.US)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
         }
@@ -149,13 +151,13 @@ public class BoardManager : MonoBehaviour
 
     public void ChangeBranchOwner(int branchNum)
     {
-        if (currentPlayer == Owner.US)
+        if (activeSide == Owner.US)
         {
-            //nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
+            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
         }
         else
         {
-            //  nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
+            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
         }
     }
 
@@ -189,13 +191,13 @@ public class BoardManager : MonoBehaviour
                 {
                     Debug.Log("Player confirmed submission; turn ending");
 
-                    if (currentPlayer == Owner.US)
+                    if (activeSide == Owner.US)
                     {
-                        currentPlayer = Owner.USSR;
+                        activeSide = Owner.USSR;
                     }
                     else
                     {
-                        currentPlayer = Owner.US;
+                        activeSide = Owner.US;
                     }
 
                     inBuildMode = false;
@@ -221,13 +223,13 @@ public class BoardManager : MonoBehaviour
             {
                 Debug.Log("Player confirmed submission; turn ending");
 
-                if (currentPlayer == Owner.US)
+                if (activeSide == Owner.US)
                 {
-                    currentPlayer = Owner.USSR;
+                    activeSide = Owner.USSR;
                 }
                 else
                 {
-                    currentPlayer = Owner.US;
+                    activeSide = Owner.US;
                 }
 
                 inBuildMode = false;

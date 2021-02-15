@@ -1,11 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameBoardScript : MonoBehaviour
+public class SetupMenuScript : MonoBehaviour
 {
-    public GameObject embassy;
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,8 +17,8 @@ public class GameBoardScript : MonoBehaviour
         
     }
 
-    public void SelectEmbassy()
+    public void PlayGame()
     {
-
+        SceneManager.LoadScene("PVP");
     }
 }

@@ -413,12 +413,6 @@ public class AI : Agent
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
     {
-        //see if in a draw state, skip if not the first move
-        if(!opener && __board == __old_board && __resources == __last_resources && __player_resources == __player_last_resources)
-        {
-            OfferDraw();
-            return;
-        }
 
         //make a trade first
         if(vectorAction[60] != 0)

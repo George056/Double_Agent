@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 458f2c3e51b67d84bad0a288f39e99a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeOwner: 0
+  nodeOwner: 2
   nodeOrder: 4
 --- !u!58 &1797189924408747768
 CircleCollider2D:

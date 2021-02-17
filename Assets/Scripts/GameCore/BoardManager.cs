@@ -99,7 +99,7 @@ public class BoardManager : MonoBehaviour
                         break;
                     case 'N':
                         instance = Instantiate(nodes[nodeCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
-                        instance.transform.SetParent(boardHolder); 
+                        instance.transform.SetParent(boardHolder);
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOrder = nodeCount;
                         nodeCount++;

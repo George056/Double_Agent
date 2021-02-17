@@ -214,14 +214,6 @@ public class AI : Agent
         {
             opener = false;
         }
-
-        //if draw state removed remove this
-        if (turns != 1)
-        {
-            __old_board = __board;
-            __last_resources = __resources;
-            __player_last_resources = __player_resources;
-        }
         
         __board = currentBoard;
         __resources = AIResources;
@@ -465,11 +457,6 @@ public class AI : Agent
     /// </summary>
     /// <param name="actionsOut">The output of the function, returned to OnActionReceived</param>
     public override void Heuristic(float[] actionsOut)
-    {
-        
-    }
-
-    private void OfferDraw()
     {
         
     }

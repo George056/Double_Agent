@@ -79,8 +79,8 @@ public class BoardManager : MonoBehaviour
     {
         boardHolder = new GameObject("Board").transform;
         GameObject instance;
-        int hang = -27; // -40
-        int lie = -25; // -30
+        int hang = -32; // -40
+        int lie = -32; // -30
         for (int x = 0; x < columns; x++)
         {
             for (int y = 0; y < rows; y++)
@@ -89,23 +89,23 @@ public class BoardManager : MonoBehaviour
                 {
                     case 'R':
                         //get the resource's location, color, the number of resource
-                        instance = Instantiate(resourceList[resourceCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(resourceList[resourceCount], new Vector3(hang + 6 * x, lie + 6 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
                         ResourceInfoList[resourceCount].nodeColor = resourceList[resourceCount].GetComponent<ResourceInfo>().nodeColor;
                         ResourceInfoList[resourceCount].nodeNum = resourceList[resourceCount].GetComponent<ResourceInfo>().numOfResource;
-                        ResourceInfoList[resourceCount].xLoc = hang + 5 * x;
-                        ResourceInfoList[resourceCount].yLoc = lie + 5 * y;
+                        ResourceInfoList[resourceCount].xLoc = hang + 6 * x;
+                        ResourceInfoList[resourceCount].yLoc = lie + 6 * y;
                         resourceCount++;
                         break;
                     case 'N':
-                        instance = Instantiate(nodes[nodeCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(nodes[nodeCount], new Vector3(hang + 6 * x, lie + 6 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOrder = nodeCount;
                         nodeCount++;
                         break;
                     case 'H':
-                        instance = Instantiate(allBranches[branchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(allBranches[branchCount], new Vector3(hang + 6 * x, lie + 6 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
@@ -113,7 +113,7 @@ public class BoardManager : MonoBehaviour
                         branchCount++;
                         break;
                     case 'S':
-                        instance = Instantiate(allBranches[branchCount], new Vector3(hang + 5 * x, lie + 5 * y, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(allBranches[branchCount], new Vector3(hang + 6 * x, lie + 6 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;

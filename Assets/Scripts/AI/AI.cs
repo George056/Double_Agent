@@ -407,8 +407,10 @@ public class AI : Agent
     /// Index 57: Place connector 34 (0 = don't place, 1 = place)
     /// Index 58: Place connector 35 (0 = don't place, 1 = place)
     /// Index 59: Place connector 36 (0 = don't place, 1 = place)
-    /// Index 60: Make a trade (0 = no trade; a trade is a composite of red = 1, blue = 2, green = 3, and yellow = 4
-    /// where an input is viewed digit by digit with the 3 trade values followed by the traded for value)
+    /// Index 60: Make a trade (0 = no trade; 1 = gggy; 2 = gggr; 3 = gggb; 4 = ggyr; 5 = ggyb; 6 = ggry; 7 = ggrb; 8 = ggby; 9 = ggbr; 10 = gyyr; 11 = gyyb;
+    /// 12 = gyrb; 13 = gybr; 14 = grry; 15 = grrb; 16 = grby; 17 = gbby; 18 = gbbr; 19 = yyyg; 20 = yyyr; 21 = yyyb; 22 = yyrg; 23 = yyrb; 24 = yybg; 25 = yybr;
+    /// 26 = yrrg; 27 = yrrb; 28 = ybbg; 29 = ybbr; 30 = yrbg; 31 = rrrg; 32 = rrry; 33 = rrrb; 34 = rrbg; 35 = rrby; 36 = rbbg; 37 = rbby; 38 = bbbg; 39 = bbby;
+    /// 40 = bbbr)
     /// </summary>
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
@@ -417,12 +419,7 @@ public class AI : Agent
         //make a trade first
         if(vectorAction[60] != 0)
         {
-            List<int> trades = new List<int>(4);
-            int temp = 0;
-            //split the digits apart
-            temp = (int)(vectorAction[60] / 1000);
-            trades[0] = temp;
-
+            //trade function
         }
         
         //place connectors

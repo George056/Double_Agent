@@ -1,0 +1,15 @@
+behaviors:
+    Node_AI:
+        trainer_type: sac
+        time_horizon: 128
+        max_steps: 5.0e6
+        hyperparameters:
+            hidden_units: 256
+            init_entcoef: 0.5
+            save_replay_buffer: true
+        network_settings:
+            vis_encoder_type: match3
+        curiosity:
+            strength: 0.05
+        save_steps: 20000
+        team_change: 4 * save_steps

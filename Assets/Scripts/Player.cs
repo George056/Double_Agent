@@ -18,6 +18,10 @@ public class Player : MonoBehaviour
     [Tooltip("This is true if they have the longest network")]
     public bool __longest_net;
 
+    public string userName;
+
+    private int userNameLength = 20;
+
     [Tooltip("A list of all human resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
     List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
 

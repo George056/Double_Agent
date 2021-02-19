@@ -21,4 +21,8 @@ public class SetupMenuScript : MonoBehaviour
     {
         SceneManager.LoadScene("PVP");
     }
+    public void OnlinePlay()
+    {
+        SceneManager.LoadScene("Lobby");
+    }
 }

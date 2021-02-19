@@ -22,6 +22,11 @@ public class MainMenuScript : MonoBehaviour
         SceneManager.LoadScene("PVP");
     }
 
+    public void OnlinePlay()
+    {
+        SceneManager.LoadScene("Lobby");
+    }
+
     public void ViewTutorial()
     {
         SceneManager.LoadScene("Tutorial");

@@ -50,4 +50,36 @@ public class Player : MonoBehaviour
     {
 
     }
+
+    public bool CanAffordNode()
+    {
+        bool canAfford = true;
+
+        if (__resources[2] < 2) { canAfford = false; }
+        if (__resources[3] < 2) { canAfford = false; }
+
+        return canAfford;
+    }
+
+    public bool CanAffordBranch()
+    {
+        bool canAfford = true;
+
+        if (__resources[0] < 1) { canAfford = false; }
+        if (__resources[1] < 1) { canAfford = false; }
+
+        return canAfford;
+    }
+
+    public void PayForNode()
+    {
+        __resources[2] -= 2;
+        __resources[3] -= 2;
+    }
+
+    public void PayForBranch()
+    {
+        __resources[0]--;
+        __resources[1]--;
+    }
 }

@@ -32,6 +32,8 @@ public class BoardManager : MonoBehaviour
     public Owner activeSide;
     public bool inBuildMode = false;
 
+    //public Player localPlayer;
+
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
      */
@@ -58,8 +60,11 @@ public class BoardManager : MonoBehaviour
     private ResourceInfo.Color tempColor; //store the color
     private int tempNum;    //store
 
+    //private void Start()
+    //{
+        //localPlayer = new Player();
+    //}
     
-
     void Shuffle(GameObject[] resourceList)
     {
         int randomNum;

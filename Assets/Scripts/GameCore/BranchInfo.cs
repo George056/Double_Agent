@@ -28,7 +28,8 @@ public class BranchInfo : MonoBehaviour
             Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOrder);
             Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOwner);
             GameObject.FindObjectOfType<BoardManager>().ChangeBranchOwner(cc);
-            // update resource count accordingly
+            
+            //GameObject.FindObjectOfType<BoardManager>().localPlayer.PayForBranch();
         }
     }
 }

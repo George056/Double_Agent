@@ -21,20 +21,27 @@ public class BoardManager : MonoBehaviour
         public int xLoc;
         public int yLoc;
     }
-    public int columns = 11;
-    public int rows = 11;
+    
     public GameObject[] resourceList;
     public GameObject[] nodes;
     public GameObject[] allBranches;
 
     public ResourceItemInfo[] ResourceInfoList = new ResourceItemInfo[13];
-    bool isSetupTurn = false;
     public Owner activeSide;
-    public bool inBuildMode = false;
-    private int turnCount = 1;
+    
     public GameObject tradeButton;
     public GameObject buildButton;
     public GameObject endTurnButton;
+    
+    public bool inBuildMode = false;
+    
+    [HideInInspector]
+    public int columns = 11;
+    [HideInInspector]
+    public int rows = 11;
+
+    bool isSetupTurn = false;
+    private int turnCount = 1;
 
 
     /*

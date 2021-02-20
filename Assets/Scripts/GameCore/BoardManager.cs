@@ -183,6 +183,27 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public bool LegalNodeMove(int node, Owner activeSide)
+    {
+        bool isLegal = true;
+
+        if (nodes[node].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) { isLegal = false; }
+        // if (not connected to an owned branch) { isLegal = false; }
+
+        return isLegal;
+    }
+
+    public bool LegalBranchMove(int branch, Owner activeSide)
+    {
+        bool isLegal = true;
+
+        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
+        // if (not connected to an owned branch) { isLegal = false; }
+        // if (on a square multi-captured by opponent) { isLegal = false; }
+
+        return isLegal;
+    }
+
     public void EnterBuildMode()
     {
         inBuildMode = true;

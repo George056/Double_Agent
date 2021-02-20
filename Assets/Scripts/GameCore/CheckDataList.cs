@@ -32,7 +32,6 @@ public class CheckDataList : MonoBehaviour
     public BoardManager.Owner longestNetOwner;
 
     private BoardManager BM;
-    private AI ai;
     private int maxResource;
     private int count = 0;
     //private int existCheck;
@@ -140,7 +139,7 @@ public class CheckDataList : MonoBehaviour
             for (int i = 0; i < longest.Count; i++)
             {
                 List<int> temp;
-                ai.connectionsRoad.TryGetValue(longest[i], out temp);
+                AI.connectionsRoad.TryGetValue(longest[i], out temp);
                 for (int j = 0; j < temp.Count; j++)
                 {
                     if (branches.Contains(temp[j]))

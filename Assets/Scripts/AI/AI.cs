@@ -15,10 +15,11 @@ public enum Difficulty
 
 public enum Resource
 {
-    red = 0,
-    blue = 1,
-    yellow = 2,
-    green = 3
+    red = 0,         //lumber
+    blue = 1,        //lumber
+    yellow = 2,      //loyalists
+    green = 3,       //money
+    nil = 4          //none
 }
 
 /// <summary>
@@ -50,14 +51,14 @@ public class AI : Agent
     public int __human_score;
 
     [HideInInspector][Tooltip("The different connections between the roads")]
-    public Dictionary<int, List<int>> connectionsRoad = new Dictionary<int, List<int>>();
+    public static Dictionary<int, List<int>> connectionsRoad = new Dictionary<int, List<int>>();
 
     [HideInInspector][Tooltip("The different connections to a node")]
-    public Dictionary<char, List<int>> connectionsNode = new Dictionary<char, List<int>>();
+    public static Dictionary<char, List<int>> connectionsNode = new Dictionary<char, List<int>>();
 
     [HideInInspector]
     [Tooltip("The different nodes a connector touches")]
-    public Dictionary<int, List<char>> connectionsRoadNode = new Dictionary<int, List<char>>();
+    public static Dictionary<int, List<char>> connectionsRoadNode = new Dictionary<int, List<char>>();
 
     [Tooltip("An integer that says if the AI is orange (0) or purple (1)")]
     public short __player;
@@ -202,10 +203,11 @@ public class AI : Agent
     /// <summary>
     /// This is the function that is called to tell the AI to make its move
     /// </summary>
-    /// <param name="currentBoard">The current board</param>
+    /// <param name="newNodes">The new moves of nodes by the human</param>
+    /// <param name="newConnectors">The list of new moves of connectors by the human</param>
     /// <param name="AIResources">The resources held by the AI</param>
     /// <param name="playerResources">The resources held by the player</param>
-    public void AIMove(Board currentBoard, List<int> AIResources, List<int> playerResources)
+    public void AIMove(List<int> newNodes, List<int> newConnectors, List<int> AIResources, List<int> playerResources)
     {
         //update info
 
@@ -214,8 +216,7 @@ public class AI : Agent
         {
             opener = false;
         }
-        
-        __board = currentBoard;
+
         __resources = AIResources;
         __player_resources = playerResources;
 

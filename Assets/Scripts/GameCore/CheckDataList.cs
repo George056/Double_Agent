@@ -100,6 +100,34 @@ public class CheckDataList : MonoBehaviour
         BM = GetComponent<BoardManager>();
     }
 
+    /// <summary>
+    /// Check to see if any tiles are depleted
+    /// </summary>
+    public void DepletedCheck()
+    {
+        for(int i = 0; i < BM.resourceList.Length; i++)
+        {
+            var tileInfo = BM.resourceList[i].GetComponent<ResourceInfo>();
+            int count = 0; //the number of nodes connected to the tile
+            foreach(var nd in BM.nodes)
+            {
+                if (tileInfo.resoureTileOwner != BoardManager.Owner.Nil) break; //cannot be depleted if owned
+                if (tileInfo.depleted) break; //skip if already depleted
+
+                var nodeInfo = nd.GetComponent<NodeInfo>();
+                if (nodeInfo.nodeOwner != BoardManager.Owner.Nil)
+                {
+                    count += (nodeInfo.resources.Contains(BM.resourceList[i])) ? 1 : 0;
+                    if(count >= tileInfo.numOfResource)
+                    {
+                        tileInfo.depleted = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public void LongestNetCheck(BoardManager.Owner who)
     {
         List<int> branches = new List<int>();

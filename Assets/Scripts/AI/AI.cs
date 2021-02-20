@@ -218,6 +218,14 @@ public class AI : Agent
         if (!trainingMode) MaxStep = 0;
     }
 
+    public void UpdateResources(List<int> update)
+    {
+        for(int i = 0; i < __resources.Count; i++)
+        {
+            __resources[i] += update[i];
+        }
+    }
+
     /// <summary>
     /// Reset the agent when an episode begins
     /// </summary>

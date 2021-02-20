@@ -10,7 +10,7 @@ public class Relationships : MonoBehaviour
 
     [HideInInspector]
     [Tooltip("The different connections to a node")]
-    public static Dictionary<char, List<int>> connectionsNode = new Dictionary<char, List<int>>();
+    public static Dictionary<int, List<int>> connectionsNode = new Dictionary<int, List<int>>();
 
     [HideInInspector]
     [Tooltip("The different nodes a connector touches")]
@@ -62,30 +62,30 @@ public class Relationships : MonoBehaviour
         connectionsRoad.Add(34, new List<int>() { 28, 31, 32, 35 });
         connectionsRoad.Add(35, new List<int>() { 33, 34 });
 
-        connectionsNode.Add('a', new List<int>() { 0, 1 });
-        connectionsNode.Add('b', new List<int>() { 0, 2 });
-        connectionsNode.Add('c', new List<int>() { 3, 6 });
-        connectionsNode.Add('d', new List<int>() { 1, 3, 4, 7 });
-        connectionsNode.Add('e', new List<int>() { 2, 4, 5, 8 });
-        connectionsNode.Add('f', new List<int>() { 5, 9 });
-        connectionsNode.Add('g', new List<int>() { 10, 15 });
-        connectionsNode.Add('h', new List<int>() { 6, 10, 11, 16 });
-        connectionsNode.Add('i', new List<int>() { 7, 11, 12, 17 });
-        connectionsNode.Add('j', new List<int>() { 9, 12, 13, 18 });
-        connectionsNode.Add('k', new List<int>() { 9, 13, 14, 19 });
-        connectionsNode.Add('l', new List<int>() { 14, 20 });
-        connectionsNode.Add('m', new List<int>() { 15, 21 });
-        connectionsNode.Add('n', new List<int>() { 16, 21, 22, 26 });
-        connectionsNode.Add('o', new List<int>() { 17, 22, 23, 27 });
-        connectionsNode.Add('p', new List<int>() { 18, 23, 24, 28 });
-        connectionsNode.Add('q', new List<int>() { 19, 24, 25, 29 });
-        connectionsNode.Add('r', new List<int>() { 20, 25 });
-        connectionsNode.Add('s', new List<int>() { 26, 30 });
-        connectionsNode.Add('t', new List<int>() { 27, 30, 31, 33 });
-        connectionsNode.Add('u', new List<int>() { 28, 31, 32, 34 });
-        connectionsNode.Add('v', new List<int>() { 29, 32 });
-        connectionsNode.Add('w', new List<int>() { 33, 35 });
-        connectionsNode.Add('x', new List<int>() { 34, 35 });
+        connectionsNode.Add(0, new List<int>() { 0, 1 });
+        connectionsNode.Add(1, new List<int>() { 0, 2 });
+        connectionsNode.Add(2, new List<int>() { 3, 6 });
+        connectionsNode.Add(3, new List<int>() { 1, 3, 4, 7 });
+        connectionsNode.Add(4, new List<int>() { 2, 4, 5, 8 });
+        connectionsNode.Add(5, new List<int>() { 5, 9 });
+        connectionsNode.Add(6, new List<int>() { 10, 15 });
+        connectionsNode.Add(7, new List<int>() { 6, 10, 11, 16 });
+        connectionsNode.Add(8, new List<int>() { 7, 11, 12, 17 });
+        connectionsNode.Add(9, new List<int>() { 9, 12, 13, 18 });
+        connectionsNode.Add(10, new List<int>() { 9, 13, 14, 19 });
+        connectionsNode.Add(11, new List<int>() { 14, 20 });
+        connectionsNode.Add(12, new List<int>() { 15, 21 });
+        connectionsNode.Add(13, new List<int>() { 16, 21, 22, 26 });
+        connectionsNode.Add(14, new List<int>() { 17, 22, 23, 27 });
+        connectionsNode.Add(15, new List<int>() { 18, 23, 24, 28 });
+        connectionsNode.Add(16, new List<int>() { 19, 24, 25, 29 });
+        connectionsNode.Add(17, new List<int>() { 20, 25 });
+        connectionsNode.Add(18, new List<int>() { 26, 30 });
+        connectionsNode.Add(19, new List<int>() { 27, 30, 31, 33 });
+        connectionsNode.Add(20, new List<int>() { 28, 31, 32, 34 });
+        connectionsNode.Add(21, new List<int>() { 29, 32 });
+        connectionsNode.Add(22, new List<int>() { 33, 35 });
+        connectionsNode.Add(23, new List<int>() { 34, 35 });
 
         connectionsRoadNode.Add(0, new List<char>() { 'a', 'b' });
         connectionsRoadNode.Add(1, new List<char>() { 'a', 'd' });

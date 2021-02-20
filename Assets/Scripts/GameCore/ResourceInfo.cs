@@ -9,6 +9,10 @@ public class ResourceInfo : MonoBehaviour
     public Color nodeColor;
     public int numOfResource;
     public BoardManager.Owner resoureTileOwner;
+
+    [HideInInspector]
+    [Tooltip("States if the tile is depleted")]
+    public bool depleted = false;
     
     // Start is called before the first frame update
     void Start()

@@ -25,8 +25,8 @@ public class Player : MonoBehaviour
     [Tooltip("A list of all human resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
     List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
 
-    List<int> __owned_nodes;
-    List<int> __owned_branches;
+    public List<int> __owned_nodes;
+    public List<int> __owned_branches;
     
 
     void Start()
@@ -35,6 +35,8 @@ public class Player : MonoBehaviour
         __piece_type = (Owner)PlayerPrefs.GetInt("Human_Piece");
         __longest_net = false;
         __owned_nodes = new List<int>();
+        __owned_branches = new List<int>();
+        UpdateResources(new List<int>(4) { 5, 5, 10, 10 });
     }
 
     public void HumanMove(int human_score, List<int> resources)
@@ -95,6 +97,16 @@ public class Player : MonoBehaviour
         {
             __resources[i] += update[i];
         }
+    }
+
+    public void AddNode(int index)
+    {
+        __owned_nodes.Add(index);
+    }
+
+    public void AddBranch(int index)
+    {
+        __owned_branches.Add(index);
     }
 
 }

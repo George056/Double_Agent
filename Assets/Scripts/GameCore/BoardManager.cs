@@ -164,6 +164,8 @@ public class BoardManager : MonoBehaviour
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
         }
+
+        var temp = GameObject.FindGameObjectsWithTag("Node");
     }
 
     public void ChangeBranchOwner(int branchNum)
@@ -184,15 +186,15 @@ public class BoardManager : MonoBehaviour
 
         if (nodes[node].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) { isLegal = false; }
 
-        //Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
-        //bool found = false;
-        //foreach (int i in connectedBranches)
-        //{
-        //    found = myBranches.Contains(i);
-        //    if (found) break;
-        //}
+        Relationships.connectionsNode.TryGetValue(node, out List<int> connectedBranches);
+        bool found = false;
+        foreach (int i in connectedBranches)
+        {
+            found = myBranches.Contains(i);
+            if (found) break;
+        }
 
-        //if (!found) { isLegal = false; }
+        if (!found) { isLegal = false; }
 
         return isLegal;
     }
@@ -204,15 +206,18 @@ public class BoardManager : MonoBehaviour
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
-        Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
-        bool found = false;
-        foreach (int i in connectedBranches)
+        if (myBranches.Count >= 2)
         {
-            found = myBranches.Contains(i);
-            if (found) break;
-        }
+            Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
+            bool found = false;
+            foreach (int i in connectedBranches)
+            {
+                found = myBranches.Contains(i);
+                if (found) break;
+            }
 
-        if (!found) { isLegal = false; }
+            if (!found) { isLegal = false; }
+        }
 
         // if (on a square multi-captured by opponent) { isLegal = false; }
 

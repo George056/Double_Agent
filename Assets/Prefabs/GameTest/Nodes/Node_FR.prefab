@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6375626238504660160}
   m_Layer: 0
   m_Name: Node_FR
-  m_TagString: Untagged
+  m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeOwner: 2
   nodeOrder: 7
-  resources: 04000000040000000400000004000000
+  resources: 04000000030000000300000004000000
 --- !u!58 &6375626238504660160
 CircleCollider2D:
   m_ObjectHideFlags: 0

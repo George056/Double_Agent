@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8807850606339281563}
   m_Layer: 0
   m_Name: HengBranch 6
-  m_TagString: Untagged
+  m_TagString: Branch
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

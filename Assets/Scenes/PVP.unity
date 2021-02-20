@@ -247,6 +247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardScript: {fileID: 0}
+  player: {fileID: 1080015562502522977, guid: 8d8c011bc6d039c4280195699a489492, type: 3}
 --- !u!224 &77764163
 RectTransform:
   m_ObjectHideFlags: 0

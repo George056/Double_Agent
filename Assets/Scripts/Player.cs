@@ -26,6 +26,8 @@ public class Player : MonoBehaviour
     List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
 
     List<int> __owned_nodes;
+    List<int> __owned_branches;
+    
 
     void Start()
     {
@@ -86,4 +88,13 @@ public class Player : MonoBehaviour
         __resources[0]--;
         __resources[1]--;
     }
+
+    public void UpdateResources(List<int> update)
+    {
+        for (int i = 0; i < __resources.Count; i++)
+        {
+            __resources[i] += update[i];
+        }
+    }
+
 }

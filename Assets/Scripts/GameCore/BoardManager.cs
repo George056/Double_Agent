@@ -32,7 +32,6 @@ public class BoardManager : MonoBehaviour
     public Owner activeSide;
     public bool inBuildMode = false;
 
-    //public Player localPlayer;
 
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
@@ -59,11 +58,6 @@ public class BoardManager : MonoBehaviour
     private List<Vector3> gridPositions = new List<Vector3>();
     private ResourceInfo.Color tempColor; //store the color
     private int tempNum;    //store
-
-    //private void Start()
-    //{
-        //localPlayer = new Player();
-    //}
     
     void Shuffle(GameObject[] resourceList)
     {
@@ -155,6 +149,7 @@ public class BoardManager : MonoBehaviour
         Shuffle(resourceList);
         BoardSetUp(GameBoard);
         AssignNodeResources();
+
     }
     /*
      *  change the owner of the node by clicking
@@ -181,6 +176,47 @@ public class BoardManager : MonoBehaviour
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
         }
+    }
+
+    public bool LegalNodeMove(int node, Owner activeSide, List<int> myBranches)
+    {
+        bool isLegal = true;
+
+        if (nodes[node].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) { isLegal = false; }
+
+        //Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
+        //bool found = false;
+        //foreach (int i in connectedBranches)
+        //{
+        //    found = myBranches.Contains(i);
+        //    if (found) break;
+        //}
+
+        //if (!found) { isLegal = false; }
+
+        return isLegal;
+    }
+
+    public bool LegalBranchMove(int branch, Owner activeSide, List<int> myBranches)
+    {
+        bool isLegal = true;
+        bool ownsNeighborBranch = false;
+
+        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
+
+        Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
+        bool found = false;
+        foreach (int i in connectedBranches)
+        {
+            found = myBranches.Contains(i);
+            if (found) break;
+        }
+
+        if (!found) { isLegal = false; }
+
+        // if (on a square multi-captured by opponent) { isLegal = false; }
+
+        return isLegal;
     }
 
     public void EnterBuildMode()

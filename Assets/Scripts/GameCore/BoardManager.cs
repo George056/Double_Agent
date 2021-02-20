@@ -132,12 +132,29 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
-   
+
+    void AssignNodeResources()
+    {
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            Relationships.connectionsNodeTiles.TryGetValue(i, out List<int> temp);
+
+            //nodes[i].GetComponent<NodeInfo>().resources = new List<ResourceInfo.Color>(temp.Count);
+
+            for (int j = 0; j < temp.Count; j++)
+            {
+                nodes[i].GetComponent<NodeInfo>().resources[j] = resourceList[temp[j]].GetComponent<ResourceInfo>().nodeColor;
+            }
+
+        }
+    }
+
     public void SetupScene()
     {
         gridPositions.Clear();
         Shuffle(resourceList);
         BoardSetUp(GameBoard);
+        AssignNodeResources();
     }
     /*
      *  change the owner of the node by clicking

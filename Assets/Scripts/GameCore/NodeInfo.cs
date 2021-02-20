@@ -8,6 +8,7 @@ public class NodeInfo : MonoBehaviour
     private int cc;
     public BoardManager.Owner nodeOwner;
     public int nodeOrder;
+    public List<ResourceInfo.Color> resources = new List<ResourceInfo.Color>(4) { ResourceInfo.Color.Empty, ResourceInfo.Color.Empty, ResourceInfo.Color.Empty, ResourceInfo.Color.Empty };
     //public string countryAbreviation;
     //public string countryName;
 

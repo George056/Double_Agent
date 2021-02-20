@@ -15,10 +15,10 @@ public enum Difficulty
 
 public enum Resource
 {
-    red = 0,         //lumber
+    red = 0,         //copper
     blue = 1,        //lumber
-    yellow = 2,      //loyalists
-    green = 3,       //money
+    yellow = 2,      //money
+    green = 3,       //loyalists
     nil = 4          //none
 }
 

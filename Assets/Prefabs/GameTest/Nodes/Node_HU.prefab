@@ -112,6 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeOwner: 2
   nodeOrder: 16
+  resources: 04000000040000000400000004000000
 --- !u!58 &-1249261169606221220
 CircleCollider2D:
   m_ObjectHideFlags: 0

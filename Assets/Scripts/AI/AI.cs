@@ -60,6 +60,10 @@ public class AI : Agent
     [Tooltip("The different nodes a connector touches")]
     public static Dictionary<int, List<char>> connectionsRoadNode = new Dictionary<int, List<char>>();
 
+    [HideInInspector]
+    [Tooltip("How nodes connect to tiles")]
+    public static Dictionary<int, List<int>> connectionsNodeTiles = new Dictionary<int, List<int>>();
+
     [Tooltip("An integer that says if the AI is orange (0) or purple (1)")]
     public short __player;
 
@@ -198,6 +202,32 @@ public class AI : Agent
         connectionsRoadNode.Add(33, new List<char>() { 't', 'w' });
         connectionsRoadNode.Add(34, new List<char>() { 'u', 'x' });
         connectionsRoadNode.Add(35, new List<char>() { 'w', 'x' });
+
+        connectionsNodeTiles.Add(0, new List<int>() { 0 });
+        connectionsNodeTiles.Add(1, new List<int>() { 0 });
+        connectionsNodeTiles.Add(2, new List<int>() { 1 });
+        connectionsNodeTiles.Add(3, new List<int>() { 0, 1, 2 });
+        connectionsNodeTiles.Add(4, new List<int>() { 0, 2, 3 });
+        connectionsNodeTiles.Add(5, new List<int>() { 3 });
+        connectionsNodeTiles.Add(6, new List<int>() { 4 });
+        connectionsNodeTiles.Add(7, new List<int>() { 1, 4, 5 });
+        connectionsNodeTiles.Add(8, new List<int>() { 1, 2, 5, 6 });
+        connectionsNodeTiles.Add(9, new List<int>() { 2, 3, 6, 7 });
+        connectionsNodeTiles.Add(10, new List<int>() { 3, 7, 8 });
+        connectionsNodeTiles.Add(11, new List<int>() { 8 });
+        connectionsNodeTiles.Add(12, new List<int>() { 4 });
+        connectionsNodeTiles.Add(13, new List<int>() { 4, 5, 9 });
+        connectionsNodeTiles.Add(14, new List<int>() { 5, 6, 9, 10 });
+        connectionsNodeTiles.Add(15, new List<int>() { 6, 7, 10, 11 });
+        connectionsNodeTiles.Add(16, new List<int>() { 7, 8, 11 });
+        connectionsNodeTiles.Add(17, new List<int>() { 8 });
+        connectionsNodeTiles.Add(18, new List<int>() { 9 });
+        connectionsNodeTiles.Add(19, new List<int>() { 9, 10, 12 });
+        connectionsNodeTiles.Add(20, new List<int>() { 10, 11, 12 });
+        connectionsNodeTiles.Add(21, new List<int>() { 11 });
+        connectionsNodeTiles.Add(22, new List<int>() { 12 });
+        connectionsNodeTiles.Add(23, new List<int>() { 12 });
+
     }
 
     /// <summary>

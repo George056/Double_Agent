@@ -99,6 +99,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void UpdateScore(int newScore)
+    {
+        __human_score = newScore;
+    }
+
     public void AddNode(int index)
     {
         __owned_nodes.Add(index);

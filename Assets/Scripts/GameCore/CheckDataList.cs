@@ -139,7 +139,7 @@ public class CheckDataList : MonoBehaviour
             for (int i = 0; i < longest.Count; i++)
             {
                 List<int> temp;
-                AI.connectionsRoad.TryGetValue(longest[i], out temp);
+                Relationships.connectionsRoad.TryGetValue(longest[i], out temp);
                 for (int j = 0; j < temp.Count; j++)
                 {
                     if (branches.Contains(temp[j]))

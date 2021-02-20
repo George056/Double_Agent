@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         boardScript = GetComponent<BoardManager>();
+        Relationships.SetUpConnections();
         InitGame();
     }
     void InitGame()

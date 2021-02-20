@@ -38,7 +38,7 @@ public class NodeInfo : MonoBehaviour
                 Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOwner);
                 GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(cc);
 
-                //GameObject.FindObjectOfType<BoardManager>().localPlayer.PayForNode();
+                //GameObject.FindObjectWithTag("Player").PayForNode();
             }
         }
         

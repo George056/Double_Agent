@@ -15,23 +15,11 @@ public class BranchInfo : MonoBehaviour
             if (GameObject.FindObjectOfType<BoardManager>().LegalBranchMove(branchOrder, GameObject.FindObjectOfType<BoardManager>().activeSide, 
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)) // or localPlayer.Owner for 2nd parameter
             {
-                if (GameObject.FindObjectOfType<BoardManager>().activeSide == BoardManager.Owner.US)
-                {
-                    this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
-                    branchOwner = BoardManager.Owner.US;
-                }
-                else if (GameObject.FindObjectOfType<BoardManager>().activeSide == BoardManager.Owner.USSR)
-                {
-                    this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
-                    branchOwner = BoardManager.Owner.USSR;
-                }
+                //Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOrder);
+                //Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOwner);
 
-                //cc = this.gameObject.GetComponent<BranchInfo>().branchOrder;
-                Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOrder);
-                Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOwner);
-                //GameObject.FindObjectOfType<BoardManager>().ChangeBranchOwner(cc);
+                GameObject.FindObjectOfType<BoardManager>().ChangeBranchOwner(branchOrder);
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().AddBranch(branchOrder);
-
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PayForBranch();
             }
         }

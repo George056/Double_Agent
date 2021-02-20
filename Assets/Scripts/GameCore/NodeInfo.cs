@@ -21,24 +21,11 @@ public class NodeInfo : MonoBehaviour
             if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)) // localPlayer.Owner)) // or could use GameObject.FindObjectOfType<BoardManager>().activeSide for 2nd parameter
             {
+                //Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOrder);
+                //Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOwner);
 
-                if (GameObject.FindObjectOfType<BoardManager>().activeSide == BoardManager.Owner.US)
-                {
-                    this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
-                    nodeOwner = BoardManager.Owner.US;
-                }
-                else if (GameObject.FindObjectOfType<BoardManager>().activeSide == BoardManager.Owner.USSR)
-                {
-                    this.gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
-                    nodeOwner = BoardManager.Owner.USSR;
-                }
-
-                cc = this.gameObject.GetComponent<NodeInfo>().nodeOrder;
-                Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOrder);
-                Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOwner);
-                GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(cc);
+                GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().AddNode(nodeOrder);
-
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PayForNode();
             }
         }

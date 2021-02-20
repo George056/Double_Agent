@@ -31,6 +31,10 @@ public class BoardManager : MonoBehaviour
     bool isSetupTurn = false;
     public Owner activeSide;
     public bool inBuildMode = false;
+    private int turnCount = 1;
+    public GameObject tradeButton;
+    public GameObject buildButton;
+    public GameObject endTurnButton;
 
 
     /*
@@ -240,12 +244,9 @@ public class BoardManager : MonoBehaviour
         //        Debug.Log("Unclaimed Node");
         //    }
         //}
-
-
-
     }
 
-    public void EndTurn()
+    public void EndTurnButtonClicked()
     {
         if (isSetupTurn)
         {
@@ -256,18 +257,25 @@ public class BoardManager : MonoBehaviour
                 {
                     Debug.Log("Player confirmed submission; turn ending");
 
-                    if (activeSide == Owner.US)
+                    if (turnCount != 2)
                     {
-                        activeSide = Owner.USSR;
-                    }
-                    else
-                    {
-                        activeSide = Owner.US;
+                        if (activeSide == Owner.US)
+                        {
+                            activeSide = Owner.USSR;
+                        }
+                        else
+                        {
+                            activeSide = Owner.US;
+                        }
                     }
 
                     inBuildMode = false;
 
                     // disable Trade, Build, and End Turn buttons
+                    //tradeButton.SetActive(!tradeButton.activeSelf);
+                    //buildButton.SetActive(!buildButton.activeSelf);
+                    //endTurnButton.SetActive(!endTurnButton.activeSelf);
+
 
                     // Perform GameBoard Check
 
@@ -276,11 +284,10 @@ public class BoardManager : MonoBehaviour
             }
             else
             {
-                
+
                 // prompt player to place E & CL
             }
         }
-
         else // a regular turn
         {
             // prompt player to confirm submission
@@ -306,7 +313,37 @@ public class BoardManager : MonoBehaviour
                 // provide player with indication that opponent is taking turn
             }
         }
+    }
 
+    public void EndTurn()
+    {
+        if (turnCount != 2)
+        {
+            if (activeSide == Owner.US)
+            {
+                activeSide = Owner.USSR;
+            }
+            else
+            {
+                activeSide = Owner.US;
+            }
+        }
+
+        // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
+
+        // if not opener move, allocate resources to appropriate player
+
+        // call AI to make move if AI turn
+        // provide player with indication that opponent is taking turn
+
+        inBuildMode = false;
+
+        // disable/reenable Trade, Build, and End Turn buttons
+        //tradeButton.SetActive(!tradeButton.activeSelf);
+        //buildButton.SetActive(!buildButton.activeSelf);
+        //endTurnButton.SetActive(!endTurnButton.activeSelf);
+
+        turnCount++;
     }
 
     void FirstTurnSequence()

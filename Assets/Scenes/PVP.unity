@@ -234,6 +234,9 @@ MonoBehaviour:
   - {fileID: 453730248622727892, guid: 21ad4f21dd3e1334b86dd011ebef039c, type: 3}
   activeSide: 0
   inBuildMode: 0
+  tradeButton: {fileID: 292137698}
+  buildButton: {fileID: 1974227698}
+  endTurnButton: {fileID: 924871812}
 --- !u!114 &77764162
 MonoBehaviour:
   m_ObjectHideFlags: 0

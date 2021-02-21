@@ -246,6 +246,13 @@ public class BoardManager : MonoBehaviour
             }
 
             if (!found) { isLegal = false; }
+
+            if(turnCount == 3 || turnCount == 4)
+            {
+                Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
+                if (LegalNodeMove(adjacentNodes[0], activeSide, myBranches) || LegalNodeMove(adjacentNodes[1], activeSide, myBranches)) isLegal = true;
+                else isLegal = false;
+            }
         }
 
         // if (on a square multi-captured by opponent) { isLegal = false; }

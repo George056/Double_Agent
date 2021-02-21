@@ -122,7 +122,6 @@ public class AI : Agent
 
                 int positionNode;
 
-                //possible error due to a branch being placed on turn 3 or 4 that has no legal node on either side*****************************************
                 positionNode = Random.Range(0, 1);
                 Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
                 if (LegalMoveConnector(temp[positionNode]))

@@ -312,9 +312,48 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Finds the proper allocation of resources for the current player (activeSide) and gives them it.
+    /// </summary>
     private void AllocateResources()
     {
+        List<int> allocation = new List<int>(4) { 0, 0, 0, 0 };
 
+        foreach(var node in nodes)//look at every node
+        {
+            var temp = node.GetComponent<NodeInfo>();
+            if(temp.nodeOwner == activeSide)//if the node is owned by the current player
+            {
+                foreach(var tile in temp.resources)//look at all the tiles the node touches
+                {
+                    var tile_temp = tile.GetComponent<ResourceInfo>();
+                    if(tile_temp.resoureTileOwner != Owner.Nil)//if someone owns it
+                    {
+                        if(tile_temp.resoureTileOwner == activeSide)//only allocate if it is owned by the player
+                        {
+                            allocation[(int)tile_temp.nodeColor] += 1;
+                        }
+                    }
+                    else//if no one owns it
+                    {
+                        if (!tile_temp.depleted)
+                        {
+                            allocation[(int)tile_temp.nodeColor] += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        //assign the new resources
+        if(activeSide == aiPiece)
+        {
+            GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().AssignResources(allocation);
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().UpdateResources(allocation);
+        }
     }
 
     public void EnterBuildMode()

@@ -85,13 +85,22 @@ public class AI : Agent
     }
 
     /// <summary>
+    /// This function updates the current resources held by the AI
+    /// </summary>
+    /// <param name="AIResources">A list of the new resources this turn</param>
+    public void AssignResources(List<int> AIResources)
+    {
+        for(int i = 0; i < __resources.Count; i++)
+        {
+            __resources[i] += AIResources[i];
+        }
+    }
+
+    /// <summary>
     /// This is the function that is called to tell the AI to make its move
     /// </summary>
-    /// <param name="newNodes">The new moves of nodes by the human</param>
-    /// <param name="newConnectors">The list of new moves of connectors by the human</param>
-    /// <param name="AIResources">The resources held by the AI</param>
     /// <param name="playerResources">The resources held by the player</param>
-    public void AIMove(List<int> newNodes, List<int> newConnectors, List<int> AIResources, List<int> playerResources)
+    public void AIMove(List<int> playerResources)
     {
         //update info
 
@@ -101,7 +110,6 @@ public class AI : Agent
             opener = false;
         }
 
-        __resources = AIResources;
         __player_resources = playerResources;
 
         //end update info

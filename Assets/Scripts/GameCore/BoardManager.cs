@@ -190,7 +190,7 @@ public class BoardManager : MonoBehaviour
         if(firstPlayer == aiPiece)
         {
             BtnToggle();
-            GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().AIMove(turnCount);
+            player2.GetComponent<AI>().AIMove(turnCount);
         }
     }
     /*
@@ -469,10 +469,12 @@ public class BoardManager : MonoBehaviour
                     Debug.Log("Player confirmed submission; turn ending");
 
                     // disable Trade, Build, and End Turn buttons
-                    BtnToggle();
+                    if (turnCount != 2)
+                        BtnToggle();
 
                     // Perform GameBoard Check
-                    BoardCheck();
+                    if (turnCount > 5)
+                        BoardCheck();
 
                     // provide player with indication that opponent is taking turn
                     if (activeSide == aiPiece)
@@ -520,10 +522,12 @@ public class BoardManager : MonoBehaviour
         }
 
         // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
-        BoardCheck();
+        if(turnCount > 5)
+            BoardCheck();
 
         // if not opener move, allocate resources to appropriate player
-        AllocateResources();
+        if(turnCount > 5)
+            AllocateResources();
 
         // call AI to make move if AI turn
         // provide player with indication that opponent is taking turn
@@ -531,7 +535,8 @@ public class BoardManager : MonoBehaviour
         inBuildMode = false;
 
         // disable/reenable Trade, Build, and End Turn buttons
-        BtnToggle();
+        if(turnCount != 2)
+            BtnToggle();
 
         turnCount++;
         if(turnCount == 5)

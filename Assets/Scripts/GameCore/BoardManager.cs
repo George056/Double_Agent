@@ -433,36 +433,12 @@ public class BoardManager : MonoBehaviour
                 if (true) // user confirmed turn submission
                 {
                     Debug.Log("Player confirmed submission; turn ending");
-
-                    if (turnCount != 2)
-                    {
-                        if (activeSide == Owner.US)
-                        {
-                            activeSide = Owner.USSR;
-                        }
-                        else
-                        {
-                            activeSide = Owner.US;
-                        }
-                    }
-
-                    inBuildMode = false;
-
-                    // disable Trade, Build, and End Turn buttons
-                    //tradeButton.SetActive(!tradeButton.activeSelf);
-                    //buildButton.SetActive(!buildButton.activeSelf);
-                    //endTurnButton.SetActive(!endTurnButton.activeSelf);
-
-
-                    // Perform GameBoard Check
-                    BoardCheck();
-
+                    EndTurn();
                     // provide player with indication that opponent is taking turn
                 }
             }
             else
             {
-
                 // prompt player to place E & CL
             }
         }
@@ -472,22 +448,7 @@ public class BoardManager : MonoBehaviour
             if (true) // user confirmed turn submission
             {
                 Debug.Log("Player confirmed submission; turn ending");
-
-                if (activeSide == Owner.US)
-                {
-                    activeSide = Owner.USSR;
-                }
-                else
-                {
-                    activeSide = Owner.US;
-                }
-
-                inBuildMode = false;
-
-                // disable Trade, Build, and End Turn buttons
-
-                // Perform GameBoard Check
-
+                EndTurn();
                 // provide player with indication that opponent is taking turn
             }
         }

@@ -493,27 +493,6 @@ public class BoardManager : MonoBehaviour
                 Debug.Log("Player confirmed submission; turn ending");
                 EndTurn();
 
-                if (activeSide == Owner.US)
-                {
-                    activeSide = Owner.USSR;
-                }
-                else
-                {
-                    activeSide = Owner.US;
-                }
-
-                inBuildMode = false;
-
-                // disable Trade, Build, and End Turn buttons
-                BtnToggle();
-                // Perform GameBoard Check
-                BoardCheck();
-
-                // provide player with indication that opponent is taking turn
-                if (activeSide == aiPiece)
-                {
-                    player2.GetComponent<AI>().AIMove(turnCount);
-                }
             }
         }
     }

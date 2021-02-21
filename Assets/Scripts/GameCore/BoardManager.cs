@@ -55,6 +55,9 @@ public class BoardManager : MonoBehaviour
     [Tooltip("What piece is the first player")]
     private Owner firstPlayer;
 
+    private GameObject player1;
+    private GameObject player2;
+
 
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
@@ -174,9 +177,20 @@ public class BoardManager : MonoBehaviour
         BoardSetUp(GameBoard);
         AssignNodeResources();
         cdl = new CheckDataList();
-        aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece");
-        humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece");
-        firstPlayer = (PlayerPrefs.GetInt("AI_Player") == 0) ? aiPiece : humanPiece;
+        aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
+        humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
+        firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
+
+        //check to see if it is an AI or network game
+        player1 = GameObject.FindGameObjectWithTag("Player");
+        player2 = GameObject.FindGameObjectWithTag("AI");
+
+        //make sure it is an AI game first
+        if(firstPlayer == aiPiece)
+        {
+            BtnToggle();
+            GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().AIMove(turnCount);
+        }
     }
     /*
      *  change the owner of the node by clicking
@@ -264,7 +278,7 @@ public class BoardManager : MonoBehaviour
     {
         bool makeTrade = false;
 
-        List<int> heldResources = (who == aiPiece) ? GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().__resources : GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__resources;
+        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
         for(int i = 0; i < 4; i++)
         {
             if(resources[i] < 0)
@@ -297,9 +311,9 @@ public class BoardManager : MonoBehaviour
         {
             //Trade animation ***********************************************************************************************************************************************
             if(who == aiPiece)
-                GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().UpdateResources(resources);
+                player2.GetComponent<AI>().UpdateResources(resources);
             else
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().UpdateResources(resources);
+                player1.GetComponent<Player>().UpdateResources(resources);
         }
     }
 
@@ -312,32 +326,48 @@ public class BoardManager : MonoBehaviour
     private void BoardCheck()
     {
         Owner who = (activeSide == Owner.US) ? Owner.USSR : Owner.US;
-        cdl.LongestNetCheck(who);
 
         CalculateScore(who);
 
         cdl.DepletedCheck();
     }
 
+    /// <summary>
+    /// Calculates the score of the person who's turn just finished.
+    /// This includes the longest network check. Both players are updated if the longest net changes hands.
+    /// </summary>
+    /// <param name="who">Who we are calculating the score of</param>
     private void CalculateScore(Owner who)
     {
         Owner oldLongest = cdl.longestNetOwner;
-
+        cdl.LongestNetCheck(who);
         int score = 0;
 
         //longest net score
         if (cdl.longestNetOwner == who)
         {
             score = 2;
+        }
 
-            //if in training mode reward or punish the AI
-            if (oldLongest != who && oldLongest == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
+        // tell player of a change in longest net holder
+        if (cdl.longestNetOwner != oldLongest)
+        {
+            if (oldLongest == aiPiece && player2.GetComponent<AI>().trainingMode)
             {
-                GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().LoseLongestNet();
+                player2.GetComponent<AI>().LoseLongestNet();
             }
-            else if (oldLongest != who && who == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
+            else
             {
-                GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().GetLongestNet();
+                player1.GetComponent<Player>().LoseLongestNet();
+            }
+
+            if (cdl.longestNetOwner == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
+            {
+                player2.GetComponent<AI>().GetLongestNet();
+            }
+            else
+            {
+                player1.GetComponent<Player>().GetLongestNet();
             }
         }
 
@@ -355,11 +385,14 @@ public class BoardManager : MonoBehaviour
 
         if(who == aiPiece)
         {
-            GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().UpdateScore(score);
+            player2.GetComponent<AI>().UpdateScore(score);
         }
         else
         {
-           GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().UpdateScore(score);
+            player1.GetComponent<Player>().UpdateScore(score);
+
+            //if an AI game
+            player2.GetComponent<AI>().__human_score = score;
         }
     }
 
@@ -399,11 +432,11 @@ public class BoardManager : MonoBehaviour
         //assign the new resources
         if(activeSide == aiPiece)
         {
-            GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().AssignResources(allocation);
+            player2.GetComponent<AI>().AssignResources(allocation);
         }
         else
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().UpdateResources(allocation);
+            player1.GetComponent<Player>().UpdateResources(allocation);
         }
     }
 
@@ -433,8 +466,18 @@ public class BoardManager : MonoBehaviour
                 if (true) // user confirmed turn submission
                 {
                     Debug.Log("Player confirmed submission; turn ending");
-                    EndTurn();
+
+                    // disable Trade, Build, and End Turn buttons
+                    BtnToggle();
+
+                    // Perform GameBoard Check
+                    BoardCheck();
+
                     // provide player with indication that opponent is taking turn
+                    if (activeSide == aiPiece)
+                    {
+                        player2.GetComponent<AI>().AIMove(turnCount);
+                    }
                 }
             }
             else
@@ -449,9 +492,37 @@ public class BoardManager : MonoBehaviour
             {
                 Debug.Log("Player confirmed submission; turn ending");
                 EndTurn();
+
+                if (activeSide == Owner.US)
+                {
+                    activeSide = Owner.USSR;
+                }
+                else
+                {
+                    activeSide = Owner.US;
+                }
+
+                inBuildMode = false;
+
+                // disable Trade, Build, and End Turn buttons
+                BtnToggle();
+                // Perform GameBoard Check
+                BoardCheck();
+
                 // provide player with indication that opponent is taking turn
+                if (activeSide == aiPiece)
+                {
+                    player2.GetComponent<AI>().AIMove(turnCount);
+                }
             }
         }
+    }
+
+    private void BtnToggle()
+    {
+        tradeButton.SetActive(!tradeButton.activeSelf);
+        buildButton.SetActive(!buildButton.activeSelf);
+        endTurnButton.SetActive(!endTurnButton.activeSelf);
     }
 
     public void EndTurn()
@@ -480,11 +551,19 @@ public class BoardManager : MonoBehaviour
         inBuildMode = false;
 
         // disable/reenable Trade, Build, and End Turn buttons
-        //tradeButton.SetActive(!tradeButton.activeSelf);
-        //buildButton.SetActive(!buildButton.activeSelf);
-        //endTurnButton.SetActive(!endTurnButton.activeSelf);
+        BtnToggle();
 
         turnCount++;
+        if(turnCount == 5)
+        {
+            player2.GetComponent<AI>().EndOpener();
+        }
+
+        // get AI move
+        if (activeSide == aiPiece)
+        {
+            player2.GetComponent<AI>().AIMove(turnCount);
+        }
     }
 
     void FirstTurnSequence()

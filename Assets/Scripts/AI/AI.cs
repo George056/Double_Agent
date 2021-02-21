@@ -90,8 +90,7 @@ public class AI : Agent
     /// <summary>
     /// This is the function that is called to tell the AI to make its move
     /// </summary>
-    /// <param name="playerResources">The resources held by the player</param>
-    public void AIMove(List<int> playerResources)
+    public void AIMove()
     {
         //update info
 
@@ -100,8 +99,6 @@ public class AI : Agent
         {
             opener = false;
         }
-
-        __player_resources = playerResources;
 
         //end update info
 

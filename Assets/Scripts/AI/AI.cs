@@ -9,8 +9,8 @@ using Unity.MLAgents.Sensors;
 
 public enum Difficulty
 {
-    Easy,
-    Hard
+    Easy = 0,
+    Hard = 1
 }
 
 public enum Resource
@@ -33,6 +33,7 @@ public class AI : Agent
     public List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
 
     [HideInInspector]
+    [Tooltip("What difficulty AI is being used; 0 = easy, 1 = hard")]
     public Difficulty __difficulty;
     [HideInInspector]
     public int __ai_score;
@@ -87,6 +88,7 @@ public class AI : Agent
         __myRoads = new List<int>();
         if(!randAI) GetDifficulty();
         GetPlayer();
+        GetPiece();
         __ai_score = 0;
         __human_score = 0;
         opener = __player == 0;
@@ -481,27 +483,29 @@ public class AI : Agent
 
     /// <summary>
     /// This finds and sets the difficulty based on the PlayerPref Difficulty
+    /// Defaults to easy
     /// </summary>
     void GetDifficulty()
     {
-        __difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty");
+        __difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty", 0);
     }
 
     /// <summary>
     /// This finds and sets the player position based on the PlayerPref AI_Player
+    /// Defaults to player 2 (purple)
     /// </summary>
     void GetPlayer()
     {
-        __player = (short)PlayerPrefs.GetInt("AI_Player");
+        __player = (short)PlayerPrefs.GetInt("AI_Player", 1);
     }
 
     /// <summary>
     /// Find out what "color" piece you based on the PlayerPref AI_Piece
+    /// Defaults to USSR
     /// </summary>
     void GetPiece()
     {
-        int temp = PlayerPrefs.GetInt("AI_Piece");
-        __piece_type = (Owner)temp;
+        __piece_type = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
     }
 
     //calculate longest path*******************************************************************************

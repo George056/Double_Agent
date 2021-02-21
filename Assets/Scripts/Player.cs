@@ -31,8 +31,8 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        __player = (short)PlayerPrefs.GetInt("Human_Player");
-        __piece_type = (Owner)PlayerPrefs.GetInt("Human_Piece");
+        __player = (short)PlayerPrefs.GetInt("Human_Player", 0); // default to orange
+        __piece_type = (Owner)PlayerPrefs.GetInt("Human_Piece", 0); // default to US
         __longest_net = false;
         __owned_nodes = new List<int>();
         __owned_branches = new List<int>();

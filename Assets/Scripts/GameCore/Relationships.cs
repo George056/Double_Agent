@@ -14,7 +14,7 @@ public class Relationships : MonoBehaviour
 
     [HideInInspector]
     [Tooltip("The different nodes a connector touches")]
-    public static Dictionary<int, List<char>> connectionsRoadNode = new Dictionary<int, List<char>>();
+    public static Dictionary<int, List<int>> connectionsRoadNode = new Dictionary<int, List<int>>();
 
     [HideInInspector]
     [Tooltip("How nodes connect to tiles")]
@@ -87,42 +87,42 @@ public class Relationships : MonoBehaviour
         connectionsNode.Add(22, new List<int>() { 33, 35 });
         connectionsNode.Add(23, new List<int>() { 34, 35 });
 
-        connectionsRoadNode.Add(0, new List<char>() { 'a', 'b' });
-        connectionsRoadNode.Add(1, new List<char>() { 'a', 'd' });
-        connectionsRoadNode.Add(2, new List<char>() { 'b', 'e' });
-        connectionsRoadNode.Add(3, new List<char>() { 'c', 'd' });
-        connectionsRoadNode.Add(4, new List<char>() { 'd', 'e' });
-        connectionsRoadNode.Add(5, new List<char>() { 'e', 'f' });
-        connectionsRoadNode.Add(6, new List<char>() { 'c', 'h' });
-        connectionsRoadNode.Add(7, new List<char>() { 'd', 'i' });
-        connectionsRoadNode.Add(8, new List<char>() { 'e', 'j' });
-        connectionsRoadNode.Add(9, new List<char>() { 'f', 'k' });
-        connectionsRoadNode.Add(10, new List<char>() { 'g', 'h' });
-        connectionsRoadNode.Add(11, new List<char>() { 'h', 'i' });
-        connectionsRoadNode.Add(12, new List<char>() { 'i', 'j' });
-        connectionsRoadNode.Add(13, new List<char>() { 'j', 'k' });
-        connectionsRoadNode.Add(14, new List<char>() { 'k', 'l' });
-        connectionsRoadNode.Add(15, new List<char>() { 'g', 'm' });
-        connectionsRoadNode.Add(16, new List<char>() { 'h', 'n' });
-        connectionsRoadNode.Add(17, new List<char>() { 'i', 'o' });
-        connectionsRoadNode.Add(18, new List<char>() { 'j', 'p' });
-        connectionsRoadNode.Add(19, new List<char>() { 'k', 'q' });
-        connectionsRoadNode.Add(20, new List<char>() { 'l', 'r' });
-        connectionsRoadNode.Add(21, new List<char>() { 'm', 'n' });
-        connectionsRoadNode.Add(22, new List<char>() { 'n', 'o' });
-        connectionsRoadNode.Add(23, new List<char>() { 'o', 'p' });
-        connectionsRoadNode.Add(24, new List<char>() { 'p', 'q' });
-        connectionsRoadNode.Add(25, new List<char>() { 'q', 'r' });
-        connectionsRoadNode.Add(26, new List<char>() { 'n', 's' });
-        connectionsRoadNode.Add(27, new List<char>() { 'o', 't' });
-        connectionsRoadNode.Add(28, new List<char>() { 'p', 'u' });
-        connectionsRoadNode.Add(29, new List<char>() { 'q', 'v' });
-        connectionsRoadNode.Add(30, new List<char>() { 's', 't' });
-        connectionsRoadNode.Add(31, new List<char>() { 't', 'u' });
-        connectionsRoadNode.Add(32, new List<char>() { 'u', 'v' });
-        connectionsRoadNode.Add(33, new List<char>() { 't', 'w' });
-        connectionsRoadNode.Add(34, new List<char>() { 'u', 'x' });
-        connectionsRoadNode.Add(35, new List<char>() { 'w', 'x' });
+        connectionsRoadNode.Add(0, new List<int>() { 'a' - 'a', 'b' - 'a' });
+        connectionsRoadNode.Add(1, new List<int>() { 'a' - 'a', 'd' - 'a' });
+        connectionsRoadNode.Add(2, new List<int>() { 'b' - 'a', 'e' - 'a' });
+        connectionsRoadNode.Add(3, new List<int>() { 'c' - 'a', 'd' - 'a' });
+        connectionsRoadNode.Add(4, new List<int>() { 'd' - 'a', 'e' - 'a' });
+        connectionsRoadNode.Add(5, new List<int>() { 'e' - 'a', 'f' - 'a' });
+        connectionsRoadNode.Add(6, new List<int>() { 'c' - 'a', 'h' - 'a' });
+        connectionsRoadNode.Add(7, new List<int>() { 'd' - 'a', 'i' - 'a' });
+        connectionsRoadNode.Add(8, new List<int>() { 'e' - 'a', 'j' - 'a' });
+        connectionsRoadNode.Add(9, new List<int>() { 'f' - 'a', 'k' - 'a' });
+        connectionsRoadNode.Add(10, new List<int>() { 'g' - 'a', 'h' - 'a' });
+        connectionsRoadNode.Add(11, new List<int>() { 'h' - 'a', 'i' - 'a' });
+        connectionsRoadNode.Add(12, new List<int>() { 'i' - 'a', 'j' - 'a' });
+        connectionsRoadNode.Add(13, new List<int>() { 'j' - 'a', 'k' - 'a' });
+        connectionsRoadNode.Add(14, new List<int>() { 'k' - 'a', 'l' - 'a' });
+        connectionsRoadNode.Add(15, new List<int>() { 'g' - 'a', 'm' - 'a' });
+        connectionsRoadNode.Add(16, new List<int>() { 'h' - 'a', 'n' - 'a' });
+        connectionsRoadNode.Add(17, new List<int>() { 'i' - 'a', 'o' - 'a' });
+        connectionsRoadNode.Add(18, new List<int>() { 'j' - 'a', 'p' - 'a' });
+        connectionsRoadNode.Add(19, new List<int>() { 'k' - 'a', 'q' - 'a' });
+        connectionsRoadNode.Add(20, new List<int>() { 'l' - 'a', 'r' - 'a' });
+        connectionsRoadNode.Add(21, new List<int>() { 'm' - 'a', 'n' - 'a' });
+        connectionsRoadNode.Add(22, new List<int>() { 'n' - 'a', 'o' - 'a' });
+        connectionsRoadNode.Add(23, new List<int>() { 'o' - 'a', 'p' - 'a' });
+        connectionsRoadNode.Add(24, new List<int>() { 'p' - 'a', 'q' - 'a' });
+        connectionsRoadNode.Add(25, new List<int>() { 'q' - 'a', 'r' - 'a' });
+        connectionsRoadNode.Add(26, new List<int>() { 'n' - 'a', 's' - 'a' });
+        connectionsRoadNode.Add(27, new List<int>() { 'o' - 'a', 't' - 'a' });
+        connectionsRoadNode.Add(28, new List<int>() { 'p' - 'a', 'u' - 'a' });
+        connectionsRoadNode.Add(29, new List<int>() { 'q' - 'a', 'v' - 'a' });
+        connectionsRoadNode.Add(30, new List<int>() { 's' - 'a', 't' - 'a' });
+        connectionsRoadNode.Add(31, new List<int>() { 't' - 'a', 'u' - 'a' });
+        connectionsRoadNode.Add(32, new List<int>() { 'u' - 'a', 'v' - 'a' });
+        connectionsRoadNode.Add(33, new List<int>() { 't' - 'a', 'w' - 'a' });
+        connectionsRoadNode.Add(34, new List<int>() { 'u' - 'a', 'x' - 'a' });
+        connectionsRoadNode.Add(35, new List<int>() { 'w' - 'a', 'x' - 'a' });
 
         connectionsNodeTiles.Add(0, new List<int>() { 0 });
         connectionsNodeTiles.Add(1, new List<int>() { 0 });

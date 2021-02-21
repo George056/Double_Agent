@@ -39,6 +39,17 @@ public class Player : MonoBehaviour
         UpdateResources(new List<int>(4) { 5, 5, 10, 10 });
     }
 
+    public void GetLongestNet()
+    {
+        __longest_net = true;
+    }
+
+    public void LoseLongestNet()
+    {
+        __longest_net = false;
+        __human_score -= 2;
+    }
+
     public void HumanMove(int human_score, List<int> resources)
     {
         __human_score = human_score;

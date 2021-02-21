@@ -46,6 +46,8 @@ public class AI : Agent
     [Tooltip("The piece does the AI play, 0 = US, 1 = USSR")]
     public Owner __piece_type;
 
+    // Variables for training {
+
     [Tooltip("Whether this is in training mode or not")]
     public bool trainingMode;
 
@@ -64,6 +66,8 @@ public class AI : Agent
     [Tooltip("Gray node reward")]
     public float nodeGrayReward = 0.01f;
 
+    // } End variables for training
+
     [Tooltip("This holds the numeric ID of the roads that have been captured")]
     private List<int> __myRoads;
 
@@ -77,7 +81,7 @@ public class AI : Agent
     private bool randAI;
 
     [Tooltip("This counts what turn it is")]
-    private int turns;
+    private int turn;
 
     [Tooltip("The active BoardManager")]
     private BoardManager bm;
@@ -85,6 +89,7 @@ public class AI : Agent
     private void Start()
     {
         randAI = true;
+        opener = true;
         __myRoads = new List<int>();
         if(!randAI) GetDifficulty();
         GetPlayer();
@@ -92,7 +97,7 @@ public class AI : Agent
         __ai_score = 0;
         __human_score = 0;
         opener = __player == 0;
-        turns = (int)__player;
+        turn = (int)__player;
         bm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>();
     }
 
@@ -108,20 +113,17 @@ public class AI : Agent
         }
     }
 
+    public void EndOpener()
+    {
+        opener = false;
+    }
+
     /// <summary>
     /// This is the function that is called to tell the AI to make its move
     /// </summary>
-    public void AIMove()
+    public void AIMove(int turn)
     {
-        //update info
-
-        turns++;
-        if(turns == 5)
-        {
-            opener = false;
-        }
-
-        //end update info
+        this.turn = turn;
 
         //make move
         if (randAI)
@@ -253,6 +255,7 @@ public class AI : Agent
     public void LoseLongestNet()
     {
         AddReward(-longestNetReward);
+        __ai_score -= 2;
     }
 
     public void CapturedTile(Color c)

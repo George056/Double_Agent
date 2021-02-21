@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResourceInfo : MonoBehaviour
 {
-    public enum Color {Red, Green, Blue, Yellow, Empty}
+    public enum Color {Red, Blue, Yellow, Green, Empty }
 
     public Color nodeColor;
     public int numOfResource;

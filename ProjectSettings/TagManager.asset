@@ -7,6 +7,7 @@ TagManager:
   - Node
   - Branch
   - AI
+  - GameManager
   layers:
   - Default
   - TransparentFX

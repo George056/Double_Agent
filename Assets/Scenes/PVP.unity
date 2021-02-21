@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 77764165}
   m_Layer: 5
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -154,8 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f124aba46887946a40b4d215fa7c40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 11
-  rows: 11
   resourceList:
   - {fileID: 5015995889806251867, guid: ac47984d0877ee9458fed38a51ce5322, type: 3}
   - {fileID: 5015995889806251867, guid: 75b50fe8253036d4d82a3bcb2d470dd3, type: 3}
@@ -233,10 +231,12 @@ MonoBehaviour:
   - {fileID: 622200039248793905, guid: 6db8e4b9b71ab4846baba91c9a9e0a7f, type: 3}
   - {fileID: 453730248622727892, guid: 21ad4f21dd3e1334b86dd011ebef039c, type: 3}
   activeSide: 0
-  inBuildMode: 0
   tradeButton: {fileID: 292137698}
   buildButton: {fileID: 1974227698}
   endTurnButton: {fileID: 924871812}
+  inBuildMode: 0
+  columns: 11
+  rows: 11
 --- !u!114 &77764162
 MonoBehaviour:
   m_ObjectHideFlags: 0

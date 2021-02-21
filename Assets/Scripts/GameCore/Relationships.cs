@@ -20,11 +20,16 @@ public class Relationships : MonoBehaviour
     [Tooltip("How nodes connect to tiles")]
     public static Dictionary<int, List<int>> connectionsNodeTiles = new Dictionary<int, List<int>>();
 
+    [HideInInspector]
+    [Tooltip("See if the dictionaries have already been made")]
+    public static bool built = false;
+
     /// <summary>
     /// This sets up the two connection maps (dictionaries)
     /// </summary>
     public static void SetUpConnections()
     {
+        built = true;
         connectionsRoad.Add(0, new List<int>() { 1, 2 });
         connectionsRoad.Add(1, new List<int>() { 0, 3, 4, 7 });
         connectionsRoad.Add(2, new List<int>() { 0, 4, 5, 8 });

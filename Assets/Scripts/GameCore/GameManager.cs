@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         boardScript = GetComponent<BoardManager>();
-        Relationships.SetUpConnections();
+        if(!Relationships.built)
+            Relationships.SetUpConnections();
         Instantiate(player);
         InitGame();
     }

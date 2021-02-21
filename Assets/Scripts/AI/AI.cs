@@ -30,18 +30,6 @@ public class AI : Agent
 {
     [Tooltip("A list of all AI resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
     List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
-    [Tooltip("A list of all AI resources last turn, used in determining a draw")]
-    List<int> __last_resources = new List<int>(4) { 0, 0, 0, 0 };
-
-    [Tooltip("A list of all player resources, used in determining a draw")]
-    List<int> __player_resources = new List<int>(4) { 0, 0, 0, 0 };
-    [Tooltip("A list of all player resources last turn, used in determining a draw")]
-    List<int> __player_last_resources = new List<int>(4) { 0, 0, 0, 0 };
-
-    [Tooltip("The current board")]
-    Board __board;
-    [Tooltip("The board last turn, used in determining a draw.")]
-    Board __old_board;
 
     [HideInInspector]
     public Difficulty __difficulty;
@@ -61,6 +49,9 @@ public class AI : Agent
 
     [Tooltip("This holds the numeric ID of the roads that have been captured")]
     private List<int> __myRoads;
+
+    [Tooltip("This holds the numeric ID of the nodes that have been captured")]
+    private List<int> __myNodes;
 
     [Tooltip("Used to tell if it is the first move or not")]
     private bool opener;
@@ -117,10 +108,6 @@ public class AI : Agent
         //make move
         if (randAI)
         {
-            int maxNodes = Math.Min(__resources[2] % 2, __resources[3] % 2);
-            int maxCons = Math.Min(__resources[0], __resources[1]);
-            List<char> nodesPlaced = new List<char>();
-            List<int> consPlaced = new List<int>();
             if (opener)
             {
                 int positionCon;
@@ -128,22 +115,34 @@ public class AI : Agent
                 do
                 {
                     positionCon = Random.Range(0, 36);
-                } while (LegalMoveConnector(positionCon));
-                consPlaced.Add(positionCon);
+                } while (!LegalMoveConnector(positionCon));//exit when a legal move is found
+                PlaceMoveBranch(positionCon);
+                __myRoads.Add(positionCon);
 
-                char positionNode;
+                int positionNode;
 
-                do
+                //possible error due to a branch being placed on turn 3 or 4 that has no legal node on either side*****************************************
+                positionNode = Random.Range(0, 1);
+                Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
+                if (LegalMoveConnector(temp[positionNode]))
                 {
-                    positionNode = (char)Random.Range('a', 'x');
-                } while (LegalMoveNode(positionNode));
-                nodesPlaced.Add(positionNode);
+                    PlaceMoveNode(temp[positionNode]);
+                    __myNodes.Add(temp[positionNode]);
+                }
+                else
+                {
+                    PlaceMoveNode(temp[(positionNode == 0) ? 1 : 0]);
+                    __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
+                }
             }
             else
             {
-                List<char> legalNodes = new List<char>();
+                int maxNodes = Math.Min(__resources[2] % 2, __resources[3] % 2);
+                int maxCons = Math.Min(__resources[0], __resources[1]);
+
+                List<int> legalNodes = new List<int>();
                 List<int> legalCon = new List<int>();
-                foreach(int i in __myRoads)
+                foreach(int i in __myRoads)//get all connections to owned branches
                 {
                     if (Relationships.connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
                     if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
@@ -155,45 +154,36 @@ public class AI : Agent
                 int nodesToPlace = Random.Range(0, maxNodes);
                 int consToPlace = Random.Range(0, maxCons);
 
-                //posible error from calculating legal nodes before placing legal branches
-                for(int i = 0; i < nodesToPlace; i++)
-                {
-                    char node = (char)Random.Range(0, legalNodes.Count);
-                    if (LegalMoveNode(node))
-                    {
-                        nodesPlaced.Add(node);
-                    }
-                    else
-                    {
-                        legalNodes.Remove(node);
-                        i--;
-                    }
-                }
-
-                for(int i = 0; i < consToPlace; i++)
+                //place a legal connection when found and make a list and do at once
+                for (int i = 0; i < consToPlace && i >= legalCon.Count; i++)
                 {
                     int con = Random.Range(0, legalCon.Count);
                     if (LegalMoveConnector(con))
                     {
-                        consPlaced.Add(con);
+                        PlaceMoveBranch(con);
+                        __myRoads.Add(con);
                     }
                     else
                     {
-                        legalCon.Remove(con);
                         i--;
                     }
+                    legalCon.Remove(con); // remove the branch; if added it's already used, if not then it was illegal
                 }
-            }
 
-            //place node and connector ****************************************************************************************************
-            foreach(int con in consPlaced)
-            {
-
-            }
-
-            foreach(char node in nodesPlaced)
-            {
-
+                for (int i = 0; i < nodesToPlace && i >= legalNodes.Count; i++)
+                {
+                    int node = Random.Range(0, legalNodes.Count);
+                    if (LegalMoveNode(node))//if a legal move add it
+                    {
+                        PlaceMoveNode(node);
+                        __myNodes.Add(node);
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                    legalNodes.Remove(node);
+                }
             }
         }
         else //ML move***********************************************************************************************************************
@@ -358,60 +348,32 @@ public class AI : Agent
         
     }
 
-    private bool LegalMoveNode(char location)
+    private bool LegalMoveNode(int location)
     {
-        if(__myRoads.Count == 0)
-        {
-            return __board.LegalMoveNode(location);
-        }
-        else
-        {
-            List<int> legal = new List<int>();
-            Relationships.connectionsNode.TryGetValue(location, out legal);
-            bool found = false;
-            foreach(int i in legal)
-            {
-                found = __myRoads.Contains(i);
-                if (found) break;
-            }
-
-            if (found)
-            {
-                return __board.LegalMoveNode(location);
-            }
-            else
-            {
-                return false;
-            }
-        }
+        return GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>().LegalNodeMove(location, __piece_type, __myRoads);
     }
 
     private bool LegalMoveConnector(int location)
     {
-        if(__myRoads.Count == 0)
-        {
-            return __board.LegalMoveConnector(location);
-        }
-        else
-        {
-            List<int> legal = new List<int>();
-            Relationships.connectionsRoad.TryGetValue(location, out legal);
-            bool found = false;
-            foreach (int i in legal)
-            {
-                found = __myRoads.Contains(i);
-                if (found) break;
-            }
+        return GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>().LegalBranchMove(location, __piece_type, __myRoads);
+    }
 
-            if (found)
-            {
-                return __board.LegalMoveConnector(location);
-            }
-            else
-            {
-                return false;
-            }
-        }
+    /// <summary>
+    /// Captures the node
+    /// </summary>
+    /// <param name="location">The node to be captured</param>
+    private void PlaceMoveNode(int location)
+    {
+        GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>().ChangeNodeOwner(location);
+    }
+
+    /// <summary>
+    /// Captures the branch
+    /// </summary>
+    /// <param name="location">The branch to capture</param>
+    private void PlaceMoveBranch(int location)
+    {
+        GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>().ChangeBranchOwner(location);
     }
 
     /// <summary>

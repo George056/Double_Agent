@@ -30,7 +30,7 @@ public enum Resource
 public class AI : Agent
 {
     [Tooltip("A list of all AI resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
-    List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
+    public List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
 
     [HideInInspector]
     public Difficulty __difficulty;
@@ -47,6 +47,21 @@ public class AI : Agent
 
     [Tooltip("Whether this is in training mode or not")]
     public bool trainingMode;
+
+    [Tooltip("The reward/punishment for getting/loosing the longest net")]
+    public float longestNetReward = 0.02f;
+
+    [Tooltip("Capture tile reward")]
+    public float captureReward = 0.01f;
+
+    [Tooltip("Red/Blue node reward")]
+    public float nodeRBReward = 0.02f;
+
+    [Tooltip("Green/Yellow node reward")]
+    public float nodeGYReward = 0.04f;
+
+    [Tooltip("Gray node reward")]
+    public float nodeGrayReward = 0.01f;
 
     [Tooltip("This holds the numeric ID of the roads that have been captured")]
     private List<int> __myRoads;
@@ -230,21 +245,33 @@ public class AI : Agent
 
     public void GetLongestNet()
     {
-        //AddReward();
+        AddReward(longestNetReward);
     }
 
     public void LoseLongestNet()
     {
-        //AddReward(-);
+        AddReward(-longestNetReward);
     }
 
     public void CapturedTile(Color c)
     {
-        //addReward();
+        if(c == Color.blue || c == Color.red)
+        {
+            AddReward(2 * captureReward);
+        }
+        else if(c == Color.green || c == Color.yellow)
+        {
+            AddReward(4 * captureReward);
+        }
+        else //if gray
+        {
+            AddReward(captureReward);
+        }
     }
 
     public void UpdateScore(int score)
     {
+        AddReward((Math.Abs(score - __ai_score) == 2) ? 0 : (score - __ai_score) / 10); //do no reward if the change is due to the longest net
         __ai_score = score;
     }
 
@@ -351,13 +378,50 @@ public class AI : Agent
         //make a trade first
         if(vectorAction[60] != 0)
         {
-            //trade function
+            //trade function**********************************************************************************
         }
         
         //place connectors
+        for(int i = 0; i < 36; i++)
+        {
+            if(vectorAction[i + 24] == 1)
+            {
+                if (LegalMoveConnector(i))
+                {
+                    PlaceMoveBranch(i);
+                    __myRoads.Add(i);
+                }
+            }
+        }
 
         //place nodes
-
+        for(int i = 0; i < 24; i++)
+        {
+            if(vectorAction[i] == 1)
+            {
+                if (LegalMoveNode(i))
+                {
+                    PlaceMoveNode(i);
+                    __myRoads.Add(i);
+                    if(trainingMode)
+                        foreach(GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)
+                        {
+                            if(c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Blue || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Red)
+                            {
+                                AddReward(nodeRBReward);
+                            }
+                            else if (c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Green || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Yellow)
+                            {
+                                AddReward(nodeGYReward);
+                            }
+                            else
+                            {
+                                AddReward(nodeGrayReward);
+                            }
+                        }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -368,7 +432,10 @@ public class AI : Agent
     {
         //observe board (60 observations)
         //sensor.AddObservation();
+        foreach(GameObject node in bm.nodes)
+        {
 
+        }
         //observe resources (4 observations)
 
     }

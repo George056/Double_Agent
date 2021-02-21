@@ -260,6 +260,49 @@ public class BoardManager : MonoBehaviour
         return isLegal;
     }
 
+    public void Trade(List<int> resources, Owner who)
+    {
+        bool makeTrade = false;
+
+        List<int> heldResources = (who == aiPiece) ? GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().__resources : GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__resources;
+        for(int i = 0; i < 4; i++)
+        {
+            if(resources[i] < 0)
+            {
+                if(heldResources[i] >= Math.Abs(resources[i]))
+                {
+                    makeTrade = true;
+                }
+                else
+                {
+                    makeTrade = false;
+                    break;
+                }
+            }
+            else
+            {
+                if(resources[i] < 2)
+                {
+                    makeTrade = true;
+                }
+                else
+                {
+                    makeTrade = false;
+                    break;
+                }
+            }
+        }
+
+        if (makeTrade)
+        {
+            //Trade animation ***********************************************************************************************************************************************
+            if(who == aiPiece)
+                GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().UpdateResources(resources);
+            else
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().UpdateResources(resources);
+        }
+    }
+
     /// <summary>
     /// Updates board info every turn.
     /// Captured tiles

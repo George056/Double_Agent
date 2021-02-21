@@ -97,4 +97,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeColor: 4
   numOfResource: 0
-  resoureTileOwner: 0
+  resoureTileOwner: 2
+  depleted: 0

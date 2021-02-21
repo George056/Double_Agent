@@ -29,7 +29,7 @@ public class CheckDataList : MonoBehaviour
     [HideInInspector]
     public ResourceInfo.Color currentColor;
     [HideInInspector]
-    public Owner longestNetOwner;
+    public Owner longestNetOwner = Owner.Nil;
 
     private BoardManager BM;
     private int maxResource;

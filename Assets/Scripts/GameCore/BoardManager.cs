@@ -184,6 +184,7 @@ public class BoardManager : MonoBehaviour
         //check to see if it is an AI or network game
         player1 = GameObject.FindGameObjectWithTag("Player");
         player2 = GameObject.FindGameObjectWithTag("AI");
+        player2.GetComponent<AI>().SetOpener();
 
         //make sure it is an AI game first
         if(firstPlayer == aiPiece)

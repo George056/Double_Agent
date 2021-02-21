@@ -118,12 +118,20 @@ public class AI : Agent
         opener = false;
     }
 
+    public void SetOpener()
+    {
+        opener = true;
+    }
+
     /// <summary>
     /// This is the function that is called to tell the AI to make its move
     /// </summary>
     public void AIMove(int turn)
     {
         this.turn = turn;
+
+        if (this.turn < 5) SetOpener();
+        else EndOpener();
 
         //make move
         if (randAI)

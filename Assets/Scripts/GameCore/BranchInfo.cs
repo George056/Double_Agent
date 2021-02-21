@@ -5,7 +5,7 @@ using UnityEngine;
 public class BranchInfo : MonoBehaviour
 {
     private int cc;
-    public BoardManager.Owner branchOwner;
+    public Owner branchOwner;
     public int branchOrder;
 
     void OnMouseDown()

@@ -54,7 +54,7 @@ public class AI : Agent
     public short __player;
 
     [Tooltip("The piece does the AI play, 0 = US, 1 = USSR")]
-    public BoardManager.Owner __piece_type;
+    public Owner __piece_type;
 
     [Tooltip("Whether this is in training mode or not")]
     public bool trainingMode;
@@ -422,7 +422,7 @@ public class AI : Agent
     void GetPiece()
     {
         int temp = PlayerPrefs.GetInt("AI_Piece");
-        __piece_type = (BoardManager.Owner)temp;
+        __piece_type = (Owner)temp;
     }
 
     /// <summary>

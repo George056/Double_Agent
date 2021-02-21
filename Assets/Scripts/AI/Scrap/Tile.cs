@@ -17,12 +17,12 @@ public enum Color
 /// <summary>
 /// The owner value for a node, branch, or tile, if not owned the value is Nil
 /// </summary>
-public enum Owner
-{
-    US = 0,
-    USSR = 1,
-    Nil = 2
-}
+//public enum Owner
+//{
+//    US = 0,
+//    USSR = 1,
+//    Nil = 2
+//}
 
 /// <summary>
 /// Every aspect associated with a single tile.

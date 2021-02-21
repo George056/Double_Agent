@@ -35,9 +35,9 @@ public class PreGameMenu : MonoBehaviour
     /// What piece is the human?
     /// </summary>
     /// <param name="owner">The piece that the human is</param>
-    public void SetPieceType(BoardManager.Owner owner)
+    public void SetPieceType(Owner owner)
     {
-        if(owner == BoardManager.Owner.US)
+        if(owner == Owner.US)
         {
             PlayerPrefs.SetInt("Human_Piece", (int)owner);
             PlayerPrefs.SetInt("AI_Piece", (int)owner + 1);

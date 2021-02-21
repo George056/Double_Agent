@@ -29,7 +29,7 @@ public class CheckDataList : MonoBehaviour
     [HideInInspector]
     public ResourceInfo.Color currentColor;
     [HideInInspector]
-    public BoardManager.Owner longestNetOwner;
+    public Owner longestNetOwner;
 
     private BoardManager BM;
     private int maxResource;
@@ -44,7 +44,7 @@ public class CheckDataList : MonoBehaviour
         for (int i = 0; i < 24; i++)
         {
             //Debug.Log(BM.nodeList[i].GetComponent<NodeInfo>().nodeOwner);
-            if (BM.nodes[i].GetComponent<NodeInfo>().nodeOwner != BoardManager.Owner.Nil)
+            if (BM.nodes[i].GetComponent<NodeInfo>().nodeOwner != Owner.Nil)
             {
                 UsedNode.Add(i);
             }
@@ -111,11 +111,11 @@ public class CheckDataList : MonoBehaviour
             int count = 0; //the number of nodes connected to the tile
             foreach(var nd in BM.nodes)
             {
-                if (tileInfo.resoureTileOwner != BoardManager.Owner.Nil) break; //cannot be depleted if owned
+                if (tileInfo.resoureTileOwner != Owner.Nil) break; //cannot be depleted if owned
                 if (tileInfo.depleted) break; //skip if already depleted
 
                 var nodeInfo = nd.GetComponent<NodeInfo>();
-                if (nodeInfo.nodeOwner != BoardManager.Owner.Nil)
+                if (nodeInfo.nodeOwner != Owner.Nil)
                 {
                     count += (nodeInfo.resources.Contains(BM.resourceList[i])) ? 1 : 0;
                     if(count >= tileInfo.numOfResource)
@@ -128,7 +128,7 @@ public class CheckDataList : MonoBehaviour
         }
     }
 
-    public void LongestNetCheck(BoardManager.Owner who)
+    public void LongestNetCheck(Owner who)
     {
         List<int> branches = new List<int>();
 

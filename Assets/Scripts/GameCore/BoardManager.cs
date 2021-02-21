@@ -4,15 +4,18 @@ using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// The owner value for a node, branch, or tile, if not owned the value is Nil
+/// </summary>
+public enum Owner
+{
+    US = 0,
+    USSR = 1,
+    Nil = 2
+}
+
 public class BoardManager : MonoBehaviour
 {
-    public enum Owner
-    {
-        US = 0,
-        USSR = 1,
-        Nil = 2
-    }
-
     public struct ResourceItemInfo
     {
         public ResourceInfo.Color nodeColor;
@@ -42,6 +45,15 @@ public class BoardManager : MonoBehaviour
 
     bool isSetupTurn = false;
     private int turnCount = 1;
+
+    private CheckDataList cdl;
+
+    [Tooltip("What piece is the AI")]
+    private Owner aiPiece;
+    [Tooltip("What piece is the human")]
+    private Owner humanPiece;
+    [Tooltip("What piece is the first player")]
+    private Owner firstPlayer;
 
 
     /*
@@ -160,7 +172,10 @@ public class BoardManager : MonoBehaviour
         Shuffle(resourceList);
         BoardSetUp(GameBoard);
         AssignNodeResources();
-
+        cdl = new CheckDataList();
+        aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece");
+        humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece");
+        firstPlayer = (PlayerPrefs.GetInt("AI_Player") == 0) ? aiPiece : humanPiece;
     }
     /*
      *  change the owner of the node by clicking
@@ -237,6 +252,19 @@ public class BoardManager : MonoBehaviour
         return isLegal;
     }
 
+    /// <summary>
+    /// Updates board info every turn.
+    /// Checks who has the longest net, and updates the score.
+    /// Marks a tile as depleted or captured.
+    /// </summary>
+    private void BoardCheck()
+    {
+        Owner oldLongest = cdl.longestNetOwner;
+        cdl.LongestNetCheck((activeSide == Owner.US) ? Owner.USSR : Owner.US);
+
+        cdl.DepletedCheck();
+    }
+
     public void EnterBuildMode()
     {
         inBuildMode = true;
@@ -285,6 +313,7 @@ public class BoardManager : MonoBehaviour
 
 
                     // Perform GameBoard Check
+                    BoardCheck();
 
                     // provide player with indication that opponent is taking turn
                 }
@@ -337,6 +366,7 @@ public class BoardManager : MonoBehaviour
         }
 
         // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
+        BoardCheck();
 
         // if not opener move, allocate resources to appropriate player
 

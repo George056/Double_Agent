@@ -6,7 +6,7 @@ public class NodeInfo : MonoBehaviour
 {
 
     private int cc;
-    public BoardManager.Owner nodeOwner;
+    public Owner nodeOwner;
     public int nodeOrder;
     public List<GameObject> resources = new List<GameObject>();
     //public string countryAbreviation;

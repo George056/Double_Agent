@@ -8,7 +8,7 @@ public class ResourceInfo : MonoBehaviour
 
     public Color nodeColor;
     public int numOfResource;
-    public BoardManager.Owner resoureTileOwner;
+    public Owner resoureTileOwner;
 
     [HideInInspector]
     [Tooltip("States if the tile is depleted")]

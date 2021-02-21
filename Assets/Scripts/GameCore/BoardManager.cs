@@ -156,11 +156,12 @@ public class BoardManager : MonoBehaviour
         {
             Relationships.connectionsNodeTiles.TryGetValue(i, out List<int> temp);
 
+            nodes[i].GetComponent<NodeInfo>().resources.Clear();
             nodes[i].GetComponent<NodeInfo>().resources.Capacity = temp.Count;
 
             for (int j = 0; j < temp.Count; j++)
             {
-                nodes[i].GetComponent<NodeInfo>().resources[j] = resourceList[temp[j]];
+                nodes[i].GetComponent<NodeInfo>().resources.Add(resourceList[temp[j]]);
             }
 
         }

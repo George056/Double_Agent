@@ -8,7 +8,7 @@ public class NodeInfo : MonoBehaviour
     private int cc;
     public Owner nodeOwner;
     public int nodeOrder;
-    public List<GameObject> resources = new List<GameObject>();
+    public List<GameObject> resources = new List<GameObject>(0);
     //public string countryAbreviation;
     //public string countryName;
 

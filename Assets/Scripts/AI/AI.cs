@@ -77,7 +77,8 @@ public class AI : Agent
         __myRoads = new List<int>();
         if(!randAI) GetDifficulty();
         GetPlayer();
-        UpdateScores(0, 0);
+        __ai_score = 0;
+        __human_score = 0;
         opener = __player == 0;
         turns = (int)__player;
         //get active board
@@ -206,6 +207,11 @@ public class AI : Agent
     public void CapturedTile(Color c)
     {
         //addReward();
+    }
+
+    public void UpdateScore(int score)
+    {
+        __ai_score = score;
     }
 
     /// <summary>
@@ -423,17 +429,6 @@ public class AI : Agent
     {
         int temp = PlayerPrefs.GetInt("AI_Piece");
         __piece_type = (Owner)temp;
-    }
-
-    /// <summary>
-    /// This updates the stored scores for both players
-    /// </summary>
-    /// <param name="ai">The score of the AI</param>
-    /// <param name="human">The score of the "human"</param>
-    void UpdateScores(int ai, int human)
-    {
-        __ai_score = ai;
-        __human_score = human;
     }
 
     //calculate longest path*******************************************************************************

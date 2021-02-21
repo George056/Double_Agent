@@ -301,6 +301,15 @@ public class BoardManager : MonoBehaviour
         {
             if (tile.GetComponent<ResourceInfo>().resoureTileOwner == who) score++;
         }
+
+        if(who == aiPiece)
+        {
+            GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().UpdateScore(score);
+        }
+        else
+        {
+           GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().UpdateScore(score);
+        }
     }
 
     private void AllocateResources()

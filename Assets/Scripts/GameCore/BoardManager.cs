@@ -254,15 +254,58 @@ public class BoardManager : MonoBehaviour
 
     /// <summary>
     /// Updates board info every turn.
+    /// Captured tiles
     /// Checks who has the longest net, and updates the score.
     /// Marks a tile as depleted or captured.
     /// </summary>
     private void BoardCheck()
     {
-        Owner oldLongest = cdl.longestNetOwner;
-        cdl.LongestNetCheck((activeSide == Owner.US) ? Owner.USSR : Owner.US);
+        Owner who = (activeSide == Owner.US) ? Owner.USSR : Owner.US;
+        cdl.LongestNetCheck(who);
+
+        CalculateScore(who);
 
         cdl.DepletedCheck();
+    }
+
+    private void CalculateScore(Owner who)
+    {
+        Owner oldLongest = cdl.longestNetOwner;
+
+        int score = 0;
+
+        //longest net score
+        if (cdl.longestNetOwner == who)
+        {
+            score = 2;
+
+            //if in training mode reward or punish the AI
+            if (oldLongest != who && oldLongest == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
+            {
+                GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().LoseLongestNet();
+            }
+            else if (oldLongest != who && who == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
+            {
+                GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().GetLongestNet();
+            }
+        }
+
+        //node count score
+        foreach (var nd in nodes)
+        {
+            if (nd.GetComponent<NodeInfo>().nodeOwner == who) score++;
+        }
+
+        //captured tiles score
+        foreach (var tile in resourceList)
+        {
+            if (tile.GetComponent<ResourceInfo>().resoureTileOwner == who) score++;
+        }
+    }
+
+    private void AllocateResources()
+    {
+
     }
 
     public void EnterBuildMode()
@@ -369,6 +412,7 @@ public class BoardManager : MonoBehaviour
         BoardCheck();
 
         // if not opener move, allocate resources to appropriate player
+        AllocateResources();
 
         // call AI to make move if AI turn
         // provide player with indication that opponent is taking turn

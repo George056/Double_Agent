@@ -97,7 +97,12 @@ public class CheckDataList : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        BM = GetComponent<BoardManager>();
+        GetBoardManager();
+    }
+
+    private void GetBoardManager()
+    {
+        BM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>();
     }
 
     /// <summary>
@@ -131,6 +136,8 @@ public class CheckDataList : MonoBehaviour
     public void LongestNetCheck(Owner who)
     {
         List<int> branches = new List<int>();
+
+        if (BM == null) GetBoardManager();
 
         foreach(GameObject go in BM.allBranches)
         {
@@ -182,7 +189,7 @@ public class CheckDataList : MonoBehaviour
             {
                 itr += i;
             }
-        } while (itr > (branches.Count / 2));
+        } while (itr <= Mathf.FloorToInt(branches.Count / 2.0f));
 
         int max = 0;
         foreach(int i in count)

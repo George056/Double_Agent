@@ -25,6 +25,7 @@ public enum Resource
 /// <summary>
 /// This class is used as the AI for the game. 
 /// It is constructed based on the Unity course at: https://learn.unity.com/course/ml-agents-hummingbirds
+/// More nural net info can be found at: https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Design-Agents.md#masking-discrete-actions
 /// </summary>
 public class AI : Agent
 {
@@ -62,6 +63,9 @@ public class AI : Agent
     [Tooltip("This counts what turn it is")]
     private int turns;
 
+    [Tooltip("The active BoardManager")]
+    private BoardManager bm;
+
     private void Start()
     {
         randAI = true;
@@ -72,7 +76,7 @@ public class AI : Agent
         __human_score = 0;
         opener = __player == 0;
         turns = (int)__player;
-        //get active board
+        bm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>();
     }
 
     /// <summary>
@@ -186,6 +190,42 @@ public class AI : Agent
         else //ML move***********************************************************************************************************************
         {
             //for adding a reward use AddReward() want it to be about 1 at the end of a game
+            RequestDecision();
+        }
+    }
+
+    /// <summary>
+    /// This makes the already clamed nodes be imposible to be chosen by the nural net
+    /// </summary>
+    /// <param name="actionMasker">Masks posible values of the nural net</param>
+    public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
+    {
+        List<int> clamedNodes = new List<int>();
+        for(int i = 0; i < bm.nodes.Length; i++)
+        {
+            if(bm.nodes[i].GetComponent<NodeInfo>().nodeOwner != Owner.Nil)
+            {
+                clamedNodes.Add(i);
+            }
+        }
+
+        List<int> clamedBranches = new List<int>();
+        for(int i = 0; i < bm.allBranches.Length; i++)
+        {
+            if(bm.allBranches[i].GetComponent<BranchInfo>().branchOwner != Owner.Nil)
+            {
+                clamedBranches.Add(i);
+            }
+        }
+
+        foreach(int i in clamedNodes)
+        {
+            actionMasker.SetMask(i, new int[1] { 1 });
+        }
+
+        foreach(int i in clamedBranches)
+        {
+            actionMasker.SetMask(i + 24, new int[1] { 1 });
         }
     }
 
@@ -347,12 +387,12 @@ public class AI : Agent
 
     private bool LegalMoveNode(int location)
     {
-        return GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>().LegalNodeMove(location, __piece_type, __myRoads);
+        return bm.LegalNodeMove(location, __piece_type, __myRoads);
     }
 
     private bool LegalMoveConnector(int location)
     {
-        return GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>().LegalBranchMove(location, __piece_type, __myRoads);
+        return bm.LegalBranchMove(location, __piece_type, __myRoads);
     }
 
     /// <summary>
@@ -361,7 +401,7 @@ public class AI : Agent
     /// <param name="location">The node to be captured</param>
     private void PlaceMoveNode(int location)
     {
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>().ChangeNodeOwner(location);
+        bm.ChangeNodeOwner(location);
     }
 
     /// <summary>
@@ -370,7 +410,7 @@ public class AI : Agent
     /// <param name="location">The branch to capture</param>
     private void PlaceMoveBranch(int location)
     {
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>().ChangeBranchOwner(location);
+        bm.ChangeBranchOwner(location);
     }
 
     /// <summary>

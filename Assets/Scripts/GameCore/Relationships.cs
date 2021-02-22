@@ -21,6 +21,10 @@ public class Relationships : MonoBehaviour
     public static Dictionary<int, List<int>> connectionsNodeTiles = new Dictionary<int, List<int>>();
 
     [HideInInspector]
+    [Tooltip("How tiles connect to Road")]
+    public static Dictionary<int, List<int>> connectionsTilesRoads = new Dictionary<int, List<int>>();
+
+    [HideInInspector]
     [Tooltip("See if the dictionaries have already been made")]
     public static bool built = false;
 
@@ -154,5 +158,19 @@ public class Relationships : MonoBehaviour
         connectionsNodeTiles.Add(22, new List<int>() { 12 });
         connectionsNodeTiles.Add(23, new List<int>() { 12 });
 
+
+        connectionsTilesRoads.Add(0, new List<int>() {0,1 ,2 ,4});
+        connectionsTilesRoads.Add(1, new List<int>() {3,6 ,7 ,11});
+        connectionsTilesRoads.Add(2, new List<int>() {4,7 ,8 ,12});
+        connectionsTilesRoads.Add(3, new List<int>() {5,8 ,9 ,13});
+        connectionsTilesRoads.Add(4, new List<int>() {10,15 ,16 ,21});
+        connectionsTilesRoads.Add(5, new List<int>() {11,16 ,17 ,22});
+        connectionsTilesRoads.Add(6, new List<int>() {12,17 ,18 ,23});
+        connectionsTilesRoads.Add(7, new List<int>() {13,18 ,19 ,24});
+        connectionsTilesRoads.Add(8, new List<int>() {14,19 ,20 ,25});
+        connectionsTilesRoads.Add(9, new List<int>() {22,26 ,27 ,30});
+        connectionsTilesRoads.Add(10, new List<int>() {23,27 ,28 ,31});
+        connectionsTilesRoads.Add(11, new List<int>() {24,28 ,29 ,32});
+        connectionsTilesRoads.Add(12, new List<int>() {31,33 ,34 ,35});
     }
 }

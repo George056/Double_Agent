@@ -134,7 +134,7 @@ public class BoardManager : MonoBehaviour
                         instance.transform.SetParent(boardHolder);
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
-                        Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
+                        //Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
                         branchCount++;
                         break;
                     case 'S':
@@ -142,7 +142,7 @@ public class BoardManager : MonoBehaviour
                         instance.transform.SetParent(boardHolder);
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
-                        Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
+                        //Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
                         branchCount++;
                         break;
                     default:

@@ -21,10 +21,25 @@ public class CheckDataList : MonoBehaviour
         {15, 16, 20, 21},
         {19, 20, 22, 23}
    };
+    
+    //Exhausted
     public GameObject BlueExhausted;
     public GameObject GreenExhausted;
     public GameObject RedExhausted;
     public GameObject YellowExhausted;
+
+    /*
+    //Captured
+    public GameObject BlueCapturedByOrange;
+    public GameObject BlueCapturedByPurple;
+    public GameObject GreenCapturedByOrange;
+    public GameObject GreenCapturedByPurple;
+    public GameObject RedCapturedByOrange;
+    public GameObject RedCapturedByPurple;
+    public GameObject YellowCapturedByOrange;
+    public GameObject YellowCapturedByPurple;
+    */
+
 
     [HideInInspector]
     public ResourceInfo.Color currentColor;
@@ -133,6 +148,24 @@ public class CheckDataList : MonoBehaviour
         }
     }
 
+    public void CapturedCheck()
+    {
+        for(int i = 0; i < BM.resourceList.Length; i++)
+        {
+            List<int> tempNum;
+            Owner[] tempBranchOwner = new Owner[4];
+            Relationships.connectionsTilesRoads.TryGetValue(i, out tempNum);
+            for(int j = 0; j < tempNum.Count; j++)
+            {
+                tempBranchOwner[j] = BM.allBranches[tempNum[j]].GetComponent<BranchInfo>().branchOwner; 
+            }
+            if(tempBranchOwner[0] != Owner.Nil && tempBranchOwner[0] == tempBranchOwner[1] && tempBranchOwner[1] == tempBranchOwner[2] 
+                && tempBranchOwner[2] == tempBranchOwner[3])
+            {
+                BM.resourceList[i].GetComponent<ResourceInfo>().resoureTileOwner = tempBranchOwner[0];
+            }
+        }
+    }
     public void LongestNetCheck(Owner who)
     {
         List<int> branches = new List<int>();

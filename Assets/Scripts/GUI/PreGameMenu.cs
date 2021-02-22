@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PreGameMenu : MonoBehaviour
 {
@@ -47,5 +48,15 @@ public class PreGameMenu : MonoBehaviour
             PlayerPrefs.SetInt("Human_Piece", (int)owner); 
             PlayerPrefs.SetInt("AI_Piece", (int)owner - 1);
         }
+    }
+
+    public void PlayGame()
+    {
+        SceneManager.LoadScene("PVP");
+    }
+    
+    public void OnlinePlay()
+    {
+        SceneManager.LoadScene("Lobby");
     }
 }

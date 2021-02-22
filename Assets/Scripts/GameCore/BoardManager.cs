@@ -362,7 +362,7 @@ public class BoardManager : MonoBehaviour
             {
                 player2.GetComponent<AI>().LoseLongestNet();
             }
-            else
+            else if(oldLongest == humanPiece)
             {
                 player1.GetComponent<Player>().LoseLongestNet();
             }
@@ -371,7 +371,7 @@ public class BoardManager : MonoBehaviour
             {
                 player2.GetComponent<AI>().GetLongestNet();
             }
-            else
+            else if(oldLongest == humanPiece)
             {
                 player1.GetComponent<Player>().GetLongestNet();
             }

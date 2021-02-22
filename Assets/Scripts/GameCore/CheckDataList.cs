@@ -238,6 +238,10 @@ public class CheckDataList : MonoBehaviour
             longestNetValue = max;
             longestNetOwner = who;
         }
+        else if(max == longestNetValue)
+        {
+            longestNetOwner = Owner.Nil;
+        }
     }
 
     // Update is called once per frame

@@ -218,6 +218,8 @@ public class AI : Agent
             //for adding a reward use AddReward() want it to be about 1 at the end of a game
             RequestDecision();
         }
+
+        bm.EndTurn();
     }
 
     /// <summary>

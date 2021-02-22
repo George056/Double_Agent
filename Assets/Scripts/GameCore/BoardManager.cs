@@ -187,7 +187,7 @@ public class BoardManager : MonoBehaviour
         player2.GetComponent<AI>().SetOpener();
 
         //make sure it is an AI game first
-        if(firstPlayer == aiPiece)
+        if (firstPlayer == aiPiece)
         {
             BtnToggle();
             player2.GetComponent<AI>().AIMove(turnCount);
@@ -468,19 +468,10 @@ public class BoardManager : MonoBehaviour
                 {
                     Debug.Log("Player confirmed submission; turn ending");
 
-                    // disable Trade, Build, and End Turn buttons
-                    if (turnCount != 2)
-                        BtnToggle();
-
-                    // Perform GameBoard Check
-                    if (turnCount > 5)
-                        BoardCheck();
-
+                    EndTurn();
                     // provide player with indication that opponent is taking turn
-                    if (activeSide == aiPiece)
-                    {
+                    if (turnCount != 3) // ****** I THINK THIS SHOULD BE 3 instead of 2
                         player2.GetComponent<AI>().AIMove(turnCount);
-                    }
                 }
             }
             else
@@ -494,7 +485,10 @@ public class BoardManager : MonoBehaviour
             if (true) // user confirmed turn submission
             {
                 Debug.Log("Player confirmed submission; turn ending");
+
                 EndTurn();
+                // provide player with indication that opponent is taking turn
+                player2.GetComponent<AI>().AIMove(turnCount);
 
             }
         }
@@ -522,34 +516,127 @@ public class BoardManager : MonoBehaviour
         }
 
         // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
-        if(turnCount > 5)
+        if (turnCount > 5)
             BoardCheck();
 
         // if not opener move, allocate resources to appropriate player
-        if(turnCount > 5)
+        if (turnCount > 5)
             AllocateResources();
 
-        // call AI to make move if AI turn
-        // provide player with indication that opponent is taking turn
-
-        inBuildMode = false;
+        if (activeSide == aiPiece)
+        {
+            inBuildMode = false;
+        }
+        else
+        {
+            inBuildMode = true;
+        }
 
         // disable/reenable Trade, Build, and End Turn buttons
-        if(turnCount != 2)
+        if (turnCount != 2)
             BtnToggle();
 
         turnCount++;
-        if(turnCount == 5)
+        if (turnCount == 5)
         {
             player2.GetComponent<AI>().EndOpener();
         }
-
-        // get AI move
-        if (activeSide == aiPiece)
-        {
-            player2.GetComponent<AI>().AIMove(turnCount);
-        }
     }
+
+
+    //public void EndTurnButtonClicked()
+    //{
+    //    if (isSetupTurn)
+    //    {
+    //        if (true) // if (E & CL have been placed)
+    //        {
+    //            // prompt player to confirm submission
+    //            if (true) // user confirmed turn submission
+    //            {
+    //                Debug.Log("Player confirmed submission; turn ending");
+
+    //                // disable Trade, Build, and End Turn buttons
+    //                if (turnCount != 2)
+    //                    BtnToggle();
+
+    //                // Perform GameBoard Check
+    //                if (turnCount > 5)
+    //                    BoardCheck();
+
+    //                // provide player with indication that opponent is taking turn
+    //                if (activeSide == aiPiece)
+    //                {
+    //                    player2.GetComponent<AI>().AIMove(turnCount);
+    //                }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            // prompt player to place E & CL
+    //        }
+    //    }
+    //    else // a regular turn
+    //    {
+    //        // prompt player to confirm submission
+    //        if (true) // user confirmed turn submission
+    //        {
+    //            Debug.Log("Player confirmed submission; turn ending");
+    //            EndTurn();
+
+    //        }
+    //    }
+    //}
+
+    //private void BtnToggle()
+    //{
+    //    tradeButton.SetActive(!tradeButton.activeSelf);
+    //    buildButton.SetActive(!buildButton.activeSelf);
+    //    endTurnButton.SetActive(!endTurnButton.activeSelf);
+    //}
+
+    //public void EndTurn()
+    //{
+    //    if (turnCount != 2)
+    //    {
+    //        if (activeSide == Owner.US)
+    //        {
+    //            activeSide = Owner.USSR;
+    //        }
+    //        else
+    //        {
+    //            activeSide = Owner.US;
+    //        }
+    //    }
+
+    //    // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
+    //    if(turnCount > 5)
+    //        BoardCheck();
+
+    //    // if not opener move, allocate resources to appropriate player
+    //    if(turnCount > 5)
+    //        AllocateResources();
+
+    //    // call AI to make move if AI turn
+    //    // provide player with indication that opponent is taking turn
+
+    //    inBuildMode = false;
+
+    //    // disable/reenable Trade, Build, and End Turn buttons
+    //    if(turnCount != 2)
+    //        BtnToggle();
+
+    //    turnCount++;
+    //    if(turnCount == 5)
+    //    {
+    //        player2.GetComponent<AI>().EndOpener();
+    //    }
+
+    //    // get AI move
+    //    if (activeSide == aiPiece)
+    //    {
+    //        player2.GetComponent<AI>().AIMove(turnCount);
+    //    }
+    //}
 
     void FirstTurnSequence()
     {

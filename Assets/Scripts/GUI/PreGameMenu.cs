@@ -50,6 +50,20 @@ public class PreGameMenu : MonoBehaviour
         }
     }
 
+    public void ChooseAlly(bool US)
+    {
+        if (US)
+        {
+            PlayerPrefs.SetInt("Human_Piece", 0);
+            PlayerPrefs.SetInt("AI_Piece", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Human_Piece", 1);
+            PlayerPrefs.SetInt("AI_Piece", 0);
+        }
+    }
+
     public void PlayGame()
     {
         SceneManager.LoadScene("PVP");

@@ -186,6 +186,11 @@ public class BoardManager : MonoBehaviour
         player2 = GameObject.FindGameObjectWithTag("AI");
         player2.GetComponent<AI>().SetOpener();
 
+
+        Debug.Log("First Player: " + firstPlayer);
+        Debug.Log("AI: " + aiPiece);
+        Debug.Log("Human: " + humanPiece);
+
         //make sure it is an AI game first
         if (firstPlayer == aiPiece)
         {

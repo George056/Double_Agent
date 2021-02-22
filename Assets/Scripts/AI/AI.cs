@@ -13,15 +13,6 @@ public enum Difficulty
     Hard = 1
 }
 
-public enum Resource
-{
-    red = 0,         //copper
-    blue = 1,        //lumber
-    yellow = 2,      //money
-    green = 3,       //loyalists
-    nil = 4          //none
-}
-
 /// <summary>
 /// This class is used as the AI for the game. 
 /// It is constructed based on the Unity course at: https://learn.unity.com/course/ml-agents-hummingbirds
@@ -519,38 +510,6 @@ public class AI : Agent
     void GetPiece()
     {
         __piece_type = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
-    }
-
-    //calculate longest path*******************************************************************************
-
-    /*
-     S_GS + 2*(G+Y) + (B+r) - D  {adjusted for max_nodes}
-     */
-    double S_a()
-    {
-        double result = 0;
-
-        return result;
-    }
-
-    /*
-     S_GO + 2*(2*(G+Y) + (r+B)) + Sigma_c + Sigma_t   {Sigma is block}
-     */
-    double S_b()
-    {
-        double result = 0;
-
-        return result;
-    }
-
-    /* Calculate trade
-     F_N(S_a + S_b) * C_T(R)   {Can you make the move is F_N}
-     */
-    double S_t()
-    {
-        double result = 0;
-
-        return result;
     }
 
 }

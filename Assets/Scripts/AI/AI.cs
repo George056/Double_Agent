@@ -175,7 +175,7 @@ public class AI : Agent
                 int consToPlace = Random.Range(0, maxCons);
 
                 //place a legal connection when found and make a list and do at once
-                for (int i = 0; i < consToPlace && i >= legalCon.Count; i++) //this cannot happen
+                for (int i = 0; i < consToPlace && i <= legalCon.Count; i++) //this cannot happen
                 {
                     int con = Random.Range(0, legalCon.Count);
                     if (LegalMoveConnector(con))

@@ -210,7 +210,7 @@ public class AI : Agent
                 }
             }
         }
-        else //ML move***********************************************************************************************************************
+        else
         {
             //for adding a reward use AddReward() want it to be about 1 at the end of a game
             RequestDecision();
@@ -461,6 +461,24 @@ public class AI : Agent
     public override void Heuristic(float[] actionsOut)
     {
         
+    }
+
+    private void MakeTrade(float trade)
+    {
+        List<int> tradeArr = new List<int>(4) { 0, 0, 0, 0 };
+        int temp1 = (int)trade;
+        int temp2 = (temp1 / 1000);
+        tradeArr[0] = temp2;
+        temp1 -= temp2 * 1000;
+        temp2 = temp1 / 100;
+        tradeArr[1] = temp2;
+        temp1 -= temp2 * 100;
+        temp2 = temp1 / 10;
+        tradeArr[2] = temp2;
+        temp1 -= temp2 * 10;
+        tradeArr[3] = temp1;
+
+        bm.Trade(tradeArr);
     }
 
     private bool LegalMoveNode(int location)

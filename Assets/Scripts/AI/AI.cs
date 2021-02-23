@@ -390,7 +390,7 @@ public class AI : Agent
         //make a trade first
         if(vectorAction[60] != 0)
         {
-            //trade function**********************************************************************************
+            MakeTrade(vectorAction[60]);
         }
         
         //place connectors

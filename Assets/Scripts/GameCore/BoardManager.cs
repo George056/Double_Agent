@@ -180,6 +180,7 @@ public class BoardManager : MonoBehaviour
         aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
         humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
         firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
+        activeSide = firstPlayer;
 
         //check to see if it is an AI or network game
         player1 = GameObject.FindGameObjectWithTag("Player");

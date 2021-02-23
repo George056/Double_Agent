@@ -144,7 +144,7 @@ public class AI : Agent
 
                 positionNode = Random.Range(0, 1);
                 Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
-                if (LegalMoveConnector(temp[positionNode]))
+                if (LegalMoveNode(temp[positionNode]))
                 {
                     PlaceMoveNode(temp[positionNode]);
                     __myNodes.Add(temp[positionNode]);

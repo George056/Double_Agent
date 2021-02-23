@@ -182,6 +182,7 @@ MonoBehaviour:
   nodeColor: 3
   numOfResource: 1
   resoureTileOwner: 2
+  depleted: 0
 --- !u!1 &7175296507664530829
 GameObject:
   m_ObjectHideFlags: 0

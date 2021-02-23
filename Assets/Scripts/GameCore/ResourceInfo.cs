@@ -10,7 +10,6 @@ public class ResourceInfo : MonoBehaviour
     public int numOfResource;
     public Owner resoureTileOwner;
 
-    [HideInInspector]
     [Tooltip("States if the tile is depleted")]
     public bool depleted = false;
     

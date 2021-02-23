@@ -430,3 +430,4 @@ MonoBehaviour:
   nodeColor: 1
   numOfResource: 3
   resoureTileOwner: 2
+  depleted: 0

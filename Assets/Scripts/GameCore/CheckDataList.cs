@@ -138,9 +138,27 @@ public class CheckDataList : MonoBehaviour
                 if (nodeInfo.nodeOwner != Owner.Nil)
                 {
                     count += (nodeInfo.resources.Contains(BM.resourceList[i])) ? 1 : 0;
-                    if(count >= tileInfo.numOfResource)
+                    if(count > tileInfo.numOfResource)
                     {
                         tileInfo.depleted = true;
+                        int x = BM.ResourceInfoList[i].xLoc;
+                        int y = BM.ResourceInfoList[i].yLoc;
+                        if (currentColor == ResourceInfo.Color.Blue)
+                        {
+                            GameObject instance = GameObject.Instantiate(BlueExhausted, new Vector3(x, y, 0f), Quaternion.identity);
+                        }
+                        else if (currentColor == ResourceInfo.Color.Green)
+                        {
+                            GameObject instance = GameObject.Instantiate(GreenExhausted, new Vector3(x, y, 0f), Quaternion.identity);
+                        }
+                        else if (currentColor == ResourceInfo.Color.Red)
+                        {
+                            GameObject instance = GameObject.Instantiate(RedExhausted, new Vector3(x, y, 0f), Quaternion.identity);
+                        }
+                        else if (currentColor == ResourceInfo.Color.Yellow)
+                        {
+                            GameObject instance = GameObject.Instantiate(YellowExhausted, new Vector3(x, y, 0f), Quaternion.identity);
+                        }
                         break;
                     }
                 }

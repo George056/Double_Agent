@@ -3,7 +3,11 @@ guid: f618fc8aee5c2b54cb180888ce76a4a3
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - BlueExhausted: {fileID: 3677131569017129025, guid: 89d3d06675f14184b9975f0da97da2ff, type: 3}
+  - GreenExhausted: {fileID: 8894057770226643412, guid: f17327810cf48ed478e588549c419668, type: 3}
+  - RedExhausted: {fileID: 7025809757667646235, guid: 2fa384051e07c2d4b9aedcc801360260, type: 3}
+  - YellowExhausted: {fileID: 8896897624650501344, guid: 283e875361e48a547be868bc18d91972, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

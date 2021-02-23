@@ -143,6 +143,7 @@ public class CheckDataList : MonoBehaviour
                         tileInfo.depleted = true;
                         int x = BM.ResourceInfoList[i].xLoc;
                         int y = BM.ResourceInfoList[i].yLoc;
+                        currentColor = tileInfo.nodeColor;
                         if (currentColor == ResourceInfo.Color.Blue)
                         {
                             GameObject instance = GameObject.Instantiate(BlueExhausted, new Vector3(x, y, 0f), Quaternion.identity);

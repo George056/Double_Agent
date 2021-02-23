@@ -167,10 +167,8 @@ public class AI : Agent
                     if (Relationships.connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
                 }
                 //remove duplicates found at: https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
-                legalNodes = legalNodes.Distinct().ToList();
+                
                 legalCon = legalCon.Distinct().ToList();
-
-                int nodesToPlace = Random.Range(0, maxNodes);
                 int consToPlace = Random.Range(0, maxCons);
 
                 //place a legal connection when found and make a list and do at once
@@ -179,34 +177,36 @@ public class AI : Agent
                     int con = Random.Range(0, legalCon.Count);
                     if (LegalMoveConnector(legalCon[con]))
                     {
-                        PlaceMoveBranch(con);
-                        __myRoads.Add(con);
+                        PlaceMoveBranch(legalCon[con]);
+                        __myRoads.Add(legalCon[con]);
                     }
                     else
                     {
                         i--;
                     }
-                    legalCon.Remove(con); // remove the branch; if added it's already used, if not then it was illegal
+                    legalCon.Remove(legalCon[con]); // remove the branch; if added it's already used, if not then it was illegal
                 }
 
                 foreach(int i in __myRoads)
                 {
                     if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
                 }
+                legalNodes = legalNodes.Distinct().ToList();
+                int nodesToPlace = Random.Range(0, maxNodes);
 
                 for (int i = 0; i < nodesToPlace && i >= legalNodes.Count; i++)
                 {
                     int node = Random.Range(0, legalNodes.Count);
                     if (LegalMoveNode(legalNodes[node]))//if a legal move add it
                     {
-                        PlaceMoveNode(node);
-                        __myNodes.Add(node);
+                        PlaceMoveNode(legalNodes[node]);
+                        __myNodes.Add(legalNodes[node]);
                     }
                     else
                     {
                         i--;
                     }
-                    legalNodes.Remove(node);
+                    legalNodes.Remove(legalNodes[node]);
                 }
             }
         }

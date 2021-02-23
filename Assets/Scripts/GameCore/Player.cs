@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
         __longest_net = false;
         __owned_nodes = new List<int>();
         __owned_branches = new List<int>();
-        UpdateResources(new List<int>(4) { 5, 5, 10, 10 });
+        UpdateResources(new List<int>(4) { 2, 2, 4, 4 });
     }
 
     public void GetLongestNet()
@@ -104,6 +104,7 @@ public class Player : MonoBehaviour
 
     public void UpdateResources(List<int> update)
     {
+        Debug.Log("Earned Resources: " + update[0] + ", " + update[1] + ", " + update[2] + ", " + update[3]);
         for (int i = 0; i < __resources.Count; i++)
         {
             __resources[i] += update[i];

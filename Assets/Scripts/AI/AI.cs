@@ -478,7 +478,7 @@ public class AI : Agent
         temp1 -= temp2 * 10;
         tradeArr[3] = temp1;
 
-        bm.Trade(tradeArr);
+        bm.Trade(tradeArr, __piece_type);
     }
 
     private bool LegalMoveNode(int location)

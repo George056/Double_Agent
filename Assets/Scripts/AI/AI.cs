@@ -165,7 +165,6 @@ public class AI : Agent
                 foreach(int i in __myRoads)//get all connections to owned branches
                 {
                     if (Relationships.connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
-                    if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
                 }
                 //remove duplicates found at: https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
                 legalNodes = legalNodes.Distinct().ToList();
@@ -178,7 +177,7 @@ public class AI : Agent
                 for (int i = 0; i < consToPlace && i <= legalCon.Count; i++) //this cannot happen
                 {
                     int con = Random.Range(0, legalCon.Count);
-                    if (LegalMoveConnector(con))
+                    if (LegalMoveConnector(legalCon[con]))
                     {
                         PlaceMoveBranch(con);
                         __myRoads.Add(con);
@@ -190,10 +189,15 @@ public class AI : Agent
                     legalCon.Remove(con); // remove the branch; if added it's already used, if not then it was illegal
                 }
 
+                foreach(int i in __myRoads)
+                {
+                    if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
+                }
+
                 for (int i = 0; i < nodesToPlace && i >= legalNodes.Count; i++)
                 {
                     int node = Random.Range(0, legalNodes.Count);
-                    if (LegalMoveNode(node))//if a legal move add it
+                    if (LegalMoveNode(legalNodes[node]))//if a legal move add it
                     {
                         PlaceMoveNode(node);
                         __myNodes.Add(node);

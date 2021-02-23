@@ -43,7 +43,7 @@ public class BoardManager : MonoBehaviour
     [HideInInspector]
     public int rows = 11;
 
-    bool isSetupTurn = false;
+    bool isSetupTurn = true;
     private int turnCount = 1;
 
     private CheckDataList cdl;
@@ -464,6 +464,9 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurnButtonClicked()
     {
+        if(turnCount == 4)
+            isSetupTurn = false;
+
         if (isSetupTurn)
         {
             if (true) // if (E & CL have been placed)
@@ -520,12 +523,13 @@ public class BoardManager : MonoBehaviour
             }
         }
 
+        turnCount++;
+
         // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
-        if (turnCount > 5)
-            BoardCheck();
+        BoardCheck();
 
         // if not opener move, allocate resources to appropriate player
-        if (turnCount > 5)
+        if (turnCount >= 5)
             AllocateResources();
 
         if (activeSide == aiPiece)
@@ -537,11 +541,24 @@ public class BoardManager : MonoBehaviour
             inBuildMode = true;
         }
 
-        // disable/reenable Trade, Build, and End Turn buttons
-        if (turnCount != 2)
-            BtnToggle();
 
-        turnCount++;
+        // disable/reenable Trade, Build, and End Turn buttons
+        if (turnCount != 3)
+        {
+            BtnToggle();
+        }
+        else
+        {
+            if (firstPlayer == humanPiece)
+            {
+                player2.GetComponent<AI>().AIMove(turnCount);
+            }
+            else
+            {
+                //human move
+            }
+        }
+        
         if (turnCount == 5)
         {
             player2.GetComponent<AI>().EndOpener();

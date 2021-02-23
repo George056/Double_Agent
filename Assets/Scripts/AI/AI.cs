@@ -21,7 +21,7 @@ public enum Difficulty
 public class AI : Agent
 {
     [Tooltip("A list of all AI resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
-    public List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
+    public List<int> __resources = new List<int>(4) { 10, 10, 10, 10 };
 
     [HideInInspector]
     [Tooltip("What difficulty AI is being used; 0 = easy, 1 = hard")]
@@ -82,6 +82,7 @@ public class AI : Agent
         randAI = true;
         opener = true;
         __myRoads = new List<int>();
+        __myNodes = new List<int>();
         if(!randAI) GetDifficulty();
         GetPlayer();
         GetPiece();
@@ -90,6 +91,7 @@ public class AI : Agent
         opener = __player == 0;
         turn = (int)__player;
         bm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>();
+        __resources = new List<int>(4) { 10, 10, 10, 10 };
     }
 
     /// <summary>
@@ -155,7 +157,7 @@ public class AI : Agent
             }
             else
             {
-                int maxNodes = Math.Min(__resources[2] % 2, __resources[3] % 2);
+                int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
                 int maxCons = Math.Min(__resources[0], __resources[1]);
 
                 List<int> legalNodes = new List<int>();
@@ -173,7 +175,7 @@ public class AI : Agent
                 int consToPlace = Random.Range(0, maxCons);
 
                 //place a legal connection when found and make a list and do at once
-                for (int i = 0; i < consToPlace && i >= legalCon.Count; i++)
+                for (int i = 0; i < consToPlace && i >= legalCon.Count; i++) //this cannot happen
                 {
                     int con = Random.Range(0, legalCon.Count);
                     if (LegalMoveConnector(con))

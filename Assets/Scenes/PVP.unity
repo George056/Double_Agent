@@ -251,6 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardScript: {fileID: 0}
   player: {fileID: 1080015562502522977, guid: 8d8c011bc6d039c4280195699a489492, type: 3}
+  gameOver: 0
 --- !u!224 &77764163
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1316,7 +1317,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 77764161}
         m_TargetAssemblyTypeName: BoardManager, Assembly-CSharp
-        m_MethodName: EndTurn
+        m_MethodName: EndTurnButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -288,6 +288,8 @@ MonoBehaviour:
   GreenExhausted: {fileID: 8894057770226643412, guid: f17327810cf48ed478e588549c419668, type: 3}
   RedExhausted: {fileID: 7025809757667646235, guid: 2fa384051e07c2d4b9aedcc801360260, type: 3}
   YellowExhausted: {fileID: 8896897624650501344, guid: 283e875361e48a547be868bc18d91972, type: 3}
+  OrangeCaptured: {fileID: 8640919517935639611, guid: 6faad242aa9b08a4ea29fcbe72a05482, type: 3}
+  PurpleCaptured: {fileID: 5414440330753415006, guid: 7a3c082bee952094aa9741c3c29e7809, type: 3}
   currentColor: 0
   longestNetOwner: 2
 --- !u!222 &77764165

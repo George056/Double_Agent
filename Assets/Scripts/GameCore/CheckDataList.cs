@@ -39,6 +39,8 @@ public class CheckDataList : MonoBehaviour
     public GameObject YellowCapturedByOrange;
     public GameObject YellowCapturedByPurple;
     */
+    public GameObject OrangeCaptured;
+    public GameObject PurpleCaptured;
 
 
     [HideInInspector]
@@ -182,6 +184,16 @@ public class CheckDataList : MonoBehaviour
                 && tempBranchOwner[2] == tempBranchOwner[3])
             {
                 BM.resourceList[i].GetComponent<ResourceInfo>().resoureTileOwner = tempBranchOwner[0];
+                int x = BM.ResourceInfoList[i].xLoc;
+                int y = BM.ResourceInfoList[i].yLoc;
+                if (tempBranchOwner[0] == Owner.US)
+                {
+                    GameObject instance = GameObject.Instantiate(PurpleCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                }
+                else
+                {
+                    GameObject instance = GameObject.Instantiate(OrangeCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                }
             }
         }
     }

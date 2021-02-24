@@ -338,6 +338,7 @@ public class BoardManager : MonoBehaviour
         CalculateScore(who);
 
         cdl.DepletedCheck();
+        cdl.CapturedCheck();
     }
 
     /// <summary>

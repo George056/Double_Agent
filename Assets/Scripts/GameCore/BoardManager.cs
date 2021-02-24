@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using TMPro;
 
 /// <summary>
 /// The owner value for a node, branch, or tile, if not owned the value is Nil
@@ -84,6 +85,11 @@ public class BoardManager : MonoBehaviour
     private List<Vector3> gridPositions = new List<Vector3>();
     private ResourceInfo.Color tempColor; //store the color
     private int tempNum;    //store
+
+    public TextMeshProUGUI coinCount;
+    public TextMeshProUGUI loyalistCount;
+    public TextMeshProUGUI copperCount;
+    public TextMeshProUGUI lumberCount;
     
     void Shuffle(GameObject[] resourceList)
     {
@@ -204,6 +210,15 @@ public class BoardManager : MonoBehaviour
     /*
      *  change the owner of the node by clicking
      */
+
+    public void UpdateResourcesInUI(List<int> resources)
+    {
+        coinCount.text = resources[3].ToString();
+        loyalistCount.text = resources[2].ToString();
+        copperCount.text = resources[0].ToString();
+        lumberCount.text = resources[1].ToString();
+    }
+
     public void ChangeNodeOwner(int nodeNum)
     {
         if (activeSide == Owner.US)

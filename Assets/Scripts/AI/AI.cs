@@ -225,32 +225,124 @@ public class AI : Agent
     /// <param name="actionMasker">Masks posible values of the nural net</param>
     public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
     {
-        List<int> clamedNodes = new List<int>();
-        for(int i = 0; i < bm.nodes.Length; i++)
+        if (opener)
         {
-            if(bm.nodes[i].GetComponent<NodeInfo>().nodeOwner != Owner.Nil)
+            List<int> clamedNodes = new List<int>();
+            for(int i = 0; i < bm.nodes.Length; i++)
             {
-                clamedNodes.Add(i);
+                if(bm.nodes[i].GetComponent<NodeInfo>().nodeOwner != Owner.Nil)
+                {
+                    clamedNodes.Add(i);
+                }
+            }
+
+            List<int> clamedBranches = new List<int>();
+            for(int i = 0; i < bm.allBranches.Length; i++)
+            {
+                if(bm.allBranches[i].GetComponent<BranchInfo>().branchOwner != Owner.Nil)
+                {
+                    clamedBranches.Add(i);
+                }
+            }
+
+            foreach(int i in clamedNodes)
+            {
+                actionMasker.SetMask(i, new int[1] { 1 });
+            }
+
+            foreach(int i in clamedBranches)
+            {
+                actionMasker.SetMask(i + 24, new int[1] { 1 });
             }
         }
 
-        List<int> clamedBranches = new List<int>();
-        for(int i = 0; i < bm.allBranches.Length; i++)
+        if(turn >= 5)
         {
-            if(bm.allBranches[i].GetComponent<BranchInfo>().branchOwner != Owner.Nil)
+            //find max branch amount
+            int maxCons = Math.Min(__resources[0], __resources[1]);
+            
+            //restrict branches that cannot be reached
+            List<int> branchesThatCanBeReached = new List<int>();
+
+            if (maxCons != 0)
             {
-                clamedBranches.Add(i);
+                List<int> additions = new List<int>();
+
+                foreach(int i in __myRoads)
+                {
+                    if (Relationships.connectionsRoad.TryGetValue(i, out List<int> temp)) additions.AddRange(temp);
+                }
+                additions = additions.Distinct().ToList();
+
+                //remove if owned
+                foreach(int i in additions)
+                {
+                    if (bm.allBranches[i].GetComponent<BranchInfo>().branchOwner != Owner.Nil) additions.Remove(i);
+                }
+
+                maxCons--;
+                branchesThatCanBeReached.AddRange(additions);
+                branchesThatCanBeReached = branchesThatCanBeReached.Distinct().ToList();
+
+                while(maxCons > 0)
+                {
+                    List<int> temp = new List<int>();
+                    foreach(int i in additions) Relationships.connectionsRoad.TryGetValue(i, out temp);
+                    temp = temp.Distinct().ToList();
+                    branchesThatCanBeReached.AddRange(additions);
+                    additions = temp;
+                    maxCons--;
+                }
+                branchesThatCanBeReached.AddRange(additions);
+                branchesThatCanBeReached = branchesThatCanBeReached.Distinct().ToList();
             }
-        }
 
-        foreach(int i in clamedNodes)
-        {
-            actionMasker.SetMask(i, new int[1] { 1 });
-        }
+            List<int> blockedBranches = new List<int>();
+            for (int i = 0; i < bm.allBranches.Length; i++) blockedBranches.Add(i);
 
-        foreach(int i in clamedBranches)
-        {
-            actionMasker.SetMask(i + 24, new int[1] { 1 });
+            //remove branches that can be reached
+            if(branchesThatCanBeReached.Count != 0)
+            {
+                foreach(int i in branchesThatCanBeReached)
+                {
+                    blockedBranches.Remove(i);
+                }
+            }
+
+            foreach(int i in blockedBranches)
+            {
+                actionMasker.SetMask(i, new int[1] { 1 });
+            }
+
+            //restrict nodes that cannot be reached
+            int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
+            List<int> nodesThatCanBeReached = new List<int>();
+            
+            if(maxNodes > 0)
+            {
+                List<int> additions = new List<int>();
+                branchesThatCanBeReached.AddRange(__myRoads);
+                foreach(int i in branchesThatCanBeReached)
+                {
+                    if (Relationships.connectionsRoadNode.TryGetValue(i, out List<int> temp)) additions.AddRange(temp);
+                }
+                additions = additions.Distinct().ToList();
+
+                //remove if owned
+                foreach (int i in additions)
+                {
+                    if (bm.nodes[i].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) additions.Remove(i);
+                }
+                nodesThatCanBeReached.AddRange(additions);
+            }
+
+            List<int> blockedNodes = new List<int>();
+            for (int i = 0; i < bm.nodes.Length; i++) blockedNodes.Add(i);
+
+            foreach (int i in nodesThatCanBeReached) blockedNodes.Remove(i);
+
+            foreach (int i in blockedNodes) actionMasker.SetMask(i, new int[1] { 1 });
+
         }
     }
 
@@ -281,7 +373,7 @@ public class AI : Agent
         }
     }
 
-    public void UpdateScore(int score)
+    public void UpdateScore(int score)//*********************************************************************************************************
     {
         AddReward((Math.Abs(score - __ai_score) == 2) ? 0 : (score - __ai_score) / 10); //do no reward if the change is due to the longest net
         __ai_score = score;

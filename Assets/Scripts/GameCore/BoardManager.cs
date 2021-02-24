@@ -120,6 +120,7 @@ public class BoardManager : MonoBehaviour
                         ResourceInfoList[resourceCount].nodeNum = resourceList[resourceCount].GetComponent<ResourceInfo>().numOfResource;
                         ResourceInfoList[resourceCount].xLoc = hang + 6 * x;
                         ResourceInfoList[resourceCount].yLoc = lie + 6 * y;
+                        resourceList[resourceCount].GetComponent<ResourceInfo>().depleted = false;
                         resourceCount++;
                         break;
                     case 'N':
@@ -146,7 +147,7 @@ public class BoardManager : MonoBehaviour
                         branchCount++;
                         break;
                     default:
-                        Debug.Log(Map[x,y]);
+                        //Debug.Log(Map[x,y]);
                         break;
                 }
             }

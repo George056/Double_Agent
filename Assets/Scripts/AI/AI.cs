@@ -194,7 +194,7 @@ public class AI : Agent
                 legalNodes = legalNodes.Distinct().ToList();
                 int nodesToPlace = Random.Range(0, maxNodes);
 
-                for (int i = 0; i < nodesToPlace && i >= legalNodes.Count; i++)
+                for (int i = 0; i < nodesToPlace && i <= legalNodes.Count; i++)
                 {
                     int node = Random.Range(0, legalNodes.Count);
                     if (LegalMoveNode(legalNodes[node]))//if a legal move add it

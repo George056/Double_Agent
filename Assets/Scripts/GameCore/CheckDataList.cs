@@ -186,13 +186,13 @@ public class CheckDataList : MonoBehaviour
                 BM.resourceList[i].GetComponent<ResourceInfo>().resoureTileOwner = tempBranchOwner[0];
                 int x = BM.ResourceInfoList[i].xLoc;
                 int y = BM.ResourceInfoList[i].yLoc;
-                if (tempBranchOwner[0] == Owner.US)
+                if (tempBranchOwner[0] == (Owner)PlayerPrefs.GetInt("Human_Piece", 0))
                 {
-                    GameObject instance = GameObject.Instantiate(PurpleCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Human_Player", 0) == 0) ? OrangeCaptured : PurpleCaptured, new Vector3(x, y, 0f), Quaternion.identity);
                 }
                 else
                 {
-                    GameObject instance = GameObject.Instantiate(OrangeCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Human_Player", 0) == 0) ? PurpleCaptured : OrangeCaptured, new Vector3(x, y, 0f), Quaternion.identity);
                 }
             }
         }

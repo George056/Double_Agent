@@ -90,6 +90,8 @@ public class BoardManager : MonoBehaviour
     public TextMeshProUGUI loyalistCount;
     public TextMeshProUGUI copperCount;
     public TextMeshProUGUI lumberCount;
+
+    public TextMeshProUGUI playerScore;
     
     void Shuffle(GameObject[] resourceList)
     {
@@ -209,7 +211,12 @@ public class BoardManager : MonoBehaviour
     }
     /*
      *  change the owner of the node by clicking
-     */
+    */
+
+    public void UpdateScoreInUI(int score)
+    {
+        playerScore.text = score.ToString();
+    }
 
     public void UpdateResourcesInUI(List<int> resources)
     {

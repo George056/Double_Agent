@@ -121,6 +121,7 @@ public class BoardManager : MonoBehaviour
                         ResourceInfoList[resourceCount].xLoc = hang + 6 * x;
                         ResourceInfoList[resourceCount].yLoc = lie + 6 * y;
                         resourceList[resourceCount].GetComponent<ResourceInfo>().depleted = false;
+                        resourceList[resourceCount].GetComponent<ResourceInfo>().resoureTileOwner = Owner.Nil;
                         resourceCount++;
                         break;
                     case 'N':

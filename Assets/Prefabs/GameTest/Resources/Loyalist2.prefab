@@ -344,7 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6330a87da7a288148ad12916633eb26b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeColor: 1
+  nodeColor: 2
   numOfResource: 2
   resoureTileOwner: 2
   depleted: 0

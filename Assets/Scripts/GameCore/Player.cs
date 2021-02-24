@@ -50,12 +50,6 @@ public class Player : MonoBehaviour
         __human_score -= 2;
     }
 
-    public void HumanMove(int human_score, List<int> resources)
-    {
-        __human_score = human_score;
-        //set the board active
-    }
-
     /// <summary>
     /// Sets if the player has the longest network
     /// </summary>
@@ -94,12 +88,16 @@ public class Player : MonoBehaviour
     {
         __resources[2] -= 2;
         __resources[3] -= 2;
+
+        GameObject.FindObjectOfType<BoardManager>().UpdateResourcesInUI(__resources);
     }
 
     public void PayForBranch()
     {
         __resources[0]--;
         __resources[1]--;
+
+        GameObject.FindObjectOfType<BoardManager>().UpdateResourcesInUI(__resources);
     }
 
     public void UpdateResources(List<int> update)
@@ -109,11 +107,14 @@ public class Player : MonoBehaviour
         {
             __resources[i] += update[i];
         }
+
+        GameObject.FindObjectOfType<BoardManager>().UpdateResourcesInUI(__resources);
     }
 
     public void UpdateScore(int newScore)
     {
         __human_score = newScore;
+        GameObject.FindObjectOfType<BoardManager>().UpdateScoreInUI(__human_score);
     }
 
     public void AddNode(int index)

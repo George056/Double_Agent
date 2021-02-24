@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using TMPro;
 
 /// <summary>
 /// The owner value for a node, branch, or tile, if not owned the value is Nil
@@ -84,6 +85,16 @@ public class BoardManager : MonoBehaviour
     private List<Vector3> gridPositions = new List<Vector3>();
     private ResourceInfo.Color tempColor; //store the color
     private int tempNum;    //store
+
+    public TextMeshProUGUI coinCount;
+    public TextMeshProUGUI loyalistCount;
+    public TextMeshProUGUI copperCount;
+    public TextMeshProUGUI lumberCount;
+
+    public TextMeshProUGUI playerScore;
+
+    public GameObject USImage;
+    public GameObject USSRImage;
     
     void Shuffle(GameObject[] resourceList)
     {
@@ -189,10 +200,16 @@ public class BoardManager : MonoBehaviour
         player2 = GameObject.FindGameObjectWithTag("AI");
         player2.GetComponent<AI>().SetOpener();
 
-
-        Debug.Log("First Player: " + firstPlayer);
-        Debug.Log("AI: " + aiPiece);
-        Debug.Log("Human: " + humanPiece);
+        if (humanPiece == Owner.US)
+        {
+            USImage.SetActive(true);
+            USSRImage.SetActive(false);
+        }
+        else
+        {
+            USImage.SetActive(false);
+            USSRImage.SetActive(true);
+        }
 
         //make sure it is an AI game first
         if (firstPlayer == aiPiece)
@@ -203,7 +220,21 @@ public class BoardManager : MonoBehaviour
     }
     /*
      *  change the owner of the node by clicking
-     */
+    */
+
+    public void UpdateScoreInUI(int score)
+    {
+        playerScore.text = score.ToString();
+    }
+
+    public void UpdateResourcesInUI(List<int> resources)
+    {
+        coinCount.text = resources[3].ToString();
+        loyalistCount.text = resources[2].ToString();
+        copperCount.text = resources[0].ToString();
+        lumberCount.text = resources[1].ToString();
+    }
+
     public void ChangeNodeOwner(int nodeNum)
     {
         if (activeSide == Owner.US)

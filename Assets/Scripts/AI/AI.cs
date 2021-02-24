@@ -174,7 +174,7 @@ public class AI : Agent
                 //place a legal connection when found and make a list and do at once
                 for (int i = 0; i < consToPlace && i <= legalCon.Count; i++) //this cannot happen
                 {
-                    int con = Random.Range(0, legalCon.Count);
+                    int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
                     if (LegalMoveConnector(legalCon[con]))
                     {
                         PlaceMoveBranch(legalCon[con]);
@@ -196,7 +196,7 @@ public class AI : Agent
 
                 for (int i = 0; i < nodesToPlace && i <= legalNodes.Count; i++)
                 {
-                    int node = Random.Range(0, legalNodes.Count);
+                    int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
                     if (LegalMoveNode(legalNodes[node]))//if a legal move add it
                     {
                         PlaceMoveNode(legalNodes[node]);

@@ -92,6 +92,9 @@ public class BoardManager : MonoBehaviour
     public TextMeshProUGUI lumberCount;
 
     public TextMeshProUGUI playerScore;
+
+    public GameObject USImage;
+    public GameObject USSRImage;
     
     void Shuffle(GameObject[] resourceList)
     {
@@ -197,10 +200,16 @@ public class BoardManager : MonoBehaviour
         player2 = GameObject.FindGameObjectWithTag("AI");
         player2.GetComponent<AI>().SetOpener();
 
-
-        Debug.Log("First Player: " + firstPlayer);
-        Debug.Log("AI: " + aiPiece);
-        Debug.Log("Human: " + humanPiece);
+        if (humanPiece == Owner.US)
+        {
+            USImage.SetActive(true);
+            USSRImage.SetActive(false);
+        }
+        else
+        {
+            USImage.SetActive(false);
+            USSRImage.SetActive(true);
+        }
 
         //make sure it is an AI game first
         if (firstPlayer == aiPiece)

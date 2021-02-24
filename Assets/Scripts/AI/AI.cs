@@ -91,7 +91,7 @@ public class AI : Agent
         opener = __player == 0;
         turn = (int)__player;
         bm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>();
-        __resources = new List<int>(4) { 10, 10, 10, 10 };
+        __resources = new List<int>(4) { 0, 0, 0, 0 };
     }
 
     /// <summary>

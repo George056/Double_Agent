@@ -94,18 +94,6 @@ public class AI : Agent
         __resources = new List<int>(4) { 0, 0, 0, 0 };
     }
 
-    /// <summary>
-    /// This function updates the current resources held by the AI
-    /// </summary>
-    /// <param name="AIResources">A list of the new resources this turn</param>
-    public void AssignResources(List<int> AIResources)
-    {
-        for(int i = 0; i < __resources.Count; i++)
-        {
-            __resources[i] += AIResources[i];
-        }
-    }
-
     public void EndOpener()
     {
         opener = false;
@@ -615,12 +603,12 @@ public class AI : Agent
 
     private bool LegalMoveNode(int location)
     {
-        return bm.LegalNodeMove(location, __piece_type, __myRoads);
+        return (opener || __resources[2] > 1 && __resources[3] > 1) ? bm.LegalNodeMove(location, __piece_type, __myRoads) : false;
     }
 
     private bool LegalMoveConnector(int location)
     {
-        return bm.LegalBranchMove(location, __piece_type, __myRoads);
+        return (opener || __resources[0] > 0 && __resources[1] > 0) ? bm.LegalBranchMove(location, __piece_type, __myRoads) : false;
     }
 
     /// <summary>
@@ -630,6 +618,11 @@ public class AI : Agent
     private void PlaceMoveNode(int location)
     {
         bm.ChangeNodeOwner(location);
+        if (!opener)
+        {
+            __resources[2] -= 2;
+            __resources[3] -= 2;
+        }
     }
 
     /// <summary>
@@ -639,6 +632,11 @@ public class AI : Agent
     private void PlaceMoveBranch(int location)
     {
         bm.ChangeBranchOwner(location);
+        if (!opener)
+        {
+            __resources[0] -= 1;
+            __resources[1] -= 1;
+        }
     }
 
     /// <summary>

@@ -559,7 +559,7 @@ public class BoardManager : MonoBehaviour
         //assign the new resources
         if(activeSide == aiPiece)
         {
-            player2.GetComponent<AI>().AssignResources(allocation);
+            player2.GetComponent<AI>().UpdateResources(allocation);
         }
         else
         {

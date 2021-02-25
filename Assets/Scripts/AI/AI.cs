@@ -546,10 +546,42 @@ public class AI : Agent
         //sensor.AddObservation();
         foreach(GameObject node in bm.nodes)
         {
+            List<int> observations = new List<int>(7) { 0, 0, 0, 0, 0, 0, 0 };// node owner; # tiles AI captured; gray count; red count; blue count; yellow count; green count;
+            NodeInfo nodeTemp = node.GetComponent<NodeInfo>();
 
+            observations[0] = ((int)nodeTemp.nodeOwner == 2) ? 0 : (int)nodeTemp.nodeOwner + 1;
+
+            foreach (GameObject tile in nodeTemp.resources)
+            {
+                ResourceInfo tileTemp = tile.GetComponent<ResourceInfo>();
+                if (tileTemp.resoureTileOwner == __piece_type) observations[1] += 1;
+                if (tileTemp.depleted == true || tileTemp.nodeColor == ResourceInfo.Color.Empty || (tileTemp.resoureTileOwner != Owner.Nil) && (tileTemp.resoureTileOwner != __piece_type)) observations[2] += 1;
+                else if (tileTemp.nodeColor == ResourceInfo.Color.Red) observations[3] += 1;
+                else if (tileTemp.nodeColor == ResourceInfo.Color.Blue) observations[4] += 1;
+                else if (tileTemp.nodeColor == ResourceInfo.Color.Yellow) observations[5] += 1;
+                else if (tileTemp.nodeColor == ResourceInfo.Color.Green) observations[6] += 1;
+            }
+            int observation = 0;
+            for(int i = (int)10E5, j = 0; j < observations.Count; i /= 10, j++)
+            {
+                observation += i * observations[j];
+            }
+            sensor.AddObservation(observation);
         }
-        //observe resources (4 observations)
 
+        foreach(GameObject branch in bm.allBranches)
+        {
+            sensor.AddObservation(((int)branch.GetComponent<BranchInfo>().branchOwner == 2) ? 0 : (int)branch.GetComponent<BranchInfo>().branchOwner + 1);
+        }
+
+        //observe if opener (1 observation)
+        sensor.AddObservation(opener);
+
+        //observe resources (4 observations)
+        foreach(int i in __resources)
+        {
+            sensor.AddObservation(i);
+        }
     }
 
     /// <summary>

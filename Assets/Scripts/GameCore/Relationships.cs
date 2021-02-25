@@ -80,7 +80,7 @@ public class Relationships : MonoBehaviour
         connectionsNode.Add(6, new List<int>() { 10, 15 });
         connectionsNode.Add(7, new List<int>() { 6, 10, 11, 16 });
         connectionsNode.Add(8, new List<int>() { 7, 11, 12, 17 });
-        connectionsNode.Add(9, new List<int>() { 9, 12, 13, 18 });
+        connectionsNode.Add(9, new List<int>() { 8, 12, 13, 18 });
         connectionsNode.Add(10, new List<int>() { 9, 13, 14, 19 });
         connectionsNode.Add(11, new List<int>() { 14, 20 });
         connectionsNode.Add(12, new List<int>() { 15, 21 });

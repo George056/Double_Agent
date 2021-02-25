@@ -25,20 +25,20 @@ public class BoardManager : MonoBehaviour
         public int xLoc;
         public int yLoc;
     }
-    
+
     public GameObject[] resourceList;
     public GameObject[] nodes;
     public GameObject[] allBranches;
 
     public ResourceItemInfo[] ResourceInfoList = new ResourceItemInfo[13];
     public Owner activeSide;
-    
+
     public GameObject tradeButton;
     public GameObject buildButton;
     public GameObject endTurnButton;
-    
+
     public bool inBuildMode = false;
-    
+
     [HideInInspector]
     public int columns = 11;
     [HideInInspector]
@@ -63,7 +63,7 @@ public class BoardManager : MonoBehaviour
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
      */
-    char[,] GameBoard = new char[11,11]
+    char[,] GameBoard = new char[11, 11]
     {
         {'X', 'X', 'X', 'X', 'N', 'H', 'N', 'X', 'X', 'X', 'X'},
         {'X', 'X', 'X', 'X', 'S', 'R', 'S', 'X', 'X', 'X', 'X'},
@@ -95,6 +95,73 @@ public class BoardManager : MonoBehaviour
 
     public GameObject USImage;
     public GameObject USSRImage;
+
+    private string customBoardSeed;
+    public GameObject[] tempResourceList = new GameObject[13];
+
+    int GetTileIndex(string code)
+    {
+        int index = 0;
+
+        switch (code)
+        {
+            case "B1":
+                index = 0;
+                break;
+            case "B2":
+                index = 1;
+                break;
+            case "B3":
+                index = 2;
+                break;
+            case "ES":
+                index = 3;
+                break;
+            case "R1":
+                index = 4;
+                break;
+            case "R2":
+                index = 5;
+                break;
+            case "R3":
+                index = 6;
+                break;
+            case "Y1":
+                index = 7;
+                break;
+            case "Y2":
+                index = 8;
+                break;
+            case "Y3":
+                index = 9;
+                break;
+            case "G1":
+                index = 10;
+                break;
+            case "G2":
+                index = 11;
+                break;
+            case "G3":
+                index = 12;
+                break;
+        }
+
+        return index;
+    }
+
+    void CustomizeBoardLayout()
+    {
+        for (int i = 0; i < 13; i++)
+        {
+            tempResourceList[i] = resourceList[i];
+        }
+
+        for (int i = 0; i < 13; i++)
+        {
+            string tileCode = customBoardSeed[i * 2].ToString() + customBoardSeed[i * 2 + 1].ToString();
+            resourceList[i] = tempResourceList[GetTileIndex(tileCode)];
+        }
+    }
     
     void Shuffle(GameObject[] resourceList)
     {
@@ -108,8 +175,6 @@ public class BoardManager : MonoBehaviour
             resourceList[randomNum] = temp;
         }
     }
-
- 
 
     void BoardSetUp(char[,] Map)
     {
@@ -185,8 +250,17 @@ public class BoardManager : MonoBehaviour
 
     public void SetupScene()
     {
+        customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
+        Debug.Log("CustomBoardSeed: " + customBoardSeed);
         gridPositions.Clear();
-        Shuffle(resourceList);
+        if (customBoardSeed != "")
+        {
+            CustomizeBoardLayout();
+        }
+        else
+        {
+            Shuffle(resourceList);
+        }
         BoardSetUp(GameBoard);
         AssignNodeResources();
         cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();

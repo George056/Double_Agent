@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PreGameMenu : MonoBehaviour
 {
+    public InputField customBoardInput;
+
     /// <summary>
     /// This is used to set the difficulty of the AI
     /// </summary>
@@ -66,6 +69,7 @@ public class PreGameMenu : MonoBehaviour
 
     public void PlayGame()
     {
+        PlayerPrefs.SetString("CustomBoardSeed", customBoardInput.text);
         SceneManager.LoadScene("PVP");
     }
     

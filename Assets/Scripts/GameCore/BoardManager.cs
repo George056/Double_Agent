@@ -651,6 +651,8 @@ public class BoardManager : MonoBehaviour
         // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
         BoardCheck();
 
+        if (end) return;
+
         // if not opener move, allocate resources to appropriate player
         if (turnCount >= 5)
             AllocateResources();

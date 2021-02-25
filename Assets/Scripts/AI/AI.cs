@@ -16,7 +16,7 @@ public enum Difficulty
 /// <summary>
 /// This class is used as the AI for the game. 
 /// It is constructed based on the Unity course at: https://learn.unity.com/course/ml-agents-hummingbirds
-/// More nural net info can be found at: https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Design-Agents.md#masking-discrete-actions
+/// More nural net info can be found at: https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Design-Agents.md
 /// </summary>
 public class AI : Agent
 {
@@ -57,6 +57,9 @@ public class AI : Agent
     [Tooltip("Gray node reward")]
     public float nodeGrayReward = 0.01f;
 
+    [HideInInspector]
+    public float totalReward = 0;
+
     // } End variables for training
 
     [Tooltip("This holds the numeric ID of the roads that have been captured")]
@@ -77,6 +80,9 @@ public class AI : Agent
     [Tooltip("The active BoardManager")]
     private BoardManager bm;
 
+    private bool loss = false;
+    private bool win = false;
+
     private void Start()
     {
         randAI = true;
@@ -92,6 +98,9 @@ public class AI : Agent
         turn = (int)__player;
         bm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BoardManager>();
         __resources = new List<int>(4) { 0, 0, 0, 0 };
+        totalReward = 0;
+        loss = false;
+        win = false;
     }
 
     public void EndOpener()
@@ -113,6 +122,11 @@ public class AI : Agent
 
         if (this.turn < 5) SetOpener();
         else EndOpener();
+
+        if (__human_score >= 10) Loss();
+        else if (__ai_score >= 10) Win();
+
+        if (loss || win) return;
 
         //make move
         if (randAI)
@@ -337,11 +351,13 @@ public class AI : Agent
     public void GetLongestNet()
     {
         AddReward(longestNetReward);
+        totalReward += longestNetReward;
     }
 
     public void LoseLongestNet()
     {
         AddReward(-longestNetReward);
+        totalReward -= longestNetReward;
         __ai_score -= 2;
     }
 
@@ -350,21 +366,41 @@ public class AI : Agent
         if(c == Color.blue || c == Color.red)
         {
             AddReward(2 * captureReward);
+            totalReward += 2 * captureReward;
         }
         else if(c == Color.green || c == Color.yellow)
         {
             AddReward(4 * captureReward);
+            totalReward += 4 * captureReward;
         }
         else //if gray
         {
             AddReward(captureReward);
+            totalReward += captureReward;
         }
     }
 
-    public void UpdateScore(int score)//*********************************************************************************************************
+    public void UpdateScore(int score, bool longestGet, bool longestLost)
     {
-        AddReward((Math.Abs(score - __ai_score) == 2) ? 0 : (score - __ai_score) / 10); //do no reward if the change is due to the longest net
+        AddReward((score - ((longestGet) ? 2 : 0)) - (__ai_score - ((longestLost) ? 2 : 0)));
+        totalReward += (score - ((longestGet) ? 2 : 0)) - (__ai_score - ((longestLost) ? 2 : 0));
         __ai_score = score;
+    }
+
+    public void Loss()
+    {
+        if (totalReward > 0) AddReward(-totalReward);
+        else if(totalReward < 0) AddReward(totalReward);
+        AddReward(-1);
+        loss = true;
+    }
+
+    public void Win()
+    {
+        if(totalReward != 1)
+        {
+            AddReward(1 - totalReward);
+        }
     }
 
     /// <summary>
@@ -501,22 +537,27 @@ public class AI : Agent
                             if(c.GetComponent<ResourceInfo>().depleted == true)
                             {
                                 AddReward(nodeGrayReward / 2);
+                                totalReward += nodeGrayReward / 2;
                             }
                             else if(c.GetComponent<ResourceInfo>().resoureTileOwner == ((__piece_type == Owner.US) ? Owner.USSR : Owner.US))
                             {
                                 AddReward(nodeGrayReward / 3);
+                                totalReward += nodeGrayReward / 3;
                             }
                             else if(c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Blue || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Red)
                             {
                                 AddReward(nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
+                                totalReward += nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
                             }
                             else if (c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Green || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Yellow)
                             {
                                 AddReward(nodeGYReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
+                                totalReward += nodeGYReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
                             }
                             else
                             {
                                 AddReward(nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
+                                totalReward += nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
                             }
                         }
                 }

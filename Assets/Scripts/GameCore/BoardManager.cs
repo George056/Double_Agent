@@ -447,11 +447,15 @@ public class BoardManager : MonoBehaviour
 
         CalculateScore(who);
 
-        if(player2.GetComponent<AI>().__ai_score == 10 || player1.GetComponent<Player>().__human_score == 10)
+        if(player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
         {
             tradeButton.SetActive(false);
             buildButton.SetActive(false);
             endTurnButton.SetActive(false);
+
+            if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
+            else player2.GetComponent<AI>().Win();
+
             end = true;
         }
 
@@ -512,7 +516,7 @@ public class BoardManager : MonoBehaviour
 
         if(who == aiPiece)
         {
-            player2.GetComponent<AI>().UpdateScore(score);
+            player2.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
         }
         else
         {

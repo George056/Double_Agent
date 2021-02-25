@@ -59,6 +59,8 @@ public class BoardManager : MonoBehaviour
     private GameObject player1;
     private GameObject player2;
 
+    private bool end;
+
 
     /*
      * X = empty; N = node; H = heng branch; S = shu branch; R = resource
@@ -269,6 +271,8 @@ public class BoardManager : MonoBehaviour
         firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
         activeSide = firstPlayer;
 
+        end = false;
+
         //check to see if it is an AI or network game
         player1 = GameObject.FindGameObjectWithTag("Player");
         player2 = GameObject.FindGameObjectWithTag("AI");
@@ -443,6 +447,14 @@ public class BoardManager : MonoBehaviour
 
         CalculateScore(who);
 
+        if(player2.GetComponent<AI>().__ai_score == 10 || player1.GetComponent<Player>().__human_score == 10)
+        {
+            tradeButton.SetActive(false);
+            buildButton.SetActive(false);
+            endTurnButton.SetActive(false);
+            end = true;
+        }
+
         cdl.DepletedCheck();
         cdl.CapturedCheck();
     }
@@ -575,6 +587,8 @@ public class BoardManager : MonoBehaviour
     {
         if(turnCount == 4)
             isSetupTurn = false;
+
+        if (end) return;
 
         if (isSetupTurn)
         {

@@ -174,7 +174,7 @@ public class AI : Agent
                 //place a legal connection when found and make a list and do at once
                 for (int i = 0; i < consToPlace && i <= legalCon.Count; i++) //this cannot happen
                 {
-                    int con = Random.Range(0, legalCon.Count);
+                    int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
                     if (LegalMoveConnector(legalCon[con]))
                     {
                         PlaceMoveBranch(legalCon[con]);
@@ -196,7 +196,7 @@ public class AI : Agent
 
                 for (int i = 0; i < nodesToPlace && i <= legalNodes.Count; i++)
                 {
-                    int node = Random.Range(0, legalNodes.Count);
+                    int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
                     if (LegalMoveNode(legalNodes[node]))//if a legal move add it
                     {
                         PlaceMoveNode(legalNodes[node]);
@@ -407,73 +407,73 @@ public class AI : Agent
     }
 
     /// <summary>
-    /// Called when an action is received
+    /// <para>Called when an action is received</para>
     /// 
-    /// vectorActions[i] represents:
-    /// Index 0: Place node A (0 = don't place, 1 = place)
-    /// Index 1: Place node B (0 = don't place, 1 = place)
-    /// Index 2: Place node C (0 = don't place, 1 = place)
-    /// Index 3: Place node D (0 = don't place, 1 = place)
-    /// Index 4: Place node E (0 = don't place, 1 = place)
-    /// Index 5: Place node F (0 = don't place, 1 = place)
-    /// Index 6: Place node G (0 = don't place, 1 = place)
-    /// Index 7: Place node H (0 = don't place, 1 = place)
-    /// Index 8: Place node I (0 = don't place, 1 = place)
-    /// Index 9: Place node J (0 = don't place, 1 = place)
-    /// Index 10: Place node K (0 = don't place, 1 = place)
-    /// Index 11: Place node L (0 = don't place, 1 = place)
-    /// Index 12: Place node M (0 = don't place, 1 = place)
-    /// Index 13: Place node N (0 = don't place, 1 = place)
-    /// Index 14: Place node O (0 = don't place, 1 = place)
-    /// Index 15: Place node P (0 = don't place, 1 = place)
-    /// Index 16: Place node Q (0 = don't place, 1 = place)
-    /// Index 17: Place node R (0 = don't place, 1 = place)
-    /// Index 18: Place node S (0 = don't place, 1 = place)
-    /// Index 19: Place node T (0 = don't place, 1 = place)
-    /// Index 20: Place node U (0 = don't place, 1 = place)
-    /// Index 21: Place node V (0 = don't place, 1 = place)
-    /// Index 22: Place node W (0 = don't place, 1 = place)
-    /// Index 23: Place node X (0 = don't place, 1 = place)
-    /// Index 24: Place connector 1 (0 = don't place, 1 = place)
-    /// Index 25: Place connector 2 (0 = don't place, 1 = place)
-    /// Index 26: Place connector 3 (0 = don't place, 1 = place)
-    /// Index 27: Place connector 4 (0 = don't place, 1 = place)
-    /// Index 28: Place connector 5 (0 = don't place, 1 = place)
-    /// Index 29: Place connector 6 (0 = don't place, 1 = place)
-    /// Index 30: Place connector 7 (0 = don't place, 1 = place)
-    /// Index 31: Place connector 8 (0 = don't place, 1 = place)
-    /// Index 32: Place connector 9 (0 = don't place, 1 = place)
-    /// Index 33: Place connector 10 (0 = don't place, 1 = place)
-    /// Index 34: Place connector 11 (0 = don't place, 1 = place)
-    /// Index 35: Place connector 12 (0 = don't place, 1 = place)
-    /// Index 36: Place connector 13 (0 = don't place, 1 = place)
-    /// Index 37: Place connector 14 (0 = don't place, 1 = place)
-    /// Index 38: Place connector 15 (0 = don't place, 1 = place)
-    /// Index 39: Place connector 16 (0 = don't place, 1 = place)
-    /// Index 40: Place connector 17 (0 = don't place, 1 = place)
-    /// Index 41: Place connector 18 (0 = don't place, 1 = place)
-    /// Index 42: Place connector 19 (0 = don't place, 1 = place)
-    /// Index 43: Place connector 20 (0 = don't place, 1 = place)
-    /// Index 44: Place connector 21 (0 = don't place, 1 = place)
-    /// Index 45: Place connector 22 (0 = don't place, 1 = place)
-    /// Index 46: Place connector 23 (0 = don't place, 1 = place)
-    /// Index 47: Place connector 24 (0 = don't place, 1 = place)
-    /// Index 48: Place connector 25 (0 = don't place, 1 = place)
-    /// Index 49: Place connector 26 (0 = don't place, 1 = place)
-    /// Index 50: Place connector 27 (0 = don't place, 1 = place)
-    /// Index 51: Place connector 28 (0 = don't place, 1 = place)
-    /// Index 52: Place connector 29 (0 = don't place, 1 = place)
-    /// Index 53: Place connector 30 (0 = don't place, 1 = place)
-    /// Index 54: Place connector 31 (0 = don't place, 1 = place)
-    /// Index 55: Place connector 32 (0 = don't place, 1 = place)
-    /// Index 56: Place connector 33 (0 = don't place, 1 = place)
-    /// Index 57: Place connector 34 (0 = don't place, 1 = place)
-    /// Index 58: Place connector 35 (0 = don't place, 1 = place)
-    /// Index 59: Place connector 36 (0 = don't place, 1 = place)
-    /// Index 60: Make a trade (0 = no trade; 1 = gggy; 2 = gggr; 3 = gggb; 4 = ggyr; 5 = ggyb; 6 = ggry; 7 = ggrb; 8 = ggby; 9 = ggbr; 10 = gyyr; 11 = gyyb;
+    /// <para>vectorActions[i] represents:</para>
+    /// <para>Index 0: Place node A (0 = don't place, 1 = place)
+    ///       Index 1: Place node B (0 = don't place, 1 = place)
+    ///       Index 2: Place node C (0 = don't place, 1 = place)</para>
+    /// <para>Index 3: Place node D (0 = don't place, 1 = place)
+    ///       Index 4: Place node E (0 = don't place, 1 = place)
+    ///       Index 5: Place node F (0 = don't place, 1 = place)</para>
+    /// <para>Index 6: Place node G (0 = don't place, 1 = place)
+    ///       Index 7: Place node H (0 = don't place, 1 = place)
+    ///       Index 8: Place node I (0 = don't place, 1 = place)</para>
+    /// <para>Index 9: Place node J (0 = don't place, 1 = place)
+    ///       Index 10: Place node K (0 = don't place, 1 = place)
+    ///       Index 11: Place node L (0 = don't place, 1 = place)</para>
+    /// <para>Index 12: Place node M (0 = don't place, 1 = place)
+    ///       Index 13: Place node N (0 = don't place, 1 = place)
+    ///       Index 14: Place node O (0 = don't place, 1 = place)</para>
+    /// <para>Index 15: Place node P (0 = don't place, 1 = place)
+    ///       Index 16: Place node Q (0 = don't place, 1 = place)
+    ///       Index 17: Place node R (0 = don't place, 1 = place)</para>
+    /// <para>Index 18: Place node S (0 = don't place, 1 = place)
+    ///       Index 19: Place node T (0 = don't place, 1 = place)
+    ///       Index 20: Place node U (0 = don't place, 1 = place)</para>
+    /// <para>Index 21: Place node V (0 = don't place, 1 = place)
+    ///       Index 22: Place node W (0 = don't place, 1 = place)
+    ///       Index 23: Place node X (0 = don't place, 1 = place)</para>
+    /// <para>Index 24: Place connector 1 (0 = don't place, 1 = place)
+    ///       Index 25: Place connector 2 (0 = don't place, 1 = place)
+    ///       Index 26: Place connector 3 (0 = don't place, 1 = place)</para>
+    /// <para>Index 27: Place connector 4 (0 = don't place, 1 = place)
+    ///       Index 28: Place connector 5 (0 = don't place, 1 = place)
+    ///       Index 29: Place connector 6 (0 = don't place, 1 = place)</para>
+    /// <para>Index 30: Place connector 7 (0 = don't place, 1 = place)
+    ///       Index 31: Place connector 8 (0 = don't place, 1 = place)
+    ///       Index 32: Place connector 9 (0 = don't place, 1 = place)</para>
+    /// <para>Index 33: Place connector 10 (0 = don't place, 1 = place)
+    ///       Index 34: Place connector 11 (0 = don't place, 1 = place)
+    ///       Index 35: Place connector 12 (0 = don't place, 1 = place)</para>
+    /// <para>Index 36: Place connector 13 (0 = don't place, 1 = place)
+    ///       Index 37: Place connector 14 (0 = don't place, 1 = place)
+    ///       Index 38: Place connector 15 (0 = don't place, 1 = place)</para>
+    /// <para>Index 39: Place connector 16 (0 = don't place, 1 = place)
+    ///       Index 40: Place connector 17 (0 = don't place, 1 = place)
+    ///       Index 41: Place connector 18 (0 = don't place, 1 = place)</para>
+    /// <para>Index 42: Place connector 19 (0 = don't place, 1 = place)
+    ///       Index 43: Place connector 20 (0 = don't place, 1 = place)
+    ///       Index 44: Place connector 21 (0 = don't place, 1 = place)</para>
+    /// <para>Index 45: Place connector 22 (0 = don't place, 1 = place)
+    ///       Index 46: Place connector 23 (0 = don't place, 1 = place)
+    ///       Index 47: Place connector 24 (0 = don't place, 1 = place)</para>
+    /// <para>Index 48: Place connector 25 (0 = don't place, 1 = place)
+    ///       Index 49: Place connector 26 (0 = don't place, 1 = place)
+    ///       Index 50: Place connector 27 (0 = don't place, 1 = place)</para>
+    /// <para>Index 51: Place connector 28 (0 = don't place, 1 = place)
+    ///       Index 52: Place connector 29 (0 = don't place, 1 = place)
+    ///       Index 53: Place connector 30 (0 = don't place, 1 = place)</para>
+    /// <para>Index 54: Place connector 31 (0 = don't place, 1 = place)
+    ///       Index 55: Place connector 32 (0 = don't place, 1 = place)
+    ///       Index 56: Place connector 33 (0 = don't place, 1 = place)</para>
+    /// <para>Index 57: Place connector 34 (0 = don't place, 1 = place)      
+    ///       Index 58: Place connector 35 (0 = don't place, 1 = place)      
+    ///       Index 59: Place connector 36 (0 = don't place, 1 = place)</para>
+    /// <para>Index 60: Make a trade (0 = no trade; 1 = gggy; 2 = gggr; 3 = gggb; 4 = ggyr; 5 = ggyb; 6 = ggry; 7 = ggrb; 8 = ggby; 9 = ggbr; 10 = gyyr; 11 = gyyb;
     /// 12 = gyrb; 13 = gybr; 14 = grry; 15 = grrb; 16 = grby; 17 = gbby; 18 = gbbr; 19 = yyyg; 20 = yyyr; 21 = yyyb; 22 = yyrg; 23 = yyrb; 24 = yybg; 25 = yybr;
     /// 26 = yrrg; 27 = yrrb; 28 = ybbg; 29 = ybbr; 30 = yrbg; 31 = rrrg; 32 = rrry; 33 = rrrb; 34 = rrbg; 35 = rrby; 36 = rbbg; 37 = rbby; 38 = bbbg; 39 = bbby;
-    /// 40 = bbbr)
+    /// 40 = bbbr)</para>
     /// </summary>
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
@@ -508,19 +508,27 @@ public class AI : Agent
                     PlaceMoveNode(i);
                     __myRoads.Add(i);
                     if(trainingMode)
-                        foreach(GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)
+                        foreach(GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)//account for depleted and captured
                         {
-                            if(c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Blue || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Red)
+                            if(c.GetComponent<ResourceInfo>().depleted == true)
                             {
-                                AddReward(nodeRBReward);
+                                AddReward(nodeGrayReward / 2);
+                            }
+                            else if(c.GetComponent<ResourceInfo>().resoureTileOwner == ((__piece_type == Owner.US) ? Owner.USSR : Owner.US))
+                            {
+                                AddReward(nodeGrayReward / 3);
+                            }
+                            else if(c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Blue || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Red)
+                            {
+                                AddReward(nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
                             }
                             else if (c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Green || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Yellow)
                             {
-                                AddReward(nodeGYReward);
+                                AddReward(nodeGYReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
                             }
                             else
                             {
-                                AddReward(nodeGrayReward);
+                                AddReward(nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
                             }
                         }
                 }

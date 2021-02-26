@@ -55,6 +55,9 @@ public class CheckDataList : MonoBehaviour
     private ArrayList UsedNode = new ArrayList();
     private int longestNetValue;
 
+    List<int> visitedTiles = new List<int>();
+    List<int> tilesToVisit = new List<int>(13) { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+
     public void DepltedResource()
     {
 
@@ -198,17 +201,38 @@ public class CheckDataList : MonoBehaviour
         }
     }
 
-    bool Multicaptured(int tileNumber)
+    public void MulticaptureCheck(Owner who)
+    {
+        foreach (int tileNumber in tilesToVisit)
+        {
+            if (Multicaptured(tileNumber))
+            {
+                Debug.Log("Multicaptured tiles: ");
+                // update every visited tile's owner
+                foreach (int capturedTile in visitedTiles)
+                {
+                    Debug.Log(capturedTile);
+                    BM.resourceList[capturedTile].GetComponent<ResourceInfo>().resoureTileOwner = who;
+                    tilesToVisit.Remove(capturedTile);
+                }
+                // update GUI
+
+            }
+            visitedTiles.Clear();
+        }
+    }
+
+    bool Multicaptured(int currentTile)
     {
         bool isCaptured = true;
 
         List<int> connectedTiles;
         List<int> connectedBranches;
-        Relationships.connectionsTilesRoads.TryGetValue(tileNumber, out connectedBranches);
+        Relationships.connectionsTilesRoads.TryGetValue(currentTile, out connectedBranches);
         
         foreach (int branch in connectedBranches)
         {
-            Relationships.connectedRoadsTiles.TryGetValue(branch, out connectedTiles);
+            Relationships.connectionsRoadTiles.TryGetValue(branch, out connectedTiles);
 
             if (BM.allBranches[branch].GetComponent<BranchInfo>().branchOwner == BM.activeSide)
             {
@@ -222,19 +246,28 @@ public class CheckDataList : MonoBehaviour
             }
             else if (BM.allBranches[branch].GetComponent<BranchInfo>().branchOwner == Owner.Nil)
             {
-                // int newTile = tile on other side of branch
+                int newTile = 0;
+                foreach (int tile in connectedTiles)
+                {
+                    if (tile != currentTile)
+                        newTile = tile;
+                }
 
-                // if (newTile is NOT in list of Visited tiles)
-                //{
-                    // put tileNumber on list of visited tiles
+                if (!visitedTiles.Contains(newTile))
+                {
+                    visitedTiles.Add(currentTile);
 
-                    // isCaptured = Multicaptured(int newTile);
-                //}
-
+                    isCaptured = Multicaptured(newTile);
+                }
+                if (!isCaptured)
+                    break;
             }
         }
 
-
+        if (!visitedTiles.Contains(currentTile))
+        {
+            visitedTiles.Add(currentTile);
+        }
 
         return isCaptured;
     }

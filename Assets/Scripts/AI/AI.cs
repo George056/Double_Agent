@@ -21,7 +21,7 @@ public enum Difficulty
 public class AI : Agent
 {
     [Tooltip("A list of all AI resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
-    public List<int> __resources = new List<int>(4) { 10, 10, 10, 10 };
+    public List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
 
     [HideInInspector]
     [Tooltip("What difficulty AI is being used; 0 = easy, 1 = hard")]

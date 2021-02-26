@@ -481,6 +481,7 @@ public class BoardManager : MonoBehaviour
 
         cdl.DepletedCheck();
         cdl.CapturedCheck();
+        //cdl.MulticaptureCheck(who);
 
         CalculateScore(who);
 

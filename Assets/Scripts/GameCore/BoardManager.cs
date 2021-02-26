@@ -311,9 +311,14 @@ public class BoardManager : MonoBehaviour
         lumberTraded.text = "0";
     }
 
-    public void UpdateScoreInUI(int score)
+    public void UpdatePlayerScoreInUI(int score)
     {
         playerScore.text = score.ToString();
+    }
+
+    public void UpdateOpponentScoreInUI(int score)
+    {
+        opponentScore.text = score.ToString();
     }
 
     public void UpdateResourcesInUI(List<int> resources)
@@ -473,10 +478,13 @@ public class BoardManager : MonoBehaviour
     private void BoardCheck()
     {
         Owner who = (activeSide == Owner.US) ? Owner.USSR : Owner.US;
-        
+
+        cdl.DepletedCheck();
+        cdl.CapturedCheck();
+
         CalculateScore(who);
 
-        if(player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
+        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
         {
             tradeButton.SetActive(false);
             buildButton.SetActive(false);
@@ -488,9 +496,6 @@ public class BoardManager : MonoBehaviour
             end = true;
             gameOverWindow.SetActive(true);
         }
-
-        cdl.DepletedCheck();
-        cdl.CapturedCheck();
     }
 
     /// <summary>

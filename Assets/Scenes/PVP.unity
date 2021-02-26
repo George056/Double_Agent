@@ -378,7 +378,7 @@ MonoBehaviour:
   copperCount: {fileID: 256051832}
   lumberCount: {fileID: 2108787453}
   playerScore: {fileID: 1160445465}
-  opponentScore: {fileID: 0}
+  opponentScore: {fileID: 784687784}
   USImage: {fileID: 1992913583}
   USSRImage: {fileID: 955976219}
   coinsTraded: {fileID: 1125425287}

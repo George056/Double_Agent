@@ -61,6 +61,7 @@ public class BoardManager : MonoBehaviour
     private GameObject player2;
 
     private bool end;
+    public GameObject gameOverWindow;
 
 
     /*
@@ -472,7 +473,7 @@ public class BoardManager : MonoBehaviour
     private void BoardCheck()
     {
         Owner who = (activeSide == Owner.US) ? Owner.USSR : Owner.US;
-
+        
         CalculateScore(who);
 
         if(player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
@@ -485,6 +486,7 @@ public class BoardManager : MonoBehaviour
             else player2.GetComponent<AI>().Win();
 
             end = true;
+            gameOverWindow.SetActive(true);
         }
 
         cdl.DepletedCheck();

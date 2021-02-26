@@ -317,10 +317,13 @@ public class BoardManager : MonoBehaviour
 
     public void UpdateResourcesInUI(List<int> resources)
     {
-        coinCount.text = resources[3].ToString();
-        loyalistCount.text = resources[2].ToString();
-        copperCount.text = resources[0].ToString();
-        lumberCount.text = resources[1].ToString();
+        if (turnCount > 4)
+        {
+            coinCount.text = resources[3].ToString();
+            loyalistCount.text = resources[2].ToString();
+            copperCount.text = resources[0].ToString();
+            lumberCount.text = resources[1].ToString();
+        }
     }
     
     public void ChangeNodeOwner(int nodeNum)
@@ -681,6 +684,12 @@ public class BoardManager : MonoBehaviour
         BoardCheck();
 
         if (end) return;
+
+        // if it is time for the player's second setup move, allocate resources for one branch and one node
+        if (turnCount == 3)
+        {
+            player1.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+        }
 
         // if not opener move, allocate resources to appropriate player
         if (turnCount >= 5)

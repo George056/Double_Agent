@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
         __longest_net = false;
         __owned_nodes = new List<int>();
         __owned_branches = new List<int>();
-        UpdateResources(new List<int>(4) { 2, 2, 4, 4 });
+        UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
     }
 
     public void GetLongestNet()

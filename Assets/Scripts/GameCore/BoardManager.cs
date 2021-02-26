@@ -686,14 +686,16 @@ public class BoardManager : MonoBehaviour
         if (turnCount >= 5)
             AllocateResources();
 
-        if (activeSide == aiPiece)
-        {
-            inBuildMode = false;
-        }
-        else
-        {
-            inBuildMode = true;
-        }
+        inBuildMode = false;
+
+        //if (activeSide == aiPiece)
+        //{
+        //    inBuildMode = false;
+        //}
+        //else
+        //{
+        //    inBuildMode = true;
+        //}
 
 
         // disable/reenable Trade, Build, and End Turn buttons

@@ -385,6 +385,7 @@ public class AI : Agent
         AddReward((score - ((longestGet) ? 2 : 0)) - (__ai_score - ((longestLost) ? 2 : 0)));
         totalReward += (score - ((longestGet) ? 2 : 0)) - (__ai_score - ((longestLost) ? 2 : 0));
         __ai_score = score;
+        bm.UpdateOpponentScoreInUI(__ai_score);
     }
 
     public void Loss()

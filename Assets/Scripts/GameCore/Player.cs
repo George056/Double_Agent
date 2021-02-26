@@ -114,7 +114,7 @@ public class Player : MonoBehaviour
     public void UpdateScore(int newScore, bool temp1, bool temp2)
     {
         __human_score = newScore;
-        GameObject.FindObjectOfType<BoardManager>().UpdateScoreInUI(__human_score);
+        GameObject.FindObjectOfType<BoardManager>().UpdatePlayerScoreInUI(__human_score);
     }
 
     public void AddNode(int index)

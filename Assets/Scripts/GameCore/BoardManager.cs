@@ -531,7 +531,7 @@ public class BoardManager : MonoBehaviour
             {
                 player2.GetComponent<AI>().GetLongestNet();
             }
-            else if(oldLongest == humanPiece)
+            else if(cdl.longestNetOwner == humanPiece)
             {
                 player1.GetComponent<Player>().GetLongestNet();
             }

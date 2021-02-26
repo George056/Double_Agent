@@ -197,6 +197,48 @@ public class CheckDataList : MonoBehaviour
             }
         }
     }
+
+    bool Multicaptured(int tileNumber)
+    {
+        bool isCaptured = true;
+
+        List<int> connectedTiles;
+        List<int> connectedBranches;
+        Relationships.connectionsTilesRoads.TryGetValue(tileNumber, out connectedBranches);
+        
+        foreach (int branch in connectedBranches)
+        {
+            Relationships.connectedRoadsTiles.TryGetValue(branch, out connectedTiles);
+
+            if (BM.allBranches[branch].GetComponent<BranchInfo>().branchOwner == BM.activeSide)
+            {
+                isCaptured = false;
+                break;
+            }
+            else if (BM.allBranches[branch].GetComponent<BranchInfo>().branchOwner == Owner.Nil && connectedTiles.Count == 1)
+            {
+                isCaptured = false;
+                break;
+            }
+            else if (BM.allBranches[branch].GetComponent<BranchInfo>().branchOwner == Owner.Nil)
+            {
+                // int newTile = tile on other side of branch
+
+                // if (newTile is NOT in list of Visited tiles)
+                //{
+                    // put tileNumber on list of visited tiles
+
+                    // isCaptured = Multicaptured(int newTile);
+                //}
+
+            }
+        }
+
+
+
+        return isCaptured;
+    }
+
     public void LongestNetCheck(Owner who)
     {
         List<int> branches = new List<int>();

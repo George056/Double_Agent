@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
 using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// The owner value for a node, branch, or tile, if not owned the value is Nil
@@ -94,9 +95,16 @@ public class BoardManager : MonoBehaviour
     public TextMeshProUGUI lumberCount;
 
     public TextMeshProUGUI playerScore;
+    public TextMeshProUGUI opponentScore;
 
     public GameObject USImage;
     public GameObject USSRImage;
+
+    public InputField coinsTraded;
+    public InputField loyalistsTraded;
+    public InputField copperTraded;
+    public InputField lumberTraded;
+
 
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
@@ -295,6 +303,11 @@ public class BoardManager : MonoBehaviour
             BtnToggle();
             player2.GetComponent<AI>().AIMove(turnCount);
         }
+
+        coinsTraded.text = "0";
+        loyalistsTraded.text = "0";
+        copperTraded.text = "0";
+        lumberTraded.text = "0";
     }
     /*
      *  change the owner of the node by clicking
@@ -312,7 +325,7 @@ public class BoardManager : MonoBehaviour
         copperCount.text = resources[0].ToString();
         lumberCount.text = resources[1].ToString();
     }
-
+    
     public void ChangeNodeOwner(int nodeNum)
     {
         if (activeSide == Owner.US)
@@ -390,6 +403,22 @@ public class BoardManager : MonoBehaviour
         // if (on a square multi-captured by opponent) { isLegal = false; }
 
         return isLegal;
+    }
+
+    public void SubmitTrade()
+    {
+        int numCoinsTraded = Convert.ToInt32(coinsTraded.text);
+        int numLoyalistsTraded = Convert.ToInt32(loyalistsTraded.text);
+        int numCopperTraded = Convert.ToInt32(copperTraded.text);
+        int numLumberTraded = Convert.ToInt32(lumberTraded.text);
+
+        coinsTraded.text = "0";
+        loyalistsTraded.text = "0";
+        copperTraded.text = "0";
+        lumberTraded.text = "0";
+
+        List<int> tradeList = new List<int>(4) { numCopperTraded, numLumberTraded, numLoyalistsTraded, numCoinsTraded };
+        Trade(tradeList, humanPiece);
     }
 
     public void Trade(List<int> resources, Owner who)

@@ -479,7 +479,10 @@ public class BoardManager : MonoBehaviour
         {
             //Trade animation ***********************************************************************************************************************************************
             if(who == aiPiece)
+            {
                 player2.GetComponent<AI>().UpdateResources(resources);
+                Debug.Log("AI Traded: " + resources[0] + " red, " + resources[1] + " blue, " + resources[2] + " yellow, " + resources[3] + " green");
+            }
             else
                 player1.GetComponent<Player>().UpdateResources(resources);
         }

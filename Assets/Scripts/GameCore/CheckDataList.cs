@@ -130,7 +130,8 @@ public class CheckDataList : MonoBehaviour
     /// </summary>
     public void DepletedCheck()
     {
-        for(int i = 0; i < BM.resourceList.Length; i++)
+        if (BM == null) GetBoardManager();
+        for (int i = 0; i < BM.resourceList.Length; i++)
         {
             var tileInfo = BM.resourceList[i].GetComponent<ResourceInfo>();
             int count = 0; //the number of nodes connected to the tile

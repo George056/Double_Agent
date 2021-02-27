@@ -432,7 +432,8 @@ public class AI : Agent
 
     public void UpdateResources(List<int> update)
     {
-        for(int i = 0; i < __resources.Count; i++)
+        Debug.Log("AI Earned Resources: " + update[0] + ", " + update[1] + ", " + update[2] + ", " + update[3]);
+        for (int i = 0; i < __resources.Count; i++)
         {
             __resources[i] += update[i];
         }

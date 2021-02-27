@@ -72,7 +72,7 @@ public class AI : Agent
     private bool opener;
 
     [Tooltip("This tells the AI to do random moves")]
-    private bool randAI;
+    public bool randAI;
 
     [Tooltip("This counts what turn it is")]
     private int turn;
@@ -85,7 +85,6 @@ public class AI : Agent
 
     private void Start()
     {
-        randAI = true;
         opener = true;
         __myRoads = new List<int>();
         __myNodes = new List<int>();

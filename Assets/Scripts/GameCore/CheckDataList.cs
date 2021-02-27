@@ -364,6 +364,10 @@ public class CheckDataList : MonoBehaviour
             longestNetValue = max;
             longestNetOwner = who;
         }
+        else if(longestNetOwner == who)
+        {
+            //do nothing
+        }
         else if(max == longestNetValue)
         {
             longestNetOwner = Owner.Nil;

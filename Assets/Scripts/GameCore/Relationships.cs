@@ -48,7 +48,7 @@ public class Relationships : MonoBehaviour
         connectionsRoad.Add(7, new List<int>() { 1, 3, 4, 11, 12, 17 });
         connectionsRoad.Add(8, new List<int>() { 2, 4, 5, 12, 13, 18 });
         connectionsRoad.Add(9, new List<int>() { 5, 13, 14, 19 });
-        connectionsRoad.Add(10, new List<int>() { 6,11, 15, 16 });
+        connectionsRoad.Add(10, new List<int>() { 6, 11, 15, 16 });
         connectionsRoad.Add(11, new List<int>() { 6, 7, 10, 12, 16, 17 });
         connectionsRoad.Add(12, new List<int>() { 7, 8, 11, 13, 17, 18 });
         connectionsRoad.Add(13, new List<int>() { 8, 9, 12, 14, 18, 19 });
@@ -64,14 +64,14 @@ public class Relationships : MonoBehaviour
         connectionsRoad.Add(23, new List<int>() { 17, 18, 22, 24, 27, 28 });
         connectionsRoad.Add(24, new List<int>() { 18, 19, 23, 25, 28, 29 });
         connectionsRoad.Add(25, new List<int>() { 19, 20, 24, 29 });
-        connectionsRoad.Add(26, new List<int>() { 21, 22, 30 });
+        connectionsRoad.Add(26, new List<int>() { 16, 21, 22, 30 });
         connectionsRoad.Add(27, new List<int>() { 17, 22, 23, 30, 31, 33 });
         connectionsRoad.Add(28, new List<int>() { 18, 23, 24, 31, 32, 34 });
         connectionsRoad.Add(29, new List<int>() { 19, 24, 25, 32 });
         connectionsRoad.Add(30, new List<int>() { 26, 27, 31, 33 });
         connectionsRoad.Add(31, new List<int>() { 27, 28, 30, 32, 33, 34 });
         connectionsRoad.Add(32, new List<int>() { 28, 29, 31, 34 });
-        connectionsRoad.Add(33, new List<int>() { 27, 30, 21, 35 });
+        connectionsRoad.Add(33, new List<int>() { 27, 30, 31, 35 });
         connectionsRoad.Add(34, new List<int>() { 28, 31, 32, 35 });
         connectionsRoad.Add(35, new List<int>() { 33, 34 });
 

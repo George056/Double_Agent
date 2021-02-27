@@ -378,6 +378,7 @@ public class AI : Agent
     /// <param name="actionMasker">Masks posible values of the nural net</param>
     public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
     {
+        if (randAI) return;
         if (turn == lastUpdateTurn) return;
         lastUpdateTurn = turn;
 
@@ -663,7 +664,7 @@ public class AI : Agent
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
     {
-
+        if (randAI) return;
         //make a trade first
         if(vectorAction[60] != 0)
         {
@@ -744,8 +745,10 @@ public class AI : Agent
     /// <param name="sensor">The vector sensor</param>
     public override void CollectObservations(VectorSensor sensor)
     {
+        if (randAI) return;
         //observe board (60 observations)
         //sensor.AddObservation();
+        Debug.Log("observe nodes");
         foreach(GameObject node in bm.nodes)
         {
             List<int> observations = new List<int>(7) { 0, 0, 0, 0, 0, 0, 0 };// node owner; # tiles AI captured; gray count; red count; blue count; yellow count; green count;
@@ -771,6 +774,7 @@ public class AI : Agent
             sensor.AddObservation(observation);
         }
 
+        Debug.Log("Observe branches");
         foreach(GameObject branch in bm.allBranches)
         {
             sensor.AddObservation(((int)branch.GetComponent<BranchInfo>().branchOwner == 2) ? 0 : (int)branch.GetComponent<BranchInfo>().branchOwner + 1);
@@ -779,11 +783,13 @@ public class AI : Agent
         //observe if opener (1 observation)
         sensor.AddObservation(opener);
 
+        Debug.Log("Observe resources");
         //observe resources (4 observations)
         foreach(int i in __resources)
         {
             sensor.AddObservation(i);
         }
+        Debug.Log("End observations");
     }
 
     /// <summary>

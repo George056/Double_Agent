@@ -281,6 +281,7 @@ public class BoardManager : MonoBehaviour
         activeSide = firstPlayer;
 
         end = false;
+        turnCount = 1;
 
         //check to see if it is an AI or network game
         player1 = GameObject.FindGameObjectWithTag("Player");

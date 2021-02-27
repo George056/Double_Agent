@@ -86,7 +86,7 @@ public class AI : Agent
     private bool loss = false;
     private bool win = false;
 
-    private void Start()
+    private void Awake()
     {
         opener = true;
         __myRoads = new List<int>();
@@ -164,6 +164,8 @@ public class AI : Agent
                 int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
                 int maxCons = Math.Min(__resources[0], __resources[1]);
 
+                int counter = 0;
+
                 List<int> legalNodes = new List<int>();
                 List<int> legalCon = new List<int>();
                 foreach(int i in __myRoads)//get all connections to owned branches
@@ -176,7 +178,7 @@ public class AI : Agent
                 int consToPlace = Random.Range(0, maxCons);
 
                 //place a legal connection when found and make a list and do at once
-                for (int i = 0; i < consToPlace && i <= legalCon.Count; i++) //this cannot happen
+                for (int i = 0; i < consToPlace && i <= legalCon.Count && counter < 50; i++, counter++) //this cannot happen
                 {
                     int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
                     if(legalCon.Count > 0)
@@ -201,7 +203,9 @@ public class AI : Agent
                 legalNodes = legalNodes.Distinct().ToList();
                 int nodesToPlace = Random.Range(0, maxNodes);
 
-                for (int i = 0; i < nodesToPlace && i <= legalNodes.Count; i++)
+                counter = 0;
+
+                for (int i = 0; i < nodesToPlace && i <= legalNodes.Count && counter < 50; i++, counter++)
                 {
                     int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
                     if(legalNodes.Count > 0)
@@ -217,6 +221,147 @@ public class AI : Agent
                         }
                         legalNodes.Remove(legalNodes[node]);
                     }
+                }
+
+                //make trade
+                if(maxCons == 0 || maxNodes == 0)
+                {
+                    List<int> trade = new List<int>(4) { 0, 0, 0, 0 };
+
+                    int traded = 0;
+                    int blocked = 0;
+                    while (traded < 3 && blocked < 3)
+                    {
+                        blocked = 0;
+
+                        if (__resources[0] == 0 && __resources[1] != 0)
+                        {
+                            if (__resources[1] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[1] -= 1;
+                                trade[1] -= 1;
+                            }
+                            else blocked++;
+                            if (__resources[2] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[2] -= 1;
+                                trade[2] -= 1;
+                            }
+                            else blocked++;
+                            if (__resources[3] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[3] -= 1;
+                                trade[3] -= 1;
+                            }
+                            else blocked++;
+                        }
+                        else if (__resources[1] == 0 && __resources[0] != 0)
+                        {
+                            if (__resources[0] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[0] -= 1;
+                                trade[0] -= 1;
+                            }
+                            else blocked++;
+                            if (__resources[2] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[2] -= 1;
+                                trade[2] -= 1;
+                            }
+                            else blocked++;
+                            if (__resources[3] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[3] -= 1;
+                                trade[3] -= 1;
+                            }
+                            else blocked++;
+                        }
+                        else if (((__resources[2] % 2) == 0 || (__resources[2] == 0)) && (__resources[3] > 2))
+                        {
+                            if (__resources[0] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[0] -= 1;
+                                trade[0] -= 1;
+                            }
+                            else blocked++;
+                            if (__resources[1] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[1] -= 1;
+                                trade[1] -= 1;
+                            }
+                            else blocked++;
+                            if (__resources[3] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[3] -= 1;
+                                trade[3] -= 1;
+                            }
+                            else blocked++;
+                        }
+                        else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] > 2)
+                        {
+                            if (__resources[0] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[0] -= 1;
+                                trade[0] -= 1;
+                            }
+                            else blocked++;
+                            if (__resources[1] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[1] -= 1;
+                                trade[1] -= 1;
+                            }
+                            else blocked++;
+                            if (__resources[2] > 0 && traded < 3)
+                            {
+                                traded++;
+                                __resources[2] -= 1;
+                                trade[2] -= 1;
+                            }
+                            else blocked++;
+                        }
+                        else blocked = 3;
+                    }
+
+                    if (blocked != 3)
+                    {
+                        if (__resources[0] == 0 && __resources[1] != 0)
+                        {
+                            trade[0] += 1;
+                        }
+                        else if (__resources[1] == 0 && __resources[0] != 0)
+                        {
+                            trade[1] += 1;
+                        }
+                        else if (__resources[2] == 0 && __resources[3] != 0)
+                        {
+                            trade[2] += 1;
+                        }
+                        else if (__resources[3] == 0 && __resources[2] != 0)
+                        {
+                            trade[3] += 1;
+                        }
+                        MakeTrade(trade);
+                        Debug.Log("Trade: " + trade[0] + ", " + trade[1] + ", " + trade[2] + ", " + trade[3]);
+                    }
+                    else
+                    {
+                        for(int i = 0; i < trade.Count; i++)
+                        {
+                            __resources[i] -= trade[i];
+                        }
+                    }
+
                 }
             }
         }
@@ -425,7 +570,7 @@ public class AI : Agent
     /// </summary>
     public override void Initialize()
     {
-        Start();
+        Awake();
         //if not in training mode, no max step
         if (!trainingMode) MaxStep = 0;
     }
@@ -523,7 +668,19 @@ public class AI : Agent
         //make a trade first
         if(vectorAction[60] != 0)
         {
-            MakeTrade(vectorAction[60]);
+            List<int> tradeArr = new List<int>(4) { 0, 0, 0, 0 };
+            int temp1 = (int)vectorAction[60];
+            int temp2 = (temp1 / 1000);
+            tradeArr[0] = temp2;
+            temp1 -= temp2 * 1000;
+            temp2 = temp1 / 100;
+            tradeArr[1] = temp2;
+            temp1 -= temp2 * 100;
+            temp2 = temp1 / 10;
+            tradeArr[2] = temp2;
+            temp1 -= temp2 * 10;
+            tradeArr[3] = temp1;
+            MakeTrade(tradeArr);
         }
         
         //place connectors
@@ -641,22 +798,9 @@ public class AI : Agent
         
     }
 
-    private void MakeTrade(float trade)
+    private void MakeTrade(List<int> trade)
     {
-        List<int> tradeArr = new List<int>(4) { 0, 0, 0, 0 };
-        int temp1 = (int)trade;
-        int temp2 = (temp1 / 1000);
-        tradeArr[0] = temp2;
-        temp1 -= temp2 * 1000;
-        temp2 = temp1 / 100;
-        tradeArr[1] = temp2;
-        temp1 -= temp2 * 100;
-        temp2 = temp1 / 10;
-        tradeArr[2] = temp2;
-        temp1 -= temp2 * 10;
-        tradeArr[3] = temp1;
-
-        bm.Trade(tradeArr, __piece_type);
+        bm.Trade(trade, __piece_type);
     }
 
     private bool LegalMoveNode(int location)

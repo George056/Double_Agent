@@ -219,7 +219,7 @@ public class AI : Agent
         }
         else
         {
-            //for adding a reward use AddReward() want it to be about 1 at the end of a game
+            Debug.Log("Here");
             RequestDecision();
         }
 
@@ -507,6 +507,7 @@ public class AI : Agent
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
     {
+        Debug.Log("AI resources: " + __resources[0] + " " + __resources[1] + " " + __resources[2] + " " + __resources[3]);
 
         //make a trade first
         if(vectorAction[60] != 0)
@@ -521,6 +522,7 @@ public class AI : Agent
             {
                 if (LegalMoveConnector(i))
                 {
+                    Debug.Log("Connector: " + i);
                     PlaceMoveBranch(i);
                     __myRoads.Add(i);
                 }
@@ -534,6 +536,7 @@ public class AI : Agent
             {
                 if (LegalMoveNode(i))
                 {
+                    Debug.Log("Node: " + i);
                     PlaceMoveNode(i);
                     __myRoads.Add(i);
                     if(trainingMode)
@@ -568,6 +571,9 @@ public class AI : Agent
                 }
             }
         }
+
+        __myNodes = __myNodes.Distinct().ToList();
+        __myRoads = __myRoads.Distinct().ToList();
     }
 
     /// <summary>
@@ -626,7 +632,91 @@ public class AI : Agent
     /// <param name="actionsOut">The output of the function, returned to OnActionReceived</param>
     public override void Heuristic(float[] actionsOut)
     {
-        
+        if (opener)
+        {
+            int positionCon;
+
+            do
+            {
+                positionCon = Random.Range(0, 36);
+            } while (!LegalMoveConnector(positionCon));//exit when a legal move is found
+            actionsOut[positionCon + 24] = 1;
+
+            int positionNode;
+
+            positionNode = Random.Range(0, 1);
+            Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
+            if (LegalMoveNode(temp[positionNode]))
+            {
+                actionsOut[temp[positionNode]] = 1;
+            }
+            else
+            {
+                actionsOut[temp[(positionNode == 0) ? 1 : 0]] = 1;
+            }
+        }
+        else
+        {
+            int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
+            int maxCons = Math.Min(__resources[0], __resources[1]);
+
+            List<int> legalNodes = new List<int>();
+            List<int> legalCon = new List<int>();
+            foreach (int i in __myRoads)//get all connections to owned branches
+            {
+                if (Relationships.connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
+            }
+            //remove duplicates found at: https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
+
+            legalCon = legalCon.Distinct().ToList();
+            int consToPlace = Random.Range(0, maxCons);
+
+            //place a legal connection when found and make a list and do at once
+            for (int i = 0; i < consToPlace && i <= legalCon.Count; i++) //this cannot happen
+            {
+                int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
+                if (legalCon.Count > 0)
+                {
+                    if (LegalMoveConnector(legalCon[con]))
+                    {
+                        PlaceMoveBranch(legalCon[con]);
+                        __myRoads.Add(legalCon[con]);
+                        actionsOut[legalCon[con]] = 1;
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                    legalCon.Remove(legalCon[con]); // remove the branch; if added it's already used, if not then it was illegal
+                }
+            }
+
+            foreach (int i in __myRoads)
+            {
+                if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
+            }
+            legalNodes = legalNodes.Distinct().ToList();
+            int nodesToPlace = Random.Range(0, maxNodes);
+
+            for (int i = 0; i < nodesToPlace && i <= legalNodes.Count; i++)
+            {
+                int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
+                if (legalNodes.Count > 0)
+                {
+                    if (LegalMoveNode(legalNodes[node]))//if a legal move add it
+                    {
+                        PlaceMoveNode(legalNodes[node]);
+                        __myNodes.Add(legalNodes[node]);
+                        actionsOut[legalNodes[node]] = 1;
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                    legalNodes.Remove(legalNodes[node]);
+                }
+            }
+        }
     }
 
     private void MakeTrade(float trade)

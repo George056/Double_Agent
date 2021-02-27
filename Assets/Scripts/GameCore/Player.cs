@@ -102,7 +102,7 @@ public class Player : MonoBehaviour
 
     public void UpdateResources(List<int> update)
     {
-        Debug.Log("Earned Resources: " + update[0] + ", " + update[1] + ", " + update[2] + ", " + update[3]);
+        Debug.Log("Earned player Resources: " + update[0] + ", " + update[1] + ", " + update[2] + ", " + update[3]);
         for (int i = 0; i < __resources.Count; i++)
         {
             __resources[i] += update[i];

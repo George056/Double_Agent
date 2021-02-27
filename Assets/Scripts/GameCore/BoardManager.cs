@@ -664,6 +664,7 @@ public class BoardManager : MonoBehaviour
                 activeSide = Owner.US;
             }
         }
+        Debug.Log("Turn: " + turnCount);
 
         turnCount++;
 

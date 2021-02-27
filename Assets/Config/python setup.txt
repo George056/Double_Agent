@@ -1,3 +1,5 @@
 activate ml-agents-node
 cd C:\Users\capstone\Documents\GitHub\Double_Agent\Assets\Config
 mlagents-learn ./trainer_config.yaml --run-id node_001
+
+tensorboard --logdir summaries

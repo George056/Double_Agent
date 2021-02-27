@@ -47,7 +47,8 @@ public class Player : MonoBehaviour
     public void LoseLongestNet()
     {
         __longest_net = false;
-        __human_score -= 2;
+        int lowerScore = __human_score - 2;
+        UpdateScore(lowerScore, false, false);
     }
 
     /// <summary>

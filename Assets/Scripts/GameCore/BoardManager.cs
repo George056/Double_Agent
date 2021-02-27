@@ -274,9 +274,12 @@ public class BoardManager : MonoBehaviour
         end = false;
 
         //check to see if it is an AI or network game
-        player1 = GameObject.FindGameObjectWithTag("Player");
-        player2 = GameObject.FindGameObjectWithTag("AI");
+        player1 = GameObject.FindGameObjectWithTag("AI");
+        player2 = GameObject.FindGameObjectWithTag("TrainerAI");
         player2.GetComponent<AI>().SetOpener();
+        player1.GetComponent<AI>().SetOpener();
+        player1.GetComponent<AI>().__piece_type = humanPiece;
+        player1.GetComponent<AI>().__player = (player2.GetComponent<AI>().__player == 1) ? (short)0 : (short)1;
 
         if (humanPiece == Owner.US)
         {
@@ -294,6 +297,14 @@ public class BoardManager : MonoBehaviour
         {
             BtnToggle();
             player2.GetComponent<AI>().AIMove(turnCount);
+        }
+
+        if (player2.GetComponent<AI>().trainingMode)
+        {
+            while (!end)
+            {
+                player1.GetComponent<AI>().AIMove(turnCount);
+            }
         }
     }
 
@@ -392,7 +403,7 @@ public class BoardManager : MonoBehaviour
     {
         bool makeTrade = false;
 
-        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
+        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<AI>().__resources;
         for(int i = 0; i < 4; i++)
         {
             if(resources[i] < 0)
@@ -427,7 +438,7 @@ public class BoardManager : MonoBehaviour
             if(who == aiPiece)
                 player2.GetComponent<AI>().UpdateResources(resources);
             else
-                player1.GetComponent<Player>().UpdateResources(resources);
+                player1.GetComponent<AI>().UpdateResources(resources);
         }
     }
 
@@ -443,14 +454,22 @@ public class BoardManager : MonoBehaviour
 
         CalculateScore(who);
 
-        if(player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
+        if(player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<AI>().__ai_score >= 10)
         {
             tradeButton.SetActive(false);
             buildButton.SetActive(false);
             endTurnButton.SetActive(false);
 
-            if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
-            else player2.GetComponent<AI>().Win();
+            if (player1.GetComponent<AI>().__human_score >= 10)
+            {
+                player2.GetComponent<AI>().Loss();
+                player1.GetComponent<AI>().Win();
+            }
+            else
+            {
+                player2.GetComponent<AI>().Win();
+                player1.GetComponent<AI>().Loss();
+            }
 
             end = true;
         }
@@ -485,16 +504,16 @@ public class BoardManager : MonoBehaviour
             }
             else if(oldLongest == humanPiece)
             {
-                player1.GetComponent<Player>().LoseLongestNet();
+                player1.GetComponent<AI>().LoseLongestNet();
             }
 
             if (cdl.longestNetOwner == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
             {
                 player2.GetComponent<AI>().GetLongestNet();
             }
-            else if(oldLongest == humanPiece)
+            else if(cdl.longestNetOwner == humanPiece)
             {
-                player1.GetComponent<Player>().GetLongestNet();
+                player1.GetComponent<AI>().GetLongestNet();
             }
         }
 
@@ -516,7 +535,7 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            player1.GetComponent<Player>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+            player1.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
 
             //if an AI game
             player2.GetComponent<AI>().__human_score = score;
@@ -563,7 +582,7 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            player1.GetComponent<Player>().UpdateResources(allocation);
+            player1.GetComponent<AI>().UpdateResources(allocation);
         }
     }
 
@@ -660,6 +679,7 @@ public class BoardManager : MonoBehaviour
         if (activeSide == aiPiece)
         {
             inBuildMode = false;
+            player2.GetComponent<AI>().AIMove(turnCount);
         }
         else
         {
@@ -683,10 +703,13 @@ public class BoardManager : MonoBehaviour
                 //human move
             }
         }
+
+        if (turnCount > 100) end = true;
         
         if (turnCount == 5)
         {
             player2.GetComponent<AI>().EndOpener();
+            player1.GetComponent<AI>().EndOpener();
         }
     }
 }

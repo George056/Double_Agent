@@ -282,7 +282,7 @@ public class AI : Agent
                             }
                             else blocked++;
                         }
-                        else if (((__resources[2] % 2) == 0 || (__resources[2] == 0)) && (__resources[3] > 2))
+                        else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
                         {
                             if (__resources[0] > 0 && traded < 3)
                             {
@@ -306,7 +306,7 @@ public class AI : Agent
                             }
                             else blocked++;
                         }
-                        else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] > 2)
+                        else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
                         {
                             if (__resources[0] > 0 && traded < 3)
                             {
@@ -333,6 +333,11 @@ public class AI : Agent
                         else blocked = 3;
                     }
 
+                    for (int i = 0; i < trade.Count; i++)
+                    {
+                        __resources[i] -= trade[i];
+                    }
+
                     if (blocked != 3)
                     {
                         if (__resources[0] == 0 && __resources[1] != 0)
@@ -343,23 +348,16 @@ public class AI : Agent
                         {
                             trade[1] += 1;
                         }
-                        else if (__resources[2] == 0 && __resources[3] != 0)
+                        else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
                         {
                             trade[2] += 1;
                         }
-                        else if (__resources[3] == 0 && __resources[2] != 0)
+                        else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
                         {
                             trade[3] += 1;
                         }
                         MakeTrade(trade);
                         Debug.Log("Trade: " + trade[0] + ", " + trade[1] + ", " + trade[2] + ", " + trade[3]);
-                    }
-                    else
-                    {
-                        for(int i = 0; i < trade.Count; i++)
-                        {
-                            __resources[i] -= trade[i];
-                        }
                     }
 
                 }

@@ -48,7 +48,7 @@ public class Relationships : MonoBehaviour
         connectionsRoad.Add(7, new List<int>() { 1, 3, 4, 11, 12, 17 });
         connectionsRoad.Add(8, new List<int>() { 2, 4, 5, 12, 13, 18 });
         connectionsRoad.Add(9, new List<int>() { 5, 13, 14, 19 });
-        connectionsRoad.Add(10, new List<int>() { 6, 15, 16 });
+        connectionsRoad.Add(10, new List<int>() { 6,11, 15, 16 });
         connectionsRoad.Add(11, new List<int>() { 6, 7, 10, 12, 16, 17 });
         connectionsRoad.Add(12, new List<int>() { 7, 8, 11, 13, 17, 18 });
         connectionsRoad.Add(13, new List<int>() { 8, 9, 12, 14, 18, 19 });

@@ -72,7 +72,7 @@ public class AI : Agent
     private bool opener;
 
     [Tooltip("This tells the AI to do random moves")]
-    private bool randAI;
+    public bool randAI;
 
     [Tooltip("This counts what turn it is")]
     private int turn;
@@ -85,7 +85,6 @@ public class AI : Agent
 
     private void Start()
     {
-        randAI = true;
         opener = true;
         __myRoads = new List<int>();
         __myNodes = new List<int>();
@@ -177,16 +176,19 @@ public class AI : Agent
                 for (int i = 0; i < consToPlace && i <= legalCon.Count; i++) //this cannot happen
                 {
                     int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
-                    if (LegalMoveConnector(legalCon[con]))
+                    if(legalCon.Count > 0)
                     {
-                        PlaceMoveBranch(legalCon[con]);
-                        __myRoads.Add(legalCon[con]);
+                        if (LegalMoveConnector(legalCon[con]))
+                        {
+                            PlaceMoveBranch(legalCon[con]);
+                            __myRoads.Add(legalCon[con]);
+                        }
+                        else
+                        {
+                            i--;
+                        }
+                        legalCon.Remove(legalCon[con]); // remove the branch; if added it's already used, if not then it was illegal
                     }
-                    else
-                    {
-                        i--;
-                    }
-                    legalCon.Remove(legalCon[con]); // remove the branch; if added it's already used, if not then it was illegal
                 }
 
                 foreach(int i in __myRoads)
@@ -199,16 +201,19 @@ public class AI : Agent
                 for (int i = 0; i < nodesToPlace && i <= legalNodes.Count; i++)
                 {
                     int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
-                    if (LegalMoveNode(legalNodes[node]))//if a legal move add it
+                    if(legalNodes.Count > 0)
                     {
-                        PlaceMoveNode(legalNodes[node]);
-                        __myNodes.Add(legalNodes[node]);
+                        if (LegalMoveNode(legalNodes[node]))//if a legal move add it
+                        {
+                            PlaceMoveNode(legalNodes[node]);
+                            __myNodes.Add(legalNodes[node]);
+                        }
+                        else
+                        {
+                            i--;
+                        }
+                        legalNodes.Remove(legalNodes[node]);
                     }
-                    else
-                    {
-                        i--;
-                    }
-                    legalNodes.Remove(legalNodes[node]);
                 }
             }
         }

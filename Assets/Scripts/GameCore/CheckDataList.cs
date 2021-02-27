@@ -292,6 +292,8 @@ public class CheckDataList : MonoBehaviour
 
         int itr = 0;//total branches visited counter
 
+        if (branches.Count == 0) return;
+
         do
         {
             if(longest.Count == 0)//first time

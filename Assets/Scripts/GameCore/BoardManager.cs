@@ -382,6 +382,7 @@ public class BoardManager : MonoBehaviour
     public bool LegalBranchMove(int branch, Owner activeSide, List<int> myBranches)
     {
         bool isLegal = true;
+        List<int> connectedTiles;
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
@@ -405,7 +406,12 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        // if (on a square multi-captured by opponent) { isLegal = false; }
+        Relationships.connectionsRoadTiles.TryGetValue(branch, out connectedTiles);
+        foreach (int tile in connectedTiles)
+        {
+            if (resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil && resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != activeSide)
+                isLegal = false;
+        }
 
         return isLegal;
     }
@@ -480,8 +486,8 @@ public class BoardManager : MonoBehaviour
         Owner who = (activeSide == Owner.US) ? Owner.USSR : Owner.US;
 
         cdl.DepletedCheck();
-        cdl.CapturedCheck();
-        //cdl.MulticaptureCheck(who);
+        //cdl.CapturedCheck();
+        cdl.MulticaptureCheck(who);
 
         CalculateScore(who);
 

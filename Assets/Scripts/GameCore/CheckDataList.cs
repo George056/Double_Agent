@@ -174,16 +174,16 @@ public class CheckDataList : MonoBehaviour
 
     public void CapturedCheck()
     {
-        for(int i = 0; i < BM.resourceList.Length; i++)
+        for (int i = 0; i < BM.resourceList.Length; i++)
         {
             List<int> tempNum;
             Owner[] tempBranchOwner = new Owner[4];
             Relationships.connectionsTilesRoads.TryGetValue(i, out tempNum);
-            for(int j = 0; j < tempNum.Count; j++)
+            for (int j = 0; j < tempNum.Count; j++)
             {
-                tempBranchOwner[j] = BM.allBranches[tempNum[j]].GetComponent<BranchInfo>().branchOwner; 
+                tempBranchOwner[j] = BM.allBranches[tempNum[j]].GetComponent<BranchInfo>().branchOwner;
             }
-            if(tempBranchOwner[0] != Owner.Nil && tempBranchOwner[0] == tempBranchOwner[1] && tempBranchOwner[1] == tempBranchOwner[2] 
+            if (tempBranchOwner[0] != Owner.Nil && tempBranchOwner[0] == tempBranchOwner[1] && tempBranchOwner[1] == tempBranchOwner[2]
                 && tempBranchOwner[2] == tempBranchOwner[3])
             {
                 BM.resourceList[i].GetComponent<ResourceInfo>().resoureTileOwner = tempBranchOwner[0];
@@ -203,9 +203,9 @@ public class CheckDataList : MonoBehaviour
 
     public void MulticaptureCheck(Owner who)
     {
-        foreach (int tileNumber in tilesToVisit)
+        for (int i = 0; i < tilesToVisit.Count; i++)
         {
-            if (Multicaptured(tileNumber))
+            if (Multicaptured(tilesToVisit[i]))
             {
                 Debug.Log("Multicaptured tiles: ");
                 // update every visited tile's owner
@@ -213,9 +213,23 @@ public class CheckDataList : MonoBehaviour
                 {
                     Debug.Log(capturedTile);
                     BM.resourceList[capturedTile].GetComponent<ResourceInfo>().resoureTileOwner = who;
+                    BM.resourceList[capturedTile].GetComponent<ResourceInfo>().depleted = false;
+
+                    // Update UI
+                    int x = BM.ResourceInfoList[capturedTile].xLoc;
+                    int y = BM.ResourceInfoList[capturedTile].yLoc;
+
+                    if (who == Owner.US)
+                    {
+                        GameObject instance = GameObject.Instantiate(PurpleCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    }
+                    else if (who == Owner.USSR)
+                    {
+                        GameObject instance = GameObject.Instantiate(OrangeCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    }
+
                     tilesToVisit.Remove(capturedTile);
                 }
-                // update GUI
 
             }
             visitedTiles.Clear();
@@ -255,7 +269,10 @@ public class CheckDataList : MonoBehaviour
 
                 if (!visitedTiles.Contains(newTile))
                 {
-                    visitedTiles.Add(currentTile);
+                    if (!visitedTiles.Contains(currentTile))
+                    {
+                        visitedTiles.Add(currentTile);
+                    }
 
                     isCaptured = Multicaptured(newTile);
                 }

@@ -77,6 +77,9 @@ public class AI : Agent
     [Tooltip("This counts what turn it is")]
     private int turn;
 
+    [Tooltip("This is used to say the last turn that a mask was generated")]
+    private int lastUpdateTurn;
+
     [Tooltip("The active BoardManager")]
     private BoardManager bm;
 
@@ -232,6 +235,9 @@ public class AI : Agent
     /// <param name="actionMasker">Masks posible values of the nural net</param>
     public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
     {
+        if (turn == lastUpdateTurn) return;
+        lastUpdateTurn = turn;
+
         if (opener)
         {
             List<int> clamedNodes = new List<int>();
@@ -275,16 +281,20 @@ public class AI : Agent
             {
                 List<int> additions = new List<int>();
 
-                foreach(int i in __myRoads)
+                for(int i = 0; i < __myRoads.Count; i++)
                 {
-                    if (Relationships.connectionsRoad.TryGetValue(i, out List<int> temp)) additions.AddRange(temp);
+                    if (Relationships.connectionsRoad.TryGetValue(__myRoads[i], out List<int> temp)) additions.AddRange(temp);
                 }
                 additions = additions.Distinct().ToList();
 
                 //remove if owned
-                foreach(int i in additions)
+                for(int i = 0; i < additions.Count; i++)
                 {
-                    if (bm.allBranches[i].GetComponent<BranchInfo>().branchOwner != Owner.Nil) additions.Remove(i);
+                    if (bm.allBranches[additions[i]].GetComponent<BranchInfo>().branchOwner != Owner.Nil)
+                    {
+                        additions.Remove(additions[i]);
+                        i--;
+                    }
                 }
 
                 maxCons--;
@@ -310,9 +320,10 @@ public class AI : Agent
             //remove branches that can be reached
             if(branchesThatCanBeReached.Count != 0)
             {
-                foreach(int i in branchesThatCanBeReached)
+                for(int i = 0; i < branchesThatCanBeReached.Count; i++)
                 {
-                    blockedBranches.Remove(i);
+                    blockedBranches.Remove(branchesThatCanBeReached[i]);
+                    i--;
                 }
             }
 
@@ -336,9 +347,9 @@ public class AI : Agent
                 additions = additions.Distinct().ToList();
 
                 //remove if owned
-                foreach (int i in additions)
+                for(int i = 0; i < additions.Count; i++)
                 {
-                    if (bm.nodes[i].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) additions.Remove(i);
+                    if (bm.nodes[additions[i]].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) additions.Remove(additions[i]);
                 }
                 nodesThatCanBeReached.AddRange(additions);
             }
@@ -346,7 +357,7 @@ public class AI : Agent
             List<int> blockedNodes = new List<int>();
             for (int i = 0; i < bm.nodes.Length; i++) blockedNodes.Add(i);
 
-            foreach (int i in nodesThatCanBeReached) blockedNodes.Remove(i);
+            for(int i = 0; i < nodesThatCanBeReached.Count; i++) blockedNodes.Remove(nodesThatCanBeReached[i]);
 
             foreach (int i in blockedNodes) actionMasker.SetMask(i, new int[1] { 1 });
 

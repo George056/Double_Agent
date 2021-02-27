@@ -344,6 +344,11 @@ public class BoardManager : MonoBehaviour
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
         }
+
+        if (activeSide == aiPiece)
+        {
+            Debug.Log("AI placed node " + nodeNum);
+        }
     }
 
     public void ChangeBranchOwner(int branchNum)
@@ -357,6 +362,11 @@ public class BoardManager : MonoBehaviour
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+        }
+
+        if (activeSide == aiPiece)
+        {
+            Debug.Log("AI placed branch " + branchNum);
         }
     }
 

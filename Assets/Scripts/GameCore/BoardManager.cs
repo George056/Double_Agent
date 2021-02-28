@@ -600,7 +600,7 @@ public class BoardManager : MonoBehaviour
                     var tile_temp = tile.GetComponent<ResourceInfo>();
                     if(tile_temp.resoureTileOwner != Owner.Nil)//if someone owns it
                     {
-                        if(tile_temp.resoureTileOwner == activeSide)//only allocate if it is owned by the player
+                        if(tile_temp.resoureTileOwner == activeSide && tile_temp.nodeColor != ResourceInfo.Color.Empty)//only allocate if it is owned by the player
                         {
                             allocation[(int)tile_temp.nodeColor] += 1;
                         }

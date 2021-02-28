@@ -144,6 +144,7 @@ public class AI : Agent
                     positionCon = Random.Range(0, 36);
                 } while (!LegalMoveConnector(positionCon));//exit when a legal move is found
                 PlaceMoveBranch(positionCon);
+                Debug.Log("Connector: " + positionCon);
                 __myRoads.Add(positionCon);
 
                 int positionNode;
@@ -160,6 +161,7 @@ public class AI : Agent
                     PlaceMoveNode(temp[(positionNode == 0) ? 1 : 0]);
                     __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
                 }
+                Debug.Log("Node: " + temp[positionNode]);
             }
             else
             {
@@ -189,6 +191,7 @@ public class AI : Agent
                         {
                             PlaceMoveBranch(legalCon[con]);
                             __myRoads.Add(legalCon[con]);
+                            Debug.Log("Connector: " + legalCon[con]);
                         }
                         else
                         {
@@ -216,6 +219,7 @@ public class AI : Agent
                         {
                             PlaceMoveNode(legalNodes[node]);
                             __myNodes.Add(legalNodes[node]);
+                            Debug.Log("Node: " + legalNodes[node]);
                         }
                         else
                         {
@@ -693,6 +697,7 @@ public class AI : Agent
             {
                 if (LegalMoveConnector(i))
                 {
+                    Debug.Log("Connector: " + i);
                     PlaceMoveBranch(i);
                     __myRoads.Add(i);
                 }
@@ -706,6 +711,7 @@ public class AI : Agent
             {
                 if (LegalMoveNode(i))
                 {
+                    Debug.Log("Node: " + i);
                     PlaceMoveNode(i);
                     __myRoads.Add(i);
                     if(trainingMode)

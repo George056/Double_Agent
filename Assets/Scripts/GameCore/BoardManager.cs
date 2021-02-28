@@ -284,7 +284,7 @@ public class BoardManager : MonoBehaviour
         turnCount = 1;
 
         //check to see if it is an AI or network game
-        player1 = GameObject.FindGameObjectWithTag("Player");
+        player1 = GameObject.FindGameObjectWithTag("AI_Trainer");
         player2 = GameObject.FindGameObjectWithTag("AI");
         player2.GetComponent<AI>().SetOpener();
 
@@ -310,6 +310,17 @@ public class BoardManager : MonoBehaviour
         loyalistsTraded.text = "0";
         copperTraded.text = "0";
         lumberTraded.text = "0";
+
+        if (player2.GetComponent<AI>().trainingMode)
+        {
+            while (!end)
+            {
+                Debug.Log("Player 1: ");
+                player1.GetComponent<AI>().AIMove(turnCount);
+                if(activeSide == aiPiece)
+                    Debug.Log("Player2: ");
+            }
+        }
     }
 
     public void UpdatePlayerScoreInUI(int score)
@@ -447,7 +458,7 @@ public class BoardManager : MonoBehaviour
     {
         bool makeTrade = false;
 
-        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
+        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<AI>().__resources;
         for(int i = 0; i < 4; i++)
         {
             if(resources[i] < 0)
@@ -478,14 +489,13 @@ public class BoardManager : MonoBehaviour
 
         if (makeTrade)
         {
-            //Trade animation ***********************************************************************************************************************************************
             if(who == aiPiece)
             {
                 player2.GetComponent<AI>().UpdateResources(resources);
                 Debug.Log("AI Traded: " + resources[0] + " red, " + resources[1] + " blue, " + resources[2] + " yellow, " + resources[3] + " green");
             }
             else
-                player1.GetComponent<Player>().UpdateResources(resources);
+                player1.GetComponent<AI>().UpdateResources(resources);
         }
     }
 
@@ -500,19 +510,28 @@ public class BoardManager : MonoBehaviour
         Owner who = (activeSide == Owner.US) ? Owner.USSR : Owner.US;
 
         cdl.DepletedCheck();
-        //cdl.CapturedCheck();
         cdl.MulticaptureCheck(who);
 
         CalculateScore(who);
 
-        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
+        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<AI>().__ai_score >= 10)
         {
             tradeButton.SetActive(false);
             buildButton.SetActive(false);
             endTurnButton.SetActive(false);
 
-            if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
-            else player2.GetComponent<AI>().Win();
+            if (player1.GetComponent<AI>().__ai_score >= 10)
+            {
+                player1.GetComponent<AI>().Win();
+                player2.GetComponent<AI>().Loss();
+                Debug.Log("Player 1 Win");
+            }
+            else
+            {
+                player2.GetComponent<AI>().Win();
+                player1.GetComponent<AI>().Loss();
+                Debug.Log("Player 2 Win");
+            }
 
             end = true;
             gameOverWindow.SetActive(true);
@@ -545,7 +564,7 @@ public class BoardManager : MonoBehaviour
             }
             else if(oldLongest == humanPiece)
             {
-                player1.GetComponent<Player>().LoseLongestNet();
+                player1.GetComponent<AI>().LoseLongestNet();
             }
 
             if (cdl.longestNetOwner == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
@@ -554,7 +573,7 @@ public class BoardManager : MonoBehaviour
             }
             else if(cdl.longestNetOwner == humanPiece)
             {
-                player1.GetComponent<Player>().GetLongestNet();
+                player1.GetComponent<AI>().GetLongestNet();
             }
         }
 
@@ -573,10 +592,13 @@ public class BoardManager : MonoBehaviour
         if(who == aiPiece)
         {
             player2.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+
+            //if an AI game
+            player1.GetComponent<AI>().__human_score = score;
         }
         else
         {
-            player1.GetComponent<Player>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+            player1.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
 
             //if an AI game
             player2.GetComponent<AI>().__human_score = score;
@@ -623,24 +645,13 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            player1.GetComponent<Player>().UpdateResources(allocation);
+            player1.GetComponent<AI>().UpdateResources(allocation);
         }
     }
 
     public void EnterBuildMode()
     {
         inBuildMode = true;
-
-        // Highlight legal moves
-        
-        //foreach(GameObject node in nodes)
-        //{
-        //    // if not owned by anyone, highlight as possible move
-        //    if (node.GetComponent<NodeInfo>().nodeOwner == NodeInfo.Owner.Nil)
-        //    {
-        //        Debug.Log("Unclaimed Node");
-        //    }
-        //}
     }
 
     public void EndTurnButtonClicked()
@@ -708,6 +719,10 @@ public class BoardManager : MonoBehaviour
 
         turnCount++;
 
+        Debug.Log("Turn: " + turnCount + "##################################################################################");
+
+        if (turnCount > 100) end = true;
+
         // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
         BoardCheck();
 
@@ -716,7 +731,7 @@ public class BoardManager : MonoBehaviour
         // if it is time for the player's second setup move, allocate resources for one branch and one node
         if (turnCount == 3)
         {
-            player1.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+            player1.GetComponent<AI>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }
 
         // if not opener move, allocate resources to appropriate player
@@ -724,15 +739,6 @@ public class BoardManager : MonoBehaviour
             AllocateResources();
 
         inBuildMode = false;
-
-        //if (activeSide == aiPiece)
-        //{
-        //    inBuildMode = false;
-        //}
-        //else
-        //{
-        //    inBuildMode = true;
-        //}
 
 
         // disable/reenable Trade, Build, and End Turn buttons
@@ -751,7 +757,7 @@ public class BoardManager : MonoBehaviour
                 //human move
             }
         }
-        
+
         if (turnCount == 5)
         {
             player2.GetComponent<AI>().EndOpener();

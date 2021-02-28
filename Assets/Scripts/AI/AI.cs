@@ -214,8 +214,20 @@ public class AI : Agent
                     {
                         if (LegalMoveNode(legalNodes[node]))//if a legal move add it
                         {
-                            PlaceMoveNode(legalNodes[node]);
-                            __myNodes.Add(legalNodes[node]);
+                            int tileCount = bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources.Count;
+                            foreach (GameObject go in bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources)
+                            {
+                                if (go.GetComponent<ResourceInfo>().depleted && go.GetComponent<ResourceInfo>().resoureTileOwner != __piece_type)
+                                {
+                                    tileCount--;
+                                }
+                            }
+                            if (tileCount > Mathf.Ceil(bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources.Count / 2) || (10 - __ai_score) < maxNodes)
+                            {
+                                PlaceMoveNode(legalNodes[node]);
+                                __myNodes.Add(legalNodes[node]);
+                            }
+                            
                         }
                         else
                         {

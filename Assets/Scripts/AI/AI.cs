@@ -177,10 +177,10 @@ public class AI : Agent
                 //remove duplicates found at: https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
                 
                 legalCon = legalCon.Distinct().ToList();
-                int consToPlace = Random.Range(0, maxCons);
+                //int consToPlace = Random.Range(0, maxCons);
 
                 //place a legal connection when found and make a list and do at once
-                for (int i = 0; i < consToPlace && i <= legalCon.Count && counter < 50; i++, counter++) //this cannot happen
+                for (int i = 0; i < maxCons && i <= legalCon.Count && counter < 50; i++, counter++) //this cannot happen
                 {
                     int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
                     if(legalCon.Count > 0)
@@ -203,11 +203,11 @@ public class AI : Agent
                     if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
                 }
                 legalNodes = legalNodes.Distinct().ToList();
-                int nodesToPlace = Random.Range(0, maxNodes);
+                //int nodesToPlace = Random.Range(0, maxNodes);
 
                 counter = 0;
 
-                for (int i = 0; i < nodesToPlace && i <= legalNodes.Count && counter < 50; i++, counter++)
+                for (int i = 0; i < maxNodes && i <= legalNodes.Count && counter < 50; i++, counter++)
                 {
                     int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
                     if(legalNodes.Count > 0)
@@ -225,8 +225,11 @@ public class AI : Agent
                     }
                 }
 
+                maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
+                maxCons = Math.Min(__resources[0], __resources[1]);
+
                 //make trade
-                if(Random.Range(0, 5) != 0 && (maxCons == 0 || maxNodes == 0))
+                if ((Random.Range(0, 6) != 2) && (maxCons == 0 || maxNodes == 0))
                 {
                     List<int> trade = new List<int>(4) { 0, 0, 0, 0 };
 

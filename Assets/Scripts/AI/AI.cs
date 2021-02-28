@@ -122,6 +122,8 @@ public class AI : Agent
     {
         this.turn = turn;
 
+        Debug.Log("AI Resources: " + __resources[0] + ", " + __resources[1] + ", " + __resources[2] + ", " + __resources[3]);
+
         if (this.turn < 5) SetOpener();
         else EndOpener();
 
@@ -358,6 +360,7 @@ public class AI : Agent
                         }
                         MakeTrade(trade);
                         Debug.Log("Trade: " + trade[0] + ", " + trade[1] + ", " + trade[2] + ", " + trade[3]);
+                        
                     }
 
                 }

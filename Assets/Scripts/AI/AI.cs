@@ -226,7 +226,7 @@ public class AI : Agent
                 }
 
                 //make trade
-                if(Random.Range(0, 1) == 1 && (maxCons == 0 || maxNodes == 0))
+                if(Random.Range(0, 5) != 0 && (maxCons == 0 || maxNodes == 0))
                 {
                     List<int> trade = new List<int>(4) { 0, 0, 0, 0 };
 

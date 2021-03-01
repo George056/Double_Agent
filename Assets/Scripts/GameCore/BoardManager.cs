@@ -109,6 +109,7 @@ public class BoardManager : MonoBehaviour
 
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
+    private bool started = false;
 
     int GetTileIndex(string code)
     {
@@ -299,33 +300,47 @@ public class BoardManager : MonoBehaviour
             USSRImage.SetActive(true);
         }
 
-        //make sure it is an AI game first
-        if (firstPlayer == aiPiece)
-        {
-            BtnToggle();
-            player2.GetComponent<AI>().AIMove(turnCount);
-        }
-
         coinsTraded.text = "0";
         loyalistsTraded.text = "0";
         copperTraded.text = "0";
         lumberTraded.text = "0";
 
-        if (player2.GetComponent<AI>().trainingMode)
+        started = false;
+
+        
+    }
+
+    private void Update()
+    {
+        if (!started && !end)
         {
-            while (!end)
+            Debug.Log("Game Started######################################################################################");
+            started = true;
+            //make sure it is an AI game first
+            if (firstPlayer == aiPiece)
             {
-                Debug.Log("Player 1: ");
-                player1.GetComponent<AI>().AIMove(turnCount);
-                if(activeSide == aiPiece)
-                    Debug.Log("Player2: ");
+                Debug.Log("Player2: ");
+                BtnToggle();
+                player2.GetComponent<AI>().AIMove(turnCount);
+            }
+
+            if (player2.GetComponent<AI>().trainingMode)
+            {
+                while (!end)
+                {
+                    Debug.Log("Player 1: ");
+                    player1.GetComponent<AI>().AIMove(turnCount);
+                    if (activeSide == aiPiece)
+                        Debug.Log("Player2: ");
+                }
             }
         }
     }
 
     public void UpdatePlayerScoreInUI(int score)
     {
-        playerScore.text = score.ToString();
+        //playerScore.text = score.ToString();
+        playerScore.text = player1.GetComponent<AI>().__ai_score.ToString();
     }
 
     public void UpdateOpponentScoreInUI(int score)

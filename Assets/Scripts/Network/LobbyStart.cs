@@ -9,14 +9,19 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public static LobbyStart room;
     public bool intentionalDisconnect = false;
-    public string roomName = "Player1";
+    public string roomName;
 
     public GameObject CreateGameButton;
     public GameObject JoinGameButton;
+    public GameObject roomListing;
+    public GameObject startButton;
+
+    public Transform lobbyPanel;
 
     public Canvas CreateOrJoinCanvas;
     public Canvas LoadingCanvas;
     public Canvas RoomLobbyListCanvas;
+    public Canvas WaitingForPlayerCanvas;
 
     private Dictionary<string, RoomInfo> cachedRoomList;
     private Dictionary<string, GameObject> roomListEntries;
@@ -64,6 +69,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnConnectedToMaster()
     {
+        Debug.Log("Connected to master");
         intentionalDisconnect = false;
 
         if (!CreateOrJoinCanvas.gameObject.activeSelf)
@@ -102,8 +108,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             MaxPlayers = 2
         };
 
-        //Need to figure out how to get a room name
-
+        roomName = PlayerPrefs.GetString("UserName", "");
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 
@@ -122,5 +127,161 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
         intentionalDisconnect = true;
         PhotonNetwork.Disconnect();
+    }
+
+    public override void OnJoinedRoom()
+    {
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        RoomLobbyListCanvas.gameObject.SetActive(false);
+
+        WaitingForPlayerCanvas.gameObject.SetActive(true);
+        startButton.gameObject.SetActive(true);
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        if (intentionalDisconnect == true)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
+    }
+
+    private void ClearRoomListView()
+    {
+        foreach (GameObject entry in roomListEntries.Values)
+        {
+            Destroy(entry.gameObject);
+        }
+        roomListEntries.Clear();
+    }
+
+    private void UpdateRoomListView()
+    {
+        foreach(RoomInfo item in cachedRoomList.Values)
+        {
+            ListRoom(item);
+        }
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        ClearRoomListView();
+        UpdateCachedRoomList(roomList);
+        UpdateRoomListView();
+    }
+
+    private void UpdateCachedRoomList(List<RoomInfo> roomList)
+    {
+        foreach (RoomInfo roomInfo in roomList)
+        {
+            if(!roomInfo.IsOpen || !roomInfo.IsVisible || roomInfo.RemovedFromList)
+            {
+                if (cachedRoomList.ContainsKey(roomInfo.Name))
+                {
+                    cachedRoomList.Remove(roomInfo.Name);
+                }
+                continue;
+            }
+
+            if (cachedRoomList.ContainsKey(roomInfo.Name))
+            {
+                cachedRoomList[roomInfo.Name] = roomInfo;
+            }
+            else
+            {
+                cachedRoomList.Add(roomInfo.Name, roomInfo);
+            }
+        }
+    }
+    public void ListRoom(RoomInfo room)
+    {
+
+        if (room.IsOpen && room.IsVisible)
+        {
+            GameObject tempListing = Instantiate(roomListing, lobbyPanel);
+            RoomButton tempButton = tempListing.GetComponent<RoomButton>();
+            tempButton.roomName = room.Name;
+            tempButton.SetRoom();
+
+            roomListEntries.Add(room.Name, tempListing);
+        }
+    }
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        if(PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+
+            if (PhotonNetwork.LocalPlayer.IsMasterClient)
+            {
+                startButton.SetActive(true);
+            }
+        }
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
+    }
+
+    public override void OnLeftRoom()
+    {
+        LoadingCanvas.gameObject.SetActive(false);
+        RoomLobbyListCanvas.gameObject.SetActive(false);
+        CreateOrJoinCanvas.gameObject.SetActive(true);
+
+        CreateGameButton.gameObject.SetActive(true);
+        JoinGameButton.gameObject.SetActive(true);
+
+        PhotonNetwork.LeaveLobby();
+    }
+
+    public override void OnLeftLobby()
+    {
+        PhotonNetwork.Disconnect();
+    }
+
+    public void CreateRoom()
+    {
+        RoomOptions roomOps = new RoomOptions()
+        {
+            EmptyRoomTtl = 1,
+            PlayerTtl = 1,
+            IsOpen = true,
+            IsVisible = true,
+            MaxPlayers = 2
+        };
+
+        roomName = PlayerPrefs.GetString("UserName", "");
+        PhotonNetwork.CreateRoom(roomName, roomOps);
+    }
+
+    public void RemoveRoomListings()
+    {
+        while (lobbyPanel.childCount != 0)
+        {
+            Destroy(lobbyPanel.GetChild(0).gameObject);
+        }
+    }
+
+    public void OnCreateGameButtonClicked()
+    {
+        CreateRoom();
+
+    }
+    public void OnJoinGameButtonClicked()
+    {
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        RoomLobbyListCanvas.gameObject.SetActive(true);
+
+        lobbyPanel.gameObject.SetActive(true);
+    }
+
+    public void OnStartButtonClicked()
+    {
+        PhotonNetwork.LoadLevel("PVP");
     }
 }

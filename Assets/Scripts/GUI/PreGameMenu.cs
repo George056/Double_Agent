@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PreGameMenu : MonoBehaviour
 {
     public InputField customBoardInput;
+    public InputField userName;
 
     /// <summary>
     /// This is used to set the difficulty of the AI
@@ -75,6 +76,7 @@ public class PreGameMenu : MonoBehaviour
     
     public void OnlinePlay()
     {
+        PlayerPrefs.SetString("UserName", userName.text);
         SceneManager.LoadScene("Lobby");
     }
 }

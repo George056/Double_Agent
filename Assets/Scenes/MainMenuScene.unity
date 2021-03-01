@@ -2355,8 +2355,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2128395038}
-        m_TargetAssemblyTypeName: SetupMenuScript, Assembly-CSharp
-        m_MethodName: PlayGame
+        m_TargetAssemblyTypeName: PreGameMenu, Assembly-CSharp
+        m_MethodName: OnlinePlay
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2551,7 +2551,7 @@ GameObject:
   - component: {fileID: 1083593465}
   - component: {fileID: 1083593464}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: UserName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2631,7 +2631,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2128395036}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3708,6 +3720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customBoardInput: {fileID: 1437112895}
+  userName: {fileID: 0}
 --- !u!1 &1437112893
 GameObject:
   m_ObjectHideFlags: 0
@@ -5307,7 +5320,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000017166, y: 51.834}
+  m_AnchoredPosition: {x: -0.000017166, y: 238}
   m_SizeDelta: {x: 1691.46, y: 976.332}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1961359550
@@ -5599,6 +5612,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2128395037}
+  - component: {fileID: 2128395039}
   - component: {fileID: 2128395038}
   m_Layer: 5
   m_Name: OnlinePlayMenu
@@ -5631,6 +5645,20 @@ RectTransform:
   m_SizeDelta: {x: 1045.1104, y: 874.0343}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2128395038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128395036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f992dc2a9f8b27e41baa0db87fdbf409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customBoardInput: {fileID: 0}
+  userName: {fileID: 1083593464}
+--- !u!114 &2128395039
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

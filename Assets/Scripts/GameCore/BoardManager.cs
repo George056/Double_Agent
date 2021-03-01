@@ -82,9 +82,7 @@ public class BoardManager : MonoBehaviour
         {'X', 'X', 'X', 'X', 'N', 'H', 'N', 'X', 'X', 'X', 'X'},
     };
 
-    private int resourceCount = 0;
-    private int nodeCount = 0;
-    private int branchCount = 0;
+    
     private Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
     private ResourceInfo.Color tempColor; //store the color
@@ -194,6 +192,11 @@ public class BoardManager : MonoBehaviour
         GameObject instance;
         int hang = -32; // -40
         int lie = -32; // -30
+
+        int resourceCount = 0;
+        int nodeCount = 0;
+        int branchCount = 0;
+
         for (int x = 0; x < columns; x++)
         {
             for (int y = 0; y < rows; y++)
@@ -541,15 +544,22 @@ public class BoardManager : MonoBehaviour
                 player2.GetComponent<AI>().Loss();
                 Debug.Log("Player 1 Win");
             }
-            else
+            else if(player2.GetComponent<AI>().__ai_score >= 10)
             {
                 player2.GetComponent<AI>().Win();
                 player1.GetComponent<AI>().Loss();
                 Debug.Log("Player 2 Win");
             }
+            else
+            {
+                player1.GetComponent<AI>().Loss();
+                player2.GetComponent<AI>().Loss();
+                Debug.Log("Turn timeout, all lose");
+            }
 
             end = true;
-            gameOverWindow.SetActive(true);
+            //gameOverWindow.SetActive(true);
+            AI.LoadNewScene();
         }
     }
 

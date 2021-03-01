@@ -57,6 +57,9 @@ public class AI : Agent
     [Tooltip("Gray node reward")]
     public float nodeGrayReward = 0.01f;
 
+    [Tooltip("The punishment for making an illegal move")]
+    public float illegalMovePunish = -0.1f;
+
     [HideInInspector]
     public float totalReward = 0;
 
@@ -327,17 +330,15 @@ public class AI : Agent
 
     public void Loss()
     {
-        if (totalReward > 0) AddReward(-totalReward);
-        else if(totalReward < 0) AddReward(totalReward);
-        AddReward(-1);
+        if(totalReward < -1) AddReward(-1);
         loss = true;
     }
 
     public void Win()
     {
-        if(totalReward != 1)
+        if(totalReward < 1)
         {
-            AddReward(1 - totalReward);
+            AddReward(1);
         }
     }
 
@@ -365,8 +366,16 @@ public class AI : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
+        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
         __ai_score = 0;
         __human_score = 0;
+    }
+
+    public static void LoadNewScene()
+    {
+        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Game Over; New Board$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
     }
 
     /// <summary>
@@ -471,6 +480,10 @@ public class AI : Agent
                     PlaceMoveBranch(i);
                     __myRoads.Add(i);
                 }
+                else
+                {
+                    AddReward(illegalMovePunish);
+                }
             }
         }
 
@@ -513,6 +526,10 @@ public class AI : Agent
                                 totalReward += nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
                             }
                         }
+                }
+                else
+                {
+                    AddReward(illegalMovePunish);
                 }
             }
         }
@@ -660,6 +677,10 @@ public class AI : Agent
         __piece_type = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
     }
 
+    /// <summary>
+    /// This function makes a random AI move and places it.
+    /// This is used for both when the <see cref="AIMove(int)"/> random AI is true (<see cref="randAI"/>) and when using the <see cref="Heuristic(float[])"/>.
+    /// </summary>
     private void RandomAIMove(){
         if (opener)
         {

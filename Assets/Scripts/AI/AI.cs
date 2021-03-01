@@ -716,7 +716,7 @@ public class AI : Agent
                     Relationships.connectionsRoadTiles.TryGetValue(legalCon[con], out List<int> temp);
                     if (LegalMoveConnector(legalCon[con]) &&
                         (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil &&
-                        (temp.Count > 1 && bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil)))
+                        ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil : true)))
                     {
                         PlaceMoveBranch(legalCon[con]);
                         __myRoads.Add(legalCon[con]);

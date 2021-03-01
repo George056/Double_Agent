@@ -514,7 +514,7 @@ public class BoardManager : MonoBehaviour
 
         CalculateScore(who);
 
-        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<AI>().__ai_score >= 10)
+        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<AI>().__ai_score >= 10 || end)
         {
             tradeButton.SetActive(false);
             buildButton.SetActive(false);

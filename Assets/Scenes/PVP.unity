@@ -2697,7 +2697,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: randAI
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056974288518276843, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 65
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
@@ -5659,6 +5663,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3667951958547329387, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: DecisionPeriod
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3667951958547329387, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: TakeActionsBetweenDecisions
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6290162366833842421, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: m_Name
       value: AI
@@ -5709,7 +5721,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: randAI
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056974288518276843, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 65
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}

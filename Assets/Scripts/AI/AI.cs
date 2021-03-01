@@ -135,259 +135,7 @@ public class AI : Agent
         //make move
         if (randAI)
         {
-            if (opener)
-            {
-                int positionCon;
-
-                do
-                {
-                    positionCon = Random.Range(0, 36);
-                } while (!LegalMoveConnector(positionCon));//exit when a legal move is found
-                PlaceMoveBranch(positionCon);
-                Debug.Log("Connector: " + positionCon);
-                __myRoads.Add(positionCon);
-
-                int positionNode;
-
-                positionNode = Random.Range(0, 1);
-                Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
-                if (LegalMoveNode(temp[positionNode]))
-                {
-                    PlaceMoveNode(temp[positionNode]);
-                    __myNodes.Add(temp[positionNode]);
-                }
-                else
-                {
-                    PlaceMoveNode(temp[(positionNode == 0) ? 1 : 0]);
-                    __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
-                }
-                Debug.Log("Node: " + temp[positionNode]);
-            }
-            else
-            {
-                int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
-                int maxCons = Math.Min(__resources[0], __resources[1]);
-
-                int counter = 0;
-
-                List<int> legalNodes = new List<int>();
-                List<int> legalCon = new List<int>();
-                foreach(int i in __myRoads)//get all connections to owned branches
-                {
-                    if (Relationships.connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
-                }
-                //remove duplicates found at: https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
-                
-                legalCon = legalCon.Distinct().ToList();
-                //int consToPlace = Random.Range(0, maxCons);
-
-                //place a legal connection when found and make a list and do at once
-                for (int i = 0; i < maxCons && i <= legalCon.Count && counter < 50; i++, counter++) //this cannot happen
-                {
-                    int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
-                    if (legalCon.Count > 0)
-                    {
-                        Relationships.connectionsRoadTiles.TryGetValue(legalCon[con], out List<int> temp);
-                        if (LegalMoveConnector(legalCon[con]) &&
-                            (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil &&
-                            (temp.Count > 1 && bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil)))
-                        {
-                            PlaceMoveBranch(legalCon[con]);
-                            __myRoads.Add(legalCon[con]);
-                            Debug.Log("Connector: " + legalCon[con]);
-                        }
-                        else
-                        {
-                            i--;
-                        }
-                        legalCon.Remove(legalCon[con]); // remove the branch; if added it's already used, if not then it was illegal
-                    }
-                }
-
-                foreach (int i in __myRoads)
-                {
-                    if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
-                }
-
-                legalNodes = legalNodes.Distinct().ToList();
-                //int nodesToPlace = Random.Range(0, maxNodes);
-
-                counter = 0;
-
-                for (int i = 0; i < maxNodes && i <= legalNodes.Count && counter < 50; i++, counter++)
-                {
-                    int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
-                    if (legalNodes.Count > 0)
-                    {
-                        if (LegalMoveNode(legalNodes[node]))//if a legal move add it
-                        {
-                            int tileCount = bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources.Count;
-                            foreach (GameObject go in bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources)
-                            {
-                                if (go.GetComponent<ResourceInfo>().depleted && go.GetComponent<ResourceInfo>().resoureTileOwner != __piece_type)
-                                {
-                                    tileCount--;
-                                }
-                            }
-                            if (tileCount > Mathf.Ceil(bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources.Count / 2) || (10 - __ai_score) < maxNodes)
-                            {
-                                PlaceMoveNode(legalNodes[node]);
-                                __myNodes.Add(legalNodes[node]);
-                                Debug.Log("Node: " + legalNodes[node]);
-                            }
-
-                        }
-                        else
-                        {
-                            i--;
-                        }
-                        legalNodes.Remove(legalNodes[node]);
-                    }
-                }
-
-                maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
-                maxCons = Math.Min(__resources[0], __resources[1]);
-
-                //make trade
-                if (Random.Range(0, 6) != 0 && (maxCons == 0 || maxNodes == 0))
-                {
-                    List<int> trade = new List<int>(4) { 0, 0, 0, 0 };
-
-                    int traded = 0;
-                    int blocked = 0;
-                    while (traded < 3 && blocked < 3)
-                    {
-                        blocked = 0;
-
-                        if (__resources[0] == 0 && __resources[1] != 0)
-                        {
-                            if (__resources[1] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[1] -= 1;
-                                trade[1] -= 1;
-                            }
-                            else blocked++;
-                            if (__resources[2] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[2] -= 1;
-                                trade[2] -= 1;
-                            }
-                            else blocked++;
-                            if (__resources[3] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[3] -= 1;
-                                trade[3] -= 1;
-                            }
-                            else blocked++;
-                        }
-                        else if (__resources[1] == 0 && __resources[0] != 0)
-                        {
-                            if (__resources[0] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[0] -= 1;
-                                trade[0] -= 1;
-                            }
-                            else blocked++;
-                            if (__resources[2] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[2] -= 1;
-                                trade[2] -= 1;
-                            }
-                            else blocked++;
-                            if (__resources[3] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[3] -= 1;
-                                trade[3] -= 1;
-                            }
-                            else blocked++;
-                        }
-                        else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
-                        {
-                            if (__resources[0] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[0] -= 1;
-                                trade[0] -= 1;
-                            }
-                            else blocked++;
-                            if (__resources[1] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[1] -= 1;
-                                trade[1] -= 1;
-                            }
-                            else blocked++;
-                            if (__resources[3] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[3] -= 1;
-                                trade[3] -= 1;
-                            }
-                            else blocked++;
-                        }
-                        else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
-                        {
-                            if (__resources[0] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[0] -= 1;
-                                trade[0] -= 1;
-                            }
-                            else blocked++;
-                            if (__resources[1] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[1] -= 1;
-                                trade[1] -= 1;
-                            }
-                            else blocked++;
-                            if (__resources[2] > 0 && traded < 3)
-                            {
-                                traded++;
-                                __resources[2] -= 1;
-                                trade[2] -= 1;
-                            }
-                            else blocked++;
-                        }
-                        else blocked = 3;
-                    }
-
-                    for (int i = 0; i < trade.Count; i++)
-                    {
-                        __resources[i] -= trade[i];
-                    }
-
-                    if (blocked != 3)
-                    {
-                        if (__resources[0] == 0 && __resources[1] != 0)
-                        {
-                            trade[0] += 1;
-                        }
-                        else if (__resources[1] == 0 && __resources[0] != 0)
-                        {
-                            trade[1] += 1;
-                        }
-                        else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
-                        {
-                            trade[2] += 1;
-                        }
-                        else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
-                        {
-                            trade[3] += 1;
-                        }
-                        MakeTrade(trade);
-                        Debug.Log("Trade: " + trade[0] + ", " + trade[1] + ", " + trade[2] + ", " + trade[3]);
-                        
-                    }
-
-                }
-            }
+            RandomAIMove();
         }
         else
         {
@@ -839,6 +587,80 @@ public class AI : Agent
             actionsOut[i] = 0;
         }
 
+        RandomAIMove();
+    }
+
+    private void MakeTrade(List<int> trade)
+    {
+        bm.Trade(trade, __piece_type);
+    }
+
+    private bool LegalMoveNode(int location)
+    {
+        return (opener || __resources[2] > 1 && __resources[3] > 1) ? bm.LegalNodeMove(location, __piece_type, __myRoads) : false;
+    }
+
+    private bool LegalMoveConnector(int location)
+    {
+        return (opener || __resources[0] > 0 && __resources[1] > 0) ? bm.LegalBranchMove(location, __piece_type, __myRoads) : false;
+    }
+
+    /// <summary>
+    /// Captures the node
+    /// </summary>
+    /// <param name="location">The node to be captured</param>
+    private void PlaceMoveNode(int location)
+    {
+        bm.ChangeNodeOwner(location);
+        if (!opener)
+        {
+            __resources[2] -= 2;
+            __resources[3] -= 2;
+        }
+    }
+
+    /// <summary>
+    /// Captures the branch
+    /// </summary>
+    /// <param name="location">The branch to capture</param>
+    private void PlaceMoveBranch(int location)
+    {
+        bm.ChangeBranchOwner(location);
+        if (!opener)
+        {
+            __resources[0] -= 1;
+            __resources[1] -= 1;
+        }
+    }
+
+    /// <summary>
+    /// This finds and sets the difficulty based on the PlayerPref Difficulty
+    /// Defaults to easy
+    /// </summary>
+    void GetDifficulty()
+    {
+        __difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty", 0);
+    }
+
+    /// <summary>
+    /// This finds and sets the player position based on the PlayerPref AI_Player
+    /// Defaults to player 2 (purple)
+    /// </summary>
+    void GetPlayer()
+    {
+        __player = (short)PlayerPrefs.GetInt("AI_Player", 1);
+    }
+
+    /// <summary>
+    /// Find out what "color" piece you based on the PlayerPref AI_Piece
+    /// Defaults to USSR
+    /// </summary>
+    void GetPiece()
+    {
+        __piece_type = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
+    }
+
+    private void RandomAIMove(){
         if (opener)
         {
             int positionCon;
@@ -892,8 +714,8 @@ public class AI : Agent
                 if (legalCon.Count > 0)
                 {
                     Relationships.connectionsRoadTiles.TryGetValue(legalCon[con], out List<int> temp);
-                    if (LegalMoveConnector(legalCon[con]) && 
-                        (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil && 
+                    if (LegalMoveConnector(legalCon[con]) &&
+                        (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil &&
                         (temp.Count > 1 && bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil)))
                     {
                         PlaceMoveBranch(legalCon[con]);
@@ -1085,14 +907,7 @@ public class AI : Agent
                     {
                         trade[3] += 1;
                     }
-
-                    int tradeVal = 0;
-                    for(int i = 0, ex = 1000; i < trade.Count; i++, ex /= 10)
-                    {
-                        tradeVal += trade[i] * ex;
-                    }
-
-                    actionsOut[60] = tradeVal;
+                    MakeTrade(trade);
                     Debug.Log("Trade: " + trade[0] + ", " + trade[1] + ", " + trade[2] + ", " + trade[3]);
 
                 }
@@ -1100,75 +915,4 @@ public class AI : Agent
             }
         }
     }
-
-    private void MakeTrade(List<int> trade)
-    {
-        bm.Trade(trade, __piece_type);
-    }
-
-    private bool LegalMoveNode(int location)
-    {
-        return (opener || __resources[2] > 1 && __resources[3] > 1) ? bm.LegalNodeMove(location, __piece_type, __myRoads) : false;
-    }
-
-    private bool LegalMoveConnector(int location)
-    {
-        return (opener || __resources[0] > 0 && __resources[1] > 0) ? bm.LegalBranchMove(location, __piece_type, __myRoads) : false;
-    }
-
-    /// <summary>
-    /// Captures the node
-    /// </summary>
-    /// <param name="location">The node to be captured</param>
-    private void PlaceMoveNode(int location)
-    {
-        bm.ChangeNodeOwner(location);
-        if (!opener)
-        {
-            __resources[2] -= 2;
-            __resources[3] -= 2;
-        }
-    }
-
-    /// <summary>
-    /// Captures the branch
-    /// </summary>
-    /// <param name="location">The branch to capture</param>
-    private void PlaceMoveBranch(int location)
-    {
-        bm.ChangeBranchOwner(location);
-        if (!opener)
-        {
-            __resources[0] -= 1;
-            __resources[1] -= 1;
-        }
-    }
-
-    /// <summary>
-    /// This finds and sets the difficulty based on the PlayerPref Difficulty
-    /// Defaults to easy
-    /// </summary>
-    void GetDifficulty()
-    {
-        __difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty", 0);
-    }
-
-    /// <summary>
-    /// This finds and sets the player position based on the PlayerPref AI_Player
-    /// Defaults to player 2 (purple)
-    /// </summary>
-    void GetPlayer()
-    {
-        __player = (short)PlayerPrefs.GetInt("AI_Player", 1);
-    }
-
-    /// <summary>
-    /// Find out what "color" piece you based on the PlayerPref AI_Piece
-    /// Defaults to USSR
-    /// </summary>
-    void GetPiece()
-    {
-        __piece_type = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
-    }
-
 }

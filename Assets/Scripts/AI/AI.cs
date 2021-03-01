@@ -410,6 +410,7 @@ public class AI : Agent
 
         if (opener)
         {
+            Debug.Log("Mask opener moves");
             List<int> clamedNodes = new List<int>();
             for(int i = 0; i < bm.nodes.Length; i++)
             {
@@ -441,6 +442,8 @@ public class AI : Agent
 
         if(turn >= 5)
         {
+            Debug.Log("Debug normal moves");
+
             //find max branch amount
             int maxCons = Math.Min(__resources[0], __resources[1]);
             
@@ -765,6 +768,9 @@ public class AI : Agent
                 }
             }
         }
+
+        __myNodes = __myNodes.Distinct().ToList();
+        __myRoads = __myRoads.Distinct().ToList();
     }
 
     /// <summary>
@@ -828,6 +834,11 @@ public class AI : Agent
     /// <param name="actionsOut">The output of the function, returned to OnActionReceived</param>
     public override void Heuristic(float[] actionsOut)
     {
+        for (int i = 0; i < 61; i++)
+        {
+            actionsOut[i] = 0;
+        }
+
         if (opener)
         {
             int positionCon;

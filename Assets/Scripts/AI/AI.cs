@@ -450,6 +450,7 @@ public class AI : Agent
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
     {
+        Debug.Log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&AI Move Requested");
         if (randAI) return;
         //make a trade first
         if(vectorAction[60] != 0)
@@ -536,6 +537,7 @@ public class AI : Agent
 
         __myNodes = __myNodes.Distinct().ToList();
         __myRoads = __myRoads.Distinct().ToList();
+        Debug.Log("AI Move Finished&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     }
 
     /// <summary>

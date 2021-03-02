@@ -63,6 +63,9 @@ public class AI : Agent
     [HideInInspector]
     public float totalReward = 0;
 
+    [Tooltip("This is set true if we are recording an example to show the AI, Logically used with trainingMode")]
+    public bool recordingExample = false;
+
     // } End variables for training
 
     [Tooltip("This holds the numeric ID of the roads that have been captured")]
@@ -606,7 +609,12 @@ public class AI : Agent
             actionsOut[i] = 0;
         }
 
-        RandomAIMove();
+        if (recordingExample)
+        {
+
+        }
+        else
+            RandomAIMove();
     }
 
     private void MakeTrade(List<int> trade)

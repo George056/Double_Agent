@@ -100,6 +100,9 @@ public class BoardManager : MonoBehaviour
 
     public GameObject USImage;
     public GameObject USSRImage;
+    public GameObject USMusic;
+    public GameObject USSRMusic;
+
 
     public InputField coinsTraded;
     public InputField loyalistsTraded;
@@ -292,11 +295,18 @@ public class BoardManager : MonoBehaviour
         {
             USImage.SetActive(true);
             USSRImage.SetActive(false);
+
+            USMusic.SetActive(true);
+            USSRMusic.SetActive(false);
         }
         else
         {
             USImage.SetActive(false);
             USSRImage.SetActive(true);
+
+            USSRMusic.SetActive(true);
+            USMusic.SetActive(false);
+
         }
 
         //make sure it is an AI game first

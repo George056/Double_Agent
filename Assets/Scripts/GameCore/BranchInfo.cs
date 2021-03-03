@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BranchInfo : MonoBehaviour
 {
-    // DELETE: private int cc;
     public Owner branchOwner;
     public int branchOrder;
 

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+
 public class NodeInfo : MonoBehaviour
 {
-    // DELETE: private int cc;
     public Owner nodeOwner;
     public int nodeOrder;
 

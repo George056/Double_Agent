@@ -4,31 +4,28 @@ using UnityEngine;
 using System;
 public class NodeInfo : MonoBehaviour
 {
-
-    private int cc;
+    // DELETE: private int cc;
     public Owner nodeOwner;
     public int nodeOrder;
-    public List<GameObject> resources = new List<GameObject>(0);
-    //public string countryAbreviation;
-    //public string countryName;
 
+    // List of resources the node gives
+    public List<GameObject> resources = new List<GameObject>(0);
     
     void OnMouseDown()
     {
-        
         if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
         {
             if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)) // localPlayer.Owner)) // or could use GameObject.FindObjectOfType<BoardManager>().activeSide for 2nd parameter
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
             {
-                //Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOrder);
-                //Debug.Log(this.gameObject.GetComponent<NodeInfo>().nodeOwner);
-
                 GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
+
+                // Adds node to player's list of owned nodes
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().AddNode(nodeOrder);
+
+                // Removes two coins and two loyalists from player's resources
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PayForNode();
             }
         }
-        
     }
 }

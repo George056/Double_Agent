@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BranchInfo : MonoBehaviour
 {
-    private int cc;
+    // DELETE: private int cc;
     public Owner branchOwner;
     public int branchOrder;
 
@@ -13,13 +13,14 @@ public class BranchInfo : MonoBehaviour
         if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordBranch())
         {
             if (GameObject.FindObjectOfType<BoardManager>().LegalBranchMove(branchOrder, GameObject.FindObjectOfType<BoardManager>().activeSide, 
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)) // or localPlayer.Owner for 2nd parameter
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)) 
             {
-                //Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOrder);
-                //Debug.Log(this.gameObject.GetComponent<BranchInfo>().branchOwner);
-
                 GameObject.FindObjectOfType<BoardManager>().ChangeBranchOwner(branchOrder);
+
+                // Adds branch to player's list of owned branches
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().AddBranch(branchOrder);
+
+                // Removes one copper and one lumber from player's resources
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PayForBranch();
             }
         }

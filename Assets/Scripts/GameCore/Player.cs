@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
         __longest_net = false;
         __owned_nodes = new List<int>();
         __owned_branches = new List<int>();
+
+        // Allocate resources to allow player to place first node and branch
         UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
     }
 

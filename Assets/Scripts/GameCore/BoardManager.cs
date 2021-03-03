@@ -630,17 +630,6 @@ public class BoardManager : MonoBehaviour
     public void EnterBuildMode()
     {
         inBuildMode = true;
-
-        // Highlight legal moves
-        
-        //foreach(GameObject node in nodes)
-        //{
-        //    // if not owned by anyone, highlight as possible move
-        //    if (node.GetComponent<NodeInfo>().nodeOwner == NodeInfo.Owner.Nil)
-        //    {
-        //        Debug.Log("Unclaimed Node");
-        //    }
-        //}
     }
 
     public void EndTurnButtonClicked()
@@ -724,15 +713,6 @@ public class BoardManager : MonoBehaviour
             AllocateResources();
 
         inBuildMode = false;
-
-        //if (activeSide == aiPiece)
-        //{
-        //    inBuildMode = false;
-        //}
-        //else
-        //{
-        //    inBuildMode = true;
-        //}
 
 
         // disable/reenable Trade, Build, and End Turn buttons

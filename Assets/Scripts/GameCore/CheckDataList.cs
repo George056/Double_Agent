@@ -373,10 +373,4 @@ public class CheckDataList : MonoBehaviour
             longestNetOwner = Owner.Nil;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

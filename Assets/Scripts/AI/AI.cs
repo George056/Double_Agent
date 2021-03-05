@@ -472,7 +472,9 @@ public class AI : Agent
             tradeArr[3] = temp1;
             MakeTrade(tradeArr);
         }
-        
+
+        int old_total_placed_branches = __myRoads.Count;
+
         //place connectors
         for(int i = 0; i < 36; i++)
         {
@@ -490,6 +492,13 @@ public class AI : Agent
                 }
             }
         }
+
+        if(__myRoads.Count == old_total_placed_branches)
+        {
+            AddReward(-.1f);
+        }
+
+        int old_total_placed_nodes = __myNodes.Count;
 
         //place nodes
         for(int i = 0; i < 24; i++)
@@ -536,6 +545,16 @@ public class AI : Agent
                     AddReward(illegalMovePunish);
                 }
             }
+        }
+
+        if(__myNodes.Count == old_total_placed_nodes)
+        {
+            AddReward(-.1f);
+        }
+
+        if(opener && (__myNodes.Count == old_total_placed_nodes) && __myRoads.Count == old_total_placed_branches)
+        {
+            RandomAIMove();
         }
 
         __myNodes = __myNodes.Distinct().ToList();

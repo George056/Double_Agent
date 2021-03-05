@@ -17,10 +17,10 @@ public class SetupMenuScript : MonoBehaviour
         
     }
 
-    public void PlayGame()
-    {
-        SceneManager.LoadScene("PVP");
-    }
+    //public void PlayGame()
+    //{
+    //    SceneManager.LoadScene("PVP");
+    //}
     public void OnlinePlay()
     {
         SceneManager.LoadScene("Lobby");

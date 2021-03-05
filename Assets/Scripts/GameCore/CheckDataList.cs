@@ -7,7 +7,6 @@ public class CheckDataList : MonoBehaviour
 {
     //Exhausted
     public GameObject Exhausted;
-
     public GameObject USSRCaptured;
     public GameObject USCaptured;
 

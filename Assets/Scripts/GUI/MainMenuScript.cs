@@ -17,21 +17,6 @@ public class MainMenuScript : MonoBehaviour
         
     }
 
-    public void PlayGame()
-    {
-        SceneManager.LoadScene("PVP");
-    }
-
-    public void OnlinePlay()
-    {
-        SceneManager.LoadScene("Lobby");
-    }
-
-    public void ViewTutorial()
-    {
-        SceneManager.LoadScene("Tutorial");
-    }
-
     public void DisplayHelp()
     {
 
@@ -40,11 +25,5 @@ public class MainMenuScript : MonoBehaviour
     public void DisplayAbout()
     {
 
-    }
-
-    public void Exit()
-    {
-        Debug.Log("Application Closed");
-        Application.Quit();
     }
 }

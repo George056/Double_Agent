@@ -90,10 +90,16 @@ public class BoardManager : MonoBehaviour
     private ResourceInfo.Color tempColor; //store the color
     private int tempNum;    //store
 
-    public TextMeshProUGUI coinCount;
-    public TextMeshProUGUI loyalistCount;
-    public TextMeshProUGUI copperCount;
-    public TextMeshProUGUI lumberCount;
+
+    public TextMeshProUGUI playerCopperCount;
+    public TextMeshProUGUI playerLumberCount;
+    public TextMeshProUGUI playerLoyalistCount;
+    public TextMeshProUGUI playerCoinCount;
+
+    public TextMeshProUGUI opponentCopperCount;
+    public TextMeshProUGUI opponentLumberCount;
+    public TextMeshProUGUI opponentLoyalistCount;
+    public TextMeshProUGUI opponentCoinCount;
 
     public TextMeshProUGUI playerScore;
     public TextMeshProUGUI opponentScore;
@@ -332,17 +338,28 @@ public class BoardManager : MonoBehaviour
         opponentScore.text = score.ToString();
     }
 
-    public void UpdateResourcesInUI(List<int> resources)
+    public void UpdatePlayerResourcesInUI(List<int> resources)
     {
         if (turnCount > 4)
         {
-            coinCount.text = resources[3].ToString();
-            loyalistCount.text = resources[2].ToString();
-            copperCount.text = resources[0].ToString();
-            lumberCount.text = resources[1].ToString();
+            playerCopperCount.text = resources[0].ToString();
+            playerLumberCount.text = resources[1].ToString();
+            playerLoyalistCount.text = resources[2].ToString();
+            playerCoinCount.text = resources[3].ToString();
         }
     }
-    
+
+    public void UpdateOpponentResourcesInUI(List<int> resources)
+    {
+        if (turnCount > 4)
+        {
+            opponentCopperCount.text = resources[0].ToString();
+            opponentLumberCount.text = resources[1].ToString();
+            opponentLoyalistCount.text = resources[2].ToString();
+            opponentCoinCount.text = resources[3].ToString();
+        }
+    }
+
     public void ChangeNodeOwner(int nodeNum)
     {
         if (activeSide == Owner.US)

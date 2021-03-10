@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
         __resources[2] -= 2;
         __resources[3] -= 2;
 
-        GameObject.FindObjectOfType<BoardManager>().UpdateResourcesInUI(__resources);
+        GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
     }
 
     public void PayForBranch()
@@ -100,7 +100,7 @@ public class Player : MonoBehaviour
         __resources[0]--;
         __resources[1]--;
 
-        GameObject.FindObjectOfType<BoardManager>().UpdateResourcesInUI(__resources);
+        GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
     }
 
     public void UpdateResources(List<int> update)
@@ -111,7 +111,7 @@ public class Player : MonoBehaviour
             __resources[i] += update[i];
         }
 
-        GameObject.FindObjectOfType<BoardManager>().UpdateResourcesInUI(__resources);
+        GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
     }
 
     public void UpdateScore(int newScore, bool temp1, bool temp2)

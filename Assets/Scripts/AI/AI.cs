@@ -358,6 +358,7 @@ public class AI : Agent
         {
             __resources[i] += update[i];
         }
+        bm.UpdateOpponentResourcesInUI(__resources);
     }
 
     /// <summary>
@@ -606,6 +607,8 @@ public class AI : Agent
         {
             __resources[2] -= 2;
             __resources[3] -= 2;
+
+            bm.UpdateOpponentResourcesInUI(__resources);
         }
     }
 
@@ -620,6 +623,8 @@ public class AI : Agent
         {
             __resources[0] -= 1;
             __resources[1] -= 1;
+
+            bm.UpdateOpponentResourcesInUI(__resources);
         }
     }
 

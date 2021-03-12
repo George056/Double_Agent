@@ -109,13 +109,6 @@ public class BoardManager : MonoBehaviour
     public GameObject USMusic;
     public GameObject USSRMusic;
 
-
-    public InputField coinsTraded;
-    public InputField loyalistsTraded;
-    public InputField copperTraded;
-    public InputField lumberTraded;
-
-
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
 
@@ -321,11 +314,6 @@ public class BoardManager : MonoBehaviour
             BtnToggle();
             player2.GetComponent<AI>().AIMove(turnCount);
         }
-
-        coinsTraded.text = "0";
-        loyalistsTraded.text = "0";
-        copperTraded.text = "0";
-        lumberTraded.text = "0";
     }
 
     public void UpdatePlayerScoreInUI(int score)
@@ -452,22 +440,6 @@ public class BoardManager : MonoBehaviour
         }
 
         return isLegal;
-    }
-
-    public void SubmitTrade()
-    {
-        int numCoinsTraded = Convert.ToInt32(coinsTraded.text);
-        int numLoyalistsTraded = Convert.ToInt32(loyalistsTraded.text);
-        int numCopperTraded = Convert.ToInt32(copperTraded.text);
-        int numLumberTraded = Convert.ToInt32(lumberTraded.text);
-
-        coinsTraded.text = "0";
-        loyalistsTraded.text = "0";
-        copperTraded.text = "0";
-        lumberTraded.text = "0";
-
-        List<int> tradeList = new List<int>(4) { numCopperTraded, numLumberTraded, numLoyalistsTraded, numCoinsTraded };
-        Trade(tradeList, humanPiece);
     }
 
     public void Trade(List<int> resources, Owner who)

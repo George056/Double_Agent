@@ -1051,6 +1051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db4d640fffafc224f8d64e7163e95fbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TutorialSlides: []
 --- !u!1 &1791960646
 GameObject:
   m_ObjectHideFlags: 0

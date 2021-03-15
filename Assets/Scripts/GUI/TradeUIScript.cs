@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class TradeUIScript : MonoBehaviour
 {
@@ -11,13 +12,32 @@ public class TradeUIScript : MonoBehaviour
     public TextMeshProUGUI loyalistsTraded;
     public TextMeshProUGUI coinsTraded;
 
+    public Button copperInButton;
+    public Button lumberInButton;
+    public Button loyalistInButton;
+    public Button coinInButton;
+
     private int totalTradeCount = 0;
 
     public GameObject tradeWindow;
 
     List<int> tradeList = new List<int>(4) { 0, 0, 0, 0 };
 
-    //List<int> playerResources = GameObject.FindObjectOfType<Player>().__resources;
+    void EnableButtons()
+    {
+        copperInButton.interactable = true;
+        lumberInButton.interactable = true;
+        loyalistInButton.interactable = true;
+        coinInButton.interactable = true;
+    }
+
+    void DisableButtons()
+    {
+        copperInButton.interactable = false;
+        lumberInButton.interactable = false;
+        loyalistInButton.interactable = false;
+        coinInButton.interactable = false;
+    }
 
     public void toggleTradeWindow()
     {
@@ -36,6 +56,14 @@ public class TradeUIScript : MonoBehaviour
             numCopperTraded = 0;
             copperTraded.text = numCopperTraded.ToString();
             tradeList[0] = 0;
+
+            if (totalTradeCount < 3)
+            {
+                DisableButtons();
+            }
+
+            // Unity Forum User ensiferum888 - https://forum.unity.com/threads/how-to-turn-on-off-button-visibility.290317/
+            copperInButton.gameObject.SetActive(true);
         }
         else
         {
@@ -43,6 +71,13 @@ public class TradeUIScript : MonoBehaviour
             numCopperTraded++;
             copperTraded.text = numCopperTraded.ToString();
             tradeList[0]--;
+
+            if (totalTradeCount == 3)
+            {
+                EnableButtons();
+            }
+
+            copperInButton.gameObject.SetActive(false);
         }
     }
 
@@ -55,6 +90,13 @@ public class TradeUIScript : MonoBehaviour
             numLumberTraded = 0;
             lumberTraded.text = numLumberTraded.ToString();
             tradeList[1] = 0;
+
+            if (totalTradeCount < 3)
+            {
+                DisableButtons();
+            }
+
+            lumberInButton.gameObject.SetActive(true);
         }
         else
         {
@@ -62,6 +104,13 @@ public class TradeUIScript : MonoBehaviour
             numLumberTraded++;
             lumberTraded.text = numLumberTraded.ToString();
             tradeList[1]--;
+
+            if (totalTradeCount == 3)
+            {
+                EnableButtons();
+            }
+
+            lumberInButton.gameObject.SetActive(false);
         }
     }
 
@@ -74,6 +123,13 @@ public class TradeUIScript : MonoBehaviour
             numLoyalistsTraded = 0;
             loyalistsTraded.text = numLoyalistsTraded.ToString();
             tradeList[2] = 0;
+
+            if (totalTradeCount < 3)
+            {
+                DisableButtons();
+            }
+
+            loyalistInButton.gameObject.SetActive(true);
         }
         else
         {
@@ -81,6 +137,13 @@ public class TradeUIScript : MonoBehaviour
             numLoyalistsTraded++;
             loyalistsTraded.text = numLoyalistsTraded.ToString();
             tradeList[2]--;
+            
+            if (totalTradeCount == 3)
+            {
+                EnableButtons();
+            }
+
+            loyalistInButton.gameObject.SetActive(false);
         }
     }
 
@@ -93,6 +156,13 @@ public class TradeUIScript : MonoBehaviour
             numCoinsTraded = 0;
             coinsTraded.text = numCoinsTraded.ToString();
             tradeList[3] = 0;
+
+            if (totalTradeCount < 3)
+            {
+                DisableButtons();
+            }
+
+            coinInButton.gameObject.SetActive(true);
         }
         else
         {
@@ -100,26 +170,61 @@ public class TradeUIScript : MonoBehaviour
             numCoinsTraded++;
             coinsTraded.text = numCoinsTraded.ToString();
             tradeList[3]--;
+
+            if (totalTradeCount == 3)
+            {
+                EnableButtons();
+            }
+
+            coinInButton.gameObject.SetActive(false);
         }
     }
 
     public void selectCopperIn()
     {
+        for (int i = 0; i < 4; i++)
+        {
+            if (tradeList[i] > 0)
+            {
+                tradeList[i] = 0;
+            }
+        }
         tradeList[0] = 1;
     }
 
     public void selectLumberIn()
     {
+        for (int i = 0; i < 4; i++)
+        {
+            if (tradeList[i] > 0)
+            {
+                tradeList[i] = 0;
+            }
+        }
         tradeList[1] = 1;
     }
 
     public void selectLoyalistIn()
     {
+        for (int i = 0; i < 4; i++)
+        {
+            if (tradeList[i] > 0)
+            {
+                tradeList[i] = 0;
+            }
+        }
         tradeList[2] = 1;
     }
 
     public void selectCoinIn()
     {
+        for (int i = 0; i < 4; i++)
+        {
+            if (tradeList[i] > 0)
+            {
+                tradeList[i] = 0;
+            }
+        }
         tradeList[3] = 1;
     }
 
@@ -140,5 +245,11 @@ public class TradeUIScript : MonoBehaviour
 
         totalTradeCount = 0;
         GameObject.FindObjectOfType<BoardManager>().playerTraded = true;
+
+        DisableButtons();
+        copperInButton.gameObject.SetActive(true);
+        lumberInButton.gameObject.SetActive(true);
+        loyalistInButton.gameObject.SetActive(true);
+        coinInButton.gameObject.SetActive(true);
     }
 }

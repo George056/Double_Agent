@@ -446,6 +446,7 @@ MonoBehaviour:
   buildButton: {fileID: 1974227698}
   endTurnButton: {fileID: 924871812}
   inBuildMode: 0
+  playerTraded: 0
   columns: 11
   rows: 11
   gameOverWindow: {fileID: 1856641027}
@@ -921,7 +922,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 227501990}
   m_OnClick:
     m_PersistentCalls:
@@ -1607,6 +1608,10 @@ MonoBehaviour:
   lumberTraded: {fileID: 1093821598}
   loyalistsTraded: {fileID: 1060107625}
   coinsTraded: {fileID: 631229685}
+  copperInButton: {fileID: 1163215267}
+  lumberInButton: {fileID: 861051959}
+  loyalistInButton: {fileID: 227501989}
+  coinInButton: {fileID: 1940623004}
   tradeWindow: {fileID: 446080589}
 --- !u!1 &479862291
 GameObject:
@@ -3274,7 +3279,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 861051960}
   m_OnClick:
     m_PersistentCalls:
@@ -4593,7 +4598,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1163215268}
   m_OnClick:
     m_PersistentCalls:
@@ -6862,7 +6867,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1940623005}
   m_OnClick:
     m_PersistentCalls:

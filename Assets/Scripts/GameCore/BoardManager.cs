@@ -39,6 +39,7 @@ public class BoardManager : MonoBehaviour
     public GameObject endTurnButton;
 
     public bool inBuildMode = false;
+    public bool playerTraded = false;
 
     [HideInInspector]
     public int columns = 11;
@@ -712,6 +713,7 @@ public class BoardManager : MonoBehaviour
             AllocateResources();
 
         inBuildMode = false;
+        playerTraded = false;
 
 
         // disable/reenable Trade, Build, and End Turn buttons

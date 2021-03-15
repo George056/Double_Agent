@@ -21,7 +21,10 @@ public class TradeUIScript : MonoBehaviour
 
     public void toggleTradeWindow()
     {
-        tradeWindow.SetActive(!tradeWindow.activeSelf);
+        if (!GameObject.FindObjectOfType<BoardManager>().playerTraded)
+        {
+            tradeWindow.SetActive(!tradeWindow.activeSelf);
+        }
     }
 
     public void selectCopperOut()
@@ -136,5 +139,6 @@ public class TradeUIScript : MonoBehaviour
         tradeList[3] = 0;
 
         totalTradeCount = 0;
+        GameObject.FindObjectOfType<BoardManager>().playerTraded = true;
     }
 }

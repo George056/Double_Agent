@@ -113,6 +113,8 @@ public class BoardManager : MonoBehaviour
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
 
+    public Button[] resourceOutButtons = new Button[4];
+
     int GetTileIndex(string code)
     {
         int index = 0;
@@ -335,6 +337,19 @@ public class BoardManager : MonoBehaviour
             playerLumberCount.text = resources[1].ToString();
             playerLoyalistCount.text = resources[2].ToString();
             playerCoinCount.text = resources[3].ToString();
+        }
+
+        // In trade window, display only resources of which the player currently has at least one
+        for (int i = 0; i < 4; i++)
+        {
+            if (resources[i] == 0)
+            {
+                resourceOutButtons[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                resourceOutButtons[i].gameObject.SetActive(true);
+            }
         }
     }
 

@@ -478,6 +478,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  resourceOutButtons:
+  - {fileID: 1518917251}
+  - {fileID: 730141490}
+  - {fileID: 123098864}
+  - {fileID: 1410431748}
 --- !u!114 &77764162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1605,14 +1610,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9b78cca5e2a4f45b185cb21e52ca6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  copperTraded: {fileID: 1232036938}
-  lumberTraded: {fileID: 1093821598}
-  loyalistsTraded: {fileID: 1060107625}
-  coinsTraded: {fileID: 631229685}
-  copperInButton: {fileID: 1163215267}
-  lumberInButton: {fileID: 861051959}
-  loyalistInButton: {fileID: 227501989}
-  coinInButton: {fileID: 1940623004}
+  tradeNumbers:
+  - {fileID: 1232036938}
+  - {fileID: 1093821598}
+  - {fileID: 1060107625}
+  - {fileID: 631229685}
+  inButtons:
+  - {fileID: 1163215267}
+  - {fileID: 861051959}
+  - {fileID: 227501989}
+  - {fileID: 1940623004}
   submitButton: {fileID: 1433096966}
   tradeWindow: {fileID: 446080589}
 --- !u!1 &479862291
@@ -2103,7 +2110,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 631229683}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -4121,7 +4128,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060107623}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -4257,7 +4264,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093821596}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -4585,7 +4592,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -4775,7 +4782,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1232036936}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -6794,7 +6801,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 446080591}
         m_TargetAssemblyTypeName: TradeUIScript, Assembly-CSharp
-        m_MethodName: CancelTrade
+        m_MethodName: ResetTradeWindow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

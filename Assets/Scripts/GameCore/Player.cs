@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 
     public List<int> __owned_nodes;
     public List<int> __owned_branches;
-    
+
 
     void Start()
     {

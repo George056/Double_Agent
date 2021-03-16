@@ -16,6 +16,7 @@ public class TradeUIScript : MonoBehaviour
     public Button lumberInButton;
     public Button loyalistInButton;
     public Button coinInButton;
+    public Button submitButton;
 
     private int totalTradeCount = 0;
 
@@ -190,6 +191,8 @@ public class TradeUIScript : MonoBehaviour
             }
         }
         tradeList[0] = 1;
+
+        submitButton.interactable = true;
     }
 
     public void selectLumberIn()
@@ -202,6 +205,8 @@ public class TradeUIScript : MonoBehaviour
             }
         }
         tradeList[1] = 1;
+
+        submitButton.interactable = true;
     }
 
     public void selectLoyalistIn()
@@ -214,6 +219,8 @@ public class TradeUIScript : MonoBehaviour
             }
         }
         tradeList[2] = 1;
+
+        submitButton.interactable = true;
     }
 
     public void selectCoinIn()
@@ -226,6 +233,8 @@ public class TradeUIScript : MonoBehaviour
             }
         }
         tradeList[3] = 1;
+
+        submitButton.interactable = true;
     }
 
     public void SubmitTrade()
@@ -251,5 +260,30 @@ public class TradeUIScript : MonoBehaviour
         lumberInButton.gameObject.SetActive(true);
         loyalistInButton.gameObject.SetActive(true);
         coinInButton.gameObject.SetActive(true);
+
+        submitButton.interactable = false;
+    }
+
+    public void CancelTrade()
+    {
+        coinsTraded.text = "0";
+        loyalistsTraded.text = "0";
+        copperTraded.text = "0";
+        lumberTraded.text = "0";
+
+        tradeList[0] = 0;
+        tradeList[1] = 0;
+        tradeList[2] = 0;
+        tradeList[3] = 0;
+
+        totalTradeCount = 0;
+
+        DisableButtons();
+        copperInButton.gameObject.SetActive(true);
+        lumberInButton.gameObject.SetActive(true);
+        loyalistInButton.gameObject.SetActive(true);
+        coinInButton.gameObject.SetActive(true);
+
+        submitButton.interactable = false;
     }
 }

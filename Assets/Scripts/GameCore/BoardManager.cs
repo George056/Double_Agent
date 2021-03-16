@@ -708,6 +708,11 @@ public class BoardManager : MonoBehaviour
             player1.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }
 
+        if (turnCount == 5)
+        {
+            tradeButton.GetComponent<Button>().interactable = true;
+        }
+
         // if not opener move, allocate resources to appropriate player
         if (turnCount >= 5)
             AllocateResources();

@@ -334,7 +334,10 @@ public class BoardManager : MonoBehaviour
                     Debug.Log("Player 1: ");
                     player1.GetComponent<AI>().AIMove(turnCount);
                     if (activeSide == aiPiece)
+                    {
                         Debug.Log("Player2: ");
+                        player2.GetComponent<AI>().AIMove(turnCount);
+                    }
                 }
             }
         }
@@ -558,8 +561,8 @@ public class BoardManager : MonoBehaviour
             }
 
             end = true;
-            //gameOverWindow.SetActive(true);
-            AI.LoadNewScene();
+            gameOverWindow.SetActive(true);
+            //AI.LoadNewScene();
         }
     }
 
@@ -647,14 +650,14 @@ public class BoardManager : MonoBehaviour
                     var tile_temp = tile.GetComponent<ResourceInfo>();
                     if(tile_temp.resoureTileOwner != Owner.Nil)//if someone owns it
                     {
-                        if(tile_temp.resoureTileOwner == activeSide)//only allocate if it is owned by the player
+                        if(tile_temp.resoureTileOwner == activeSide && tile_temp.nodeColor != ResourceInfo.Color.Empty)//only allocate if it is owned by the player
                         {
                             allocation[(int)tile_temp.nodeColor] += 1;
                         }
                     }
                     else//if no one owns it
                     {
-                        if (!tile_temp.depleted)
+                        if (!tile_temp.depleted && tile_temp.nodeColor != ResourceInfo.Color.Empty)
                         {
                             allocation[(int)tile_temp.nodeColor] += 1;
                         }
@@ -746,7 +749,8 @@ public class BoardManager : MonoBehaviour
 
         Debug.Log("Turn: " + turnCount + "##################################################################################");
 
-        if (turnCount > 100) end = true;
+        if (turnCount > 100)
+            end = true;
 
         // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
         BoardCheck();

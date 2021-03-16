@@ -6,6 +6,7 @@ using System;
 using Random = UnityEngine.Random;
 using System.Linq;
 using Unity.MLAgents.Sensors;
+using UnityEngine.SceneManagement;
 
 public enum Difficulty
 {
@@ -59,6 +60,9 @@ public class AI : Agent
 
     [Tooltip("The punishment for making an illegal move")]
     public float illegalMovePunish = -0.1f;
+
+    [Tooltip("A punishment for making no move when a move could have been made")]
+    public float noMovePunish = -0.5f;
 
     [HideInInspector]
     public float totalReward = 0;
@@ -378,7 +382,7 @@ public class AI : Agent
     public static void LoadNewScene()
     {
         Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Game Over; New Board$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
+        SceneManager.LoadScene("PVP");
     }
 
     /// <summary>
@@ -455,6 +459,11 @@ public class AI : Agent
     {
         Debug.Log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&AI Move Requested");
         if (randAI) return;
+
+        bool noTrade = true;
+        bool noBranch = true;
+        bool noNode = true;
+
         //make a trade first
         if(vectorAction[60] != 0)
         {
@@ -471,6 +480,7 @@ public class AI : Agent
             temp1 -= temp2 * 10;
             tradeArr[3] = temp1;
             MakeTrade(tradeArr);
+            noTrade = false;
         }
 
         int old_total_placed_branches = __myRoads.Count;
@@ -480,6 +490,7 @@ public class AI : Agent
         {
             if(vectorAction[i + 24] == 1)
             {
+                noBranch = false;
                 if (LegalMoveConnector(i))
                 {
                     Debug.Log("Connector: " + i);
@@ -505,6 +516,7 @@ public class AI : Agent
         {
             if(vectorAction[i] == 1)
             {
+                noNode = false;
                 if (LegalMoveNode(i))
                 {
                     Debug.Log("Node: " + i);
@@ -555,6 +567,11 @@ public class AI : Agent
         if(opener && (__myNodes.Count == old_total_placed_nodes) && __myRoads.Count == old_total_placed_branches)
         {
             RandomAIMove();
+        }
+
+        if((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)))
+        {
+            AddReward(noMovePunish);
         }
 
         __myNodes = __myNodes.Distinct().ToList();
@@ -649,6 +666,13 @@ public class AI : Agent
     private bool LegalMoveConnector(int location)
     {
         return (opener || __resources[0] > 0 && __resources[1] > 0) ? bm.LegalBranchMove(location, __piece_type, __myRoads) : false;
+    }
+
+    private int TotalResourceCount()
+    {
+        int result = 0;
+        foreach (int i in __resources) result += i;
+        return result;
     }
 
     /// <summary>

@@ -31,7 +31,11 @@ public class TradeUIScript : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             inButtons[i].interactable = false;
+            inButtons[i].transform.localScale = new Vector3(1f, 1f, 1f);
         }
+
+        // Also disable the Submit button
+        submitButton.interactable = false;
     }
 
     public void ClearSelectedResource()
@@ -41,6 +45,7 @@ public class TradeUIScript : MonoBehaviour
             if (tradeList[i] > 0)
             {
                 tradeList[i] = 0;
+                inButtons[i].transform.localScale = new Vector3(1f, 1f, 1f);
             }
         }
     }
@@ -198,6 +203,7 @@ public class TradeUIScript : MonoBehaviour
     {
         ClearSelectedResource();
         tradeList[0] = 1;
+        inButtons[0].transform.localScale = new Vector3(1.5f, 1.5f, 1f);
 
         submitButton.interactable = true;
     }
@@ -206,6 +212,7 @@ public class TradeUIScript : MonoBehaviour
     {
         ClearSelectedResource();
         tradeList[1] = 1;
+        inButtons[1].transform.localScale = new Vector3(1.5f, 1.5f, 1f);
 
         submitButton.interactable = true;
     }
@@ -214,6 +221,7 @@ public class TradeUIScript : MonoBehaviour
     {
         ClearSelectedResource();
         tradeList[2] = 1;
+        inButtons[2].transform.localScale = new Vector3(1.5f, 1.5f, 1f);
 
         submitButton.interactable = true;
     }
@@ -222,6 +230,7 @@ public class TradeUIScript : MonoBehaviour
     {
         ClearSelectedResource();
         tradeList[3] = 1;
+        inButtons[3].transform.localScale = new Vector3(1.5f, 1.5f, 1f);
 
         submitButton.interactable = true;
     }
@@ -238,7 +247,6 @@ public class TradeUIScript : MonoBehaviour
 
         DisableInButtons();
         totalTradeCount = 0;
-        submitButton.interactable = false;
     }
 
     public void SubmitTrade()

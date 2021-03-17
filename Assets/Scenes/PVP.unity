@@ -483,6 +483,8 @@ MonoBehaviour:
   - {fileID: 730141490}
   - {fileID: 123098864}
   - {fileID: 1410431748}
+  nodesPlacedThisTurn: 
+  branchesPlacedThisTurn: 
 --- !u!114 &77764162
 MonoBehaviour:
   m_ObjectHideFlags: 0

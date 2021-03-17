@@ -115,6 +115,9 @@ public class BoardManager : MonoBehaviour
 
     public Button[] resourceOutButtons = new Button[4];
 
+    public List<int> nodesPlacedThisTurn = new List<int>();
+    public List<int> branchesPlacedThisTurn = new List<int>();
+
     int GetTileIndex(string code)
     {
         int index = 0;
@@ -221,6 +224,7 @@ public class BoardManager : MonoBehaviour
                         instance.transform.SetParent(boardHolder);
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOrder = nodeCount;
+                        nodes[nodeCount].GetComponent<NodeInfo>().placementConfirmed = false;
                         nodeCount++;
                         break;
                     case 'H':
@@ -364,6 +368,14 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public void UnplaceNode(int nodeNum)
+    {
+        nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
+        GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
+
+        nodesPlacedThisTurn.Remove(nodeNum);
+    }
+
     public void ChangeNodeOwner(int nodeNum)
     {
         if (activeSide == Owner.US)
@@ -376,6 +388,8 @@ public class BoardManager : MonoBehaviour
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
         }
+
+        nodesPlacedThisTurn.Add(nodeNum);
 
         if (activeSide == aiPiece)
         {
@@ -661,7 +675,11 @@ public class BoardManager : MonoBehaviour
                 // prompt player to confirm submission
                 if (true) // user confirmed turn submission
                 {
-                    Debug.Log("Player confirmed submission; turn ending");
+                    for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
+                    {
+                        nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
+                    }
+                    nodesPlacedThisTurn.Clear();
 
                     EndTurn();
                     // provide player with indication that opponent is taking turn
@@ -680,6 +698,12 @@ public class BoardManager : MonoBehaviour
             if (true) // user confirmed turn submission
             {
                 Debug.Log("Player confirmed submission; turn ending");
+
+                for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
+                {
+                    nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
+                }
+                nodesPlacedThisTurn.Clear();
 
                 EndTurn();
                 // provide player with indication that opponent is taking turn

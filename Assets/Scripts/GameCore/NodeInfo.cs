@@ -15,30 +15,38 @@ public class NodeInfo : MonoBehaviour
     
     void OnMouseDown()
     {
-        if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
+        if (GameObject.FindObjectOfType<BoardManager>().inBuildMode)
         {
-            if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
+            Debug.Log("Node Owner: " + GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().nodeOwner);
+            Debug.Log("Placement Confirmed: " + GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().placementConfirmed);
+
+            if (GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().nodeOwner == GameObject.FindObjectOfType<BoardManager>().activeSide &&
+                !GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().placementConfirmed)
             {
-                GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
 
-                // Adds node to player's list of owned nodes
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().AddNode(nodeOrder);
 
-                // Removes two coins and two loyalists from player's resources
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PayForNode();
+                GameObject.FindObjectOfType<BoardManager>().UnplaceNode(nodeOrder);
+
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().RemoveNode(nodeOrder);
+
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().ReimburseForNode();
+
+
             }
-        }
-        else if (nodeOwner == GameObject.FindObjectOfType<BoardManager>().activeSide && !placementConfirmed)
-        {
-            // change nodeOwner to Nil
-            // change color back to grey
-            // remove nodeOrder from player's list of owned nodes
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_nodes.Remove(nodeOrder);
+            else if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
+            {
+                if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
+                {
+                    GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
 
-            // give player two coins and two loyalists back
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__resources[2] += 2;
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__resources[3] += 2;
+                    // Adds node to player's list of owned nodes
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().AddNode(nodeOrder);
+
+                    // Removes two coins and two loyalists from player's resources
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PayForNode();
+                }
+            }
         }
     }
 

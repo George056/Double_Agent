@@ -95,6 +95,14 @@ public class Player : MonoBehaviour
         GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
     }
 
+    public void ReimburseForNode()
+    {
+        __resources[2] += 2;
+        __resources[3] += 2;
+
+        GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
+    }
+
     public void PayForBranch()
     {
         __resources[0]--;
@@ -123,6 +131,11 @@ public class Player : MonoBehaviour
     public void AddNode(int index)
     {
         __owned_nodes.Add(index);
+    }
+
+    public void RemoveNode(int index)
+    {
+        __owned_nodes.Remove(index);
     }
 
     public void AddBranch(int index)

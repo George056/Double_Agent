@@ -9,6 +9,8 @@ TagManager:
   - AI
   - GameManager
   - Music
+  - Music Slider
+  - Sound fx Slider
   layers:
   - Default
   - TransparentFX

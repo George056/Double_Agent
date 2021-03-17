@@ -111,6 +111,14 @@ public class Player : MonoBehaviour
         GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
     }
 
+    public void ReimburseForBranch()
+    {
+        __resources[0]++;
+        __resources[1]++;
+
+        GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
+    }
+
     public void UpdateResources(List<int> update)
     {
         Debug.Log("Earned Resources: " + update[0] + ", " + update[1] + ", " + update[2] + ", " + update[3]);
@@ -143,4 +151,8 @@ public class Player : MonoBehaviour
         __owned_branches.Add(index);
     }
 
+    public void RemoveBranch(int index)
+    {
+        __owned_branches.Remove(index);
+    }
 }

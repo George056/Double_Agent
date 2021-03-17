@@ -232,6 +232,7 @@ public class BoardManager : MonoBehaviour
                         instance.transform.SetParent(boardHolder);
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
+                        allBranches[branchCount].GetComponent<BranchInfo>().placementConfirmed = false;
                         //Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
                         branchCount++;
                         break;
@@ -240,6 +241,7 @@ public class BoardManager : MonoBehaviour
                         instance.transform.SetParent(boardHolder);
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
+                        allBranches[branchCount].GetComponent<BranchInfo>().placementConfirmed = false;
                         //Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
                         branchCount++;
                         break;
@@ -368,13 +370,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void UnplaceNode(int nodeNum)
-    {
-        nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
-        GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
-
-        nodesPlacedThisTurn.Remove(nodeNum);
-    }
+    
 
     public void ChangeNodeOwner(int nodeNum)
     {
@@ -410,10 +406,28 @@ public class BoardManager : MonoBehaviour
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
         }
 
+        branchesPlacedThisTurn.Add(branchNum);
+
         if (activeSide == aiPiece)
         {
             Debug.Log("AI placed branch " + branchNum);
         }
+    }
+
+    public void UnplaceNode(int nodeNum)
+    {
+        nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
+        GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
+
+        nodesPlacedThisTurn.Remove(nodeNum);
+    }
+
+    public void UnplaceBranch(int branchNum)
+    {
+        allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
+        GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(156, 167, 176, 255);
+
+        branchesPlacedThisTurn.Remove(branchNum);
     }
 
     public bool LegalNodeMove(int node, Owner activeSide, List<int> myBranches)
@@ -680,6 +694,11 @@ public class BoardManager : MonoBehaviour
                         nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
                     }
                     nodesPlacedThisTurn.Clear();
+                    for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
+                    {
+                        allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
+                    }
+                    branchesPlacedThisTurn.Clear();
 
                     EndTurn();
                     // provide player with indication that opponent is taking turn
@@ -704,6 +723,11 @@ public class BoardManager : MonoBehaviour
                     nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
                 }
                 nodesPlacedThisTurn.Clear();
+                for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
+                {
+                    allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
+                }
+                branchesPlacedThisTurn.Clear();
 
                 EndTurn();
                 // provide player with indication that opponent is taking turn

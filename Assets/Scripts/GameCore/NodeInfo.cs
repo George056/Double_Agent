@@ -50,20 +50,34 @@ public class NodeInfo : MonoBehaviour
         }
     }
 
-    //void OnMouseEnter()
-    //{
-    //    if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
-    //    {
-    //        if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
-    //            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
-    //        {
-    //            this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
-    //        }
-    //    }
-    //}
+    void OnMouseEnter()
+    {
+        if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
+        {
+            if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
+            {
+                if (GameObject.FindObjectOfType<BoardManager>().activeSide == Owner.US)
+                {
+                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+                }
+                else
+                {
+                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+                }
+            }
+        }
+    }
 
-    //void OnMouseExit()
-    //{
-        
-    //}
+    void OnMouseExit()
+    {
+        if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
+        {
+            if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
+            {
+                this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
+            }
+        }
+    }
 }

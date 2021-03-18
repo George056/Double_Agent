@@ -96,6 +96,8 @@ public class AI : Agent
     private bool loss = false;
     private bool win = false;
 
+    private bool setup = false;
+
     private void Awake()
     {
         opener = true;
@@ -113,6 +115,7 @@ public class AI : Agent
         totalReward = 0;
         loss = false;
         win = false;
+        setup = true;
     }
 
     public void EndOpener()
@@ -133,6 +136,8 @@ public class AI : Agent
     /// </summary>
     public void AIMove(int turn)
     {
+        if (!setup) Awake();
+
         this.turn = turn;
 
         Debug.Log("AI Resources: " + __resources[0] + ", " + __resources[1] + ", " + __resources[2] + ", " + __resources[3]);
@@ -865,7 +870,7 @@ public class AI : Agent
 
                     if (__resources[0] == 0 && __resources[1] != 0)
                     {
-                        if (__resources[1] > 0 && traded < 3)
+                        if (__resources[1] > 1 && traded < 3)
                         {
                             traded++;
                             __resources[1] -= 1;
@@ -889,7 +894,7 @@ public class AI : Agent
                     }
                     else if (__resources[1] == 0 && __resources[0] != 0)
                     {
-                        if (__resources[0] > 0 && traded < 3)
+                        if (__resources[0] > 1 && traded < 3)
                         {
                             traded++;
                             __resources[0] -= 1;
@@ -927,7 +932,7 @@ public class AI : Agent
                             trade[1] -= 1;
                         }
                         else blocked++;
-                        if (__resources[3] > 0 && traded < 3)
+                        if (__resources[3] > 2 && traded < 3)
                         {
                             traded++;
                             __resources[3] -= 1;
@@ -951,7 +956,7 @@ public class AI : Agent
                             trade[1] -= 1;
                         }
                         else blocked++;
-                        if (__resources[2] > 0 && traded < 3)
+                        if (__resources[2] > 2 && traded < 3)
                         {
                             traded++;
                             __resources[2] -= 1;

@@ -374,7 +374,7 @@ public class AI : Agent
     public override void OnEpisodeBegin()
     {
         Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
+        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
         __ai_score = 0;
         __human_score = 0;
     }

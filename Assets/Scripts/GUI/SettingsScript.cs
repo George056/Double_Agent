@@ -11,7 +11,6 @@ public class SettingsScript : MonoBehaviour
 
     public AudioSource Music;
 
-
     public void SettingsWindowPopUp()
     {
         SettingsWindow.SetActive(true);
@@ -22,8 +21,9 @@ public class SettingsScript : MonoBehaviour
         SettingsWindow.SetActive(false);
     }
 
-    private void Update()
+    public void ChangeVolume()
     {
         Music.volume = MusicSlider.value;
+        PlayerPrefs.SetFloat("MusicVolume", MusicSlider.value);
     }
 }

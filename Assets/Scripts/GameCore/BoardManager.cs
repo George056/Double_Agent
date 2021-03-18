@@ -109,6 +109,7 @@ public class BoardManager : MonoBehaviour
     public GameObject USSRImage;
     public GameObject USMusic;
     public GameObject USSRMusic;
+    public float defaultVolume = 0.5f;
 
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
@@ -290,6 +291,9 @@ public class BoardManager : MonoBehaviour
         humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
         firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
         activeSide = firstPlayer;
+
+        USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
         end = false;
         turnCount = 1;

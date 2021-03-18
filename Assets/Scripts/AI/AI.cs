@@ -61,6 +61,9 @@ public class AI : Agent
     [Tooltip("The punishment for making an illegal move")]
     public float illegalMovePunish = -0.1f;
 
+    [Tooltip("The punishment for making an illegal trade")]
+    public float illegalTradePunish = -0.1f;
+
     [Tooltip("A punishment for making no move when a move could have been made")]
     public float noMovePunish = -0.5f;
 
@@ -479,6 +482,7 @@ public class AI : Agent
         //make a trade first
         if (vectorAction[60] != 0)
         {
+            int traded_for = 0, traded_in = 0;
             List<int> tradeArr = new List<int>(4) { 0, 0, 0, 0 };
             int temp1 = (int)vectorAction[60];
             int temp2 = (temp1 / 1000);
@@ -491,7 +495,17 @@ public class AI : Agent
             tradeArr[2] = temp2;
             temp1 -= temp2 * 10;
             tradeArr[3] = temp1;
-            MakeTrade(tradeArr);
+
+            foreach(int i in tradeArr)
+            {
+                if (i > 0) traded_for += i;
+                else traded_in += i;
+            }
+
+            if (traded_for != 1 || Math.Abs(traded_in) != 3)
+                AddReward(illegalTradePunish);
+            else
+                MakeTrade(tradeArr);
             noTrade = false;
         }
 

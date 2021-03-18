@@ -126,7 +126,10 @@ public class AI : Agent
     }
 
     /// <summary>
-    /// This is the function that is called to tell the AI to make its move
+    /// This is the function that is called to tell the AI to make its move.
+    /// <see cref="randAI"/> if true the AI will make a random move, if so it is done by calling <see cref="RandomAI()"/>
+    /// <see cref="OnActionReceived(float[])"/> is used when the nural net makes a move.
+    /// <see cref="Heuristic(float[])"/> is used if no trained nural net is avaliable, which just calles <see cref="RandomAI()"/>
     /// </summary>
     public void AIMove(int turn)
     {
@@ -337,7 +340,9 @@ public class AI : Agent
 
     public void Loss()
     {
-        if(totalReward < -1) AddReward(-1);
+        if (totalReward > 0) AddReward(-totalReward);
+        else if(totalReward < 0) AddReward(totalReward);
+        AddReward(-1);
         loss = true;
     }
 
@@ -345,7 +350,8 @@ public class AI : Agent
     {
         if(totalReward < 1)
         {
-            AddReward(1);
+            float temp = 1 - totalReward;
+            AddReward((temp < 0) ? 0.1f : temp);
         }
     }
 
@@ -366,6 +372,7 @@ public class AI : Agent
         {
             __resources[i] += update[i];
         }
+        //bm.UpdateOpponentResourcesInUI(__resources);
     }
 
     /// <summary>
@@ -686,6 +693,8 @@ public class AI : Agent
         {
             __resources[2] -= 2;
             __resources[3] -= 2;
+
+            //bm.UpdateOpponentResourcesInUI(__resources);
         }
     }
 
@@ -700,6 +709,8 @@ public class AI : Agent
         {
             __resources[0] -= 1;
             __resources[1] -= 1;
+
+            //bm.UpdateOpponentResourcesInUI(__resources);
         }
     }
 

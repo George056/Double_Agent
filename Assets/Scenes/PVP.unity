@@ -464,6 +464,7 @@ MonoBehaviour:
   USSRImage: {fileID: 955976219}
   USMusic: {fileID: 396023532}
   USSRMusic: {fileID: 867615559}
+  defaultVolume: 0.5
   tempResourceList:
   - {fileID: 0}
   - {fileID: 0}
@@ -9269,7 +9270,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: trainingMode
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8056974288518276843, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: m_Model
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8056974288518276843, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize

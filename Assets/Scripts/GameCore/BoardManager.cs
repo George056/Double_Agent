@@ -494,6 +494,8 @@ public class BoardManager : MonoBehaviour
     {
         bool makeTrade = false;
 
+        int traded_for = 0, traded_in = 0;
+
         List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
         for(int i = 0; i < 4; i++)
         {
@@ -502,6 +504,7 @@ public class BoardManager : MonoBehaviour
                 if(heldResources[i] >= Math.Abs(resources[i]))
                 {
                     makeTrade = true;
+                    traded_in += resources[i];
                 }
                 else
                 {
@@ -514,6 +517,7 @@ public class BoardManager : MonoBehaviour
                 if(resources[i] < 2)
                 {
                     makeTrade = true;
+                    traded_for += resources[i];
                 }
                 else
                 {
@@ -522,6 +526,8 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+
+        if (makeTrade && (traded_for != 1 || Math.Abs(traded_in) != 3)) makeTrade = false;
 
         if (makeTrade)
         {

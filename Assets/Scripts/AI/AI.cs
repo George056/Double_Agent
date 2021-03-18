@@ -6,6 +6,7 @@ using System;
 using Random = UnityEngine.Random;
 using System.Linq;
 using Unity.MLAgents.Sensors;
+using UnityEngine.SceneManagement;
 
 public enum Difficulty
 {
@@ -57,8 +58,17 @@ public class AI : Agent
     [Tooltip("Gray node reward")]
     public float nodeGrayReward = 0.01f;
 
+    [Tooltip("The punishment for making an illegal move")]
+    public float illegalMovePunish = -0.1f;
+
+    [Tooltip("A punishment for making no move when a move could have been made")]
+    public float noMovePunish = -0.5f;
+
     [HideInInspector]
     public float totalReward = 0;
+
+    [Tooltip("This is set true if we are recording an example to show the AI, Logically used with trainingMode")]
+    public bool recordingExample = false;
 
     // } End variables for training
 
@@ -117,9 +127,9 @@ public class AI : Agent
 
     /// <summary>
     /// This is the function that is called to tell the AI to make its move.
-    /// <see cref="randAI"/> if true the AI will make a random move, if so it is done by calling <see cref="RandomAI()"/>
+    /// <see cref="randAI"/> if true the AI will make a random move, if so it is done by calling <see cref="RandomAIMove()"/>
     /// <see cref="OnActionReceived(float[])"/> is used when the nural net makes a move.
-    /// <see cref="Heuristic(float[])"/> is used if no trained nural net is avaliable, which just calles <see cref="RandomAI()"/>
+    /// <see cref="Heuristic(float[])"/> is used if no trained nural net is avaliable, which just calles <see cref="RandomAIMove()"/>
     /// </summary>
     public void AIMove(int turn)
     {
@@ -138,7 +148,7 @@ public class AI : Agent
         //make move
         if (randAI)
         {
-            RandomAI();
+            RandomAIMove();
         }
         else
         {
@@ -161,6 +171,7 @@ public class AI : Agent
 
         if (opener)
         {
+            Debug.Log("Mask opener moves");
             List<int> clamedNodes = new List<int>();
             for(int i = 0; i < bm.nodes.Length; i++)
             {
@@ -192,6 +203,8 @@ public class AI : Agent
 
         if(turn >= 5)
         {
+            Debug.Log("Debug normal moves");
+
             //find max branch amount
             int maxCons = Math.Min(__resources[0], __resources[1]);
             
@@ -337,7 +350,8 @@ public class AI : Agent
     {
         if(totalReward != 1)
         {
-            AddReward(1 - totalReward);
+            float temp = 1 - totalReward;
+            AddReward((temp < 0) ? 0.1f : temp);
         }
     }
 
@@ -366,8 +380,16 @@ public class AI : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
+        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
         __ai_score = 0;
         __human_score = 0;
+    }
+
+    public static void LoadNewScene()
+    {
+        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Game Over; New Board$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        SceneManager.LoadScene("PVP");
     }
 
     /// <summary>
@@ -442,9 +464,15 @@ public class AI : Agent
     /// <param name="vectorAction">List of actions to take</param>
     public override void OnActionReceived(float[] vectorAction)
     {
+        Debug.Log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&AI Move Requested");
         if (randAI) return;
+
+        bool noTrade = true;
+        bool noBranch = true;
+        bool noNode = true;
+
         //make a trade first
-        if(vectorAction[60] != 0)
+        if (vectorAction[60] != 0)
         {
             List<int> tradeArr = new List<int>(4) { 0, 0, 0, 0 };
             int temp1 = (int)vectorAction[60];
@@ -459,28 +487,46 @@ public class AI : Agent
             temp1 -= temp2 * 10;
             tradeArr[3] = temp1;
             MakeTrade(tradeArr);
+            noTrade = false;
         }
-        
+
+        int old_total_placed_branches = __myRoads.Count;
+
         //place connectors
-        for(int i = 0; i < 36; i++)
+        for (int i = 0; i < 36; i++)
         {
-            if(vectorAction[i + 24] == 1)
+            if (vectorAction[i + 24] == 1)
             {
+                noBranch = false;
                 if (LegalMoveConnector(i))
                 {
+                    Debug.Log("Connector: " + i);
                     PlaceMoveBranch(i);
                     __myRoads.Add(i);
+                }
+                else
+                {
+                    AddReward(illegalMovePunish);
                 }
             }
         }
 
+        if (__myRoads.Count == old_total_placed_branches)
+        {
+            AddReward(-.1f);
+        }
+
+        int old_total_placed_nodes = __myNodes.Count;
+
         //place nodes
-        for(int i = 0; i < 24; i++)
+        for (int i = 0; i < 24; i++)
         {
             if(vectorAction[i] == 1)
             {
+                noNode = false;
                 if (LegalMoveNode(i))
                 {
+                    Debug.Log("Node: " + i);
                     PlaceMoveNode(i);
                     __myRoads.Add(i);
                     if(trainingMode)
@@ -513,8 +559,31 @@ public class AI : Agent
                             }
                         }
                 }
+                else
+                {
+                    AddReward(illegalMovePunish);
+                }
             }
         }
+
+        if (__myNodes.Count == old_total_placed_nodes)
+        {
+            AddReward(-.1f);
+        }
+
+        if (opener && (__myNodes.Count == old_total_placed_nodes) && __myRoads.Count == old_total_placed_branches)
+        {
+            RandomAIMove();
+        }
+
+        if ((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)))
+        {
+            AddReward(noMovePunish);
+        }
+
+        __myNodes = __myNodes.Distinct().ToList();
+        __myRoads = __myRoads.Distinct().ToList();
+        Debug.Log("AI Move Finished&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     }
 
     /// <summary>
@@ -578,7 +647,17 @@ public class AI : Agent
     /// <param name="actionsOut">The output of the function, returned to OnActionReceived</param>
     public override void Heuristic(float[] actionsOut)
     {
-        RandomAI();
+        for(int i = 0; i < 61; i++)
+        {
+            actionsOut[i] = 0;
+        }
+
+        if (recordingExample)
+        {
+
+        }
+        else
+            RandomAIMove();
     }
 
     private void MakeTrade(List<int> trade)
@@ -594,6 +673,13 @@ public class AI : Agent
     private bool LegalMoveConnector(int location)
     {
         return (opener || __resources[0] > 0 && __resources[1] > 0) ? bm.LegalBranchMove(location, __piece_type, __myRoads) : false;
+    }
+
+    private int TotalResourceCount()
+    {
+        int result = 0;
+        foreach (int i in __resources) result += i;
+        return result;
     }
 
     /// <summary>
@@ -659,7 +745,7 @@ public class AI : Agent
     /// This function makes a random AI move and places it.
     /// This is used for both when the <see cref="AIMove(int)"/> random AI is true (<see cref="randAI"/>) and when using the <see cref="Heuristic(float[])"/>.
     /// </summary>
-    private void RandomAI()
+    private void RandomAIMove()
     {
         if (opener)
         {

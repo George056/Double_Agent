@@ -98,6 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   branchOwner: 2
   branchOrder: 17
+  placementConfirmed: 0
 --- !u!61 &-1751898142059540905
 BoxCollider2D:
   m_ObjectHideFlags: 0

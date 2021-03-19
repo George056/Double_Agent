@@ -124,3 +124,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   branchOwner: 2
   branchOrder: 24
+  placementConfirmed: 0

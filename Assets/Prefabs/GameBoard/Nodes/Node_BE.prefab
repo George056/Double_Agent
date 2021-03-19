@@ -112,7 +112,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeOwner: 2
   nodeOrder: 13
-  resources: 03000000030000000300000004000000
+  placementConfirmed: 0
+  resources:
+  - {fileID: 5015995889806251867, guid: 40b8748b66e00a343a80aa02e478512f, type: 3}
+  - {fileID: 8567565184321727926, guid: a38e91d294bccad40bbc7be4d6a318f1, type: 3}
+  - {fileID: 5015995889806251867, guid: 048af0f0e8a1e2445802326b59401f07, type: 3}
 --- !u!58 &-7748068651571355451
 CircleCollider2D:
   m_ObjectHideFlags: 0

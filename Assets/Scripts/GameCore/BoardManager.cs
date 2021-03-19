@@ -110,6 +110,7 @@ public class BoardManager : MonoBehaviour
     public GameObject USMusic;
     public GameObject USSRMusic;
     public float defaultVolume = 0.5f;
+    public Slider musicSlider;
 
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];

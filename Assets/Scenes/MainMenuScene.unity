@@ -6697,8 +6697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SettingsWindow: {fileID: 1819931538}
   MusicSlider: {fileID: 74837968}
-  Music1: {fileID: 596289881}
-  Music2: {fileID: 596289881}
+  Music: {fileID: 596289881}
 --- !u!1 &1977836638
 GameObject:
   m_ObjectHideFlags: 0

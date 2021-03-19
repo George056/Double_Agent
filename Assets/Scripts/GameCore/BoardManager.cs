@@ -110,7 +110,6 @@ public class BoardManager : MonoBehaviour
     public GameObject USMusic;
     public GameObject USSRMusic;
     public float defaultVolume = 0.5f;
-    public Slider musicSlider;
 
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
@@ -295,7 +294,6 @@ public class BoardManager : MonoBehaviour
 
         USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
         USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-        //musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
         end = false;
         turnCount = 1;

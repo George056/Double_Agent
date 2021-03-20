@@ -101,6 +101,8 @@ public class AI : Agent
 
     private bool setup = false;
 
+    private bool moveMade = false;
+
     private void Awake()
     {
         opener = true;
@@ -163,6 +165,10 @@ public class AI : Agent
             //for adding a reward use AddReward() want it to be about 1 at the end of a game
             RequestDecision();
         }
+
+        while (!moveMade)
+        {};
+        moveMade = false;
 
         bm.EndTurn();
     }
@@ -388,7 +394,7 @@ public class AI : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
-        //Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
         __ai_score = 0;
         __human_score = 0;
@@ -602,6 +608,8 @@ public class AI : Agent
 
         __myNodes = __myNodes.Distinct().ToList();
         __myRoads = __myRoads.Distinct().ToList();
+
+        moveMade = true;
         Debug.Log("AI Move Finished&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     }
 
@@ -1011,5 +1019,8 @@ public class AI : Agent
 
             }
         }
+
+
+        moveMade = true;
     }
 }

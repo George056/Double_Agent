@@ -15,10 +15,10 @@ public class NodeInfo : MonoBehaviour
     
     void OnMouseDown()
     {
+        Debug.Log("Node Owner: " + GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().nodeOwner);
+
         if (GameObject.FindObjectOfType<BoardManager>().inBuildMode)
         {
-            Debug.Log("Node Owner: " + GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().nodeOwner);
-            Debug.Log("Placement Confirmed: " + GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().placementConfirmed);
 
             if (GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().nodeOwner == GameObject.FindObjectOfType<BoardManager>().activeSide &&
                 !GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().placementConfirmed)

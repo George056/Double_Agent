@@ -11,6 +11,8 @@ public class BranchInfo : MonoBehaviour
 
     void OnMouseDown()
     {
+        Debug.Log("Branch Owner: " + GameObject.FindObjectOfType<BoardManager>().allBranches[branchOrder].GetComponent<BranchInfo>().branchOwner);
+
         if (GameObject.FindObjectOfType<BoardManager>().inBuildMode)
         {
             if (GameObject.FindObjectOfType<BoardManager>().allBranches[branchOrder].GetComponent<BranchInfo>().branchOwner == GameObject.FindObjectOfType<BoardManager>().activeSide &&

@@ -400,6 +400,7 @@ public class BoardManager : MonoBehaviour
 
     public void ChangeBranchOwner(int branchNum)
     {
+        Debug.Log("active Side when branch owner changed: " + activeSide);
         if (activeSide == Owner.US)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
@@ -461,18 +462,22 @@ public class BoardManager : MonoBehaviour
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
+        // if this is not a Setup Move
         if (myBranches.Count >= 2)
         {
+            // check all the branches connected to the one you want to place
             Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
             bool found = false;
             foreach (int i in connectedBranches)
             {
+                // set found to true if any of the connected branches is in your list of owned branches
                 found = myBranches.Contains(i);
                 if (found) break;
             }
 
             if (!found) { isLegal = false; }
 
+            // a branch on a setup move must have an available adjacent node that can also be claimed
             if(turnCount == 3 || turnCount == 4)
             {
                 Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
@@ -481,6 +486,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
+        // a branch cannot be placed inside a multicaptured square owned by opponent
         Relationships.connectionsRoadTiles.TryGetValue(branch, out connectedTiles);
         foreach (int tile in connectedTiles)
         {
@@ -757,8 +763,10 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurn()
     {
+        Debug.Log("Active Side before ending turn: " + activeSide);
         if (turnCount != 2)
         {
+            Debug.Log("Active Side should be switched");
             if (activeSide == Owner.US)
             {
                 activeSide = Owner.USSR;
@@ -768,6 +776,8 @@ public class BoardManager : MonoBehaviour
                 activeSide = Owner.US;
             }
         }
+        Debug.Log("Active Side after switch: " + activeSide);
+
 
         turnCount++;
 

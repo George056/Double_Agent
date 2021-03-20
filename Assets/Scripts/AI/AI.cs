@@ -101,7 +101,7 @@ public class AI : Agent
 
     private bool setup = false;
 
-    private bool moveMade = false;
+    private bool heuristic = false;
 
     private void Awake()
     {
@@ -159,18 +159,13 @@ public class AI : Agent
         if (randAI)
         {
             RandomAIMove();
+            bm.EndTurn();
         }
         else
         {
             //for adding a reward use AddReward() want it to be about 1 at the end of a game
             RequestDecision();
         }
-
-        while (!moveMade)
-        {};
-        moveMade = false;
-
-        bm.EndTurn();
     }
 
     /// <summary>
@@ -214,8 +209,7 @@ public class AI : Agent
                 actionMasker.SetMask(i + 24, new int[1] { 1 });
             }
         }
-
-        if(turn >= 5)
+        else
         {
             Debug.Log("Debug normal moves");
 
@@ -266,13 +260,9 @@ public class AI : Agent
             for (int i = 0; i < bm.allBranches.Length; i++) blockedBranches.Add(i);
 
             //remove branches that can be reached
-            if(branchesThatCanBeReached.Count != 0)
+            for(int i = 0; i < branchesThatCanBeReached.Count; i++)
             {
-                for(int i = 0; i < branchesThatCanBeReached.Count; i++)
-                {
-                    blockedBranches.Remove(branchesThatCanBeReached[i]);
-                    i--;
-                }
+                blockedBranches.Remove(branchesThatCanBeReached[i]);
             }
 
             foreach(int i in blockedBranches)
@@ -488,19 +478,207 @@ public class AI : Agent
         //make a trade first
         if (vectorAction[60] != 0)
         {
+            bool illegal_trade = false; // used to show that a trade was made that exceeds held resources.
             int traded_for = 0, traded_in = 0;
-            List<int> tradeArr = new List<int>(4) { 0, 0, 0, 0 };
-            int temp1 = (int)vectorAction[60];
-            int temp2 = (temp1 / 1000);
-            tradeArr[0] = temp2;
-            temp1 -= temp2 * 1000;
-            temp2 = temp1 / 100;
-            tradeArr[1] = temp2;
-            temp1 -= temp2 * 100;
-            temp2 = temp1 / 10;
-            tradeArr[2] = temp2;
-            temp1 -= temp2 * 10;
-            tradeArr[3] = temp1;
+            List<int> tradeArr = new List<int>(4) { 0, 0, 0, 0 };//r,b,y,g
+
+            switch (vectorAction[60])
+            {
+                case 0:
+                    break;
+                case 1:
+                    tradeArr[3] -= 3;
+                    tradeArr[2] = 1;
+                    break;
+                case 2:
+                    tradeArr[3] -= 3;
+                    tradeArr[0] = 1;
+                    break;
+                case 3:
+                    tradeArr[3] -= 3;
+                    tradeArr[1] = 1;
+                    break;
+                case 4:
+                    tradeArr[3] -= 2;
+                    tradeArr[2] -= 1;
+                    tradeArr[0] = 1;
+                    break;
+                case 5:
+                    tradeArr[3] -= 2;
+                    tradeArr[2] -= 1;
+                    tradeArr[1] = 1;
+                    break;
+                case 6:
+                    tradeArr[3] -= 2;
+                    tradeArr[0] -= 1;
+                    tradeArr[2] = 1;
+                    break;
+                case 7:
+                    tradeArr[3] -= 2;
+                    tradeArr[0] -= 1;
+                    tradeArr[1] = 1;
+                    break;
+                case 8:
+                    tradeArr[3] -= 2;
+                    tradeArr[1] -= 1;
+                    tradeArr[2] = 1;
+                    break;
+                case 9:
+                    tradeArr[3] -= 2;
+                    tradeArr[1] -= 1;
+                    tradeArr[0] = 1;
+                    break;
+                case 10:
+                    tradeArr[3] -= 1;
+                    tradeArr[2] -= 2;
+                    tradeArr[0] = 1;
+                    break;
+                case 11:
+                    tradeArr[3] -= 1;
+                    tradeArr[2] -= 2;
+                    tradeArr[1] = 1;
+                    break;
+                case 12:
+                    tradeArr[3] -= 1;
+                    tradeArr[2] -= 1;
+                    tradeArr[0] -= 1;
+                    tradeArr[1] = 1;
+                    break;
+                case 13:
+                    tradeArr[3] -= 1;
+                    tradeArr[2] -= 1;
+                    tradeArr[1] -= 1;
+                    tradeArr[0] = 1;
+                    break;
+                case 14:
+                    tradeArr[3] -= 1;
+                    tradeArr[0] -= 2;
+                    tradeArr[2] = 1;
+                    break;
+                case 15:
+                    tradeArr[3] -= 1;
+                    tradeArr[0] -= 2;
+                    tradeArr[1] = 1;
+                    break;
+                case 16:
+                    tradeArr[3] -= 1;
+                    tradeArr[0] -= 1;
+                    tradeArr[1] -= 1;
+                    tradeArr[2] = 1;
+                    break;
+                case 17:
+                    tradeArr[3] -= 1;
+                    tradeArr[1] -= 2;
+                    tradeArr[2] = 1;
+                    break;
+                case 18:
+                    tradeArr[3] -= 1;
+                    tradeArr[1] -= 2;
+                    tradeArr[0] = 1;
+                    break;
+                case 19:
+                    tradeArr[2] -= 3;
+                    tradeArr[3] = 1;
+                    break;
+                case 20:
+                    tradeArr[2] -= 3;
+                    tradeArr[0] = 1;
+                    break;
+                case 21:
+                    tradeArr[2] -= 3;
+                    tradeArr[1] = 1;
+                    break;
+                case 22:
+                    tradeArr[2] -= 2;
+                    tradeArr[0] -= 1;
+                    tradeArr[3] = 1;
+                    break;
+                case 23:
+                    tradeArr[2] -= 2;
+                    tradeArr[0] -= 1;
+                    tradeArr[1] = 1;
+                    break;
+                case 24:
+                    tradeArr[2] -= 2;
+                    tradeArr[1] -= 1;
+                    tradeArr[3] = 1;
+                    break;
+                case 25:
+                    tradeArr[2] -= 2;
+                    tradeArr[1] -= 1;
+                    tradeArr[0] = 1;
+                    break;
+                case 26:
+                    tradeArr[2] -= 1;
+                    tradeArr[0] -= 2;
+                    tradeArr[3] = 1;
+                    break;
+                case 27:
+                    tradeArr[2] -= 1;
+                    tradeArr[0] -= 2;
+                    tradeArr[1] = 1;
+                    break;
+                case 28:
+                    tradeArr[2] -= 1;
+                    tradeArr[1] -= 2;
+                    tradeArr[3] = 1;
+                    break;
+                case 29:
+                    tradeArr[2] -= 1;
+                    tradeArr[1] -= 2;
+                    tradeArr[0] = 1;
+                    break;
+                case 30:
+                    tradeArr[2] -= 1;
+                    tradeArr[0] -= 1;
+                    tradeArr[1] -= 1;
+                    tradeArr[3] = 1;
+                    break;
+                case 31:
+                    tradeArr[0] -= 3;
+                    tradeArr[3] = 1;
+                    break;
+                case 32:
+                    tradeArr[0] -= 3;
+                    tradeArr[2] = 1;
+                    break;
+                case 33:
+                    tradeArr[0] -= 3;
+                    tradeArr[1] = 1;
+                    break;
+                case 34:
+                    tradeArr[0] -= 2;
+                    tradeArr[1] -= 1;
+                    tradeArr[3] = 1;
+                    break;
+                case 35:
+                    tradeArr[0] -= 2;
+                    tradeArr[1] -= 1;
+                    tradeArr[2] = 1;
+                    break;
+                case 36:
+                    tradeArr[0] -= 1;
+                    tradeArr[1] -= 2;
+                    tradeArr[3] = 1;
+                    break;
+                case 37:
+                    tradeArr[0] -= 1;
+                    tradeArr[1] -= 2;
+                    tradeArr[2] = 1;
+                    break;
+                case 38:
+                    tradeArr[1] -= 3;
+                    tradeArr[3] = 1;
+                    break;
+                case 39:
+                    tradeArr[1] -= 3;
+                    tradeArr[2] = 1;
+                    break;
+                case 40:
+                    tradeArr[1] -= 3;
+                    tradeArr[0] = 1;
+                    break;
+            }
 
             foreach(int i in tradeArr)
             {
@@ -508,14 +686,21 @@ public class AI : Agent
                 else traded_in += i;
             }
 
-            if (traded_for != 1 || Math.Abs(traded_in) != 3)
+            for(int i = 0; i < tradeArr.Count; ++i)
+            {
+                if(tradeArr[i] > __resources[i])
+                {
+                    illegal_trade = true;
+                    break;
+                }
+            }
+
+            if (traded_for != 1 || Math.Abs(traded_in) != 3 || illegal_trade)
                 AddReward(illegalTradePunish);
             else
                 MakeTrade(tradeArr);
             noTrade = false;
         }
-
-        int old_total_placed_branches = __myRoads.Count;
 
         //place connectors
         for (int i = 0; i < 36; i++)
@@ -535,13 +720,6 @@ public class AI : Agent
                 }
             }
         }
-
-        if (__myRoads.Count == old_total_placed_branches)
-        {
-            AddReward(-.1f);
-        }
-
-        int old_total_placed_nodes = __myNodes.Count;
 
         //place nodes
         for (int i = 0; i < 24; i++)
@@ -591,12 +769,7 @@ public class AI : Agent
             }
         }
 
-        if (__myNodes.Count == old_total_placed_nodes)
-        {
-            AddReward(-.1f);
-        }
-
-        if (opener && (__myNodes.Count == old_total_placed_nodes) && __myRoads.Count == old_total_placed_branches)
+        if (opener && !heuristic && (noNode && noBranch && noTrade))
         {
             RandomAIMove();
         }
@@ -609,8 +782,8 @@ public class AI : Agent
         __myNodes = __myNodes.Distinct().ToList();
         __myRoads = __myRoads.Distinct().ToList();
 
-        moveMade = true;
         Debug.Log("AI Move Finished&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        bm.EndTurn();
     }
 
     /// <summary>
@@ -620,6 +793,7 @@ public class AI : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         if (randAI) return;
+        if (bm.activeSide != __piece_type) return;
         //observe board (60 observations)
         //sensor.AddObservation();
         Debug.Log("observe nodes");
@@ -667,13 +841,14 @@ public class AI : Agent
     }
 
     /// <summary>
-    /// When behavior type is set to "Hueristic Only" on the agent's Behavior Parameters,
+    /// When behavior type is set to "Heuristic Only" on the agent's Behavior Parameters,
     /// this function will be called. Its return values will be fed into
     /// <see cref="OnActionReceived(float[])"/> instead of using the neural net
     /// </summary>
     /// <param name="actionsOut">The output of the function, returned to OnActionReceived</param>
     public override void Heuristic(float[] actionsOut)
     {
+        heuristic = true;
         for(int i = 0; i < 61; i++)
         {
             actionsOut[i] = 0;
@@ -1019,8 +1194,5 @@ public class AI : Agent
 
             }
         }
-
-
-        moveMade = true;
     }
 }

@@ -58,6 +58,9 @@ public class AI : Agent
     [Tooltip("Gray node reward")]
     public float nodeGrayReward = 0.01f;
 
+    [Tooltip("Gray node reward")]
+    public float branchReward = 0.05f;
+
     [Tooltip("The punishment for making an illegal move")]
     public float illegalMovePunish = -0.1f;
 
@@ -715,8 +718,10 @@ public class AI : Agent
                     PlaceMoveBranch(i);
                     __myRoads.Add(i);
                     ++placed_branches;
+                    if (trainingMode)
+                        AddReward(branchReward);
                 }
-                else
+                else if(trainingMode)
                 {
                     AddReward(illegalMovePunish);
                 }
@@ -766,7 +771,7 @@ public class AI : Agent
                             }
                         }
                 }
-                else
+                else if(trainingMode)
                 {
                     AddReward(illegalMovePunish);
                 }
@@ -778,7 +783,7 @@ public class AI : Agent
             RandomAIMove();
         }
 
-        if ((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)))
+        if ((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode)
         {
             AddReward(noMovePunish);
         }

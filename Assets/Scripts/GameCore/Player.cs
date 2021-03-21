@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public Owner __piece_type;
 
     [HideInInspector]
-    [Tooltip("The score of the human apponent")]
+    [Tooltip("The score of the human opponent")]
     public int __human_score;
 
     [HideInInspector]

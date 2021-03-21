@@ -17,7 +17,7 @@ public enum Difficulty
 /// <summary>
 /// This class is used as the AI for the game. 
 /// It is constructed based on the Unity course at: https://learn.unity.com/course/ml-agents-hummingbirds
-/// More nural net info can be found at: https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Design-Agents.md
+/// More neural net info can be found at: https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Design-Agents.md
 /// </summary>
 public class AI : Agent
 {
@@ -136,8 +136,8 @@ public class AI : Agent
     /// <summary>
     /// This is the function that is called to tell the AI to make its move.
     /// <see cref="randAI"/> if true the AI will make a random move, if so it is done by calling <see cref="RandomAIMove()"/>
-    /// <see cref="OnActionReceived(float[])"/> is used when the nural net makes a move.
-    /// <see cref="Heuristic(float[])"/> is used if no trained nural net is avaliable, which just calles <see cref="RandomAIMove()"/>
+    /// <see cref="OnActionReceived(float[])"/> is used when the neural net makes a move.
+    /// <see cref="Heuristic(float[])"/> is used if no trained neural net is available, which just calls <see cref="RandomAIMove()"/>
     /// </summary>
     public void AIMove(int turn)
     {
@@ -169,9 +169,9 @@ public class AI : Agent
     }
 
     /// <summary>
-    /// This makes the already clamed nodes be imposible to be chosen by the nural net
+    /// This makes the already claimed nodes be impossible to be chosen by the neural net
     /// </summary>
-    /// <param name="actionMasker">Masks posible values of the nural net</param>
+    /// <param name="actionMasker">Masks possible values of the neural net</param>
     public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
     {
         if (randAI) return;
@@ -702,17 +702,19 @@ public class AI : Agent
             noTrade = false;
         }
 
+        int placed_branches = 0;
         //place connectors
         for (int i = 0; i < 36; i++)
         {
             if (vectorAction[i + 24] == 1)
             {
                 noBranch = false;
-                if (LegalMoveConnector(i))
+                if (LegalMoveConnector(i) && (!opener || placed_branches < 0))
                 {
                     Debug.Log("Connector: " + i);
                     PlaceMoveBranch(i);
                     __myRoads.Add(i);
+                    ++placed_branches;
                 }
                 else
                 {
@@ -721,17 +723,19 @@ public class AI : Agent
             }
         }
 
+        int placed_nodes = 0;
         //place nodes
         for (int i = 0; i < 24; i++)
         {
             if(vectorAction[i] == 1)
             {
                 noNode = false;
-                if (LegalMoveNode(i))
+                if (LegalMoveNode(i) && (!opener || placed_nodes <0))
                 {
                     Debug.Log("Node: " + i);
                     PlaceMoveNode(i);
                     __myRoads.Add(i);
+                    ++placed_nodes;
                     if(trainingMode)
                         foreach(GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)//account for depleted and captured
                         {

@@ -334,10 +334,12 @@ public class BoardManager : MonoBehaviour
     {
         if(!end && activeSide == humanPiece)
         {
+            Debug.Log("Turn: " + turnCount);
             player1.GetComponent<AI>().AIMove(turnCount);
         }
         else if(!end && activeSide == aiPiece)
         {
+            Debug.Log("Turn: " + turnCount);
             player2.GetComponent<AI>().AIMove(turnCount);
         }
     }

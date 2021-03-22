@@ -300,7 +300,7 @@ public class BoardManager : MonoBehaviour
         turnCount = 1;
 
         //check to see if it is an AI or network game
-        player1 = GameObject.FindGameObjectWithTag("Player");
+        player1 = GameObject.FindGameObjectWithTag("AI_helper");
         player2 = GameObject.FindGameObjectWithTag("AI");
         player2.GetComponent<AI>().SetOpener();
 
@@ -323,9 +323,21 @@ public class BoardManager : MonoBehaviour
         }
 
         //make sure it is an AI game first
-        if (firstPlayer == aiPiece)
+        /*if (firstPlayer == aiPiece)
         {
             BtnToggle();
+            player2.GetComponent<AI>().AIMove(turnCount);
+        }*/
+    }
+
+    private void Update()
+    {
+        if(!end && activeSide == humanPiece)
+        {
+            player1.GetComponent<AI>().AIMove(turnCount);
+        }
+        else if(!end && activeSide == aiPiece)
+        {
             player2.GetComponent<AI>().AIMove(turnCount);
         }
     }
@@ -503,7 +515,7 @@ public class BoardManager : MonoBehaviour
 
         int traded_for = 0, traded_in = 0;
 
-        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
+        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<AI>().__resources;
         for(int i = 0; i < 4; i++)
         {
             if(resources[i] < 0)
@@ -545,7 +557,7 @@ public class BoardManager : MonoBehaviour
                 Debug.Log("AI Traded: " + resources[0] + " red, " + resources[1] + " blue, " + resources[2] + " yellow, " + resources[3] + " green");
             }
             else
-                player1.GetComponent<Player>().UpdateResources(resources);
+                player1.GetComponent<AI>().UpdateResources(resources);
         }
     }
 
@@ -565,14 +577,22 @@ public class BoardManager : MonoBehaviour
 
         CalculateScore(who);
 
-        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
+        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<AI>().__ai_score >= 10)
         {
             tradeButton.SetActive(false);
             buildButton.SetActive(false);
             endTurnButton.SetActive(false);
 
-            if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
-            else player2.GetComponent<AI>().Win();
+            if (player1.GetComponent<AI>().__ai_score >= 10)
+            {
+                player1.GetComponent<AI>().Win();
+                player2.GetComponent<AI>().Loss();
+            }
+            else 
+            {
+                player1.GetComponent<AI>().Loss();
+                player2.GetComponent<AI>().Win(); 
+            }
 
             end = true;
             gameOverWindow.SetActive(true);
@@ -633,10 +653,11 @@ public class BoardManager : MonoBehaviour
         if(who == aiPiece)
         {
             player2.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+            player1.GetComponent<AI>().__human_score = score;
         }
         else
         {
-            player1.GetComponent<Player>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+            player1.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
 
             //if an AI game
             player2.GetComponent<AI>().__human_score = score;
@@ -683,7 +704,7 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            player1.GetComponent<Player>().UpdateResources(allocation);
+            player1.GetComponent<AI>().UpdateResources(allocation);
         }
     }
 
@@ -719,8 +740,8 @@ public class BoardManager : MonoBehaviour
 
                     EndTurn();
                     // provide player with indication that opponent is taking turn
-                    if (turnCount != 3)
-                        player2.GetComponent<AI>().AIMove(turnCount);
+                    //if (turnCount != 3)
+                        //player2.GetComponent<AI>().AIMove(turnCount);
                 }
             }
             else
@@ -748,7 +769,7 @@ public class BoardManager : MonoBehaviour
 
                 EndTurn();
                 // provide player with indication that opponent is taking turn
-                player2.GetComponent<AI>().AIMove(turnCount);
+                //player2.GetComponent<AI>().AIMove(turnCount);
 
             }
         }
@@ -787,10 +808,10 @@ public class BoardManager : MonoBehaviour
         if (end) return;
 
         // if it is time for the player's second setup move, allocate resources for one branch and one node
-        if (turnCount == 3)
+        /*if (turnCount == 3)
         {
             player1.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
-        }
+        }*/
 
         if (turnCount == 5)
         {
@@ -810,7 +831,7 @@ public class BoardManager : MonoBehaviour
         {
             BtnToggle();
         }
-        else
+        /*else
         {
             if (firstPlayer == humanPiece)
             {
@@ -820,11 +841,11 @@ public class BoardManager : MonoBehaviour
             {
                 //human move
             }
-        }
+        }*/
         
-        if (turnCount == 5)
+        /*if (turnCount == 5)
         {
             player2.GetComponent<AI>().EndOpener();
-        }
+        }*/
     }
 }

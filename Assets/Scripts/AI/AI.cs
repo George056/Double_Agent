@@ -211,6 +211,7 @@ public class AI : Agent
             {
                 actionMasker.SetMask(i + 24, new int[1] { 1 });
             }
+            actionMasker.SetMask(60, new int[1] { 1 }); // no trading in the opener
         }
         else
         {
@@ -712,7 +713,7 @@ public class AI : Agent
             if (vectorAction[i + 24] == 1)
             {
                 noBranch = false;
-                if (LegalMoveConnector(i) && (!opener || placed_branches < 0))
+                if (LegalMoveConnector(i) && (!opener || placed_branches <= 0))
                 {
                     Debug.Log("Connector: " + i);
                     PlaceMoveBranch(i);
@@ -735,7 +736,7 @@ public class AI : Agent
             if(vectorAction[i] == 1)
             {
                 noNode = false;
-                if (LegalMoveNode(i) && (!opener || placed_nodes <0))
+                if (LegalMoveNode(i) && (!opener || placed_nodes <= 0))
                 {
                     Debug.Log("Node: " + i);
                     PlaceMoveNode(i);

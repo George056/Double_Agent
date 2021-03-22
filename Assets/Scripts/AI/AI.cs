@@ -479,7 +479,7 @@ public class AI : Agent
         bool noNode = true;
 
         //make a trade first
-        if (vectorAction[60] != 0)
+        if (!heuristic && vectorAction[60] != 0)
         {
             bool illegal_trade = false; // used to show that a trade was made that exceeds held resources.
             int traded_for = 0, traded_in = 0;
@@ -707,7 +707,7 @@ public class AI : Agent
 
         int placed_branches = 0;
         //place connectors
-        for (int i = 0; i < 36; i++)
+        for (int i = 0; !heuristic && i < 36; i++)
         {
             if (vectorAction[i + 24] == 1)
             {
@@ -730,7 +730,7 @@ public class AI : Agent
 
         int placed_nodes = 0;
         //place nodes
-        for (int i = 0; i < 24; i++)
+        for (int i = 0; !heuristic && i < 24; i++)
         {
             if(vectorAction[i] == 1)
             {
@@ -783,7 +783,7 @@ public class AI : Agent
             RandomAIMove();
         }
 
-        if ((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode)
+        if ((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode && !heuristic)
         {
             AddReward(noMovePunish);
         }

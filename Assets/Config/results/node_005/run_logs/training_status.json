@@ -6,13 +6,31 @@
                 "file_path": "results\\node_005\\Node_AI\\Node_AI-100.onnx",
                 "reward": null,
                 "creation_time": 1616532047.2647
+            },
+            {
+                "steps": 147,
+                "file_path": "results\\node_005\\Node_AI\\Node_AI-147.onnx",
+                "reward": null,
+                "creation_time": 1616533020.7193382
+            },
+            {
+                "steps": 194,
+                "file_path": "results\\node_005\\Node_AI\\Node_AI-194.onnx",
+                "reward": null,
+                "creation_time": 1616533054.7208743
+            },
+            {
+                "steps": 194,
+                "file_path": "results\\node_005\\Node_AI\\Node_AI-194.onnx",
+                "reward": null,
+                "creation_time": 1616533142.4723136
             }
         ],
         "final_checkpoint": {
-            "steps": 100,
+            "steps": 194,
             "file_path": "results\\node_005\\Node_AI.onnx",
             "reward": null,
-            "creation_time": 1616532047.2647
+            "creation_time": 1616533142.4723136
         }
     },
     "metadata": {

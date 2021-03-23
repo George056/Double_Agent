@@ -111,7 +111,7 @@ public class AI : Agent
         opener = true;
         __myRoads = new List<int>();
         __myNodes = new List<int>();
-        if(!randAI) GetDifficulty();
+        if (!randAI) GetDifficulty();
         GetPlayer();
         GetPiece();
         __ai_score = 0;
@@ -185,29 +185,29 @@ public class AI : Agent
         {
             Debug.Log("Mask opener moves");
             List<int> clamedNodes = new List<int>();
-            for(int i = 0; i < bm.nodes.Length; i++)
+            for (int i = 0; i < bm.nodes.Length; i++)
             {
-                if(bm.nodes[i].GetComponent<NodeInfo>().nodeOwner != Owner.Nil)
+                if (bm.nodes[i].GetComponent<NodeInfo>().nodeOwner != Owner.Nil)
                 {
                     clamedNodes.Add(i);
                 }
             }
 
             List<int> clamedBranches = new List<int>();
-            for(int i = 0; i < bm.allBranches.Length; i++)
+            for (int i = 0; i < bm.allBranches.Length; i++)
             {
-                if(bm.allBranches[i].GetComponent<BranchInfo>().branchOwner != Owner.Nil)
+                if (bm.allBranches[i].GetComponent<BranchInfo>().branchOwner != Owner.Nil)
                 {
                     clamedBranches.Add(i);
                 }
             }
 
-            foreach(int i in clamedNodes)
+            foreach (int i in clamedNodes)
             {
                 actionMasker.SetMask(i, new int[1] { 1 });
             }
 
-            foreach(int i in clamedBranches)
+            foreach (int i in clamedBranches)
             {
                 actionMasker.SetMask(i + 24, new int[1] { 1 });
             }
@@ -219,7 +219,7 @@ public class AI : Agent
 
             //find max branch amount
             int maxCons = Math.Min(__resources[0], __resources[1]);
-            
+
             //restrict branches that cannot be reached
             List<int> branchesThatCanBeReached = new List<int>();
 
@@ -227,14 +227,14 @@ public class AI : Agent
             {
                 List<int> additions = new List<int>();
 
-                for(int i = 0; i < __myRoads.Count; i++)
+                for (int i = 0; i < __myRoads.Count; i++)
                 {
                     if (Relationships.connectionsRoad.TryGetValue(__myRoads[i], out List<int> temp)) additions.AddRange(temp);
                 }
                 additions = additions.Distinct().ToList();
 
                 //remove if owned
-                for(int i = 0; i < additions.Count; i++)
+                for (int i = 0; i < additions.Count; i++)
                 {
                     if (bm.allBranches[additions[i]].GetComponent<BranchInfo>().branchOwner != Owner.Nil)
                     {
@@ -247,10 +247,10 @@ public class AI : Agent
                 branchesThatCanBeReached.AddRange(additions);
                 branchesThatCanBeReached = branchesThatCanBeReached.Distinct().ToList();
 
-                while(maxCons > 0)
+                while (maxCons > 0)
                 {
                     List<int> temp = new List<int>();
-                    foreach(int i in additions) Relationships.connectionsRoad.TryGetValue(i, out temp);
+                    foreach (int i in additions) Relationships.connectionsRoad.TryGetValue(i, out temp);
                     temp = temp.Distinct().ToList();
                     branchesThatCanBeReached.AddRange(additions);
                     additions = temp;
@@ -264,12 +264,12 @@ public class AI : Agent
             for (int i = 0; i < bm.allBranches.Length; i++) blockedBranches.Add(i);
 
             //remove branches that can be reached
-            for(int i = 0; i < branchesThatCanBeReached.Count; i++)
+            for (int i = 0; i < branchesThatCanBeReached.Count; i++)
             {
                 blockedBranches.Remove(branchesThatCanBeReached[i]);
             }
 
-            foreach(int i in blockedBranches)
+            foreach (int i in blockedBranches)
             {
                 actionMasker.SetMask(i, new int[1] { 1 });
             }
@@ -277,19 +277,19 @@ public class AI : Agent
             //restrict nodes that cannot be reached
             int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
             List<int> nodesThatCanBeReached = new List<int>();
-            
-            if(maxNodes > 0)
+
+            if (maxNodes > 0)
             {
                 List<int> additions = new List<int>();
                 branchesThatCanBeReached.AddRange(__myRoads);
-                foreach(int i in branchesThatCanBeReached)
+                foreach (int i in branchesThatCanBeReached)
                 {
                     if (Relationships.connectionsRoadNode.TryGetValue(i, out List<int> temp)) additions.AddRange(temp);
                 }
                 additions = additions.Distinct().ToList();
 
                 //remove if owned
-                for(int i = 0; i < additions.Count; i++)
+                for (int i = 0; i < additions.Count; i++)
                 {
                     if (bm.nodes[additions[i]].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) additions.Remove(additions[i]);
                 }
@@ -299,7 +299,7 @@ public class AI : Agent
             List<int> blockedNodes = new List<int>();
             for (int i = 0; i < bm.nodes.Length; i++) blockedNodes.Add(i);
 
-            for(int i = 0; i < nodesThatCanBeReached.Count; i++) blockedNodes.Remove(nodesThatCanBeReached[i]);
+            for (int i = 0; i < nodesThatCanBeReached.Count; i++) blockedNodes.Remove(nodesThatCanBeReached[i]);
 
             foreach (int i in blockedNodes) actionMasker.SetMask(i, new int[1] { 1 });
 
@@ -321,12 +321,12 @@ public class AI : Agent
 
     public void CapturedTile(Color c)
     {
-        if(c == Color.blue || c == Color.red)
+        if (c == Color.blue || c == Color.red)
         {
             AddReward(2 * captureReward);
             totalReward += 2 * captureReward;
         }
-        else if(c == Color.green || c == Color.yellow)
+        else if (c == Color.green || c == Color.yellow)
         {
             AddReward(4 * captureReward);
             totalReward += 4 * captureReward;
@@ -349,14 +349,14 @@ public class AI : Agent
     public void Loss()
     {
         if (totalReward > 0) AddReward(-totalReward);
-        else if(totalReward < 0) AddReward(totalReward);
+        else if (totalReward < 0) AddReward(totalReward);
         AddReward(-1);
         loss = true;
     }
 
     public void Win()
     {
-        if(totalReward != 1)
+        if (totalReward != 1)
         {
             float temp = 1 - totalReward;
             AddReward((temp < 0) ? 0.1f : temp);
@@ -390,6 +390,7 @@ public class AI : Agent
     {
         Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
+        if (!setup) Awake();
         __ai_score = 0;
         __human_score = 0;
     }
@@ -480,7 +481,7 @@ public class AI : Agent
         bool noNode = true;
 
         //make a trade first
-        if (!heuristic && vectorAction[60] != 0)
+        if (!heuristic && !opener && vectorAction[60] != 0)
         {
             bool illegal_trade = false; // used to show that a trade was made that exceeds held resources.
             int traded_for = 0, traded_in = 0;
@@ -684,15 +685,15 @@ public class AI : Agent
                     break;
             }
 
-            foreach(int i in tradeArr)
+            foreach (int i in tradeArr)
             {
                 if (i > 0) traded_for += i;
                 else traded_in += i;
             }
 
-            for(int i = 0; i < tradeArr.Count; ++i)
+            for (int i = 0; i < tradeArr.Count; ++i)
             {
-                if(tradeArr[i] > __resources[i])
+                if (tradeArr[i] > __resources[i])
                 {
                     illegal_trade = true;
                     break;
@@ -722,7 +723,7 @@ public class AI : Agent
                     if (trainingMode)
                         AddReward(branchReward);
                 }
-                else if(trainingMode)
+                else if (trainingMode)
                 {
                     AddReward(illegalMovePunish);
                 }
@@ -733,7 +734,7 @@ public class AI : Agent
         //place nodes
         for (int i = 0; !heuristic && i < 24; i++)
         {
-            if(vectorAction[i] == 1)
+            if (vectorAction[i] == 1)
             {
                 noNode = false;
                 if (LegalMoveNode(i) && (!opener || placed_nodes <= 0))
@@ -742,20 +743,20 @@ public class AI : Agent
                     PlaceMoveNode(i);
                     __myRoads.Add(i);
                     ++placed_nodes;
-                    if(trainingMode)
-                        foreach(GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)//account for depleted and captured
+                    if (trainingMode)
+                        foreach (GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)//account for depleted and captured
                         {
-                            if(c.GetComponent<ResourceInfo>().depleted == true)
+                            if (c.GetComponent<ResourceInfo>().depleted == true)
                             {
                                 AddReward(nodeGrayReward / 2);
                                 totalReward += nodeGrayReward / 2;
                             }
-                            else if(c.GetComponent<ResourceInfo>().resoureTileOwner == ((__piece_type == Owner.US) ? Owner.USSR : Owner.US))
+                            else if (c.GetComponent<ResourceInfo>().resoureTileOwner == ((__piece_type == Owner.US) ? Owner.USSR : Owner.US))
                             {
                                 AddReward(nodeGrayReward / 3);
                                 totalReward += nodeGrayReward / 3;
                             }
-                            else if(c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Blue || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Red)
+                            else if (c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Blue || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Red)
                             {
                                 AddReward(nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
                                 totalReward += nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
@@ -772,7 +773,7 @@ public class AI : Agent
                             }
                         }
                 }
-                else if(trainingMode)
+                else if (trainingMode)
                 {
                     AddReward(illegalMovePunish);
                 }
@@ -782,6 +783,17 @@ public class AI : Agent
         if (opener && !heuristic && (noNode && noBranch && noTrade))
         {
             RandomAIMove();
+        }
+
+        if (turn < 3)
+        {
+            if (__myNodes.Count != 1) AddReward(noMovePunish);
+            else if (__myRoads.Count != 1) AddReward(noMovePunish);
+        }
+        else if (turn > 3 && opener)
+        {
+            if (__myNodes.Count != 2) AddReward(noMovePunish);
+            else if (__myRoads.Count != 2) AddReward(noMovePunish);
         }
 
         if ((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode && !heuristic)
@@ -807,7 +819,7 @@ public class AI : Agent
         //observe board (60 observations)
         //sensor.AddObservation();
         Debug.Log("observe nodes");
-        foreach(GameObject node in bm.nodes)
+        foreach (GameObject node in bm.nodes)
         {
             List<int> observations = new List<int>(7) { 0, 0, 0, 0, 0, 0, 0 };// node owner; # tiles AI captured; gray count; red count; blue count; yellow count; green count;
             NodeInfo nodeTemp = node.GetComponent<NodeInfo>();
@@ -825,7 +837,7 @@ public class AI : Agent
                 else if (tileTemp.nodeColor == ResourceInfo.Color.Green) observations[6] += 1;
             }
             int observation = 0;
-            for(int i = (int)10E5, j = 0; j < observations.Count; i /= 10, j++)
+            for (int i = (int)10E5, j = 0; j < observations.Count; i /= 10, j++)
             {
                 observation += i * observations[j];
             }
@@ -833,7 +845,7 @@ public class AI : Agent
         }
 
         Debug.Log("Observe branches");
-        foreach(GameObject branch in bm.allBranches)
+        foreach (GameObject branch in bm.allBranches)
         {
             sensor.AddObservation(((int)branch.GetComponent<BranchInfo>().branchOwner == 2) ? 0 : (int)branch.GetComponent<BranchInfo>().branchOwner + 1);
         }
@@ -843,7 +855,7 @@ public class AI : Agent
 
         Debug.Log("Observe resources");
         //observe resources (4 observations)
-        foreach(int i in __resources)
+        foreach (int i in __resources)
         {
             sensor.AddObservation(i);
         }
@@ -859,7 +871,7 @@ public class AI : Agent
     public override void Heuristic(float[] actionsOut)
     {
         heuristic = true;
-        for(int i = 0; i < 61; i++)
+        for (int i = 0; i < 61; i++)
         {
             actionsOut[i] = 0;
         }

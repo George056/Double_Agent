@@ -12,45 +12,48 @@ public class BranchInfo : MonoBehaviour
 
     List<int> visitedBranches = new List<int>();
 
-    bool IsConnected(int branch)
+    //bool IsConnected(int branch)
+    //{
+    //    bool connectsToSetup = false;
+
+    //    if (!visitedBranches.Contains(branch))
+    //    {
+    //        visitedBranches.Add(branch);
+
+    //        Relationships.connectionsRoad.TryGetValue(branchOrder, out List<int> neighborBranches);
+    //        foreach (int i in neighborBranches)
+    //        {
+    //            if (GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().isSetupBranch)
+    //            {
+    //                connectsToSetup = true;
+    //                break;
+    //            }
+    //            else if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches.Contains(i) &&
+    //                !visitedBranches.Contains(i))
+    //            {
+    //                connectsToSetup = IsConnected(i);
+    //            }
+    //        }
+    //    }
+
+    //    return connectsToSetup;
+    //}
+
+    public void MarkConnectedPieces(int currentBranch)
     {
-        bool connectsToSetup = false;
-
-        if (!visitedBranches.Contains(branch))
-        {
-            visitedBranches.Add(branch);
-
-            Relationships.connectionsRoad.TryGetValue(branchOrder, out List<int> neighborBranches);
-            foreach (int i in neighborBranches)
-            {
-                if (GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().isSetupBranch)
-                {
-                    connectsToSetup = true;
-                    break;
-                }
-                else if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches.Contains(i) &&
-                    !visitedBranches.Contains(i))
-                {
-                    connectsToSetup = IsConnected(i);
-                }
-            }
-        }
-
-        return connectsToSetup;
-    }
-
-    public void markConnectedPieces(int currentBranch)
-    {
+        Debug.Log("Calling markConnectedPieces on Branch " + currentBranch);
+        
         GameObject.FindObjectOfType<BoardManager>().allBranches[currentBranch].GetComponent<BranchInfo>().connectedToSetup = true;
 
         Relationships.connectionsRoad.TryGetValue(currentBranch, out List<int> connectedBranches);
 
         foreach (int i in connectedBranches)
         {
+            Debug.Log("Branch " + i + "connectedToSetup = " + GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup);
             if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches.Contains(i) &&
                 !GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup)
             {
-                markConnectedPieces(i);
+                MarkConnectedPieces(i);
             }
         }
     }
@@ -63,8 +66,8 @@ public class BranchInfo : MonoBehaviour
 
         // mark as connected everything still accessible from setupBranches
         GameObject.FindObjectOfType<BoardManager>().allBranches[branchToUnplace].GetComponent<BranchInfo>().connectedToSetup = true;
-        markConnectedPieces(GameObject.FindObjectOfType<BoardManager>().firstSetupBranch);
-        markConnectedPieces(GameObject.FindObjectOfType<BoardManager>().secondSetupBranch);
+        MarkConnectedPieces(GameObject.FindObjectOfType<BoardManager>().firstSetupBranch);
+        MarkConnectedPieces(GameObject.FindObjectOfType<BoardManager>().secondSetupBranch);
 
         // loop through player's owned branches and nodes; if any are not marked as connected, set canUnplace = false;
 
@@ -72,6 +75,7 @@ public class BranchInfo : MonoBehaviour
         {
             if (!GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup)
             {
+                Debug.Log("Found isolated branch : " + i);
                 canUnplace = false;
             }
         }
@@ -175,20 +179,12 @@ public class BranchInfo : MonoBehaviour
             {
                 if (CanUnplace(branchOrder))
                 {
-
-
                     GameObject.FindObjectOfType<BoardManager>().UnplaceBranch(branchOrder);
 
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().RemoveBranch(branchOrder);
 
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().ReimburseForBranch();
-                }
-                //visitedBranches.Clear();
-                // loop through player's owned branches and nodes reset all to connectedToSetup = false
-                foreach (int i in GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)
-                {
-                    GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup = false;
-                }
+                }                
             }
             else if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordBranch())
             {
@@ -203,6 +199,11 @@ public class BranchInfo : MonoBehaviour
                     // Removes one copper and one lumber from player's resources
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PayForBranch();
                 }
+            }
+
+            foreach (int i in GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)
+            {
+                GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup = false;
             }
         }
     }

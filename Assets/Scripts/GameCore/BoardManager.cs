@@ -470,8 +470,16 @@ public class BoardManager : MonoBehaviour
         bool found = false;
         foreach (int i in connectedBranches)
         {
-            found = myBranches.Contains(i);
-            if (found) break;
+            if (activeSide == humanPiece && (turnCount == 3 || turnCount == 4))
+            {
+                found = (i == secondSetupBranch);
+                if (found) break;
+            }
+            else
+            {
+                found = myBranches.Contains(i);
+                if (found) break;
+            }
         }
 
         if (!found) { isLegal = false; }
@@ -722,7 +730,7 @@ public class BoardManager : MonoBehaviour
             isSetupTurn = false;
 
         if (end) return;
-
+        
         if (isSetupTurn)
         {
             if (SetupturnlegalCheck()) // if (E & CL have been placed)

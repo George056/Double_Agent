@@ -579,21 +579,25 @@ public class BoardManager : MonoBehaviour
 
         CalculateScore(who);
 
-        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<AI>().__ai_score >= 10)
+        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<AI>().__ai_score >= 10 || turnCount >= 101)
         {
             tradeButton.SetActive(false);
             buildButton.SetActive(false);
             endTurnButton.SetActive(false);
-
-            if (player1.GetComponent<AI>().__ai_score >= 10)
+            if(turnCount >= 101)
+            {
+                player1.GetComponent<AI>().Loss();
+                player2.GetComponent<AI>().Loss();
+            }
+            else if (player1.GetComponent<AI>().__ai_score >= 10)
             {
                 player1.GetComponent<AI>().Win();
                 player2.GetComponent<AI>().Loss();
             }
             else 
             {
-                player1.GetComponent<AI>().Loss();
                 player2.GetComponent<AI>().Win(); 
+                player1.GetComponent<AI>().Loss();
             }
 
             end = true;

@@ -390,6 +390,7 @@ public class AI : Agent
     {
         Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
+        if (!setup) Awake();
         __ai_score = 0;
         __human_score = 0;
     }
@@ -480,7 +481,7 @@ public class AI : Agent
         bool noNode = true;
 
         //make a trade first
-        if (!heuristic && vectorAction[60] != 0)
+        if (!heuristic && !opener && vectorAction[60] != 0)
         {
             bool illegal_trade = false; // used to show that a trade was made that exceeds held resources.
             int traded_for = 0, traded_in = 0;

@@ -63,6 +63,7 @@ public class BoardManager : MonoBehaviour
 
     private bool end;
     public GameObject gameOverWindow;
+    public GameObject SetupLegalPopup;
 
 
     /*
@@ -717,14 +718,14 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurnButtonClicked()
     {
-        if(turnCount == 4)
+        if(turnCount > 4)
             isSetupTurn = false;
 
         if (end) return;
 
         if (isSetupTurn)
         {
-            if (true) // if (E & CL have been placed)
+            if (SetupturnlegalCheck()) // if (E & CL have been placed)
             {
                 // prompt player to confirm submission
                 if (true) // user confirmed turn submission
@@ -749,6 +750,7 @@ public class BoardManager : MonoBehaviour
             else
             {
                 // prompt player to place E & CL
+                SetupLegalPopup.SetActive(true);
             }
         }
         else // a regular turn
@@ -776,7 +778,21 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
-
+    private bool SetupturnlegalCheck()
+    {
+        bool islegal = true;
+        // player1.GetComponent<Player>().UpdateResources
+        List<int> tempPlayerResources;
+        for (int i = 0; i < player1.GetComponent<Player>().__resources.Count; i++)
+        {
+            if (player1.GetComponent<Player>().__resources[i] != 0)
+            {
+                islegal = false;
+                break;
+            }
+        }
+        return islegal;
+    }
     private void BtnToggle()
     {
         tradeButton.SetActive(!tradeButton.activeSelf);

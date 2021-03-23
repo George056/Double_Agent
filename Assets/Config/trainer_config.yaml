@@ -23,6 +23,13 @@ behaviors:
             num_layers: 2 #typical is 1 - 3
             normalize: false
             vis_encoder_type: match3
+        reward_signals:
+            extrinsic:
+                gamma: 0.99
+                strength: 1.0
+            curiosity:
+                strength: 0.05
+                gamma: 0.99
         self_play:
             save_steps: 20000
             team_change: 80000

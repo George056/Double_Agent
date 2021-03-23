@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
 
     [HideInInspector]
-    [Tooltip("When set true the gameplay loop ends")]
+    [Tooltip("When set true the game-play loop ends")]
     public bool gameOver = false;
 
     [Tooltip("What piece is the AI")]

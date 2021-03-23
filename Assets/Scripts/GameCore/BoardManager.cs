@@ -120,6 +120,9 @@ public class BoardManager : MonoBehaviour
     public List<int> nodesPlacedThisTurn = new List<int>();
     public List<int> branchesPlacedThisTurn = new List<int>();
 
+    public int firstSetupBranch;
+    public int secondSetupBranch;
+
     int GetTileIndex(string code)
     {
         int index = 0;
@@ -235,6 +238,7 @@ public class BoardManager : MonoBehaviour
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
                         allBranches[branchCount].GetComponent<BranchInfo>().placementConfirmed = false;
+                        allBranches[branchCount].GetComponent<BranchInfo>().isSetupBranch = false;
                         //Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
                         branchCount++;
                         break;
@@ -244,6 +248,7 @@ public class BoardManager : MonoBehaviour
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
                         allBranches[branchCount].GetComponent<BranchInfo>().branchOrder = branchCount;
                         allBranches[branchCount].GetComponent<BranchInfo>().placementConfirmed = false;
+                        allBranches[branchCount].GetComponent<BranchInfo>().isSetupBranch = false;
                         //Debug.Log(allBranches[branchCount].GetComponent<BranchInfo>().branchOwner);
                         branchCount++;
                         break;
@@ -414,6 +419,19 @@ public class BoardManager : MonoBehaviour
 
         branchesPlacedThisTurn.Add(branchNum);
 
+        if (activeSide == humanPiece && isSetupTurn)
+        {
+            allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = true;
+            if (turnCount == 1 || turnCount == 2)
+            {
+                firstSetupBranch = branchNum;
+            }
+            else if (turnCount == 3 || turnCount == 4)
+            {
+                secondSetupBranch = branchNum;
+            }
+        }
+
         if (activeSide == aiPiece)
         {
             Debug.Log("AI placed branch " + branchNum);
@@ -432,6 +450,11 @@ public class BoardManager : MonoBehaviour
     {
         allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
         GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(156, 167, 176, 255);
+
+        if (activeSide == humanPiece && isSetupTurn)
+        {
+            allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = false;
+        }
 
         branchesPlacedThisTurn.Remove(branchNum);
     }

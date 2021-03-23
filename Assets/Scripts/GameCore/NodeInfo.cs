@@ -9,6 +9,7 @@ public class NodeInfo : MonoBehaviour
     public int nodeOrder;
 
     public bool placementConfirmed = false;
+    public bool connectedToSetup = false;
 
     // List of resources the node gives
     public List<GameObject> resources = new List<GameObject>(0);

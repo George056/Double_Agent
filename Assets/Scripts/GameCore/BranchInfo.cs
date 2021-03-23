@@ -42,18 +42,29 @@ public class BranchInfo : MonoBehaviour
     public void MarkConnectedPieces(int currentBranch)
     {
         Debug.Log("Calling markConnectedPieces on Branch " + currentBranch);
-        
+
         GameObject.FindObjectOfType<BoardManager>().allBranches[currentBranch].GetComponent<BranchInfo>().connectedToSetup = true;
 
         Relationships.connectionsRoad.TryGetValue(currentBranch, out List<int> connectedBranches);
 
         foreach (int i in connectedBranches)
         {
-            Debug.Log("Branch " + i + "connectedToSetup = " + GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup);
+            Debug.Log("Branch " + i + " connectedToSetup = " + GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup);
             if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches.Contains(i) &&
                 !GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup)
             {
                 MarkConnectedPieces(i);
+            }
+        }
+
+        Relationships.connectionsRoadNode.TryGetValue(currentBranch, out List<int> connectedNodes);
+
+        foreach (int i in connectedNodes)
+        {
+            Debug.Log("Node " + i + " connectedToSetup = " + GameObject.FindObjectOfType<BoardManager>().nodes[i].GetComponent<NodeInfo>().connectedToSetup);
+            if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_nodes.Contains(i))
+            {
+                GameObject.FindObjectOfType<BoardManager>().nodes[i].GetComponent<NodeInfo>().connectedToSetup = true;
             }
         }
     }
@@ -62,20 +73,37 @@ public class BranchInfo : MonoBehaviour
     {
         // ******** ATTEMPT 3 ********
 
+        for (int i = 0; i < 36; i++)
+        {
+            Debug.Log("Branch " + i + " connectedToSetup = " + GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup);
+        }
+
         bool canUnplace = true;
 
         // mark as connected everything still accessible from setupBranches
         GameObject.FindObjectOfType<BoardManager>().allBranches[branchToUnplace].GetComponent<BranchInfo>().connectedToSetup = true;
-        MarkConnectedPieces(GameObject.FindObjectOfType<BoardManager>().firstSetupBranch);
-        MarkConnectedPieces(GameObject.FindObjectOfType<BoardManager>().secondSetupBranch);
+
+        if (GameObject.FindObjectOfType<BoardManager>().firstSetupBranch != -1) 
+            MarkConnectedPieces(GameObject.FindObjectOfType<BoardManager>().firstSetupBranch);
+
+        if (GameObject.FindObjectOfType<BoardManager>().secondSetupBranch != -1)
+            MarkConnectedPieces(GameObject.FindObjectOfType<BoardManager>().secondSetupBranch);
 
         // loop through player's owned branches and nodes; if any are not marked as connected, set canUnplace = false;
-
         foreach (int i in GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)
         {
             if (!GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup)
             {
                 Debug.Log("Found isolated branch : " + i);
+                canUnplace = false;
+            }
+        }
+
+        foreach (int i in GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_nodes)
+        {
+            if (!GameObject.FindObjectOfType<BoardManager>().nodes[i].GetComponent<NodeInfo>().connectedToSetup)
+            {
+                Debug.Log("Found isolated node : " + i);
                 canUnplace = false;
             }
         }
@@ -201,9 +229,14 @@ public class BranchInfo : MonoBehaviour
                 }
             }
 
-            foreach (int i in GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches)
+            for (int i = 0; i < 36; i++)
             {
                 GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().connectedToSetup = false;
+            }
+
+            for (int i = 0; i < 24; i++)
+            {
+                GameObject.FindObjectOfType<BoardManager>().nodes[i].GetComponent<NodeInfo>().connectedToSetup = false;
             }
         }
     }

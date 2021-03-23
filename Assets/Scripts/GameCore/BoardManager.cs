@@ -120,8 +120,8 @@ public class BoardManager : MonoBehaviour
     public List<int> nodesPlacedThisTurn = new List<int>();
     public List<int> branchesPlacedThisTurn = new List<int>();
 
-    public int firstSetupBranch;
-    public int secondSetupBranch;
+    public int firstSetupBranch = -1;
+    public int secondSetupBranch = -1;
 
     int GetTileIndex(string code)
     {

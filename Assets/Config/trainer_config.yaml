@@ -6,7 +6,7 @@ behaviors:
         max_steps: 5.0e6
         keep_checkpoints: 5
         checkpoint_interval: 500000
-        init_path: none
+        init_path: null
         threaded: true
         hyperparameters:
             learning_rate: 3e-4

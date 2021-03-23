@@ -785,6 +785,17 @@ public class AI : Agent
             RandomAIMove();
         }
 
+        if(turn < 3)
+        {
+            if (__myNodes.Count != 1) AddReward(noMovePunish);
+            else if (__myRoads.Count != 1) AddReward(noMovePunish);
+        }
+        else if(turn > 3 && opener)
+        {
+            if (__myNodes.Count != 2) AddReward(noMovePunish);
+            else if (__myRoads.Count != 2) AddReward(noMovePunish);
+        }
+
         if ((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode && !heuristic)
         {
             AddReward(noMovePunish);

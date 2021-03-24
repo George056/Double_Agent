@@ -602,6 +602,7 @@ public class BoardManager : MonoBehaviour
 
             end = true;
             gameOverWindow.SetActive(true);
+            AI.LoadNewScene();
         }
     }
 

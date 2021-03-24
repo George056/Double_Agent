@@ -1669,7 +1669,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: MaxStep
-      value: 200
+      value: 2500000
       objectReference: {fileID: 0}
     - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: trainingMode
@@ -1681,7 +1681,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8056974288518276843, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 65
+      value: 78
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -3667951958547329387, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
@@ -11544,7 +11544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: MaxStep
-      value: 200
+      value: 2500000
       objectReference: {fileID: 0}
     - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: trainingMode
@@ -11556,7 +11556,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8056974288518276843, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: m_BrainParameters.VectorObservationSize
-      value: 65
+      value: 78
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -3667951958547329387, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}

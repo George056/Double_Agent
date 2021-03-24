@@ -211,7 +211,50 @@ public class AI : Agent
             {
                 actionMasker.SetMask(i + 24, new int[1] { 1 });
             }
-            actionMasker.SetMask(60, new int[1] { 1 }); // no trading in the opener
+            actionMasker.SetMask(60, new int[40] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40 }); // no trading in the opener
+
+            if(turn > 2) // block adjacent branches and nodes in the opener to promote curiosity
+            {
+                List<int> legalCon = new List<int>();
+                foreach (int i in __myRoads)//get all connections to owned branches
+                {
+                    if (Relationships.connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
+                }
+                legalCon = legalCon.Distinct().ToList();
+                foreach(int i in legalCon)
+                {
+                    actionMasker.SetMask(i + 24, new int[1] { 1 });
+                }
+
+                List<int> legalNodes = new List<int>();
+                foreach (int i in __myRoads)
+                {
+                    if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
+                }
+                legalNodes = legalNodes.Distinct().ToList();
+                foreach(int i in legalNodes)
+                {
+                    actionMasker.SetMask(i, new int[1] { 1 });
+                }
+            }
+            // mask bad opener moves
+            actionMasker.SetMask(24, new int[1] { 1 });
+            actionMasker.SetMask(39, new int[1] { 1 });
+            actionMasker.SetMask(44, new int[1] { 1 });
+            actionMasker.SetMask(59, new int[1] { 1 });
+
+            actionMasker.SetMask(0, new int[1] { 1 });
+            actionMasker.SetMask(1, new int[1] { 1 });
+            actionMasker.SetMask(2, new int[1] { 1 });
+            actionMasker.SetMask(5, new int[1] { 1 });
+            actionMasker.SetMask(6, new int[1] { 1 });
+            actionMasker.SetMask(11, new int[1] { 1 });
+            actionMasker.SetMask(12, new int[1] { 1 });
+            actionMasker.SetMask(17, new int[1] { 1 });
+            actionMasker.SetMask(18, new int[1] { 1 });
+            actionMasker.SetMask(21, new int[1] { 1 });
+            actionMasker.SetMask(22, new int[1] { 1 });
+            actionMasker.SetMask(23, new int[1] { 1 });
         }
         else
         {
@@ -741,7 +784,7 @@ public class AI : Agent
                 {
                     Debug.Log("Node: " + i);
                     PlaceMoveNode(i);
-                    __myRoads.Add(i);
+                    __myNodes.Add(i);
                     ++placed_nodes;
                     if(trainingMode)
                         foreach(GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)//account for depleted and captured
@@ -816,6 +859,14 @@ public class AI : Agent
     {
         if (randAI) return;
         if (bm.activeSide != __piece_type) return;
+
+        // observe tiles (13 observations)
+        foreach (GameObject tile in bm.resourceList)
+        {
+            ResourceInfo.Color color = tile.GetComponent<ResourceInfo>().nodeColor;
+            sensor.AddObservation((int)color);
+        }
+
         //observe board (60 observations)
         //sensor.AddObservation();
         Debug.Log("observe nodes");

@@ -10,35 +10,6 @@ public class BranchInfo : MonoBehaviour
     public bool placementConfirmed = false;
     public bool connectedToSetup = false;
 
-    List<int> visitedBranches = new List<int>();
-
-    //bool IsConnected(int branch)
-    //{
-    //    bool connectsToSetup = false;
-
-    //    if (!visitedBranches.Contains(branch))
-    //    {
-    //        visitedBranches.Add(branch);
-
-    //        Relationships.connectionsRoad.TryGetValue(branchOrder, out List<int> neighborBranches);
-    //        foreach (int i in neighborBranches)
-    //        {
-    //            if (GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().isSetupBranch)
-    //            {
-    //                connectsToSetup = true;
-    //                break;
-    //            }
-    //            else if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches.Contains(i) &&
-    //                !visitedBranches.Contains(i))
-    //            {
-    //                connectsToSetup = IsConnected(i);
-    //            }
-    //        }
-    //    }
-
-    //    return connectsToSetup;
-    //}
-
     public void MarkConnectedPieces(int currentBranch)
     {
         Debug.Log("Calling markConnectedPieces on Branch " + currentBranch);
@@ -109,91 +80,6 @@ public class BranchInfo : MonoBehaviour
         }
 
         return canUnplace;
-
-        // ******** ATTEMPT 2 ********
-
-        //Debug.Log("Calling CanUnplace on Branch " + branchToUnplace);
-        //bool canUnplace = false;
-        //visitedBranches.Add(branchToUnplace);
-
-        //if (GameObject.FindObjectOfType<BoardManager>().allBranches[branchToUnplace].GetComponent<BranchInfo>().isSetupBranch)
-        //{
-        //    Debug.Log(branchToUnplace + " isSetupBranch");
-        //    canUnplace = true;
-        //}
-        //else
-        //{
-        //    // Examine every branch connected to the branch you want to unplace
-        //    Relationships.connectionsRoad.TryGetValue(branchToUnplace, out List<int> connectedBranches);
-
-        //    foreach (int i in connectedBranches)
-        //    {
-        //        Debug.Log("Check branch neighbor " + i);
-        //        // If you own the neighboring branch
-        //        Debug.Log(i + " owned = " + GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches.Contains(i));
-        //        Debug.Log(i + " visited = " + visitedBranches.Contains(i));
-        //        if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches.Contains(i) && !visitedBranches.Contains(i))
-        //        {
-        //            Debug.Log("Branch " + i + " owned and not visited");
-        //            if (!GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().placementConfirmed)
-        //            {
-        //                Debug.Log("Branch " + i + " placed on current turn");
-        //                canUnplace = CanUnplace(i);
-        //                Debug.Log("CanUnplace = " + canUnplace);
-        //                if (!canUnplace)
-        //                { break; }
-        //            }
-        //            else
-        //            {
-        //                Debug.Log("Branch " + i + " placement Confirmed");
-
-        //                canUnplace = true;
-        //                //break;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //return canUnplace;
-
-
-        // ******** ATTEMPT 1 ***********
-
-        //Debug.Log("Calling CanUnplace on Branch " + branchToUnplace);
-
-        //bool canUnplace = false;
-
-        //if (GameObject.FindObjectOfType<BoardManager>().allBranches[branchToUnplace].GetComponent<BranchInfo>().isSetupBranch)
-        //{
-        //    canUnplace = true;
-        //}
-        //else
-        //{
-        //    visitedBranches.Add(branchToUnplace);
-        //    // Examine every branch connected to the branch you want to unplace
-        //    Relationships.connectionsRoad.TryGetValue(branchToUnplace, out List<int> connectedBranches);
-        //    foreach (int i in connectedBranches)
-        //    {
-        //        Debug.Log("Examining Immediate Neighbor Branch " + i);
-        //        // If you own the neighboring branch but it is not a setup branch
-        //        if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches.Contains(i) &&
-        //            !GameObject.FindObjectOfType<BoardManager>().allBranches[i].GetComponent<BranchInfo>().isSetupBranch)
-        //        {
-        //            if (IsConnected(i))
-        //            {
-        //                Debug.Log("Immediate Neighbor Branch " + i + " is connected to a Setup Branch");
-        //                canUnplace = true;
-        //                break;
-        //            }
-        //            else
-        //                Debug.Log("Immediate Neighbor Branch " + i + " is NOT connected to a Setup Branch");
-        //        }
-        //    }
-
-        //    visitedBranches.Clear();
-        //}
-
-        //return canUnplace;
     }
 
     void OnMouseDown()

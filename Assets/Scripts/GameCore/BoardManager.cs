@@ -35,10 +35,10 @@ public class BoardManager : MonoBehaviour
     public Owner activeSide;
 
     public GameObject tradeButton;
-    public GameObject buildButton;
+    //public GameObject buildButton;
     public GameObject endTurnButton;
 
-    public bool inBuildMode = false;
+    public bool inBuildMode;
     public bool playerTraded = false;
 
     [HideInInspector]
@@ -105,6 +105,11 @@ public class BoardManager : MonoBehaviour
 
     public TextMeshProUGUI playerScore;
     public TextMeshProUGUI opponentScore;
+
+    public GameObject firstSetupNodeImage;
+    public GameObject secondSetupNodeImage;
+    public GameObject firstSetupBranchImage;
+    public GameObject secondSetupBranchImage;
 
     public GameObject USImage;
     public GameObject USSRImage;
@@ -304,6 +309,7 @@ public class BoardManager : MonoBehaviour
 
         end = false;
         turnCount = 1;
+        inBuildMode = (firstPlayer == humanPiece);
 
         //check to see if it is an AI or network game
         player1 = GameObject.FindGameObjectWithTag("Player");
@@ -398,6 +404,18 @@ public class BoardManager : MonoBehaviour
 
         nodesPlacedThisTurn.Add(nodeNum);
 
+        if (activeSide == humanPiece && isSetupTurn)
+        {
+            if (turnCount == 1 || turnCount == 2)
+            {
+                firstSetupNodeImage.SetActive(false);
+            }
+            else if (turnCount == 3 || turnCount == 4)
+            {
+                secondSetupNodeImage.SetActive(false);
+            }
+        }
+
         if (activeSide == aiPiece)
         {
             Debug.Log("AI placed node " + nodeNum);
@@ -406,7 +424,6 @@ public class BoardManager : MonoBehaviour
 
     public void ChangeBranchOwner(int branchNum)
     {
-        Debug.Log("active Side when branch owner changed: " + activeSide);
         if (activeSide == Owner.US)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
@@ -426,10 +443,12 @@ public class BoardManager : MonoBehaviour
             if (turnCount == 1 || turnCount == 2)
             {
                 firstSetupBranch = branchNum;
+                firstSetupBranchImage.SetActive(false);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
                 secondSetupBranch = branchNum;
+                secondSetupBranchImage.SetActive(false);
             }
         }
 
@@ -445,6 +464,18 @@ public class BoardManager : MonoBehaviour
         GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
 
         nodesPlacedThisTurn.Remove(nodeNum);
+
+        if (activeSide == humanPiece && isSetupTurn)
+        {
+            if (turnCount == 1 || turnCount == 2)
+            {
+                firstSetupNodeImage.SetActive(true);
+            }
+            else if (turnCount == 3 || turnCount == 4)
+            {
+                secondSetupNodeImage.SetActive(true);
+            }
+        }
     }
 
     public void UnplaceBranch(int branchNum)
@@ -455,6 +486,14 @@ public class BoardManager : MonoBehaviour
         if (activeSide == humanPiece && isSetupTurn)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = false;
+            if (turnCount == 1 || turnCount == 2)
+            {
+                firstSetupBranchImage.SetActive(true);
+            }
+            else if (turnCount == 3 || turnCount == 4)
+            {
+                secondSetupBranchImage.SetActive(true);
+            }
         }
 
         branchesPlacedThisTurn.Remove(branchNum);
@@ -600,7 +639,7 @@ public class BoardManager : MonoBehaviour
         if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
         {
             tradeButton.SetActive(false);
-            buildButton.SetActive(false);
+            //buildButton.SetActive(false);
             endTurnButton.SetActive(false);
 
             if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
@@ -719,10 +758,10 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void EnterBuildMode()
-    {
-        inBuildMode = true;
-    }
+    //public void EnterBuildMode()
+    //{
+    //    inBuildMode = true;
+    //}
 
     public void EndTurnButtonClicked()
     {
@@ -804,16 +843,14 @@ public class BoardManager : MonoBehaviour
     private void BtnToggle()
     {
         tradeButton.SetActive(!tradeButton.activeSelf);
-        buildButton.SetActive(!buildButton.activeSelf);
+        //buildButton.SetActive(!buildButton.activeSelf);
         endTurnButton.SetActive(!endTurnButton.activeSelf);
     }
 
     public void EndTurn()
     {
-        Debug.Log("Active Side before ending turn: " + activeSide);
         if (turnCount != 2)
         {
-            Debug.Log("Active Side should be switched");
             if (activeSide == Owner.US)
             {
                 activeSide = Owner.USSR;
@@ -822,9 +859,9 @@ public class BoardManager : MonoBehaviour
             {
                 activeSide = Owner.US;
             }
-        }
-        Debug.Log("Active Side after switch: " + activeSide);
 
+            inBuildMode = !inBuildMode;
+        }
 
         turnCount++;
 
@@ -848,7 +885,6 @@ public class BoardManager : MonoBehaviour
         if (turnCount >= 5)
             AllocateResources();
 
-        inBuildMode = false;
         playerTraded = false;
 
 

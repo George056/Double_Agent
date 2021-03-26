@@ -10,7 +10,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     private PhotonView photonView;
 
     public static NetworkPlayer networkPlayer;
-    // Start is called before the first frame update
     void Start()
     {
         photonView = PhotonView.Get(this);

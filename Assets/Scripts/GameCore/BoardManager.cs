@@ -294,26 +294,17 @@ public class BoardManager : MonoBehaviour
 
     public void SetupScene()
     {
-        customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
-        Debug.Log("CustomBoardSeed: " + customBoardSeed);
-        gridPositions.Clear();
-        if (customBoardSeed != "")
-        {
-            CustomizeBoardLayout();
-        }
-        else
-        {
-            Shuffle(resourceList);
-        }
-        BoardSetUp(GameBoard);
-        AssignNodeResources();
-        cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
-        aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
-        humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
-        netPiece = (Owner)PlayerPrefs.GetInt("Network_Piece", 0);
-
         if (PlayerPrefs.GetString("GameType") == "net")
         {
+            setNetworkManagerReference();
+            netPiece = (Owner)PlayerPrefs.GetInt("Network_Piece", 0);
+
+            customBoardSeed = GetRandomBoardSeed();
+
+            CustomizeBoardLayout();
+            BoardSetUp(GameBoard);
+            AssignNodeResources();
+
             firstPlayer = netPiece;
             activeSide = firstPlayer;
             end = false;
@@ -337,22 +328,38 @@ public class BoardManager : MonoBehaviour
                 USSRMusic.SetActive(true);
                 USMusic.SetActive(false);
             }
-            setNetworkManagerReference();
+
             NetworkGame();
         }
         else
         {
+            customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
+            Debug.Log("CustomBoardSeed: " + customBoardSeed);
+            gridPositions.Clear();
+            if (customBoardSeed != "")
+            {
+                CustomizeBoardLayout();
+            }
+            else
+            {
+                Shuffle(resourceList);
+            }
+            BoardSetUp(GameBoard);
+            AssignNodeResources();
+            cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
+            aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
+            humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
             firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
             activeSide = firstPlayer;
 
             end = false;
             turnCount = 1;
-        USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-        USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
-        end = false;
-        turnCount = 1;
-        inBuildMode = (firstPlayer == humanPiece);
+            end = false;
+            turnCount = 1;
+            inBuildMode = (firstPlayer == humanPiece);
 
             //check to see if it is an AI or network game
             player1 = GameObject.FindGameObjectWithTag("Player");
@@ -1073,6 +1080,13 @@ public class BoardManager : MonoBehaviour
         {
             Debug.Log("Network placed branch " + branchNum);
         }*/
+    }
+
+    public string GetRandomBoardSeed()
+    {
+        string boardSeed = "Y3G3R1B2R2Y2B3Y1R3G1ESB1G2";
+
+        return boardSeed;
     }
 
 }

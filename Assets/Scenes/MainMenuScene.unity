@@ -1493,10 +1493,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1961359551}
-        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+      - m_Target: {fileID: 1961359548}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1504,6 +1504,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: Lobby
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2128395036}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &485107697
 MonoBehaviour:
@@ -6697,8 +6709,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SettingsWindow: {fileID: 1819931538}
   MusicSlider: {fileID: 74837968}
+  SoundEffectSlider: {fileID: 0}
   Music1: {fileID: 596289881}
   Music2: {fileID: 596289881}
+  SFX1: {fileID: 0}
+  SFX2: {fileID: 0}
+  SFX3: {fileID: 0}
+  SFX4: {fileID: 0}
 --- !u!1 &1977836638
 GameObject:
   m_ObjectHideFlags: 0

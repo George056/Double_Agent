@@ -298,7 +298,7 @@ public class BoardManager : MonoBehaviour
         {
             setNetworkManagerReference();
             netPiece = (Owner)PlayerPrefs.GetInt("Network_Piece", 0);
-            gridPositions.Clear()
+            // gridPositions.Clear();
 
             customBoardSeed = GetRandomBoardSeed();
 

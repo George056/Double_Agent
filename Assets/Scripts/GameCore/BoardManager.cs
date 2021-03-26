@@ -304,11 +304,15 @@ public class BoardManager : MonoBehaviour
             CustomizeBoardLayout();
             BoardSetUp(GameBoard);
             AssignNodeResources();
+            cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
 
             firstPlayer = netPiece;
             activeSide = firstPlayer;
             end = false;
             turnCount = 1;
+
+            USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
             netPlayer = GameObject.FindGameObjectWithTag("Player");
 

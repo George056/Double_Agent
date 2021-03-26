@@ -24,7 +24,7 @@ public class NodeInfo : MonoBehaviour
             if (GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().nodeOwner == GameObject.FindObjectOfType<BoardManager>().activeSide &&
                 !GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().placementConfirmed)
             {
-
+                //GameObject.FindObjectOfType<BoardManager>().nodeGlow[nodeOrder].SetActive(false);
 
                 GameObject.FindObjectOfType<BoardManager>().UnplaceNode(nodeOrder);
 
@@ -39,6 +39,9 @@ public class NodeInfo : MonoBehaviour
                 if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
+                    //GameObject.FindObjectOfType<BoardManager>().nodeGlow[nodeOrder].SetActive(true);
+
+
                     GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
 
                     // Adds node to player's list of owned nodes

@@ -31,6 +31,8 @@ public class BoardManager : MonoBehaviour
     public GameObject[] nodes;
     public GameObject[] allBranches;
 
+    public GameObject[] nodeGlow;
+
     public ResourceItemInfo[] ResourceInfoList = new ResourceItemInfo[13];
     public Owner activeSide;
 
@@ -231,6 +233,9 @@ public class BoardManager : MonoBehaviour
                         resourceCount++;
                         break;
                     case 'N':
+                        //instance = Instantiate(nodeGlow[nodeCount], new Vector3(hang + 6 * x, lie + 6 * y, 0f), Quaternion.identity) as GameObject;
+                        //instance.transform.SetParent(boardHolder);
+                        //instance.SetActive(false);
                         instance = Instantiate(nodes[nodeCount], new Vector3(hang + 6 * x, lie + 6 * y, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;

@@ -57,13 +57,22 @@ public class BoardManager : MonoBehaviour
     private Owner humanPiece;
     [Tooltip("What piece is the first player")]
     private Owner firstPlayer;
+    [Tooltip("What piece is the networks")]
+    private Owner netPiece;
 
+
+   
     private GameObject player1;
     private GameObject player2;
+
+    public GameObject netPlayer;
 
     private bool end;
     public GameObject gameOverWindow;
     public GameObject SetupLegalPopup;
+
+    private static NetworkController networkController = new NetworkController();
+    private bool netWorkTurn = true;
 
 
     /*
@@ -301,9 +310,43 @@ public class BoardManager : MonoBehaviour
         cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
         aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
         humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
-        firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
-        activeSide = firstPlayer;
+        netPiece = (Owner)PlayerPrefs.GetInt("Network_Piece", 0);
 
+        if (PlayerPrefs.GetString("GameType") == "net")
+        {
+            firstPlayer = netPiece;
+            activeSide = firstPlayer;
+            end = false;
+            turnCount = 1;
+
+            netPlayer = GameObject.FindGameObjectWithTag("Player");
+
+            if(netPiece == Owner.US)
+            {
+                USImage.SetActive(true);
+                USSRImage.SetActive(false);
+
+                USMusic.SetActive(true);
+                USSRMusic.SetActive(false);
+            }
+            else
+            {
+                USImage.SetActive(false);
+                USSRImage.SetActive(true);
+
+                USSRMusic.SetActive(true);
+                USMusic.SetActive(false);
+            }
+            setNetworkManagerReference();
+            NetworkGame();
+        }
+        else
+        {
+            firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
+            activeSide = firstPlayer;
+
+            end = false;
+            turnCount = 1;
         USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
         USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
@@ -311,36 +354,39 @@ public class BoardManager : MonoBehaviour
         turnCount = 1;
         inBuildMode = (firstPlayer == humanPiece);
 
-        //check to see if it is an AI or network game
-        player1 = GameObject.FindGameObjectWithTag("Player");
-        player2 = GameObject.FindGameObjectWithTag("AI");
-        player2.GetComponent<AI>().SetOpener();
+            //check to see if it is an AI or network game
+            player1 = GameObject.FindGameObjectWithTag("Player");
+            player2 = GameObject.FindGameObjectWithTag("AI");
+            player2.GetComponent<AI>().SetOpener();
 
-        if (humanPiece == Owner.US)
-        {
-            USImage.SetActive(true);
-            USSRImage.SetActive(false);
+            if (humanPiece == Owner.US)
+            {
+                USImage.SetActive(true);
+                USSRImage.SetActive(false);
 
-            USMusic.SetActive(true);
-            USSRMusic.SetActive(false);
-        }
-        else
-        {
-            USImage.SetActive(false);
-            USSRImage.SetActive(true);
+                USMusic.SetActive(true);
+                USSRMusic.SetActive(false);
+            }
+            else
+            {
+                USImage.SetActive(false);
+                USSRImage.SetActive(true);
 
-            USSRMusic.SetActive(true);
-            USMusic.SetActive(false);
+                USSRMusic.SetActive(true);
+                USMusic.SetActive(false);
 
-        }
+            }
 
-        //make sure it is an AI game first
-        if (firstPlayer == aiPiece)
-        {
-            BtnToggle();
-            player2.GetComponent<AI>().AIMove(turnCount);
+            //make sure it is an AI game first
+            if (firstPlayer == aiPiece)
+            {
+                BtnToggle();
+                player2.GetComponent<AI>().AIMove(turnCount);
+            }
         }
     }
+
+    #region GameCore
 
     public void UpdatePlayerScoreInUI(int score)
     {
@@ -910,4 +956,123 @@ public class BoardManager : MonoBehaviour
             player2.GetComponent<AI>().EndOpener();
         }
     }
+
+    #endregion
+    public void NetworkGame()
+    {
+        //Host Turn
+        if(activeSide == firstPlayer)
+        {
+
+        }
+
+        else if(activeSide != firstPlayer)
+        {
+            if (netWorkTurn)
+            {
+                netWorkTurn = false;
+            }
+            else
+            {
+                netWorkTurn = true;
+            }
+            StartCoroutine(networkController.WaitForTurn());
+        }
+    }
+
+    public void TurnReceived()
+    {
+        ReceiveMoveFromNetwork();
+        NetworkGame();
+    }
+
+    public void ReceiveMoveFromNetwork()
+    {
+        List<int> networkNodes = networkController.GetNodesPlaced();
+        List<int> networkBranches = networkController.GetBranchesPlaced();
+
+        foreach(int node in networkNodes)
+        {
+            NetworkChangeNodeOwner(node);
+        }
+        foreach(int branch in networkBranches)
+        {
+            NetworkChangeBranchOwner(branch);
+        }
+    }
+
+    public void setNetworkManagerReference()
+    {
+        networkController.SetBoardManagerReference(this);
+    }
+
+    public void NetworkChangeNodeOwner(int nodeNum)
+    {
+        if (activeSide == Owner.US)
+        {
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+        }
+        else
+        {
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+        }
+
+        /*nodesPlacedThisTurn.Add(nodeNum);*/
+
+        /*if (activeSide == humanPiece && isSetupTurn)
+        {
+            if (turnCount == 1 || turnCount == 2)
+            {
+                firstSetupNodeImage.SetActive(false);
+            }
+            else if (turnCount == 3 || turnCount == 4)
+            {
+                secondSetupNodeImage.SetActive(false);
+            }
+        }
+
+        if (activeSide == aiPiece)
+        {
+            Debug.Log("AI placed node " + nodeNum);
+        }*/
+    }
+
+    public void NetworkChangeBranchOwner(int branchNum)
+    {
+        if (activeSide == Owner.US)
+        {
+            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+        }
+        else
+        {
+            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+        }
+
+        /*branchesPlacedThisTurn.Add(branchNum);*/
+
+       /* if (activeSide == netPiece && isSetupTurn)
+        {
+            allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = true;
+            if (turnCount == 1 || turnCount == 2)
+            {
+                firstSetupBranch = branchNum;
+                firstSetupBranchImage.SetActive(false);
+            }
+            else if (turnCount == 3 || turnCount == 4)
+            {
+                secondSetupBranch = branchNum;
+                secondSetupBranchImage.SetActive(false);
+            }
+        }
+
+        if (activeSide != netPiece)
+        {
+            Debug.Log("Network placed branch " + branchNum);
+        }*/
+    }
+
 }

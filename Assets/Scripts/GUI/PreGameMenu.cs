@@ -76,6 +76,9 @@ public class PreGameMenu : MonoBehaviour
     
     public void OnlinePlay()
     {
+        PlayerPrefs.SetInt("Network_Player", 0);
+        PlayerPrefs.SetInt("Network_Piece", 0);
+        PlayerPrefs.SetString("GameType", "net");
         PlayerPrefs.SetString("UserName", userName.text);
         SceneManager.LoadScene("Lobby");
     }

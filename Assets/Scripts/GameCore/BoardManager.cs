@@ -61,7 +61,11 @@ public class BoardManager : MonoBehaviour
     private GameObject player2;
 
     private bool end;
-    public GameObject gameOverWindow;
+    public GameObject gameOverUSWin;
+    public GameObject gameOverUSLoss;
+    public GameObject gameOverUSSRWin;
+    public GameObject gameOverUSSRLoss;
+
     public GameObject SetupLegalPopup;
 
 
@@ -703,6 +707,20 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public void UIEndGame()
+    {
+        if (humanPiece == Owner.US)
+        {
+            if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSWin.SetActive(true); }
+            else { gameOverUSLoss.SetActive(true); }
+        }
+        else
+        {
+            if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSSRWin.SetActive(true); }
+            else { gameOverUSSRLoss.SetActive(true); }
+        }
+    }
+
     /// <summary>
     /// Updates board info every turn.
     /// Captured tiles
@@ -729,7 +747,7 @@ public class BoardManager : MonoBehaviour
             else player2.GetComponent<AI>().Win();
 
             end = true;
-            gameOverWindow.SetActive(true);
+            UIEndGame();
         }
     }
 

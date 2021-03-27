@@ -7,7 +7,7 @@ public class NodeInfo : MonoBehaviour
 {
     public Owner nodeOwner;
     public int nodeOrder;
-
+    public bool isSetupNode = false;
     public bool placementConfirmed = false;
     public bool connectedToSetup = false;
 
@@ -24,7 +24,6 @@ public class NodeInfo : MonoBehaviour
             if (GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().nodeOwner == GameObject.FindObjectOfType<BoardManager>().activeSide &&
                 !GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().placementConfirmed)
             {
-                //GameObject.FindObjectOfType<BoardManager>().nodeGlow[nodeOrder].SetActive(false);
 
                 GameObject.FindObjectOfType<BoardManager>().UnplaceNode(nodeOrder);
 
@@ -39,8 +38,7 @@ public class NodeInfo : MonoBehaviour
                 if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
-                    //GameObject.FindObjectOfType<BoardManager>().nodeGlow[nodeOrder].SetActive(true);
-
+                    //GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].transform.Find("Highlight").GetComponent<SpriteRenderer>().enabled = true;
 
                     GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
 

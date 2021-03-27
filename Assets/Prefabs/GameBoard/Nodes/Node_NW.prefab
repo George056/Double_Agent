@@ -112,7 +112,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeOwner: 2
   nodeOrder: 0
-  resources: 00000000040000000400000004000000
+  placementConfirmed: 0
+  connectedToSetup: 0
+  resources: []
 --- !u!58 &6475511178370683176
 CircleCollider2D:
   m_ObjectHideFlags: 0

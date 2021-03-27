@@ -13,9 +13,9 @@ public class PreGameMenu : MonoBehaviour
     /// This is used to set the difficulty of the AI
     /// </summary>
     /// <param name="diff">What is the difficulty of the AI (0 = Easy, 1 = hard)</param>
-    public void SetDifficulty(Difficulty diff)
+    public void SetDifficulty(int diff)
     {
-        PlayerPrefs.SetInt("Difficulty", (int)diff);
+        PlayerPrefs.SetInt("Difficulty", diff);
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ public class PreGameMenu : MonoBehaviour
         {
             PlayerPrefs.SetInt("Human_Player", 1);
             PlayerPrefs.SetInt("AI_Player", 0);
-        }
+        } 
     }
 
     /// <summary>

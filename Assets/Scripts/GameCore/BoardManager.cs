@@ -412,10 +412,12 @@ public class BoardManager : MonoBehaviour
             nodes[nodeNum].GetComponent<NodeInfo>().isSetupNode = true;
             if (turnCount == 1 || turnCount == 2)
             {
+                firstSetupNode = nodeNum;
                 firstSetupNodeImage.SetActive(false);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
+                secondSetupNode = nodeNum;
                 secondSetupNodeImage.SetActive(false);
             }
         }
@@ -474,10 +476,12 @@ public class BoardManager : MonoBehaviour
             nodes[nodeNum].GetComponent<NodeInfo>().isSetupNode = false;
             if (turnCount == 1 || turnCount == 2)
             {
+                firstSetupNode = -1;
                 firstSetupNodeImage.SetActive(true);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
+                secondSetupNode = -1;
                 secondSetupNodeImage.SetActive(true);
             }
         }
@@ -493,10 +497,12 @@ public class BoardManager : MonoBehaviour
             allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = false;
             if (turnCount == 1 || turnCount == 2)
             {
+                firstSetupBranch = -1;
                 firstSetupBranchImage.SetActive(true);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
+                secondSetupBranch = -1;
                 secondSetupBranchImage.SetActive(true);
             }
         }
@@ -520,7 +526,7 @@ public class BoardManager : MonoBehaviour
                 if (allBranches[i].GetComponent<BranchInfo>().branchOwner == Owner.Nil)
                     availableBranchFound = true;
             }
-            isLegal = availableBranchFound;
+            if (!availableBranchFound) { isLegal = false; }
         }
         else
         {
@@ -549,8 +555,14 @@ public class BoardManager : MonoBehaviour
         if (turnCount < 5)
         {
             Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
-            if (!nodes[adjacentNodes[0]].GetComponent<NodeInfo>().isSetupNode && !nodes[adjacentNodes[1]].GetComponent<NodeInfo>().isSetupNode) isLegal = false;
-            else isLegal = false;
+            if (turnCount == 1 || turnCount == 2)
+            {
+                if (adjacentNodes[0] != firstSetupNode && adjacentNodes[1] != firstSetupNode) { isLegal = false; }
+            }
+            else if (turnCount == 3 || turnCount == 4)
+            {
+                if (adjacentNodes[0] != secondSetupNode && adjacentNodes[1] != secondSetupNode) { isLegal = false; }
+            }
         }
         else
         {
@@ -565,14 +577,14 @@ public class BoardManager : MonoBehaviour
             }
 
             if (!found) { isLegal = false; }
-        }
 
-        // a branch cannot be placed inside a multicaptured square owned by opponent
-        Relationships.connectionsRoadTiles.TryGetValue(branch, out connectedTiles);
-        foreach (int tile in connectedTiles)
-        {
-            if (resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil && resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != activeSide)
-                isLegal = false;
+            // a branch cannot be placed inside a multicaptured square owned by opponent
+            Relationships.connectionsRoadTiles.TryGetValue(branch, out connectedTiles);
+            foreach (int tile in connectedTiles)
+            {
+                if (resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil && resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != activeSide)
+                    isLegal = false;
+            }
         }
 
         return isLegal;

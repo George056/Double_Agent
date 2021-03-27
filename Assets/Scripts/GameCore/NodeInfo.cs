@@ -35,7 +35,7 @@ public class NodeInfo : MonoBehaviour
             }
             else if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
             {
-                if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+                if (GameObject.FindObjectOfType<BoardManager>().LegalUINodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
                     //GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].transform.Find("Highlight").GetComponent<SpriteRenderer>().enabled = true;
@@ -56,7 +56,7 @@ public class NodeInfo : MonoBehaviour
     {
         if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
         {
-            if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+            if (GameObject.FindObjectOfType<BoardManager>().LegalUINodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
             {
                 if (GameObject.FindObjectOfType<BoardManager>().activeSide == Owner.US)
@@ -75,7 +75,7 @@ public class NodeInfo : MonoBehaviour
     {
         if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
         {
-            if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+            if (GameObject.FindObjectOfType<BoardManager>().LegalUINodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
             {
                 this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);

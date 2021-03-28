@@ -35,7 +35,6 @@ public class BoardManager : MonoBehaviour
     public Owner activeSide;
 
     public GameObject tradeButton;
-    //public GameObject buildButton;
     public GameObject endTurnButton;
 
     public bool inBuildMode;
@@ -47,7 +46,8 @@ public class BoardManager : MonoBehaviour
     public int rows = 11;
 
     bool isSetupTurn = true;
-    private int turnCount = 1;
+    [HideInInspector]
+    public int turnCount = 1;
 
     private CheckDataList cdl;
 
@@ -65,9 +65,15 @@ public class BoardManager : MonoBehaviour
     private GameObject player1;
     private GameObject player2;
 
-    public GameObject netPlayer;
+    [HideInInspector]
+    public static bool end;
 
-    private bool end;
+    public GameObject gameOverUSWin;
+    public GameObject gameOverUSLoss;
+    public GameObject gameOverUSSRWin;
+    public GameObject gameOverUSSRLoss;
+
+    public GameObject netPlayer;
     public GameObject gameOverWindow;
     public GameObject SetupLegalPopup;
 
@@ -127,6 +133,9 @@ public class BoardManager : MonoBehaviour
     public float defaultVolume = 0.5f;
     public Slider musicSlider;
 
+    [HideInInspector]
+    public static bool new_board = true;
+
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
 
@@ -137,6 +146,9 @@ public class BoardManager : MonoBehaviour
 
     public int firstSetupBranch = -1;
     public int secondSetupBranch = -1;
+
+    public int firstSetupNode = -1;
+    public int secondSetupNode = -1;
 
 
     public void Awake()
@@ -265,6 +277,7 @@ public class BoardManager : MonoBehaviour
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
                         nodes[nodeCount].GetComponent<NodeInfo>().nodeOrder = nodeCount;
                         nodes[nodeCount].GetComponent<NodeInfo>().placementConfirmed = false;
+                        nodes[nodeCount].GetComponent<NodeInfo>().isSetupNode = false;
                         nodeCount++;
                         break;
                     case 'H':
@@ -334,7 +347,7 @@ public class BoardManager : MonoBehaviour
 
             netPlayer = GameObject.FindGameObjectWithTag("Player");
 
-            if(netPiece == Owner.US)
+            if (netPiece == Owner.US)
             {
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
@@ -351,7 +364,7 @@ public class BoardManager : MonoBehaviour
                 USMusic.SetActive(false);
             }
 
-           NetworkGame();
+            NetworkGame();
         }
         else
         {
@@ -413,9 +426,10 @@ public class BoardManager : MonoBehaviour
                 player2.GetComponent<AI>().AIMove(turnCount);
             }
         }
+
     }
 
-    #region GameCore
+
 
     public void UpdatePlayerScoreInUI(int score)
     {
@@ -481,12 +495,15 @@ public class BoardManager : MonoBehaviour
 
         if (activeSide == humanPiece && isSetupTurn)
         {
+            nodes[nodeNum].GetComponent<NodeInfo>().isSetupNode = true;
             if (turnCount == 1 || turnCount == 2)
             {
+                firstSetupNode = nodeNum;
                 firstSetupNodeImage.SetActive(false);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
+                secondSetupNode = nodeNum;
                 secondSetupNodeImage.SetActive(false);
             }
         }
@@ -542,12 +559,15 @@ public class BoardManager : MonoBehaviour
 
         if (activeSide == humanPiece && isSetupTurn)
         {
+            nodes[nodeNum].GetComponent<NodeInfo>().isSetupNode = false;
             if (turnCount == 1 || turnCount == 2)
             {
+                firstSetupNode = -1;
                 firstSetupNodeImage.SetActive(true);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
+                secondSetupNode = -1;
                 secondSetupNodeImage.SetActive(true);
             }
         }
@@ -563,15 +583,97 @@ public class BoardManager : MonoBehaviour
             allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = false;
             if (turnCount == 1 || turnCount == 2)
             {
+                firstSetupBranch = -1;
                 firstSetupBranchImage.SetActive(true);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
+                secondSetupBranch = -1;
                 secondSetupBranchImage.SetActive(true);
             }
         }
 
         branchesPlacedThisTurn.Remove(branchNum);
+    }
+
+    public bool LegalUINodeMove(int node, Owner activeSide, List<int> myBranches)
+    {
+        bool isLegal = true;
+
+        if (nodes[node].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) { isLegal = false; }
+        
+        if (turnCount < 5)
+        {
+            // a node on a setup move must have an available adjacent branch that can also be claimed
+            bool availableBranchFound = false;
+            Relationships.connectionsNode.TryGetValue(node, out List<int> adjacentBranches);
+            foreach (int i in adjacentBranches)
+            {
+                if (allBranches[i].GetComponent<BranchInfo>().branchOwner == Owner.Nil)
+                    availableBranchFound = true;
+            }
+            if (!availableBranchFound) { isLegal = false; }
+        }
+        else
+        {
+            Relationships.connectionsNode.TryGetValue(node, out List<int> connectedBranches);
+            bool found = false;
+            foreach (int i in connectedBranches)
+            {
+                found = myBranches.Contains(i);
+                if (found) break;
+            }
+
+            if (!found) { isLegal = false; }
+        }
+
+        return isLegal;
+    }
+
+    public bool LegalUIBranchMove(int branch, Owner activeSide, List<int> myBranches)
+    {
+        bool isLegal = true;
+        List<int> connectedTiles;
+
+        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
+
+        //*************************** THIS DOES NOT WORK YET (the if statement) *************************************************** 
+        if (turnCount < 5)
+        {
+            Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
+            if (turnCount == 1 || turnCount == 2)
+            {
+                if (adjacentNodes[0] != firstSetupNode && adjacentNodes[1] != firstSetupNode) { isLegal = false; }
+            }
+            else if (turnCount == 3 || turnCount == 4)
+            {
+                if (adjacentNodes[0] != secondSetupNode && adjacentNodes[1] != secondSetupNode) { isLegal = false; }
+            }
+        }
+        else
+        {
+            // check all the branches connected to the one you want to place
+            Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
+            bool found = false;
+            foreach (int i in connectedBranches)
+            {
+                // set found to true if any of the connected branches is in your list of owned branches
+                found = myBranches.Contains(i);
+                if (found) break;
+            }
+
+            if (!found) { isLegal = false; }
+
+            // a branch cannot be placed inside a multicaptured square owned by opponent
+            Relationships.connectionsRoadTiles.TryGetValue(branch, out connectedTiles);
+            foreach (int tile in connectedTiles)
+            {
+                if (resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil && resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != activeSide)
+                    isLegal = false;
+            }
+        }
+
+        return isLegal;
     }
 
     public bool LegalNodeMove(int node, Owner activeSide, List<int> myBranches)
@@ -584,16 +686,8 @@ public class BoardManager : MonoBehaviour
         bool found = false;
         foreach (int i in connectedBranches)
         {
-            if (activeSide == humanPiece && (turnCount == 3 || turnCount == 4))
-            {
-                found = (i == secondSetupBranch);
-                if (found) break;
-            }
-            else
-            {
-                found = myBranches.Contains(i);
-                if (found) break;
-            }
+            found = myBranches.Contains(i);
+            if (found) break;
         }
 
         if (!found) { isLegal = false; }
@@ -695,6 +789,20 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    public void UIEndGame()
+    {
+        if (humanPiece == Owner.US)
+        {
+            if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSWin.SetActive(true); }
+            else { gameOverUSLoss.SetActive(true); }
+        }
+        else
+        {
+            if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSSRWin.SetActive(true); }
+            else { gameOverUSSRLoss.SetActive(true); }
+        }
+    }
+
     /// <summary>
     /// Updates board info every turn.
     /// Captured tiles
@@ -721,7 +829,7 @@ public class BoardManager : MonoBehaviour
             else player2.GetComponent<AI>().Win();
 
             end = true;
-            gameOverWindow.SetActive(true);
+            UIEndGame();
         }
     }
 
@@ -986,7 +1094,6 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    #endregion
     public void NetworkGame()
     {
         //Host Turn
@@ -1142,5 +1249,6 @@ public class BoardManager : MonoBehaviour
         
         return boardSeed;
     }
-
 }
+
+

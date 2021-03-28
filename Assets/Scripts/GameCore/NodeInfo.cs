@@ -7,12 +7,37 @@ public class NodeInfo : MonoBehaviour
 {
     public Owner nodeOwner;
     public int nodeOrder;
-
+    public bool isSetupNode = false;
     public bool placementConfirmed = false;
     public bool connectedToSetup = false;
 
     // List of resources the node gives
     public List<GameObject> resources = new List<GameObject>(0);
+
+    bool CanUnplace(int nodeToUnplace)
+    {
+        bool canUnplace = true;
+
+        Relationships.connectionsNode.TryGetValue(nodeToUnplace, out List<int> adjacentBranches);
+        if (GameObject.FindObjectOfType<BoardManager>().turnCount < 3)
+        { 
+            foreach (int i in adjacentBranches)
+            {
+                if (i == GameObject.FindObjectOfType<BoardManager>().firstSetupBranch)
+                    canUnplace = false;
+            }
+        }
+        else if (GameObject.FindObjectOfType<BoardManager>().turnCount == 3 || GameObject.FindObjectOfType<BoardManager>().turnCount == 4)
+        {
+            foreach (int i in adjacentBranches)
+            {
+                if (i == GameObject.FindObjectOfType<BoardManager>().secondSetupBranch)
+                    canUnplace = false;
+            }
+        }
+
+        return canUnplace;
+    }
     
     void OnMouseDown()
     {
@@ -24,21 +49,23 @@ public class NodeInfo : MonoBehaviour
             if (GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().nodeOwner == GameObject.FindObjectOfType<BoardManager>().activeSide &&
                 !GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].GetComponent<NodeInfo>().placementConfirmed)
             {
+                if (CanUnplace(nodeOrder))
+                {
+                    GameObject.FindObjectOfType<BoardManager>().UnplaceNode(nodeOrder);
 
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().RemoveNode(nodeOrder);
 
-                GameObject.FindObjectOfType<BoardManager>().UnplaceNode(nodeOrder);
-
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().RemoveNode(nodeOrder);
-
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().ReimburseForNode();
-
+                    GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().ReimburseForNode();
+                }
 
             }
             else if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
             {
-                if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+                if (GameObject.FindObjectOfType<BoardManager>().LegalUINodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
+                    //GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].transform.Find("Highlight").GetComponent<SpriteRenderer>().enabled = true;
+
                     GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
 
                     // Adds node to player's list of owned nodes
@@ -55,7 +82,7 @@ public class NodeInfo : MonoBehaviour
     {
         if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
         {
-            if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+            if (GameObject.FindObjectOfType<BoardManager>().LegalUINodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
             {
                 if (GameObject.FindObjectOfType<BoardManager>().activeSide == Owner.US)
@@ -74,7 +101,7 @@ public class NodeInfo : MonoBehaviour
     {
         if (GameObject.FindObjectOfType<BoardManager>().inBuildMode && GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordNode())
         {
-            if (GameObject.FindObjectOfType<BoardManager>().LegalNodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
+            if (GameObject.FindObjectOfType<BoardManager>().LegalUINodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
             {
                 this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);

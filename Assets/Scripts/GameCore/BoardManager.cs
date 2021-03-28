@@ -46,7 +46,8 @@ public class BoardManager : MonoBehaviour
     public int rows = 11;
 
     bool isSetupTurn = true;
-    private int turnCount = 1;
+    [HideInInspector]
+    public int turnCount = 1;
 
     private CheckDataList cdl;
 

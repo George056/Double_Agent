@@ -28,11 +28,24 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
         networkController.SetPlayerTurn(true);
     }
 
+    [PunRPC]
+    public void RPC_SendSeed(string gameBoardSeed)
+    {
+        if (!photonView.IsMine)
+            return;
+        networkController.SetBoardSeed(gameBoardSeed);
+    }
+
 
 
     public void SendMove(List<int> nodesPlaced, List<int> branchesPlaced)
     {
         photonView.RPC("RPC_SendMove", RpcTarget.All, nodesPlaced, branchesPlaced);
+    }
+
+    public void SendSeed(string gameBoardSeed)
+    {
+        photonView.RPC("RPC_SendSeed", RpcTarget.All, gameBoardSeed);
     }
 
 

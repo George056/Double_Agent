@@ -138,6 +138,26 @@ public class BoardManager : MonoBehaviour
     public int firstSetupBranch = -1;
     public int secondSetupBranch = -1;
 
+
+    public void Awake()
+    {
+
+        setNetworkManagerReference();
+        if (PlayerPrefs.GetInt("Host") == 1)
+        {
+            customBoardSeed = GetRandomBoardSeed();
+            networkController.SetBoardSeed(customBoardSeed);
+            networkController.SendSeed();
+        }
+
+        else
+        {
+            while(customBoardSeed == "")
+            {
+                customBoardSeed = networkController.GetBoardSeed();
+            }
+        }
+    }
     int GetTileIndex(string code)
     {
         int index = 0;
@@ -296,11 +316,8 @@ public class BoardManager : MonoBehaviour
     {
         if (PlayerPrefs.GetString("GameType") == "net")
         {
-            setNetworkManagerReference();
             netPiece = (Owner)PlayerPrefs.GetInt("Network_Piece", 0);
-            // gridPositions.Clear();
-
-            customBoardSeed = GetRandomBoardSeed();
+            gridPositions.Clear();
 
             CustomizeBoardLayout();
             BoardSetUp(GameBoard);
@@ -334,7 +351,7 @@ public class BoardManager : MonoBehaviour
                 USMusic.SetActive(false);
             }
 
-            NetworkGame();
+           NetworkGame();
         }
         else
         {
@@ -1089,8 +1106,40 @@ public class BoardManager : MonoBehaviour
 
     public string GetRandomBoardSeed()
     {
-        string boardSeed = "Y3G3R1B2R2Y2B3Y1R3G1ESB1G2";
+        string boardSeed = "";
+        int randNum;
+        string temp;
+        List<string> boardSeedComponents = new List<string>() 
+        {
+            "Y1",
+            "Y2",
+            "Y3",
+            "G1",
+            "G2",
+            "G3",
+            "R1",
+            "R2",
+            "R3",
+            "B1",
+            "B2",
+            "B3",
+            "ES"
+        };
 
+        for(int i = 0; i < boardSeedComponents.Count; i++)
+        {
+            temp = boardSeedComponents[i];
+            randNum = Random.Range(0, boardSeedComponents.Count);
+            boardSeedComponents[i] = boardSeedComponents[randNum];
+            boardSeedComponents[randNum] = temp;
+        }
+
+        for(int i = 0; i < boardSeedComponents.Count; i++)
+        {
+            boardSeed = boardSeed + boardSeedComponents[i];
+        }
+
+        
         return boardSeed;
     }
 

@@ -10,6 +10,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public static List<int> nodesPlaced;
     public static List<int> branchesPlaced;
+    public static string gameBoardSeed = "";
 
     public static NetworkController NetController;
 
@@ -46,6 +47,15 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     }
 
+    public void SendMove()
+    {
+        NetworkPlayer.networkPlayer.SendMove(nodesPlaced, branchesPlaced);
+    }
+
+    public void SendSeed()
+    {
+        NetworkPlayer.networkPlayer.SendSeed(gameBoardSeed);
+    }
 
     public void SetNodesPlaced(List<int> newNodesPlaced)
     {
@@ -55,6 +65,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void SetBranchesPlaced(List<int> newBranchesPlaced)
     {
         branchesPlaced = newBranchesPlaced;
+    }
+
+    public void SetBoardSeed(string boardSeed)
+    {
+        gameBoardSeed = boardSeed;
     }
 
     public void SetPlayerTurn(bool b)
@@ -70,6 +85,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public List<int> GetBranchesPlaced()
     {
         return branchesPlaced;
+    }
+
+    public string GetBoardSeed()
+    {
+        return gameBoardSeed;
     }
 
     public override void OnLeftRoom()

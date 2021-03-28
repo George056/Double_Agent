@@ -269,11 +269,15 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void OnCreateGameButtonClicked()
     {
+        // Set Host to 1 for if player is host
+        PlayerPrefs.SetInt("Host", 1);
         CreateRoom();
 
     }
     public void OnJoinGameButtonClicked()
     {
+        //Set host to 0 if player is not host
+        PlayerPrefs.SetInt("Host", 0);
         CreateOrJoinCanvas.gameObject.SetActive(false);
         RoomLobbyListCanvas.gameObject.SetActive(true);
 

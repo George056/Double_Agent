@@ -392,10 +392,6 @@ public class BoardManager : MonoBehaviour
             USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
             USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
-            end = false;
-            turnCount = 1;
-            inBuildMode = (firstPlayer == humanPiece);
-
             //check to see if it is an AI or network game
             player1 = GameObject.FindGameObjectWithTag("Player");
             player2 = GameObject.FindGameObjectWithTag("AI");

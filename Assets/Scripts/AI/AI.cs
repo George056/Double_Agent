@@ -255,6 +255,39 @@ public class AI : Agent
             actionMasker.SetMask(21, new int[1] { 1 });
             actionMasker.SetMask(22, new int[1] { 1 });
             actionMasker.SetMask(23, new int[1] { 1 });
+
+            List<int> var_branches = new List<int>(new int[] { 1, 3, 2, 5, 6, 10, 9, 14, 21, 26, 25, 29, 30, 33, 32, 34 });
+            List<int> var_nodes = new List<int>(new int[]    { 3,    4,    7,     10,    13,     16,     19,     20 });
+            List<int> double_var_branches = new List<int>(new int[] { 4,          16,            19,             31 });
+
+            bool last_node_owned = false;
+            bool current_node_owned = false;
+
+            List<int> blocking = new List<int>();
+
+            for(int i = 0, branchCounter = 0; i < var_nodes.Count; ++i, branchCounter += 2)
+            {
+                last_node_owned = current_node_owned;
+                current_node_owned = bm.nodes[var_nodes[i]].GetComponent<NodeInfo>().nodeOwner != Owner.Nil;
+
+                if (current_node_owned)
+                {
+                    blocking.Add(var_branches[branchCounter]);
+                    blocking.Add(var_branches[branchCounter + 1]);
+                }
+
+                if(current_node_owned && last_node_owned)
+                {
+                    blocking.Add(double_var_branches[(int)(i / 2)]);
+                }
+            }
+
+            Add(24, ref blocking);
+
+            foreach(int i in blocking)
+            {
+                actionMasker.SetMask(i, new int[1] { 1 });
+            }
         }
         else
         {
@@ -346,6 +379,14 @@ public class AI : Agent
 
             foreach (int i in blockedNodes) actionMasker.SetMask(i, new int[1] { 1 });
 
+        }
+    }
+
+    private void Add(int amount, ref List<int> lst)
+    {
+        for(int i = 0; i < lst.Count; ++i)
+        {
+            lst[i] += amount;
         }
     }
 
@@ -524,7 +565,80 @@ public class AI : Agent
         bool noBranch = true;
         bool noNode = true;
 
-        //make a trade first
+        int placed_branches = 0;
+        //place connectors
+        for (int i = 0; !heuristic && i < 36; i++)
+        {
+            if (vectorAction[i + 24] == 1)
+            {
+                noBranch = false;
+                if (LegalMoveConnector(i) && (!opener || placed_branches <= 0))
+                {
+                    Debug.Log("Connector: " + i);
+                    PlaceMoveBranch(i);
+                    __myRoads.Add(i);
+                    ++placed_branches;
+                    if (trainingMode)
+                        AddReward(branchReward);
+                }
+                else if(trainingMode)
+                {
+                    AddReward(illegalMovePunish);
+                }
+            }
+        }
+
+        int placed_nodes = 0;
+        //place nodes
+        for (int i = 0; !heuristic && i < 24; i++)
+        {
+            if(vectorAction[i] == 1)
+            {
+                noNode = false;
+                if (LegalMoveNode(i) && (!opener || placed_nodes <= 0))
+                {
+                    Debug.Log("Node: " + i);
+                    PlaceMoveNode(i);
+                    __myNodes.Add(i);
+                    ++placed_nodes;
+                    if(trainingMode)
+                        foreach(GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)//account for depleted and captured
+                        {
+                            if(c.GetComponent<ResourceInfo>().depleted == true)
+                            {
+                                AddReward(nodeGrayReward / 2);
+                                totalReward += nodeGrayReward / 2;
+                            }
+                            else if(c.GetComponent<ResourceInfo>().resoureTileOwner == ((__piece_type == Owner.US) ? Owner.USSR : Owner.US))
+                            {
+                                AddReward(nodeGrayReward / 3);
+                                totalReward += nodeGrayReward / 3;
+                            }
+                            else if(c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Blue || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Red)
+                            {
+                                AddReward(nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
+                                totalReward += nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
+                            }
+                            else if (c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Green || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Yellow)
+                            {
+                                AddReward(nodeGYReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
+                                totalReward += nodeGYReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
+                            }
+                            else
+                            {
+                                AddReward(nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
+                                totalReward += nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
+                            }
+                        }
+                }
+                else if(trainingMode)
+                {
+                    AddReward(illegalMovePunish);
+                }
+            }
+        }
+
+        //make a trade
         if (!heuristic && !opener && vectorAction[60] != 0)
         {
             bool illegal_trade = false; // used to show that a trade was made that exceeds held resources.
@@ -729,15 +843,15 @@ public class AI : Agent
                     break;
             }
 
-            foreach(int i in tradeArr)
+            foreach (int i in tradeArr)
             {
                 if (i > 0) traded_for += i;
                 else traded_in += i;
             }
 
-            for(int i = 0; i < tradeArr.Count; ++i)
+            for (int i = 0; i < tradeArr.Count; ++i)
             {
-                if(tradeArr[i] > __resources[i])
+                if (tradeArr[i] > __resources[i])
                 {
                     illegal_trade = true;
                     break;
@@ -745,83 +859,14 @@ public class AI : Agent
             }
 
             if (traded_for != 1 || Math.Abs(traded_in) != 3 || illegal_trade)
-                AddReward(illegalTradePunish);
+                if(trainingMode) AddReward(illegalTradePunish);
             else
                 MakeTrade(tradeArr);
             noTrade = false;
         }
-
-        int placed_branches = 0;
-        //place connectors
-        for (int i = 0; !heuristic && i < 36; i++)
+        else if(trainingMode && !heuristic && !opener && noNode && noBranch && SumResources() > 3)
         {
-            if (vectorAction[i + 24] == 1)
-            {
-                noBranch = false;
-                if (LegalMoveConnector(i) && (!opener || placed_branches <= 0))
-                {
-                    Debug.Log("Connector: " + i);
-                    PlaceMoveBranch(i);
-                    __myRoads.Add(i);
-                    ++placed_branches;
-                    if (trainingMode)
-                        AddReward(branchReward);
-                }
-                else if(trainingMode)
-                {
-                    AddReward(illegalMovePunish);
-                }
-            }
-        }
-
-        int placed_nodes = 0;
-        //place nodes
-        for (int i = 0; !heuristic && i < 24; i++)
-        {
-            if(vectorAction[i] == 1)
-            {
-                noNode = false;
-                if (LegalMoveNode(i) && (!opener || placed_nodes <= 0))
-                {
-                    Debug.Log("Node: " + i);
-                    PlaceMoveNode(i);
-                    __myNodes.Add(i);
-                    ++placed_nodes;
-                    if(trainingMode)
-                        foreach(GameObject c in bm.nodes[i].GetComponent<NodeInfo>().resources)//account for depleted and captured
-                        {
-                            if(c.GetComponent<ResourceInfo>().depleted == true)
-                            {
-                                AddReward(nodeGrayReward / 2);
-                                totalReward += nodeGrayReward / 2;
-                            }
-                            else if(c.GetComponent<ResourceInfo>().resoureTileOwner == ((__piece_type == Owner.US) ? Owner.USSR : Owner.US))
-                            {
-                                AddReward(nodeGrayReward / 3);
-                                totalReward += nodeGrayReward / 3;
-                            }
-                            else if(c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Blue || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Red)
-                            {
-                                AddReward(nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
-                                totalReward += nodeRBReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
-                            }
-                            else if (c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Green || c.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Yellow)
-                            {
-                                AddReward(nodeGYReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
-                                totalReward += nodeGYReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
-                            }
-                            else
-                            {
-                                AddReward(nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1));
-                                totalReward += nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
-                            }
-                        }
-                }
-                else if(trainingMode)
-                {
-                    AddReward(illegalMovePunish);
-                }
-            }
+            AddReward(illegalTradePunish * 2.0f);
         }
 
         if (opener && !heuristic && (noNode && noBranch))
@@ -842,12 +887,12 @@ public class AI : Agent
 
         if (opener && !heuristic)
         {
-            if (noBranch && noNode)
+            if (__myRoads.Count != ((turn == 1 || turn == 2) ? 1 : 2) && __myNodes.Count != ((turn == 1 || turn == 2) ? 1 : 2))
             {
                 int positionBranch = OpenerBranch();
                 OpenerNode(positionBranch);
             }
-            else if (noNode)
+            else if (__myNodes.Count != ((turn == 1 || turn == 2) ? 1 : 2))
             {
                 OpenerNode(__myRoads[(turn == 1 || turn == 2) ? 0 : 1]);
             }
@@ -863,6 +908,16 @@ public class AI : Agent
 
         Debug.Log("AI Move Finished&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
         bm.EndTurn();
+    }
+
+    int SumResources()
+    {
+        int sum = 0;
+        foreach(int i in __resources)
+        {
+            sum += i;
+        }
+        return sum;
     }
 
     /// <summary>

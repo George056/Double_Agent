@@ -61,7 +61,9 @@ public class BoardManager : MonoBehaviour
     private GameObject player1;
     private GameObject player2;
 
-    private bool end;
+    [HideInInspector]
+    public static bool end;
+    
     public GameObject gameOverWindow;
 
 
@@ -111,6 +113,9 @@ public class BoardManager : MonoBehaviour
     public GameObject USSRMusic;
     public float defaultVolume = 0.5f;
     public Slider musicSlider;
+
+    [HideInInspector]
+    public static bool new_board = true;
 
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
@@ -276,6 +281,7 @@ public class BoardManager : MonoBehaviour
     {
         customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
         Debug.Log("CustomBoardSeed: " + customBoardSeed);
+        new_board = true;
         gridPositions.Clear();
         if (customBoardSeed != "")
         {
@@ -334,11 +340,13 @@ public class BoardManager : MonoBehaviour
     {
         if(!end && activeSide == humanPiece)
         {
+            new_board = false;
             Debug.Log("Turn: " + turnCount);
             player1.GetComponent<AI>().AIMove(turnCount);
         }
         else if(!end && activeSide == aiPiece)
         {
+            new_board = false;
             Debug.Log("Turn: " + turnCount);
             player2.GetComponent<AI>().AIMove(turnCount);
         }
@@ -602,7 +610,7 @@ public class BoardManager : MonoBehaviour
 
             end = true;
             gameOverWindow.SetActive(true);
-            AI.LoadNewScene();
+            //AI.LoadNewScene();
         }
     }
 
@@ -632,7 +640,7 @@ public class BoardManager : MonoBehaviour
             }
             else if(oldLongest == humanPiece)
             {
-                player1.GetComponent<Player>().LoseLongestNet();
+                player1.GetComponent<AI>().LoseLongestNet();
             }
 
             if (cdl.longestNetOwner == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
@@ -641,7 +649,7 @@ public class BoardManager : MonoBehaviour
             }
             else if(cdl.longestNetOwner == humanPiece)
             {
-                player1.GetComponent<Player>().GetLongestNet();
+                player1.GetComponent<AI>().GetLongestNet();
             }
         }
 

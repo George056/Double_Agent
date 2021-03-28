@@ -432,6 +432,7 @@ public class AI : Agent
     public override void OnEpisodeBegin()
     {
         Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        if (!BoardManager.new_board) LoadNewScene();
         //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
         if (!setup) Awake();
         __ai_score = 0;
@@ -823,7 +824,7 @@ public class AI : Agent
             }
         }
 
-        if (opener && !heuristic && (noNode && noBranch && noTrade))
+        if (opener && !heuristic && (noNode && noBranch))
         {
             RandomAIMove();
         }
@@ -839,7 +840,20 @@ public class AI : Agent
             else if (__myRoads.Count != 2) AddReward(noMovePunish);
         }
 
-        if ((noNode && noBranch && noTrade) && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode && !heuristic)
+        if (opener && !heuristic)
+        {
+            if (noBranch && noNode)
+            {
+                int positionBranch = OpenerBranch();
+                OpenerNode(positionBranch);
+            }
+            else if (noNode)
+            {
+                OpenerNode(__myRoads[(turn == 1 || turn == 2) ? 0 : 1]);
+            }
+        }
+
+        if ((noNode && noBranch && noTrade) && !opener && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode && !heuristic)
         {
             AddReward(noMovePunish);
         }
@@ -1024,248 +1038,277 @@ public class AI : Agent
     {
         if (opener)
         {
-            int positionCon;
-
-            do
-            {
-                positionCon = Random.Range(0, 36);
-            } while (!LegalMoveConnector(positionCon));//exit when a legal move is found
-            PlaceMoveBranch(positionCon);
-            __myRoads.Add(positionCon);
-
-            int positionNode;
-
-            positionNode = Random.Range(0, 1);
-            Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
-            if (LegalMoveNode(temp[positionNode]))
-            {
-                PlaceMoveNode(temp[positionNode]);
-                __myNodes.Add(temp[positionNode]);
-            }
-            else
-            {
-                PlaceMoveNode(temp[(positionNode == 0) ? 1 : 0]);
-                __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
-            }
+            int positionBranch = OpenerBranch();
+            OpenerNode(positionBranch);
         }
         else
         {
             int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
-            int maxCons = Math.Min(__resources[0], __resources[1]);
+            int maxBranches = Math.Min(__resources[0], __resources[1]);
 
-            int counter = 0;
+            RandomBranches(maxBranches);
+            RandomNodes(maxNodes);
 
-            List<int> legalNodes = new List<int>();
-            List<int> legalCon = new List<int>();
-            foreach (int i in __myRoads)//get all connections to owned branches
+            List<int> trade = MakeTrade();
+            if(trade != null)
             {
-                if (Relationships.connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
+                MakeTrade(trade);
             }
-            //remove duplicates found at: https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
+        }
+            
+    }
 
-            legalCon = legalCon.Distinct().ToList();
-            //int consToPlace = Random.Range(0, maxCons);
+    int OpenerBranch()
+    {
+        int positionCon;
 
-            //place a legal connection when found and make a list and do at once
-            for (int i = 0; i < maxCons && i <= legalCon.Count && counter < 50; i++, counter++) //this cannot happen
+        do
+        {
+            positionCon = Random.Range(0, 36);
+        } while (!LegalMoveConnector(positionCon));//exit when a legal move is found
+        PlaceMoveBranch(positionCon);
+        __myRoads.Add(positionCon);
+        return positionCon;
+    }
+
+    void OpenerNode(int positionCon)
+    {
+        int positionNode;
+
+        positionNode = Random.Range(0, 1);
+        Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
+        if (LegalMoveNode(temp[positionNode]))
+        {
+            PlaceMoveNode(temp[positionNode]);
+            __myNodes.Add(temp[positionNode]);
+        }
+        else
+        {
+            PlaceMoveNode(temp[(positionNode == 0) ? 1 : 0]);
+            __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
+        }
+    }
+
+    void RandomBranches(int amount)
+    {
+        int counter = 0;
+
+        List<int> legalCon = new List<int>();
+        foreach (int i in __myRoads)//get all connections to owned branches
+        {
+            if (Relationships.connectionsRoad.TryGetValue(i, out var outputC)) legalCon.AddRange(outputC);
+        }
+        //remove duplicates found at: https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
+        legalCon = legalCon.Distinct().ToList();
+
+        //place a legal connection when found and make a list and do at once
+        for (int i = 0; i < amount && i <= legalCon.Count && counter < 50; i++, counter++) //this cannot happen
+        {
+            int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
+            if (legalCon.Count > 0)
             {
-                int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
-                if (legalCon.Count > 0)
+                if (LegalMoveConnector(legalCon[con]))
                 {
-                    if (LegalMoveConnector(legalCon[con]))
-                    {
-                        PlaceMoveBranch(legalCon[con]);
-                        __myRoads.Add(legalCon[con]);
-                    }
-                    else
-                    {
-                        i--;
-                    }
-                    legalCon.Remove(legalCon[con]); // remove the branch; if added it's already used, if not then it was illegal
+                    PlaceMoveBranch(legalCon[con]);
+                    __myRoads.Add(legalCon[con]);
                 }
-            }
-
-            foreach (int i in __myRoads)
-            {
-                if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
-            }
-            legalNodes = legalNodes.Distinct().ToList();
-            //int nodesToPlace = Random.Range(0, maxNodes);
-
-            counter = 0;
-
-            for (int i = 0; i < maxNodes && i <= legalNodes.Count && counter < 50; i++, counter++)
-            {
-                int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
-                if (legalNodes.Count > 0)
+                else
                 {
-                    if (LegalMoveNode(legalNodes[node]))//if a legal move add it
-                    {
-                        int tileCount = bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources.Count;
-                        foreach (GameObject go in bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources)
-                        {
-                            if (go.GetComponent<ResourceInfo>().depleted && go.GetComponent<ResourceInfo>().resoureTileOwner != __piece_type)
-                            {
-                                tileCount--;
-                            }
-                        }
-                        if (tileCount > Mathf.Ceil(bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources.Count / 2) || (10 - __ai_score) < maxNodes)
-                        {
-                            PlaceMoveNode(legalNodes[node]);
-                            __myNodes.Add(legalNodes[node]);
-                        }
-
-                    }
-                    else
-                    {
-                        i--;
-                    }
-                    legalNodes.Remove(legalNodes[node]);
+                    i--;
                 }
-            }
-
-            maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
-            maxCons = Math.Min(__resources[0], __resources[1]);
-
-            //make trade
-            if ((Random.Range(0, 6) != 2) && (maxCons == 0 || maxNodes == 0))
-            {
-                List<int> trade = new List<int>(4) { 0, 0, 0, 0 };
-
-                int traded = 0;
-                int blocked = 0;
-                while (traded < 3 && blocked < 3)
-                {
-                    blocked = 0;
-
-                    if (__resources[0] == 0 && __resources[1] != 0)
-                    {
-                        if (__resources[1] > 1 && traded < 3)
-                        {
-                            traded++;
-                            __resources[1] -= 1;
-                            trade[1] -= 1;
-                        }
-                        else blocked++;
-                        if (__resources[2] > 0 && traded < 3)
-                        {
-                            traded++;
-                            __resources[2] -= 1;
-                            trade[2] -= 1;
-                        }
-                        else blocked++;
-                        if (__resources[3] > 0 && traded < 3)
-                        {
-                            traded++;
-                            __resources[3] -= 1;
-                            trade[3] -= 1;
-                        }
-                        else blocked++;
-                    }
-                    else if (__resources[1] == 0 && __resources[0] != 0)
-                    {
-                        if (__resources[0] > 1 && traded < 3)
-                        {
-                            traded++;
-                            __resources[0] -= 1;
-                            trade[0] -= 1;
-                        }
-                        else blocked++;
-                        if (__resources[2] > 0 && traded < 3)
-                        {
-                            traded++;
-                            __resources[2] -= 1;
-                            trade[2] -= 1;
-                        }
-                        else blocked++;
-                        if (__resources[3] > 0 && traded < 3)
-                        {
-                            traded++;
-                            __resources[3] -= 1;
-                            trade[3] -= 1;
-                        }
-                        else blocked++;
-                    }
-                    else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
-                    {
-                        if (__resources[0] > 0 && traded < 3)
-                        {
-                            traded++;
-                            __resources[0] -= 1;
-                            trade[0] -= 1;
-                        }
-                        else blocked++;
-                        if (__resources[1] > 0 && traded < 3)
-                        {
-                            traded++;
-                            __resources[1] -= 1;
-                            trade[1] -= 1;
-                        }
-                        else blocked++;
-                        if (__resources[3] > 2 && traded < 3)
-                        {
-                            traded++;
-                            __resources[3] -= 1;
-                            trade[3] -= 1;
-                        }
-                        else blocked++;
-                    }
-                    else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
-                    {
-                        if (__resources[0] > 0 && traded < 3)
-                        {
-                            traded++;
-                            __resources[0] -= 1;
-                            trade[0] -= 1;
-                        }
-                        else blocked++;
-                        if (__resources[1] > 0 && traded < 3)
-                        {
-                            traded++;
-                            __resources[1] -= 1;
-                            trade[1] -= 1;
-                        }
-                        else blocked++;
-                        if (__resources[2] > 2 && traded < 3)
-                        {
-                            traded++;
-                            __resources[2] -= 1;
-                            trade[2] -= 1;
-                        }
-                        else blocked++;
-                    }
-                    else blocked = 3;
-                }
-
-                for (int i = 0; i < trade.Count; i++)
-                {
-                    __resources[i] -= trade[i];
-                }
-
-                if (blocked != 3)
-                {
-                    if (__resources[0] == 0 && __resources[1] != 0)
-                    {
-                        trade[0] += 1;
-                    }
-                    else if (__resources[1] == 0 && __resources[0] != 0)
-                    {
-                        trade[1] += 1;
-                    }
-                    else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
-                    {
-                        trade[2] += 1;
-                    }
-                    else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
-                    {
-                        trade[3] += 1;
-                    }
-                    MakeTrade(trade);
-                    Debug.Log("Trade: " + trade[0] + ", " + trade[1] + ", " + trade[2] + ", " + trade[3]);
-
-                }
-
+                legalCon.Remove(legalCon[con]); // remove the branch; if added it's already used, if not then it was illegal
             }
         }
     }
+
+    void RandomNodes(int amount)
+    {
+        List<int> legalNodes = new List<int>();
+        foreach (int i in __myRoads)
+        {
+            if (Relationships.connectionsRoadNode.TryGetValue(i, out var outputN)) legalNodes.AddRange(outputN);
+        }
+        legalNodes = legalNodes.Distinct().ToList();
+
+        int counter = 0;
+
+        for (int i = 0; i < amount && i <= legalNodes.Count && counter < 50; i++, counter++)
+        {
+            int node = Random.Range(0, (legalNodes.Count == 0) ? 0 : legalNodes.Count - 1);
+            if (legalNodes.Count > 0)
+            {
+                if (LegalMoveNode(legalNodes[node]))//if a legal move add it
+                {
+                    int tileCount = bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources.Count;
+                    foreach (GameObject go in bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources)
+                    {
+                        if (go.GetComponent<ResourceInfo>().depleted && go.GetComponent<ResourceInfo>().resoureTileOwner != __piece_type)
+                        {
+                            tileCount--;
+                        }
+                    }
+                    if (tileCount > Mathf.Ceil(bm.nodes[legalNodes[node]].GetComponent<NodeInfo>().resources.Count / 2) || (10 - __ai_score) < amount)
+                    {
+                        PlaceMoveNode(legalNodes[node]);
+                        __myNodes.Add(legalNodes[node]);
+                    }
+
+                }
+                else
+                {
+                    i--;
+                }
+                legalNodes.Remove(legalNodes[node]);
+            }
+        }
+    }
+
+    List<int> MakeTrade()
+    {
+        int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
+        int maxCons = Math.Min(__resources[0], __resources[1]);
+
+        //make trade
+        if ((Random.Range(0, 6) != 2) && (maxCons == 0 || maxNodes == 0))
+        {
+            List<int> trade = new List<int>(4) { 0, 0, 0, 0 };
+
+            int traded = 0;
+            int blocked = 0;
+            while (traded < 3 && blocked < 3)
+            {
+                blocked = 0;
+
+                if (__resources[0] == 0 && __resources[1] != 0)
+                {
+                    if (__resources[1] > 1 && traded < 3)
+                    {
+                        traded++;
+                        __resources[1] -= 1;
+                        trade[1] -= 1;
+                    }
+                    else blocked++;
+                    if (__resources[2] > 0 && traded < 3)
+                    {
+                        traded++;
+                        __resources[2] -= 1;
+                        trade[2] -= 1;
+                    }
+                    else blocked++;
+                    if (__resources[3] > 0 && traded < 3)
+                    {
+                        traded++;
+                        __resources[3] -= 1;
+                        trade[3] -= 1;
+                    }
+                    else blocked++;
+                }
+                else if (__resources[1] == 0 && __resources[0] != 0)
+                {
+                    if (__resources[0] > 1 && traded < 3)
+                    {
+                        traded++;
+                        __resources[0] -= 1;
+                        trade[0] -= 1;
+                    }
+                    else blocked++;
+                    if (__resources[2] > 0 && traded < 3)
+                    {
+                        traded++;
+                        __resources[2] -= 1;
+                        trade[2] -= 1;
+                    }
+                    else blocked++;
+                    if (__resources[3] > 0 && traded < 3)
+                    {
+                        traded++;
+                        __resources[3] -= 1;
+                        trade[3] -= 1;
+                    }
+                    else blocked++;
+                }
+                else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
+                {
+                    if (__resources[0] > 0 && traded < 3)
+                    {
+                        traded++;
+                        __resources[0] -= 1;
+                        trade[0] -= 1;
+                    }
+                    else blocked++;
+                    if (__resources[1] > 0 && traded < 3)
+                    {
+                        traded++;
+                        __resources[1] -= 1;
+                        trade[1] -= 1;
+                    }
+                    else blocked++;
+                    if (__resources[3] > 2 && traded < 3)
+                    {
+                        traded++;
+                        __resources[3] -= 1;
+                        trade[3] -= 1;
+                    }
+                    else blocked++;
+                }
+                else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
+                {
+                    if (__resources[0] > 0 && traded < 3)
+                    {
+                        traded++;
+                        __resources[0] -= 1;
+                        trade[0] -= 1;
+                    }
+                    else blocked++;
+                    if (__resources[1] > 0 && traded < 3)
+                    {
+                        traded++;
+                        __resources[1] -= 1;
+                        trade[1] -= 1;
+                    }
+                    else blocked++;
+                    if (__resources[2] > 2 && traded < 3)
+                    {
+                        traded++;
+                        __resources[2] -= 1;
+                        trade[2] -= 1;
+                    }
+                    else blocked++;
+                }
+                else blocked = 3;
+            }
+
+            for (int i = 0; i < trade.Count; i++)
+            {
+                __resources[i] -= trade[i];
+            }
+
+            if (blocked != 3)
+            {
+                if (__resources[0] == 0 && __resources[1] != 0)
+                {
+                    trade[0] += 1;
+                }
+                else if (__resources[1] == 0 && __resources[0] != 0)
+                {
+                    trade[1] += 1;
+                }
+                else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
+                {
+                    trade[2] += 1;
+                }
+                else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
+                {
+                    trade[3] += 1;
+                }
+                Debug.Log("Trade: " + trade[0] + ", " + trade[1] + ", " + trade[2] + ", " + trade[3]);
+                return trade;
+
+            }
+
+        }
+
+        return null;
+    }
+    
 }

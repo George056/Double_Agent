@@ -231,7 +231,7 @@ RectTransform:
   - {fileID: 1242013363}
   - {fileID: 44211554}
   m_Father: {fileID: 363064369}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -524,6 +524,7 @@ MonoBehaviour:
   playerTraded: 0
   columns: 11
   rows: 11
+  turnCount: 1
   gameOverUSWin: {fileID: 1856641027}
   gameOverUSLoss: {fileID: 1374983589}
   gameOverUSSRWin: {fileID: 1242013362}
@@ -1189,7 +1190,7 @@ RectTransform:
   - {fileID: 98704674}
   - {fileID: 1845329812}
   m_Father: {fileID: 363064369}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2223,10 +2224,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1333850752}
+  - {fileID: 4631252}
   - {fileID: 1556847302}
   - {fileID: 134378538}
   - {fileID: 475490675}
-  - {fileID: 4631252}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2320,7 +2321,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1333850755}
         m_TargetAssemblyTypeName: SettingsScript, Assembly-CSharp
-        m_MethodName: CloseSettingsWindow
+        m_MethodName: ToggleSettingsWindow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2385,7 +2386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &367396801
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2465,7 +2466,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &392535436
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3002,7 +3003,7 @@ RectTransform:
   - {fileID: 1751789002}
   - {fileID: 762754076}
   m_Father: {fileID: 363064369}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3097,7 +3098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9843138, b: 0.93725497, a: 0.43137255}
+  m_Color: {r: 1, g: 0.9843138, b: 0.93725497, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3266,7 +3267,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &512681917
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4191,7 +4192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &698662194
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9673,7 +9674,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1333850755}
         m_TargetAssemblyTypeName: SettingsScript, Assembly-CSharp
-        m_MethodName: SettingsWindowPopUp
+        m_MethodName: ToggleSettingsWindow
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10202,7 +10203,7 @@ RectTransform:
   - {fileID: 1417780655}
   - {fileID: 1173639172}
   m_Father: {fileID: 363064369}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -12358,7 +12359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9843138, b: 0.93725497, a: 0.43137255}
+  m_Color: {r: 1, g: 0.9843138, b: 0.93725497, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12567,7 +12568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9843138, b: 0.93725497, a: 0.43137255}
+  m_Color: {r: 1, g: 0.9843138, b: 0.93725497, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -13156,7 +13157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9843138, b: 0.93725497, a: 0.43137255}
+  m_Color: {r: 1, g: 0.9843138, b: 0.93725497, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

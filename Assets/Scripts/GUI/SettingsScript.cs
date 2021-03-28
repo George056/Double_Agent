@@ -23,14 +23,9 @@ public class SettingsScript : MonoBehaviour
         //SoundEffectSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume", 0.5f);
     }
 
-    public void SettingsWindowPopUp()
+    public void ToggleSettingsWindow()
     {
-        SettingsWindow.SetActive(true);
-    }
-
-    public void CloseSettingsWindow()
-    {
-        SettingsWindow.SetActive(false);
+        SettingsWindow.SetActive(!SettingsWindow.activeSelf);
     }
 
     public void ChangeVolume()

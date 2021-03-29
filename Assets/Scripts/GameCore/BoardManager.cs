@@ -1235,7 +1235,7 @@ public class BoardManager : MonoBehaviour
         return boardSeed;
     }
 
-    public IEnumerator StartNetworkGame()
+    public void StartNetworkGame()
     {
         string role = PlayerPrefs.GetInt("Host").ToString();
         Debug.Log("Role: " + role);
@@ -1253,7 +1253,7 @@ public class BoardManager : MonoBehaviour
         else
         {
             Debug.Log("Waiting for seed");
-           yield return StartCoroutine(networkController.WaitForSeed());
+            networkController.WaitForSeed();
         }
     }
 

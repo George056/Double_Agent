@@ -1235,7 +1235,7 @@ public class BoardManager : MonoBehaviour
         return boardSeed;
     }
 
-    public void StartNetworkGame()
+    public IEnumerator StartNetworkGame()
     {
         string role = PlayerPrefs.GetInt("Host").ToString();
         Debug.Log("Role: " + role);
@@ -1245,18 +1245,15 @@ public class BoardManager : MonoBehaviour
             customBoardSeed = GetRandomBoardSeed();
             networkController.SetBoardSeed(customBoardSeed);
             Debug.Log("SetBoardSeedComplete");
-            // networkController.SendSeed();
+            networkController.SendSeed();
             Debug.Log("SendSeedComplete");
             SetupScene();
             Debug.Log("SetupSceneShouldBeCalledByNow");
         }
         else
         {
-            while (networkController.GetBoardSeed() == "") 
-            {
-                Debug.Log("Waiting for seed");
-            }
-            ReceiveSeedFromNetwork();
+            Debug.Log("Waiting for seed");
+           yield return StartCoroutine(networkController.WaitForSeed());
         }
     }
 

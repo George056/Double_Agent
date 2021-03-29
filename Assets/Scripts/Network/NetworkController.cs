@@ -7,6 +7,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private PhotonView photonView;
     [SerializeField] private BoardManager boardManager;
+    [SerializeField] private GameObject player;
 
     public static List<int> nodesPlaced;
     public static List<int> branchesPlaced;
@@ -14,7 +15,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public static NetworkController NetController;
 
-    public static GameObject player;
+    
 
     private static bool playerTurn = false;
 

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   photonView: {fileID: 799378837964446133}
   boardManager: {fileID: 0}
+  player: {fileID: 8839940536126958509, guid: ffbfcf72412f9404c9c6eab64f654e12, type: 3}
 --- !u!114 &799378837964446133
 MonoBehaviour:
   m_ObjectHideFlags: 0

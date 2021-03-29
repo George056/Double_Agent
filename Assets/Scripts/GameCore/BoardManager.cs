@@ -61,11 +61,14 @@ public class BoardManager : MonoBehaviour
     private GameObject player1;
     private GameObject player2;
 
-    private bool end;
+    [HideInInspector]
+    public static bool end;
+
     public GameObject gameOverUSWin;
     public GameObject gameOverUSLoss;
     public GameObject gameOverUSSRWin;
     public GameObject gameOverUSSRLoss;
+  
 
     public GameObject SetupLegalPopup;
 
@@ -119,8 +122,12 @@ public class BoardManager : MonoBehaviour
     public GameObject USSRImage;
     public GameObject USMusic;
     public GameObject USSRMusic;
+    public AudioSource PiecePlaced;
     public float defaultVolume = 0.5f;
     public Slider musicSlider;
+
+    [HideInInspector]
+    public static bool new_board = true;
 
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
@@ -295,6 +302,7 @@ public class BoardManager : MonoBehaviour
     {
         customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
         Debug.Log("CustomBoardSeed: " + customBoardSeed);
+        new_board = true;
         gridPositions.Clear();
         if (customBoardSeed != "")
         {

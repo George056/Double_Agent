@@ -70,6 +70,7 @@ public class PreGameMenu : MonoBehaviour
 
     public void PlayGame()
     {
+        PlayerPrefs.SetString("GameType", "local");
         PlayerPrefs.SetString("CustomBoardSeed", customBoardInput.text);
         SceneManager.LoadScene("PVP");
     }

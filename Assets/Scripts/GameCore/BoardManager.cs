@@ -150,26 +150,6 @@ public class BoardManager : MonoBehaviour
     public int firstSetupNode = -1;
     public int secondSetupNode = -1;
 
-
-    public void Awake()
-    {
-
-        setNetworkManagerReference();
-        if (PlayerPrefs.GetInt("Host") == 1)
-        {
-            customBoardSeed = GetRandomBoardSeed();
-            networkController.SetBoardSeed(customBoardSeed);
-            networkController.SendSeed();
-        }
-
-        else
-        {
-            while(customBoardSeed == "")
-            {
-                customBoardSeed = networkController.GetBoardSeed();
-            }
-        }
-    }
     int GetTileIndex(string code)
     {
         int index = 0;
@@ -306,6 +286,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        Debug.Log("BoardSetUp complete");
     }
 
     void AssignNodeResources()
@@ -327,8 +308,24 @@ public class BoardManager : MonoBehaviour
 
     public void SetupScene()
     {
-        if (PlayerPrefs.GetString("GameType") == "net")
+        if (PlayerPrefs.GetString("GameType", "") == "net")
         {
+            Debug.Log("Network game SetupScene");
+            setNetworkManagerReference();
+            if (PlayerPrefs.GetInt("Host") == 1)
+            {
+                customBoardSeed = GetRandomBoardSeed();
+                networkController.SetBoardSeed(customBoardSeed);
+                networkController.SendSeed();
+            }
+            else
+            {
+                while (customBoardSeed == "")
+                {
+                    customBoardSeed = networkController.GetBoardSeed();
+                }
+            }
+
             netPiece = (Owner)PlayerPrefs.GetInt("Network_Piece", 0);
             gridPositions.Clear();
 
@@ -337,6 +334,7 @@ public class BoardManager : MonoBehaviour
             AssignNodeResources();
             cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
 
+            inBuildMode = true;
             firstPlayer = netPiece;
             activeSide = firstPlayer;
             end = false;
@@ -368,6 +366,7 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("Local game SetupScene");
             customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
             Debug.Log("CustomBoardSeed: " + customBoardSeed);
             gridPositions.Clear();
@@ -387,6 +386,7 @@ public class BoardManager : MonoBehaviour
             firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
             activeSide = firstPlayer;
 
+            inBuildMode = true;
             end = false;
             turnCount = 1;
             USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
@@ -1242,6 +1242,7 @@ public class BoardManager : MonoBehaviour
             boardSeed = boardSeed + boardSeedComponents[i];
         }
 
+        Debug.Log("Board Seed: " + boardSeed);
         
         return boardSeed;
     }

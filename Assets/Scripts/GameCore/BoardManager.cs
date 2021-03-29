@@ -1252,8 +1252,11 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Waiting for seed");
-            StartCoroutine(networkController.WaitForSeed());
+            while (networkController.GetBoardSeed() == "") 
+            {
+                Debug.Log("Waiting for seed");
+            }
+            ReceiveSeedFromNetwork();
         }
     }
 

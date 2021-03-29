@@ -33,6 +33,17 @@ public class GameManager : MonoBehaviour
     }
     void InitGame()
     {
-        boardScript.SetupScene();
+        if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            boardScript.SetupScene();
+        }
+        else if(PlayerPrefs.GetString("GameType") == "net")
+        {
+            boardScript.StartNetworkGame();
+        }
+        else
+        {
+            Debug.Log("Game type incorrectly set");
+        }
     }
 }

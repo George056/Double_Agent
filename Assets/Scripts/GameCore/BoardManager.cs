@@ -150,32 +150,6 @@ public class BoardManager : MonoBehaviour
     public int firstSetupNode = -1;
     public int secondSetupNode = -1;
 
-
-
-    private void Awake()
-    {
-        if (PlayerPrefs.GetString("GameType", "") == "net")
-        {
-            string role = PlayerPrefs.GetInt("Host").ToString();
-            Debug.Log("Role: " + role);
-            setNetworkManagerReference();
-            if (PlayerPrefs.GetInt("Host") == 1)
-            {
-                customBoardSeed = GetRandomBoardSeed();
-                networkController.SetBoardSeed(customBoardSeed);
-                networkController.SendSeed();
-            }
-            else
-            {
-                while (customBoardSeed == "")
-                {
-                    customBoardSeed = networkController.GetBoardSeed();
-                    Debug.Log("NetworkController Board Seed: " + networkController.GetBoardSeed());
-                }
-            }
-        }
-
-    }
     int GetTileIndex(string code)
     {
         int index = 0;
@@ -1257,6 +1231,31 @@ public class BoardManager : MonoBehaviour
         Debug.Log("Board Seed: " + boardSeed);
         
         return boardSeed;
+    }
+
+    public void StartNetworkGame()
+    {
+        string role = PlayerPrefs.GetInt("Host").ToString();
+        Debug.Log("Role: " + role);
+        setNetworkManagerReference();
+        if (PlayerPrefs.GetInt("Host") == 1)
+        {
+            customBoardSeed = GetRandomBoardSeed();
+            networkController.SetBoardSeed(customBoardSeed);
+            networkController.SendSeed();
+            SetupScene();
+        }
+        else
+        {
+            StartCoroutine(networkController.WaitForSeed());
+        }
+    }
+
+    public void ReceiveSeedFromNetwork()
+    {
+        customBoardSeed = networkController.GetBoardSeed();
+        Debug.Log("Received Seed from Network: " + customBoardSeed);
+        SetupScene();
     }
 }
 

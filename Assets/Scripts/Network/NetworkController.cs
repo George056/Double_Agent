@@ -44,7 +44,18 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
 
         playerTurn = false;
+        boardManager.TurnReceived();
 
+    }
+
+    public IEnumerator WaitForSeed()
+    {
+        while (gameBoardSeed == "")
+            yield return null;
+
+        gameBoardSeed = "";
+
+        boardManager.ReceiveSeedFromNetwork();
     }
 
     public void SendMove()

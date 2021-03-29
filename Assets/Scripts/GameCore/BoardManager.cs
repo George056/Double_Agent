@@ -150,6 +150,32 @@ public class BoardManager : MonoBehaviour
     public int firstSetupNode = -1;
     public int secondSetupNode = -1;
 
+
+
+    private void Awake()
+    {
+        string role = PlayerPrefs.GetInt("Host").ToString();
+        Debug.Log("Role: " + role);
+        if (PlayerPrefs.GetString("GameType", "") == "net")
+        {
+            setNetworkManagerReference();
+            if (PlayerPrefs.GetInt("Host") == 1)
+            {
+                customBoardSeed = GetRandomBoardSeed();
+                networkController.SetBoardSeed(customBoardSeed);
+                networkController.SendSeed();
+            }
+            else
+            {
+                while (customBoardSeed == "")
+                {
+                    customBoardSeed = networkController.GetBoardSeed();
+                    Debug.Log("NetworkController Board Seed: " + networkController.GetBoardSeed());
+                }
+            }
+        }
+
+    }
     int GetTileIndex(string code)
     {
         int index = 0;
@@ -311,20 +337,6 @@ public class BoardManager : MonoBehaviour
         if (PlayerPrefs.GetString("GameType", "") == "net")
         {
             Debug.Log("Network game SetupScene");
-            setNetworkManagerReference();
-            if (PlayerPrefs.GetInt("Host") == 1)
-            {
-                customBoardSeed = GetRandomBoardSeed();
-                networkController.SetBoardSeed(customBoardSeed);
-                networkController.SendSeed();
-            }
-            else
-            {
-                while (customBoardSeed == "")
-                {
-                    customBoardSeed = networkController.GetBoardSeed();
-                }
-            }
 
             netPiece = (Owner)PlayerPrefs.GetInt("Network_Piece", 0);
             gridPositions.Clear();

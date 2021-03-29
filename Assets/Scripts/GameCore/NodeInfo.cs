@@ -65,7 +65,6 @@ public class NodeInfo : MonoBehaviour
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
                     GameObject.FindObjectOfType<BoardManager>().PiecePlaced.Play(0);
-                    //GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].transform.Find("Highlight").GetComponent<SpriteRenderer>().enabled = true;
 
                     GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
 

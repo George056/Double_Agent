@@ -10,12 +10,20 @@ public class SettingsScript : MonoBehaviour
     public Slider MusicSlider;
     public Slider SoundEffectSlider;
 
-    public AudioSource Music1;
-    public AudioSource Music2;
-    public AudioSource SFX1;
-    public AudioSource SFX2;
-    public AudioSource SFX3;
-    public AudioSource SFX4;
+    public AudioSource MainMusic;
+    public AudioSource USMusic;
+    public AudioSource USSRMusic;
+    public AudioSource ButtonClick;
+    public AudioSource GameDoorClose;
+    public AudioSource GameDoorCreak;
+    public AudioSource USCapture;
+    public AudioSource USSRCapture;
+    public AudioSource USWin;
+    public AudioSource USDefeat;
+    public AudioSource USSRWin;
+    public AudioSource USSRDefeat;
+    public AudioSource LightClick;
+    public AudioSource PiecePlaced;
 
     void Awake()
     {
@@ -33,19 +41,32 @@ public class SettingsScript : MonoBehaviour
         SettingsWindow.SetActive(false);
     }
 
-    public void ChangeVolume()
+    public void ChangeMainMusicVolume()
     {
-        Music1.volume = MusicSlider.value;
-        Music2.volume = MusicSlider.value;
+        MainMusic.volume = MusicSlider.value;
+        PlayerPrefs.SetFloat("MusicVolume", MusicSlider.value);
+    }
+
+    public void ChangeGameMusicVolume()
+    {
+        USMusic.volume = MusicSlider.value;
+        USSRMusic.volume = MusicSlider.value;
         PlayerPrefs.SetFloat("MusicVolume", MusicSlider.value);
     }
 
     public void ChangeSoundEffectVolume()
     {
-        SFX1.volume = SoundEffectSlider.value;
-        SFX2.volume = SoundEffectSlider.value;
-        SFX3.volume = SoundEffectSlider.value;
-        SFX4.volume = SoundEffectSlider.value;
+        ButtonClick.volume = SoundEffectSlider.value;
+        GameDoorClose.volume = SoundEffectSlider.value;
+        GameDoorCreak.volume = SoundEffectSlider.value;
+        USCapture.volume = SoundEffectSlider.value;
+        USSRCapture.volume = SoundEffectSlider.value;
+        USWin.volume = SoundEffectSlider.value;
+        USDefeat.volume = SoundEffectSlider.value;
+        USSRWin.volume = SoundEffectSlider.value;
+        USSRDefeat.volume = SoundEffectSlider.value;
+        LightClick.volume = SoundEffectSlider.value;
+        PiecePlaced.volume = SoundEffectSlider.value;
         PlayerPrefs.SetFloat("SoundEffectsVolume", SoundEffectSlider.value);
     }
 }

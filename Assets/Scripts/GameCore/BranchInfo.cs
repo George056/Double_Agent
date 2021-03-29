@@ -106,6 +106,7 @@ public class BranchInfo : MonoBehaviour
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
                     GameObject.FindObjectOfType<BoardManager>().PiecePlaced.Play(0);
+
                     GameObject.FindObjectOfType<BoardManager>().ChangeBranchOwner(branchOrder);
 
                     // Adds branch to player's list of owned branches

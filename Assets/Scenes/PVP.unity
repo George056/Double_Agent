@@ -12158,10 +12158,18 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 799378837964446133, guid: 489eb689252279845b465451e78daff5, type: 3}
+      propertyPath: observableSearch
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3854652489833358241, guid: 489eb689252279845b465451e78daff5, type: 3}
       propertyPath: m_Name
       value: NetworkController
       objectReference: {fileID: 0}
+    - target: {fileID: 5265945514283563562, guid: 489eb689252279845b465451e78daff5, type: 3}
+      propertyPath: boardManager
+      value: 
+      objectReference: {fileID: 77764161}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 489eb689252279845b465451e78daff5, type: 3}
 --- !u!1 &1940623002

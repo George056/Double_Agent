@@ -308,6 +308,7 @@ public class BoardManager : MonoBehaviour
 
     public void SetupScene()
     {
+        Debug.Log("SetupSceneCalled");
         if (PlayerPrefs.GetString("GameType", "") == "net")
         {
             Debug.Log("Network game SetupScene");
@@ -316,6 +317,7 @@ public class BoardManager : MonoBehaviour
             gridPositions.Clear();
 
             CustomizeBoardLayout();
+            Debug.Log("CustomizeBoardLayoutComplete");
             BoardSetUp(GameBoard);
             AssignNodeResources();
             cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
@@ -1242,8 +1244,11 @@ public class BoardManager : MonoBehaviour
         {
             customBoardSeed = GetRandomBoardSeed();
             networkController.SetBoardSeed(customBoardSeed);
-            networkController.SendSeed();
+            Debug.Log("SetBoardSeedComplete");
+            // networkController.SendSeed();
+            Debug.Log("SendSeedComplete");
             SetupScene();
+            Debug.Log("SetupSceneShouldBeCalledByNow");
         }
         else
         {

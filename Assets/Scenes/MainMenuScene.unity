@@ -7311,7 +7311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SettingsWindow: {fileID: 1819931538}
   MusicSlider: {fileID: 74837968}
-  SoundEffectSlider: {fileID: 0}
+  SoundEffectSlider: {fileID: 1278837265}
   Music1: {fileID: 596289881}
   Music2: {fileID: 596289881}
   SFX1: {fileID: 0}

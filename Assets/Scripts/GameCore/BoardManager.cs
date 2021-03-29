@@ -68,6 +68,7 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverUSLoss;
     public GameObject gameOverUSSRWin;
     public GameObject gameOverUSSRLoss;
+  
 
     public GameObject SetupLegalPopup;
 
@@ -121,6 +122,7 @@ public class BoardManager : MonoBehaviour
     public GameObject USSRImage;
     public GameObject USMusic;
     public GameObject USSRMusic;
+    public AudioSource PiecePlaced;
     public float defaultVolume = 0.5f;
     public Slider musicSlider;
 

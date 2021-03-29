@@ -20,7 +20,7 @@ public class SettingsScript : MonoBehaviour
     void Awake()
     {
         MusicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
-        //SoundEffectSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume", 0.5f);
+        SoundEffectSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume", 0.5f);
     }
 
     public void SettingsWindowPopUp()

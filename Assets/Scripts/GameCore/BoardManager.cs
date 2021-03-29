@@ -78,6 +78,7 @@ public class BoardManager : MonoBehaviour
     public GameObject SetupLegalPopup;
 
     private static NetworkController networkController = new NetworkController();
+    private static NetworkPlayer networkPlayerClass = new NetworkPlayer();
     private bool netWorkTurn = true;
 
 

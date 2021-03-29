@@ -411,7 +411,7 @@ public class BoardManager : MonoBehaviour
 
     }
 
-
+    #region GameCore
 
     public void UpdatePlayerScoreInUI(int score)
     {
@@ -1075,7 +1075,7 @@ public class BoardManager : MonoBehaviour
             player2.GetComponent<AI>().EndOpener();
         }
     }
-
+    #endregion
     public void NetworkGame()
     {
         //Host Turn
@@ -1253,6 +1253,7 @@ public class BoardManager : MonoBehaviour
 
     public void ReceiveSeedFromNetwork()
     {
+        Debug.Log("ReceivingSeed");
         customBoardSeed = networkController.GetBoardSeed();
         Debug.Log("Received Seed from Network: " + customBoardSeed);
         SetupScene();

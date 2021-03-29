@@ -154,10 +154,10 @@ public class BoardManager : MonoBehaviour
 
     private void Awake()
     {
-        string role = PlayerPrefs.GetInt("Host").ToString();
-        Debug.Log("Role: " + role);
         if (PlayerPrefs.GetString("GameType", "") == "net")
         {
+            string role = PlayerPrefs.GetInt("Host").ToString();
+            Debug.Log("Role: " + role);
             setNetworkManagerReference();
             if (PlayerPrefs.GetInt("Host") == 1)
             {

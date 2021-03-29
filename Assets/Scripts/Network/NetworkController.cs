@@ -14,8 +14,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public static NetworkController NetController;
 
-    public GameObject player;
-
     private static bool playerTurn = false;
 
     private void Awake()
@@ -25,7 +23,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
   
     void Start()
     {
-        player = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        GameObject player = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
     }
 
     void Update()
@@ -67,8 +65,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void SendSeed()
     {
-        /*NetworkPlayer.networkPlayer.SendSeed(gameBoardSeed);*/
-        player.GetComponent<NetworkPlayer>().SendSeed(gameBoardSeed);
+        NetworkPlayer.networkPlayer.SendSeed(gameBoardSeed);
     }
 
     public void SetNodesPlaced(List<int> newNodesPlaced)

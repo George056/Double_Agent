@@ -21,15 +21,16 @@ public class NetworkController : MonoBehaviourPunCallbacks
     private void Awake()
     {
         NetController = this;
-    }
-  
-    void Start()
-    {
         GameObject player = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
         if (player)
         {
             Debug.Log("Network Player Instantiated");
         }
+    }
+  
+    void Start()
+    {
+
     }
 
     void Update()
@@ -58,8 +59,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         while (gameBoardSeed == "")
             yield return null;
-        
-        gameBoardSeed = "";
+       
         boardManager.ReceiveSeedFromNetwork();
         
     }

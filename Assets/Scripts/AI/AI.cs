@@ -382,6 +382,71 @@ public class AI : Agent
 
             foreach (int i in blockedNodes) actionMasker.SetMask(i, new int[1] { 1 });
 
+            // block trades
+            List<int> blocked_trades = new List<int>();
+
+            // block bad trades
+            if(__resources[0] > 10)
+            {
+                blocked_trades.AddRange(new int[] { 2, 4, 9, 10, 13, 18, 20, 25, 29, 40 });
+            }
+            if(__resources[1] > 10)
+            {
+                blocked_trades.AddRange(new int[] { 3, 5, 7, 11, 12, 15, 21, 23, 27, 33 });
+            }
+            if(__resources[2] > 10)
+            {
+                blocked_trades.AddRange(new int[] { 1, 6, 8, 14, 16, 17, 32, 35, 37, 39 });
+            }
+            if(__resources[3] > 10)
+            {
+                blocked_trades.AddRange(new int[] { 19, 22, 24, 26, 28, 30, 31, 34, 36, 38 });
+            }
+
+            // block imposible trades
+            if(__resources[3] < 3)
+            {
+                blocked_trades.AddRange(new int[] { 1, 2, 3, 4 });
+            }
+            if(__resources[3] < 2)
+            {
+                blocked_trades.AddRange(new int[] { 5, 6, 7, 8, 9 });
+            }
+            if(__resources[3] < 1)
+            {
+                blocked_trades.AddRange(new int[] { 10, 11, 12, 13, 14, 15, 16, 17, 18 });
+            }
+
+            if(__resources[2] < 3)
+            {
+                blocked_trades.AddRange(new int[] { 19, 20, 21 });
+            }
+            if(__resources[2] < 2)
+            {
+                blocked_trades.AddRange(new int[] { 22, 23, 24, 25 });
+            }
+            if(__resources[2] < 1)
+            {
+                blocked_trades.AddRange(new int[] { 26, 27, 28, 29, 30 });
+            }
+
+            if(__resources[1] < 3)
+            {
+                blocked_trades.AddRange(new int[] { 38, 39, 40 });
+            }
+
+            if(__resources[0] < 3)
+            {
+                blocked_trades.AddRange(new int[] { 31, 32, 33 });
+            }
+            if(__resources[0] < 2)
+            {
+                blocked_trades.AddRange(new int[] { 34, 35 });
+            }
+            if(__resources[0] < 1)
+            {
+                blocked_trades.AddRange(new int[] { 36, 37 });
+            }
         }
     }
 
@@ -1163,12 +1228,38 @@ public class AI : Agent
 
     int OpenerBranch()
     {
+        List<int> var_branches = new List<int>(new int[] { 1, 3, 2, 5, 6, 10, 9, 14, 21, 26, 25, 29, 30, 33, 32, 34 });
+        List<int> var_nodes = new List<int>(new int[] {    3,    4,    7,    10,     13,     16,     19,     20 });
+        List<int> double_var_branches = new List<int>(new int[] { 4,         16,             19,             31 });
+
         int positionCon;
+
+        List<int> blocked_branches = new List<int>(new int[] { 0, 15, 20, 35 });
+
+        bool last_node_owned = false;
+        bool current_node_owned = false;
+
+        for (int i = 0, branchCounter = 0; i < var_nodes.Count; ++i, branchCounter += 2)
+        {
+            last_node_owned = current_node_owned;
+            current_node_owned = bm.nodes[var_nodes[i]].GetComponent<NodeInfo>().nodeOwner != Owner.Nil;
+
+            if (current_node_owned)
+            {
+                blocked_branches.Add(var_branches[branchCounter]);
+                blocked_branches.Add(var_branches[branchCounter + 1]);
+            }
+
+            if (current_node_owned && last_node_owned)
+            {
+                blocked_branches.Add(double_var_branches[(int)(i / 2)]);
+            }
+        }
 
         do
         {
             positionCon = Random.Range(0, 36);
-        } while (!LegalMoveConnector(positionCon));//exit when a legal move is found
+        } while (!LegalMoveConnector(positionCon) && blocked_branches.Contains(positionCon));//exit when a legal move is found
         PlaceMoveBranch(positionCon);
         __myRoads.Add(positionCon);
         return positionCon;
@@ -1176,19 +1267,40 @@ public class AI : Agent
 
     void OpenerNode(int positionCon)
     {
+
+        List<int> blocked_nodes = new List<int>(new int[] { 0, 1, 2, 5, 6, 11, 12, 17, 18, 21, 22, 23 });
+
         int positionNode;
 
         positionNode = Random.Range(0, 1);
         Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
-        if (LegalMoveNode(temp[positionNode]))
+        if ((!blocked_nodes.Contains(temp[positionNode]) && !blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])) || 
+            (blocked_nodes.Contains(temp[positionNode]) && blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])) || 
+            (blocked_nodes.Contains(temp[positionNode]) && !blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])))
         {
-            PlaceMoveNode(temp[positionNode]);
-            __myNodes.Add(temp[positionNode]);
+            if (LegalMoveNode(temp[positionNode]))
+            {
+                PlaceMoveNode(temp[positionNode]);
+                __myNodes.Add(temp[positionNode]);
+            }
+            else
+            {
+                PlaceMoveNode(temp[(positionNode == 0) ? 1 : 0]);
+                __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
+            }
         }
-        else
+        else if(!blocked_nodes.Contains(temp[positionNode]) && blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0]))
         {
-            PlaceMoveNode(temp[(positionNode == 0) ? 1 : 0]);
-            __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
+            if (LegalMoveNode(temp[(positionNode == 0) ? 1 : 0]))
+            {
+                PlaceMoveNode(temp[(positionNode == 0) ? 1 : 0]);
+                __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
+            }
+            else
+            {
+                PlaceMoveNode(temp[positionNode]);
+                __myNodes.Add(temp[positionNode]);
+            }
         }
     }
 

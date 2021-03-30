@@ -378,7 +378,18 @@ public class AI : Agent
             List<int> blockedNodes = new List<int>();
             for (int i = 0; i < bm.nodes.Length; i++) blockedNodes.Add(i);
 
-            for(int i = 0; i < nodesThatCanBeReached.Count; i++) blockedNodes.Remove(nodesThatCanBeReached[i]);
+            for (int i = 0; i < nodesThatCanBeReached.Count; ++i)
+            {
+                int num0 = 0;
+                foreach (GameObject tile_go in bm.nodes[nodesThatCanBeReached[i]].GetComponent<NodeInfo>().resources)
+                {
+                    ResourceInfo tile = tile_go.GetComponent<ResourceInfo>();
+                    if (tile.nodeColor == ResourceInfo.Color.Empty || tile.depleted) ++num0;
+                }
+                if (num0 == bm.nodes[i].GetComponent<NodeInfo>().resources.Count) nodesThatCanBeReached.Remove(nodesThatCanBeReached[i]);
+            }
+
+            for (int i = 0; i < nodesThatCanBeReached.Count; i++) blockedNodes.Remove(nodesThatCanBeReached[i]);
 
             foreach (int i in blockedNodes) actionMasker.SetMask(i, new int[1] { 1 });
 
@@ -447,6 +458,10 @@ public class AI : Agent
             {
                 blocked_trades.AddRange(new int[] { 36, 37 });
             }
+
+            blocked_trades = blocked_trades.Distinct().ToList();
+
+            actionMasker.SetMask(60, blocked_trades);
         }
     }
 

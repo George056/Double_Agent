@@ -2,41 +2,41 @@
     "Node_AI": {
         "checkpoints": [
             {
-                "steps": 13804,
-                "file_path": "results\\node_008\\Node_AI\\Node_AI-13804.onnx",
+                "steps": 17093,
+                "file_path": "results\\node_008\\Node_AI\\Node_AI-17093.onnx",
                 "reward": null,
-                "creation_time": 1616965797.4346051
+                "creation_time": 1617067862.8989909
             },
             {
-                "steps": 14229,
-                "file_path": "results\\node_008\\Node_AI\\Node_AI-14229.onnx",
+                "steps": 18093,
+                "file_path": "results\\node_008\\Node_AI\\Node_AI-18093.onnx",
                 "reward": null,
-                "creation_time": 1616965868.667214
+                "creation_time": 1617067998.0071127
             },
             {
-                "steps": 14629,
-                "file_path": "results\\node_008\\Node_AI\\Node_AI-14629.onnx",
+                "steps": 19143,
+                "file_path": "results\\node_008\\Node_AI\\Node_AI-19143.onnx",
                 "reward": null,
-                "creation_time": 1616965988.244025
+                "creation_time": 1617068118.5457916
             },
             {
-                "steps": 14779,
-                "file_path": "results\\node_008\\Node_AI\\Node_AI-14779.onnx",
+                "steps": 19543,
+                "file_path": "results\\node_008\\Node_AI\\Node_AI-19543.onnx",
                 "reward": null,
-                "creation_time": 1616966065.182681
+                "creation_time": 1617068214.0403745
             },
             {
-                "steps": 15829,
-                "file_path": "results\\node_008\\Node_AI\\Node_AI-15829.onnx",
+                "steps": 20543,
+                "file_path": "results\\node_008\\Node_AI\\Node_AI-20543.onnx",
                 "reward": null,
-                "creation_time": 1616967062.1363723
+                "creation_time": 1617068329.7253957
             }
         ],
         "final_checkpoint": {
-            "steps": 15829,
+            "steps": 20543,
             "file_path": "results\\node_008\\Node_AI.onnx",
             "reward": null,
-            "creation_time": 1616967062.1363723
+            "creation_time": 1617068329.7253957
         }
     },
     "metadata": {

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class TutorialScript : MonoBehaviour
 {
-    public GameObject[] TutorialSlides = new GameObject[2];
+    public GameObject[] TutorialSlides = new GameObject[4];
     public Button BackButton;
     public Button NextButton;
     int slideNum = 0;
@@ -53,7 +53,7 @@ public class TutorialScript : MonoBehaviour
             BackButton.interactable = true;
         }
         slideNum++;
-        if(slideNum == 1) //Hard code in array bounds
+        if(slideNum == 3) //Hard code in array bounds
         {
             NextButton.interactable = false;
         }

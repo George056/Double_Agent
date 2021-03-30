@@ -452,12 +452,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Alliance is a two-player strategy game representing a Cold War Conflict.
-
-
-    Choose
-    your ally - US or USSR - and compete to build the biggest alliance of embassies
-    and communication lines.'
+  m_text: "The gameboard consists of 13 regions.  One is empty, but the others each
+    provdie a type of resource.\r\n\nEmbassies can be placed on the corners of resource
+    regions, and Communication Lines can be placed on the edges.\r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3931,12 +3928,12 @@ GameObject:
   - component: {fileID: 868773650}
   - component: {fileID: 868773649}
   m_Layer: 5
-  m_Name: TutorialSlide1 (1)
+  m_Name: TutorialSlide2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &868773648
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5059,7 +5056,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The Game
+  m_text: Gameplay Setup
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5482,12 +5479,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Alliance is a two-player strategy game representing a Cold War Conflict.
-
-
-    Choose
-    your ally - US or USSR - and compete to build the biggest alliance of embassies
-    and communication lines.'
+  m_text: "Each resource region can support a limited number of embassies (indicated
+    by 1, 2, or 3 dots).  \r\n\nIf more embassies are placed on a region than its
+    limit, the region will be \"depleted.\"  A depleted region does not give resources.
+    \r\n\nYou can capture a region (whether depleted or not) by enclosing it with
+    your branches.  You may place as many embassies as you want on a region you have
+    captured.\r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7220,12 +7217,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Alliance is a two-player strategy game representing a Cold War Conflict.
-
-
-    Choose
-    your ally - US or USSR - and compete to build the biggest alliance of embassies
-    and communication lines.'
+  m_text: "On each of your first two turns, place an embassy anywhere on the board,
+    and a communication line adjacent to it. \r\n\nThe regions adjacent to your first
+    two embassies determine what resources you will get after the setup turns are
+    completed.\r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8026,7 +8021,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The Game
+  m_text: Resources
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8514,7 +8509,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The Game
+  m_text: The Gameboard
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9581,12 +9576,12 @@ GameObject:
   - component: {fileID: 1753802305}
   - component: {fileID: 1753802304}
   m_Layer: 5
-  m_Name: TutorialSlide1 (2)
+  m_Name: TutorialSlide3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1753802303
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10456,7 +10451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1904860816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11670,12 +11665,12 @@ GameObject:
   - component: {fileID: 2085394775}
   - component: {fileID: 2085394774}
   m_Layer: 5
-  m_Name: TutorialSlide1 (3)
+  m_Name: TutorialSlide4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2085394773
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11881,7 +11876,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2108459258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11896,7 +11891,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TutorialSlides:
   - {fileID: 859817631}
-  - {fileID: 0}
+  - {fileID: 868773647}
+  - {fileID: 1753802302}
+  - {fileID: 2085394772}
   BackButton: {fileID: 514751781}
   NextButton: {fileID: 1179761866}
 --- !u!114 &2108459259
@@ -12330,7 +12327,6 @@ GameObject:
   - component: {fileID: 2146383075}
   - component: {fileID: 2146383078}
   - component: {fileID: 2146383077}
-  - component: {fileID: 2146383076}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -12357,23 +12353,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2146383076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2146383074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db4d640fffafc224f8d64e7163e95fbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TutorialSlides:
-  - {fileID: 0}
-  - {fileID: 0}
-  BackButton: {fileID: 514751781}
-  NextButton: {fileID: 1179761866}
 --- !u!114 &2146383077
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -30,6 +30,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
         {
             Debug.Log("Network Player Instantiated");
         }
+        else
+        {
+            Debug.Log("Network Player not instantiated");
+        }
     }
 
     public void SetBoardManagerReference(BoardManager manager)

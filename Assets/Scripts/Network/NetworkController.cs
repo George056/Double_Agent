@@ -70,7 +70,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void SendSeed()
     {
         Debug.Log("NetworkController sending seed: " + gameBoardSeed);
-        networkPlayer.GetComponent<NetworkPlayer>().SendSeed(gameBoardSeed);
+        NetworkPlayer.networkPlayer.SendSeed(gameBoardSeed);
         
     }
 

@@ -90,14 +90,14 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void SetBoardSeed(string boardSeed)
     {
-        /*if(PlayerPrefs.GetInt("Host") == 1)
+        if (PlayerPrefs.GetInt("Host") == 1)
         {
             Debug.Log("Host called SetBoardSeed: " + boardSeed);
         }
         else
         {
             Debug.Log("Network Player called SetBoardSeed: " + boardSeed);
-        }*/
+        }
         gameBoardSeed = boardSeed;
     }
 

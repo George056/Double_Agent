@@ -73,7 +73,7 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverUSSRWin;
     public GameObject gameOverUSSRLoss;
 
-    public GameObject netPlayer;
+    public GameObject localPlayer;
     public GameObject gameOverWindow;
     public GameObject SetupLegalPopup;
 
@@ -323,7 +323,17 @@ public class BoardManager : MonoBehaviour
             AssignNodeResources();
             cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
 
-            inBuildMode = true;
+
+            if (PlayerPrefs.GetInt("Host") == 1)
+            {
+                inBuildMode = true;
+            }
+            else
+            {
+                inBuildMode = false;
+            }
+
+
             firstPlayer = netPiece;
             activeSide = firstPlayer;
             end = false;
@@ -332,7 +342,7 @@ public class BoardManager : MonoBehaviour
             USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
             USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
-            netPlayer = GameObject.FindGameObjectWithTag("Player");
+            localPlayer = GameObject.FindGameObjectWithTag("Player");
 
             if (netPiece == Owner.US)
             {
@@ -1081,22 +1091,9 @@ public class BoardManager : MonoBehaviour
     #endregion
     public void NetworkGame()
     {
-        //Host Turn
-        if(activeSide == firstPlayer)
-        {
 
-        }
-
-        else if(activeSide != firstPlayer)
+        if(activeSide != firstPlayer)
         {
-            if (netWorkTurn)
-            {
-                netWorkTurn = false;
-            }
-            else
-            {
-                netWorkTurn = true;
-            }
             StartCoroutine(networkController.WaitForTurn());
         }
     }

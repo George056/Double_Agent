@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class TutorialScript : MonoBehaviour
 {
-    public GameObject[] TutorialSlides = new GameObject[2];
+    public GameObject[] TutorialSlides = new GameObject[6];
     public Button BackButton;
     public Button NextButton;
     int slideNum = 0;
@@ -24,9 +24,17 @@ public class TutorialScript : MonoBehaviour
         
     }
 
-    public void ReturnToMainMenu()
+    public void ResetTutorial()
     {
-        SceneManager.LoadScene("MainMenuScene");
+        TutorialSlides[0].SetActive(true);
+        for (int i = 1; i < 6; i++) // hard code in array bounds
+        {
+            TutorialSlides[i].SetActive(false);
+        }
+
+        NextButton.interactable = true;
+        BackButton.interactable = false;
+        slideNum = 0;
     }
 
     public void TutorialBack()
@@ -53,7 +61,7 @@ public class TutorialScript : MonoBehaviour
             BackButton.interactable = true;
         }
         slideNum++;
-        if(slideNum == 1) //Hard code in array bounds
+        if(slideNum == 5) //Hard code in array bounds
         {
             NextButton.interactable = false;
         }

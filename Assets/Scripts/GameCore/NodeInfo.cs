@@ -64,7 +64,7 @@ public class NodeInfo : MonoBehaviour
                 if (GameObject.FindObjectOfType<BoardManager>().LegalUINodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
-                    //GameObject.FindObjectOfType<BoardManager>().nodes[nodeOrder].transform.Find("Highlight").GetComponent<SpriteRenderer>().enabled = true;
+                    GameObject.FindObjectOfType<BoardManager>().PiecePlaced.Play(0);
 
                     GameObject.FindObjectOfType<BoardManager>().ChangeNodeOwner(nodeOrder);
 
@@ -87,11 +87,11 @@ public class NodeInfo : MonoBehaviour
             {
                 if (GameObject.FindObjectOfType<BoardManager>().activeSide == Owner.US)
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
                 }
                 else
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
                 }
             }
         }

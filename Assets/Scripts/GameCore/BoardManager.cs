@@ -72,6 +72,7 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverUSLoss;
     public GameObject gameOverUSSRWin;
     public GameObject gameOverUSSRLoss;
+  
 
     public GameObject localPlayer;
     public GameObject gameOverWindow;
@@ -131,6 +132,7 @@ public class BoardManager : MonoBehaviour
     public GameObject USSRImage;
     public GameObject USMusic;
     public GameObject USSRMusic;
+    public AudioSource PiecePlaced;
     public float defaultVolume = 0.5f;
     public Slider musicSlider;
 
@@ -478,12 +480,12 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
         }
         else
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
         }
 
         nodesPlacedThisTurn.Add(nodeNum);
@@ -514,12 +516,12 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
         }
         else
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
         }
 
         branchesPlacedThisTurn.Add(branchNum);

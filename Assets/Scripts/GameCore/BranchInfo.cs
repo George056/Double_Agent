@@ -105,6 +105,8 @@ public class BranchInfo : MonoBehaviour
                 if (GameObject.FindObjectOfType<BoardManager>().LegalUIBranchMove(branchOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
+                    GameObject.FindObjectOfType<BoardManager>().PiecePlaced.Play(0);
+
                     GameObject.FindObjectOfType<BoardManager>().ChangeBranchOwner(branchOrder);
 
                     // Adds branch to player's list of owned branches
@@ -136,11 +138,11 @@ public class BranchInfo : MonoBehaviour
             {
                 if (GameObject.FindObjectOfType<BoardManager>().activeSide == Owner.US)
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
                 }
                 else
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
                 }
             }
         }

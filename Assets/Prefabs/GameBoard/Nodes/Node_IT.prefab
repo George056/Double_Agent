@@ -29,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 7894064666338646847}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -112,7 +112,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeOwner: 2
   nodeOrder: 19
-  resources: 03000000010000000000000004000000
+  isSetupNode: 0
+  placementConfirmed: 0
+  connectedToSetup: 0
+  resources:
+  - {fileID: 8567565184321727926, guid: 6ce2a1a87403c8b44b1855daf3d282ca, type: 3}
+  - {fileID: 5015995889806251867, guid: 75b50fe8253036d4d82a3bcb2d470dd3, type: 3}
+  - {fileID: 5015995889806251867, guid: 460ac1ffc994a4f4e9fc163122698a5b, type: 3}
 --- !u!58 &-8338169634520686615
 CircleCollider2D:
   m_ObjectHideFlags: 0

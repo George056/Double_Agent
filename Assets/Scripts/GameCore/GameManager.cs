@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public BoardManager boardScript;
     public GameObject player;
+    public NetworkController networkController;
 
     [HideInInspector]
     [Tooltip("When set true the game-play loop ends")]
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
         if(!Relationships.built)
             Relationships.SetUpConnections();
         Instantiate(player);
+        Instantiate(networkController);
         InitGame();
     }
     void InitGame()

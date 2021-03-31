@@ -94,10 +94,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
         {
             Debug.Log("Host called SetBoardSeed: " + boardSeed);
         }
-        else
+/*        else
         {
             Debug.Log("Network Player called SetBoardSeed: " + boardSeed);
-        }
+        }*/
         gameBoardSeed = boardSeed;
     }
 

@@ -1229,10 +1229,7 @@ public class BoardManager : MonoBehaviour
         for(int i = 0; i < boardSeedComponents.Count; i++)
         {
             boardSeed = boardSeed + boardSeedComponents[i];
-        }
-
-        Debug.Log("Board Seed: " + boardSeed);
-        
+        }        
         return boardSeed;
     }
 

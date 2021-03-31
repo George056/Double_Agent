@@ -420,7 +420,7 @@ public class BoardManager : MonoBehaviour
             if (firstPlayer == aiPiece)
             {
                 BtnToggle();
-                player2.GetComponent<AI>().AIMove(turnCount);
+                /*player2.GetComponent<AI>().AIMove(turnCount);*/
             }
         }
 
@@ -740,49 +740,93 @@ public class BoardManager : MonoBehaviour
 
         int traded_for = 0, traded_in = 0;
 
-        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
-        for(int i = 0; i < 4; i++)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            if(resources[i] < 0)
+            List<int> heldResources = localPlayer.GetComponent<Player>().__resources;
+            for (int i = 0; i < 4; i++)
             {
-                if(heldResources[i] >= Math.Abs(resources[i]))
+                if (resources[i] < 0)
                 {
-                    makeTrade = true;
-                    traded_in += resources[i];
+                    if (heldResources[i] >= Math.Abs(resources[i]))
+                    {
+                        makeTrade = true;
+                        traded_in += resources[i];
+                    }
+                    else
+                    {
+                        makeTrade = false;
+                        break;
+                    }
                 }
                 else
                 {
-                    makeTrade = false;
-                    break;
+                    if (resources[i] < 2)
+                    {
+                        makeTrade = true;
+                        traded_for += resources[i];
+                    }
+                    else
+                    {
+                        makeTrade = false;
+                        break;
+                    }
                 }
             }
-            else
+
+            if (makeTrade && (traded_for != 1 || Math.Abs(traded_in) != 3)) makeTrade = false;
+
+            if (makeTrade)
             {
-                if(resources[i] < 2)
-                {
-                    makeTrade = true;
-                    traded_for += resources[i];
-                }
-                else
-                {
-                    makeTrade = false;
-                    break;
-                }
+                //Trade animation *********************************************************************************************************************************************** 
+                localPlayer.GetComponent<Player>().UpdateResources(resources);
             }
         }
-
-        if (makeTrade && (traded_for != 1 || Math.Abs(traded_in) != 3)) makeTrade = false;
-
-        if (makeTrade)
+        else if (PlayerPrefs.GetString("GameType") == "local")
         {
-            //Trade animation ***********************************************************************************************************************************************
-            if(who == aiPiece)
+            List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
+            for (int i = 0; i < 4; i++)
             {
-                player2.GetComponent<AI>().UpdateResources(resources);
-                Debug.Log("AI Traded: " + resources[0] + " red, " + resources[1] + " blue, " + resources[2] + " yellow, " + resources[3] + " green");
+                if (resources[i] < 0)
+                {
+                    if (heldResources[i] >= Math.Abs(resources[i]))
+                    {
+                        makeTrade = true;
+                        traded_in += resources[i];
+                    }
+                    else
+                    {
+                        makeTrade = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (resources[i] < 2)
+                    {
+                        makeTrade = true;
+                        traded_for += resources[i];
+                    }
+                    else
+                    {
+                        makeTrade = false;
+                        break;
+                    }
+                }
             }
-            else
-                player1.GetComponent<Player>().UpdateResources(resources);
+
+            if (makeTrade && (traded_for != 1 || Math.Abs(traded_in) != 3)) makeTrade = false;
+
+            if (makeTrade)
+            {
+                //Trade animation ***********************************************************************************************************************************************
+                if (who == aiPiece)
+                {
+                    player2.GetComponent<AI>().UpdateResources(resources);
+                    Debug.Log("AI Traded: " + resources[0] + " red, " + resources[1] + " blue, " + resources[2] + " yellow, " + resources[3] + " green");
+                }
+                else
+                    player1.GetComponent<Player>().UpdateResources(resources);
+            }
         }
     }
 
@@ -970,8 +1014,8 @@ public class BoardManager : MonoBehaviour
 
                     EndTurn();
                     // provide player with indication that opponent is taking turn
-                    if (turnCount != 3)
-                        player2.GetComponent<AI>().AIMove(turnCount);
+                    /*if (turnCount != 3)*/
+                        /*player2.GetComponent<AI>().AIMove(turnCount);*/
                 }
             }
             else
@@ -1000,7 +1044,7 @@ public class BoardManager : MonoBehaviour
 
                 EndTurn();
                 // provide player with indication that opponent is taking turn
-                player2.GetComponent<AI>().AIMove(turnCount);
+                /*player2.GetComponent<AI>().AIMove(turnCount);*/
 
             }
         }
@@ -1050,44 +1094,70 @@ public class BoardManager : MonoBehaviour
 
         if (end) return;
 
-        // if it is time for the player's second setup move, allocate resources for one branch and one node
-        if (turnCount == 3)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            player1.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
-        }
-
-        if (turnCount == 5)
-        {
-            tradeButton.GetComponent<Button>().interactable = true;
-        }
-
-        // if not opener move, allocate resources to appropriate player
-        if (turnCount >= 5)
-            AllocateResources();
-
-        playerTraded = false;
-
-
-        // disable/reenable Trade, Build, and End Turn buttons
-        if (turnCount != 3)
-        {
-            BtnToggle();
-        }
-        else
-        {
-            if (firstPlayer == humanPiece)
+            if (turnCount == 3)
             {
-                player2.GetComponent<AI>().AIMove(turnCount);
+                localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+            }
+            if (turnCount >= 5)
+            {
+                tradeButton.GetComponent<Button>().interactable = true;
+            }
+            if (turnCount >= 5)
+                AllocateResources();
+            playerTraded = false;
+            if (turnCount != 3)
+            {
+                BtnToggle();
+            }
+
+            networkController.SetNodesPlaced(nodesPlacedThisTurn);
+            networkController.SetBranchesPlaced(branchesPlacedThisTurn);
+            networkController.SendMove();
+
+        }
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            // if it is time for the player's second setup move, allocate resources for one branch and one node
+            if (turnCount == 3)
+            {
+                player1.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+            }
+
+            if (turnCount == 5)
+            {
+                tradeButton.GetComponent<Button>().interactable = true;
+            }
+
+            // if not opener move, allocate resources to appropriate player
+            if (turnCount >= 5)
+                AllocateResources();
+
+            playerTraded = false;
+
+
+            // disable/reenable Trade, Build, and End Turn buttons
+            if (turnCount != 3)
+            {
+                BtnToggle();
             }
             else
             {
-                //human move
+                /*if (firstPlayer == humanPiece)
+                {
+                    player2.GetComponent<AI>().AIMove(turnCount);
+                }
+                else
+                {
+                    //human move
+                }*/
             }
-        }
-        
-        if (turnCount == 5)
-        {
-            player2.GetComponent<AI>().EndOpener();
+
+            /*        if (turnCount == 5)
+                    {
+                        player2.GetComponent<AI>().EndOpener();
+                    }*/
         }
     }
     #endregion
@@ -1102,6 +1172,20 @@ public class BoardManager : MonoBehaviour
 
     public void TurnReceived()
     {
+        turnCount++;
+        if (turnCount != 2)
+        {
+            if (activeSide == Owner.US)
+            {
+                activeSide = Owner.USSR;
+            }
+            else
+            {
+                activeSide = Owner.US;
+            }
+
+            inBuildMode = !inBuildMode;
+        }
         ReceiveMoveFromNetwork();
         NetworkGame();
     }

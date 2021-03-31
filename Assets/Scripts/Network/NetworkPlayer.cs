@@ -22,8 +22,6 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SendMove(List<int> nodesPlaced, List<int> branchesPlaced)
     {
-        if (!photonView.IsMine)
-            return;
 
         networkController.SetNodesPlaced(nodesPlaced);
         networkController.SetBranchesPlaced(branchesPlaced);

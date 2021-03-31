@@ -118,6 +118,9 @@ public class BoardManager : MonoBehaviour
     public GameObject firstSetupBranchImage;
     public GameObject secondSetupBranchImage;
 
+    public Sprite USNodeSprite;
+    public Sprite USBranchSprite;
+
     public GameObject USImage;
     public GameObject USSRImage;
     public GameObject USMusic;

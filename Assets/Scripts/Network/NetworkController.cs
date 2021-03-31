@@ -7,7 +7,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private PhotonView photonView;
     [SerializeField] private BoardManager boardManager;
-    [SerializeField] private GameObject networkPlayer;
 
     public static List<int> nodesPlaced;
     public static List<int> branchesPlaced;
@@ -24,20 +23,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
     private void Awake()
     {
         NetController = this;
-    }
-  
-    void Start()
-    {
-        networkPlayer = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        GameObject networkPlayer = PhotonNetwork.Instantiate("NetworkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
         if (networkPlayer)
         {
             Debug.Log("Network Player Instantiated");
         }
-    }
-
-    void Update()
-    {
-        
     }
 
     public void SetBoardManagerReference(BoardManager manager)
@@ -74,7 +64,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void SendSeed()
     {
         Debug.Log("NetworkController sending seed: " + gameBoardSeed);
-        networkPlayer.GetComponent<NetworkPlayer>().SendSeed(gameBoardSeed);
+        NetworkPlayer.networkPlayer.SendSeed(gameBoardSeed);
+        
     }
 
     public void SetNodesPlaced(List<int> newNodesPlaced)

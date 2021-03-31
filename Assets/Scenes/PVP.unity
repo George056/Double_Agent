@@ -12180,9 +12180,17 @@ PrefabInstance:
       value: NetworkController
       objectReference: {fileID: 0}
     - target: {fileID: 5265945514283563562, guid: 489eb689252279845b465451e78daff5, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 8839940536126958509, guid: ffbfcf72412f9404c9c6eab64f654e12, type: 3}
+    - target: {fileID: 5265945514283563562, guid: 489eb689252279845b465451e78daff5, type: 3}
       propertyPath: boardManager
       value: 
       objectReference: {fileID: 77764161}
+    - target: {fileID: 5265945514283563562, guid: 489eb689252279845b465451e78daff5, type: 3}
+      propertyPath: networkPlayer
+      value: 
+      objectReference: {fileID: 8839940536126958509, guid: ffbfcf72412f9404c9c6eab64f654e12, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 489eb689252279845b465451e78daff5, type: 3}
 --- !u!1 &1940623002

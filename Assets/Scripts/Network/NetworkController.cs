@@ -13,8 +13,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public static string gameBoardSeed = "";
 
     public static NetworkController NetController;
-
     
+
+
+
 
     private static bool playerTurn = false;
 

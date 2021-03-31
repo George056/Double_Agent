@@ -37,7 +37,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
         if (!photonView.IsMine)
             return;
 
-        Debug.Log("NetworkPlayer.RPC_SendSeed after photonView");
+        /*Debug.Log("NetworkPlayer.RPC_SendSeed after photonView");*/
         networkController.SetBoardSeed(gameBoardSeed);
     }
 
@@ -50,7 +50,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
 
     public void SendSeed(string gameBoardSeed)
     {
-        Debug.Log("NetworkPlayer.SendSee()");
+       /* Debug.Log("NetworkPlayer.SendSee()");*/
         photonView.RPC("RPC_SendSeed", RpcTarget.All, gameBoardSeed);
     }
 

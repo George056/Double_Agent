@@ -53,12 +53,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     }
 
-    public void WaitForSeed()
+    public IEnumerator WaitForSeed()
     {
         Debug.Log("WaitForSeed called");
         while (gameBoardSeed == "")
         {
-           
+            yield return null;  
         }
 
         Debug.Log("WaitForSeed got value: " + gameBoardSeed);
@@ -90,11 +90,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void SetBoardSeed(string boardSeed)
     {
-        if(PlayerPrefs.GetInt("Host") == 1)
+        /*if(PlayerPrefs.GetInt("Host") == 1)
         {
             Debug.Log("Host called SetBoardSeed: " + boardSeed);
         }
-/*        else
+        else
         {
             Debug.Log("Network Player called SetBoardSeed: " + boardSeed);
         }*/

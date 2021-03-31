@@ -10,8 +10,10 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     private PhotonView photonView;
 
     public static NetworkPlayer networkPlayer;
-    void Start()
+    
+    private void Awake()
     {
+        Debug.Log("NetworkPlayerStart Function");
         photonView = PhotonView.Get(this);
         networkPlayer = this;
     }

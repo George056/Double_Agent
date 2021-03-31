@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [HideInInspector]
     public BoardManager boardScript;
     public GameObject player;
+    [HideInInspector]
     public NetworkController networkController;
 
     [HideInInspector]
@@ -30,7 +32,7 @@ public class GameManager : MonoBehaviour
         if(!Relationships.built)
             Relationships.SetUpConnections();
         Instantiate(player);
-        Instantiate(networkController);
+        Instantiate(networkController); 
         InitGame();
     }
     void InitGame()

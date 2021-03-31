@@ -34,7 +34,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     public void RPC_SendSeed(string gameBoardSeed)
     {
         Debug.Log("NetworkPlayer.RPC_SendSeed and gameboard = " + gameBoardSeed);
-        if (!photonView.IsMine)
+        if (photonView.IsMine)
             return;
 
         Debug.Log("NetworkPlayer.RPC_SendSeed after photonView");

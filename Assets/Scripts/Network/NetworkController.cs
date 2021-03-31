@@ -53,11 +53,13 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     }
 
-    public IEnumerator WaitForSeed()
+    public void WaitForSeed()
     {
         Debug.Log("WaitForSeed called");
         while (gameBoardSeed == "")
-            yield return null;
+        {
+           
+        }
 
         Debug.Log("WaitForSeed got value: " + gameBoardSeed);
         boardManager.ReceiveSeedFromNetwork();

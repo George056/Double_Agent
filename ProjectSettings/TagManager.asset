@@ -11,6 +11,7 @@ TagManager:
   - Music
   - Music Slider
   - Sound fx Slider
+  - NetworkPlayer
   layers:
   - Default
   - TransparentFX

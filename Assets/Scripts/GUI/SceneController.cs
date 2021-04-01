@@ -12,6 +12,8 @@ public class SceneController : MonoBehaviour
 
     public void quitGame()
     {
+        PlayerPrefs.SetFloat("MusicVolume", 0.5f);
+        PlayerPrefs.SetFloat("SoundEffectsVolume", 0.5f);
         Application.Quit();
     }
 }

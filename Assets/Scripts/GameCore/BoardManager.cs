@@ -132,6 +132,10 @@ public class BoardManager : MonoBehaviour
     public AudioSource PiecePlaced;
     public float defaultVolume = 0.5f;
     public Slider musicSlider;
+    public AudioSource USVictory;
+    public AudioSource USLoss;
+    public AudioSource USSRVictory;
+    public AudioSource USSRLoss;
 
     [HideInInspector]
     public static bool new_board = true;
@@ -730,13 +734,35 @@ public class BoardManager : MonoBehaviour
     {
         if (humanPiece == Owner.US)
         {
-            if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSWin.SetActive(true); }
-            else { gameOverUSLoss.SetActive(true); }
+            if (player1.GetComponent<Player>().__human_score >= 10)
+            { 
+                gameOverUSWin.SetActive(true);
+                USMusic.GetComponent<AudioSource>().volume = 0;
+                GameObject.FindObjectOfType<BoardManager>().USVictory.Play(0);
+
+            }
+            else 
+            { 
+                gameOverUSLoss.SetActive(true);
+                USMusic.GetComponent<AudioSource>().volume = 0;
+                GameObject.FindObjectOfType<BoardManager>().USLoss.Play(0);
+            }
         }
         else
         {
-            if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSSRWin.SetActive(true); }
-            else { gameOverUSSRLoss.SetActive(true); }
+            if (player1.GetComponent<Player>().__human_score >= 10) 
+            { 
+                gameOverUSSRWin.SetActive(true);
+                USSRMusic.GetComponent<AudioSource>().volume = 0;
+                GameObject.FindObjectOfType<BoardManager>().USSRVictory.Play(0);
+            }
+            else 
+            { 
+                gameOverUSSRLoss.SetActive(true);
+                USSRMusic.GetComponent<AudioSource>().volume = 0;
+                GameObject.FindObjectOfType<BoardManager>().USSRLoss.Play(0);
+
+            }
         }
     }
 

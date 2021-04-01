@@ -671,8 +671,12 @@ MonoBehaviour:
   secondSetupNodeImage: {fileID: 1593690054}
   firstSetupBranchImage: {fileID: 937833133}
   secondSetupBranchImage: {fileID: 163675534}
-  USNodeSprite: {fileID: 0}
-  USBranchSprite: {fileID: 0}
+  EmptyNodeSprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
+  EmptyBranchSprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
+  USNodeSprite: {fileID: 21300000, guid: 87b85c964467fd941a53d8209f8ec175, type: 3}
+  USBranchSprite: {fileID: 21300000, guid: 0b3d916c235902f4dad9a13ca413745d, type: 3}
+  USSRNodeSprite: {fileID: 21300000, guid: 95c9b44e052472843ae95c7e6fc0f14d, type: 3}
+  USSRBranchSprite: {fileID: 21300000, guid: df2038810d162db42828a2b8c1b8796d, type: 3}
   USImage: {fileID: 1992913583}
   USSRImage: {fileID: 955976219}
   USMusic: {fileID: 396023532}

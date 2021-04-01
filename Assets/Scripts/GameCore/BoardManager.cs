@@ -417,14 +417,14 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
-            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
         }
         else
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
-            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
         }
 
         nodesPlacedThisTurn.Add(nodeNum);
@@ -489,8 +489,8 @@ public class BoardManager : MonoBehaviour
     public void UnplaceNode(int nodeNum)
     {
         nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
-        //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
-        GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = EmptyNodeSprite;
+        GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
+        //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = EmptyNodeSprite;
 
         nodesPlacedThisTurn.Remove(nodeNum);
 

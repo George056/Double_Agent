@@ -339,6 +339,18 @@ public class AI : Agent
                 branchesThatCanBeReached = branchesThatCanBeReached.Distinct().ToList();
             }
 
+            for(int i = 0; i < branchesThatCanBeReached.Count; ++i)
+            {
+                Relationships.connectionsRoadTiles.TryGetValue(branchesThatCanBeReached[i], out List<int> temp);
+                if ((bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil &&
+                    ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil : true)))
+                {
+                    branchesThatCanBeReached.RemoveAt(i);
+                    --i;
+                }
+
+            }
+
             List<int> blockedBranches = new List<int>();
             for (int i = 0; i < bm.allBranches.Length; i++) blockedBranches.Add(i);
 
@@ -523,11 +535,7 @@ public class AI : Agent
 
     public void Win()
     {
-        if(totalReward != 1)
-        {
-            float temp = 1 - totalReward;
-            AddReward((temp < 0) ? 0.1f : temp);
-        }
+        AddReward((totalReward < 1) ? (1.0f - totalReward) + 1.0f : 1.0f);
     }
 
     /// <summary>
@@ -1012,11 +1020,13 @@ public class AI : Agent
         {
             if (__myRoads.Count != ((turn == 1 || turn == 2) ? 1 : 2) && __myNodes.Count != ((turn == 1 || turn == 2) ? 1 : 2))
             {
+                Debug.Log("%%%%%%%%%%%%%%%%Just Heuristic%%%%%%%%%%%%%%%%%%%%%");
                 int positionBranch = OpenerBranch();
                 OpenerNode(positionBranch);
             }
             else if (__myNodes.Count != ((turn == 1 || turn == 2) ? 1 : 2))
             {
+                Debug.Log("%%%%%%%%%%%%%%%%Heuristic Node%%%%%%%%%%%%%%%%%%%%%");
                 OpenerNode(__myRoads[(turn == 1 || turn == 2) ? 0 : 1]);
             }
         }
@@ -1025,14 +1035,35 @@ public class AI : Agent
         {
             AddReward(noMovePunish);
             if (SumResources() > 10) AddReward(noMovePunish * 10.0f);
+            RandomBranches(Math.Min(__resources[0], __resources[1]));
+            RandomNodes(Math.Min(__resources[2] / 2, __resources[3] / 2));
         }
 
         __myNodes = __myNodes.Distinct().ToList();
         __myRoads = __myRoads.Distinct().ToList();
 
-        // if you can win, win
-        int min_node = Math.Min(__resources[2] / 2, __resources[3] / 2);
-        if (!heuristic && min_node > (10 - __ai_score)) RandomNodes(min_node);
+        if(!opener)
+        {
+            List<int> reachableNodes = new List<int>();
+            foreach(int i in __myRoads)
+            {
+                Relationships.connectionsRoadNode.TryGetValue(i, out reachableNodes);
+            }
+            reachableNodes = reachableNodes.Distinct().ToList();
+
+            for(int i = 0; i < reachableNodes.Count; ++i)
+            {
+                if(bm.nodes[reachableNodes[i]].GetComponent<NodeInfo>().nodeOwner != Owner.Nil)
+                {
+                    reachableNodes.RemoveAt(i);
+                    --i;
+                }
+            }
+
+            // if you can win, win
+            int min_node = Math.Min(__resources[2] / 2, __resources[3] / 2);
+            if (!heuristic && min_node > (10 - __ai_score) && min_node < reachableNodes.Count) RandomNodes(min_node);
+        }
 
         Debug.Log("AI Move Finished&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
         bm.EndTurn();
@@ -1291,7 +1322,7 @@ public class AI : Agent
         Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
         if ((!blocked_nodes.Contains(temp[positionNode]) && !blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])) || 
             (blocked_nodes.Contains(temp[positionNode]) && blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])) || 
-            (blocked_nodes.Contains(temp[positionNode]) && !blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])))
+            (!blocked_nodes.Contains(temp[positionNode]) && blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])))
         {
             if (LegalMoveNode(temp[positionNode]))
             {
@@ -1304,7 +1335,7 @@ public class AI : Agent
                 __myNodes.Add(temp[(positionNode == 0) ? 1 : 0]);
             }
         }
-        else if(!blocked_nodes.Contains(temp[positionNode]) && blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0]))
+        else if(blocked_nodes.Contains(temp[positionNode]) && !blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0]))
         {
             if (LegalMoveNode(temp[(positionNode == 0) ? 1 : 0]))
             {
@@ -1337,7 +1368,10 @@ public class AI : Agent
             int con = Random.Range(0, (legalCon.Count == 0) ? 0 : legalCon.Count - 1);
             if (legalCon.Count > 0)
             {
-                if (LegalMoveConnector(legalCon[con]))
+                Relationships.connectionsRoadTiles.TryGetValue(legalCon[con], out List<int> temp);
+                if (LegalMoveConnector(legalCon[con]) &&
+                    (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil && 
+                    ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil : true)))
                 {
                     PlaceMoveBranch(legalCon[con]);
                     __myRoads.Add(legalCon[con]);

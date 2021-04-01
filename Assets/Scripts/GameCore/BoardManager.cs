@@ -503,7 +503,7 @@ public class BoardManager : MonoBehaviour
             if(turnCount == 3 || turnCount == 4)
             {
                 Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
-                if (LegalNodeMove(adjacentNodes[0], activeSide, myBranches) || LegalNodeMove(adjacentNodes[1], activeSide, myBranches)) isLegal = true;
+                if (LegalNodeMove(adjacentNodes[0], activeSide, myBranches) || LegalNodeMove(adjacentNodes[1], activeSide, myBranches)) ;
                 else isLegal = false;
             }
         }

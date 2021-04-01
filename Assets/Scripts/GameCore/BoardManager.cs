@@ -1218,20 +1218,20 @@ public class BoardManager : MonoBehaviour
             }
             else
             {
-                /*if (firstPlayer == humanPiece)
+                if (firstPlayer == humanPiece)
                 {
                     player2.GetComponent<AI>().AIMove(turnCount);
                 }
                 else
                 {
                     //human move
-                }*/
+                }
             }
 
-            /*        if (turnCount == 5)
-                    {
-                        player2.GetComponent<AI>().EndOpener();
-                    }*/
+            if (turnCount == 5)
+            {
+                player2.GetComponent<AI>().EndOpener();
+            }
         }
     }
     #endregion

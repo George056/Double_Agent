@@ -990,7 +990,7 @@ public class AI : Agent
 
             for (int i = 0; i < tradeArr.Count; ++i)
             {
-                if (tradeArr[i] > __resources[i])
+                if (tradeArr[i] < 0 && Math.Abs(tradeArr[i]) > __resources[i])
                 {
                     illegal_trade = true;
                     break;

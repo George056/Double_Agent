@@ -331,6 +331,14 @@ public class AI : Agent
                     List<int> temp = new List<int>();
                     foreach(int i in additions) Relationships.connectionsRoad.TryGetValue(i, out temp);
                     temp = temp.Distinct().ToList();
+                    for(int i = 0; i < temp.Count; ++i)
+                    {
+                        if(bm.allBranches[temp[i]].GetComponent<BranchInfo>().branchOwner != Owner.Nil)
+                        {
+                            temp.RemoveAt(i);
+                            --i;
+                        }
+                    }
                     branchesThatCanBeReached.AddRange(additions);
                     additions = temp;
                     maxCons--;
@@ -342,8 +350,8 @@ public class AI : Agent
             for(int i = 0; i < branchesThatCanBeReached.Count; ++i)
             {
                 Relationships.connectionsRoadTiles.TryGetValue(branchesThatCanBeReached[i], out List<int> temp);
-                if ((bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil &&
-                    ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil : true)))
+                if ((bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil &&
+                    ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil : true)))
                 {
                     branchesThatCanBeReached.RemoveAt(i);
                     --i;

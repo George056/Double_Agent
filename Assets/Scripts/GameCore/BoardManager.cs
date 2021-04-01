@@ -832,15 +832,31 @@ public class BoardManager : MonoBehaviour
 
     public void UIEndGame()
     {
-        if (humanPiece == Owner.US)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSWin.SetActive(true); }
-            else { gameOverUSLoss.SetActive(true); }
+            if (netPiece == Owner.US)
+            {
+                if (localPlayer.GetComponent<Player>().__human_score >= 10) { gameOverUSWin.SetActive(true); }
+                else { gameOverUSLoss.SetActive(true); }
+            }
+            else
+            {
+                if (localPlayer.GetComponent<Player>().__human_score >= 10) { gameOverUSSRWin.SetActive(true); }
+                else { gameOverUSSRLoss.SetActive(true); }
+            }
         }
-        else
+        else if (PlayerPrefs.GetString("GameType") == "local")
         {
-            if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSSRWin.SetActive(true); }
-            else { gameOverUSSRLoss.SetActive(true); }
+            if (humanPiece == Owner.US)
+            {
+                if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSWin.SetActive(true); }
+                else { gameOverUSLoss.SetActive(true); }
+            }
+            else
+            {
+                if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSSRWin.SetActive(true); }
+                else { gameOverUSSRLoss.SetActive(true); }
+            }
         }
     }
 
@@ -860,17 +876,25 @@ public class BoardManager : MonoBehaviour
 
         CalculateScore(who);
 
-        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            tradeButton.SetActive(false);
-            //buildButton.SetActive(false);
-            endTurnButton.SetActive(false);
 
-            if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
-            else player2.GetComponent<AI>().Win();
+        }
 
-            end = true;
-            UIEndGame();
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
+            {
+                tradeButton.SetActive(false);
+                //buildButton.SetActive(false);
+                endTurnButton.SetActive(false);
+
+                if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
+                else player2.GetComponent<AI>().Win();
+
+                end = true;
+                UIEndGame();
+            }
         }
     }
 
@@ -891,25 +915,43 @@ public class BoardManager : MonoBehaviour
             score = 2;
         }
 
-        // tell player of a change in longest net holder
-        if (cdl.longestNetOwner != oldLongest)
-        {
-            if (oldLongest == aiPiece && player2.GetComponent<AI>().trainingMode)
+        if (PlayerPrefs.GetString("GameType") == "net") {
+            if (cdl.longestNetOwner != oldLongest)
             {
-                player2.GetComponent<AI>().LoseLongestNet();
-            }
-            else if(oldLongest == humanPiece)
-            {
-                player1.GetComponent<Player>().LoseLongestNet();
-            }
+                if (oldLongest == netPiece)
+                {
+                    localPlayer.GetComponent<Player>().LoseLongestNet();
+                }
 
-            if (cdl.longestNetOwner == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
-            {
-                player2.GetComponent<AI>().GetLongestNet();
+                if (cdl.longestNetOwner == netPiece)
+                {
+                    localPlayer.GetComponent<Player>().GetLongestNet();
+                }
             }
-            else if(cdl.longestNetOwner == humanPiece)
+        }
+
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+        // tell player of a change in longest net holder
+            if (cdl.longestNetOwner != oldLongest) 
             {
-                player1.GetComponent<Player>().GetLongestNet();
+                if (oldLongest == aiPiece && player2.GetComponent<AI>().trainingMode)
+                {
+                    player2.GetComponent<AI>().LoseLongestNet();
+                }
+                else if (oldLongest == humanPiece)
+                {
+                    player1.GetComponent<Player>().LoseLongestNet();
+                }
+
+                if (cdl.longestNetOwner == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
+                {
+                    player2.GetComponent<AI>().GetLongestNet();
+                }
+                else if (cdl.longestNetOwner == humanPiece)
+                {
+                    player1.GetComponent<Player>().GetLongestNet();
+                }
             }
         }
 
@@ -925,16 +967,25 @@ public class BoardManager : MonoBehaviour
             if (tile.GetComponent<ResourceInfo>().resoureTileOwner == who) score++;
         }
 
-        if(who == aiPiece)
-        {
-            player2.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
-        }
-        else
-        {
-            player1.GetComponent<Player>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
 
-            //if an AI game
-            player2.GetComponent<AI>().__human_score = score;
+        if (PlayerPrefs.GetString("GameType") == "net") 
+        {
+                localPlayer.GetComponent<Player>().UpdateScore(score);
+        }
+
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            if (who == aiPiece)
+            {
+                player2.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+            }
+            else
+            {
+                player1.GetComponent<Player>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+
+                //if an AI game
+                player2.GetComponent<AI>().__human_score = score;
+            }
         }
     }
 
@@ -972,13 +1023,21 @@ public class BoardManager : MonoBehaviour
         }
 
         //assign the new resources
-        if(activeSide == aiPiece)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            player2.GetComponent<AI>().UpdateResources(allocation);
+            localPlayer.GetComponent<Player>().UpdateResources(allocation);
         }
-        else
+
+        else if (PlayerPrefs.GetString("GameType") == "local")
         {
-            player1.GetComponent<Player>().UpdateResources(allocation);
+            if (activeSide == aiPiece)
+            {
+                player2.GetComponent<AI>().UpdateResources(allocation);
+            }
+            else
+            {
+                player1.GetComponent<Player>().UpdateResources(allocation);
+            }
         }
     }
 
@@ -1054,12 +1113,27 @@ public class BoardManager : MonoBehaviour
         bool islegal = true;
         // player1.GetComponent<Player>().UpdateResources
         List<int> tempPlayerResources;
-        for (int i = 0; i < player1.GetComponent<Player>().__resources.Count; i++)
+
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            if (player1.GetComponent<Player>().__resources[i] != 0)
+            for (int i = 0; i < localPlayer.GetComponent<Player>().__resources.Count; i++)
             {
-                islegal = false;
-                break;
+                if (localPlayer.GetComponent<Player>().__resources[i] != 0)
+                {
+                    islegal = false;
+                    break;
+                }
+            }
+        }
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            for (int i = 0; i < player1.GetComponent<Player>().__resources.Count; i++)
+            {
+                if (player1.GetComponent<Player>().__resources[i] != 0)
+                {
+                    islegal = false;
+                    break;
+                }
             }
         }
         return islegal;
@@ -1187,6 +1261,7 @@ public class BoardManager : MonoBehaviour
             inBuildMode = !inBuildMode;
         }
         ReceiveMoveFromNetwork();
+        BoardCheck();
         NetworkGame();
     }
 
@@ -1223,24 +1298,6 @@ public class BoardManager : MonoBehaviour
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
         }
 
-        /*nodesPlacedThisTurn.Add(nodeNum);*/
-
-        /*if (activeSide == humanPiece && isSetupTurn)
-        {
-            if (turnCount == 1 || turnCount == 2)
-            {
-                firstSetupNodeImage.SetActive(false);
-            }
-            else if (turnCount == 3 || turnCount == 4)
-            {
-                secondSetupNodeImage.SetActive(false);
-            }
-        }
-
-        if (activeSide == aiPiece)
-        {
-            Debug.Log("AI placed node " + nodeNum);
-        }*/
     }
 
     public void NetworkChangeBranchOwner(int branchNum)
@@ -1255,28 +1312,6 @@ public class BoardManager : MonoBehaviour
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
         }
-
-        /*branchesPlacedThisTurn.Add(branchNum);*/
-
-       /* if (activeSide == netPiece && isSetupTurn)
-        {
-            allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = true;
-            if (turnCount == 1 || turnCount == 2)
-            {
-                firstSetupBranch = branchNum;
-                firstSetupBranchImage.SetActive(false);
-            }
-            else if (turnCount == 3 || turnCount == 4)
-            {
-                secondSetupBranch = branchNum;
-                secondSetupBranchImage.SetActive(false);
-            }
-        }
-
-        if (activeSide != netPiece)
-        {
-            Debug.Log("Network placed branch " + branchNum);
-        }*/
     }
 
     public string GetRandomBoardSeed()

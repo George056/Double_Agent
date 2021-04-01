@@ -130,7 +130,7 @@ public class Player : MonoBehaviour
         GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
     }
 
-    public void UpdateScore(int newScore, bool temp1, bool temp2)
+    public void UpdateScore(int newScore, bool temp1 = true, bool temp2 = true)
     {
         __human_score = newScore;
         GameObject.FindObjectOfType<BoardManager>().UpdatePlayerScoreInUI(__human_score);

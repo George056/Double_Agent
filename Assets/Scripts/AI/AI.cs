@@ -186,7 +186,7 @@ public class AI : Agent
 
         if (opener)
         {
-            Debug.Log("Mask opener moves");
+            //Debug.Log("Mask opener moves");
             List<int> clamedNodes = new List<int>();
             for(int i = 0; i < bm.nodes.Length; i++)
             {
@@ -294,7 +294,7 @@ public class AI : Agent
         }
         else
         {
-            Debug.Log("Debug normal moves");
+            //Debug.Log("Debug normal moves");
 
             //find max branch amount
             int maxCons = Math.Min(__resources[0], __resources[1]);
@@ -1107,7 +1107,7 @@ public class AI : Agent
 
         //observe board (60 observations)
         //sensor.AddObservation();
-        Debug.Log("observe nodes");
+        //Debug.Log("observe nodes");
         foreach(GameObject node in bm.nodes)
         {
             List<int> observations = new List<int>(7) { 0, 0, 0, 0, 0, 0, 0 };// node owner; # tiles AI captured; gray count; red count; blue count; yellow count; green count;
@@ -1133,7 +1133,7 @@ public class AI : Agent
             sensor.AddObservation(observation);
         }
 
-        Debug.Log("Observe branches");
+        //Debug.Log("Observe branches");
         foreach(GameObject branch in bm.allBranches)
         {
             sensor.AddObservation(((int)branch.GetComponent<BranchInfo>().branchOwner == 2) ? 0 : (int)branch.GetComponent<BranchInfo>().branchOwner + 1);
@@ -1142,13 +1142,13 @@ public class AI : Agent
         //observe if opener (1 observation)
         sensor.AddObservation(opener);
 
-        Debug.Log("Observe resources");
+        //Debug.Log("Observe resources");
         //observe resources (4 observations)
         foreach(int i in __resources)
         {
             sensor.AddObservation(i);
         }
-        Debug.Log("End observations");
+        //Debug.Log("End observations");
     }
 
     /// <summary>

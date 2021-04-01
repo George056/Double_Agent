@@ -68,10 +68,10 @@ public class AI : Agent
     public float illegalTradePunish = -0.1f;
 
     [Tooltip("The punishment for a bad trade")]
-    public float badTradeReward = -0.05f;
+    public float badTradePunish = -0.05f;
 
     [Tooltip("A punishment for making no move when a move could have been made")]
-    public float noMovePunish = -0.5f;
+    public float noMovePunish = -0.75f;
 
     [HideInInspector]
     public float totalReward = 0;
@@ -751,234 +751,234 @@ public class AI : Agent
                 case 1:
                     tradeArr[3] -= 3;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 2:
                     tradeArr[3] -= 3;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 3:
                     tradeArr[3] -= 3;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 4:
                     tradeArr[3] -= 2;
                     tradeArr[2] -= 1;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 5:
                     tradeArr[3] -= 2;
                     tradeArr[2] -= 1;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 6:
                     tradeArr[3] -= 2;
                     tradeArr[0] -= 1;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 7:
                     tradeArr[3] -= 2;
                     tradeArr[0] -= 1;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 8:
                     tradeArr[3] -= 2;
                     tradeArr[1] -= 1;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 9:
                     tradeArr[3] -= 2;
                     tradeArr[1] -= 1;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 10:
                     tradeArr[3] -= 1;
                     tradeArr[2] -= 2;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 11:
                     tradeArr[3] -= 1;
                     tradeArr[2] -= 2;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 12:
                     tradeArr[3] -= 1;
                     tradeArr[2] -= 1;
                     tradeArr[0] -= 1;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 13:
                     tradeArr[3] -= 1;
                     tradeArr[2] -= 1;
                     tradeArr[1] -= 1;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 14:
                     tradeArr[3] -= 1;
                     tradeArr[0] -= 2;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 15:
                     tradeArr[3] -= 1;
                     tradeArr[0] -= 2;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 16:
                     tradeArr[3] -= 1;
                     tradeArr[0] -= 1;
                     tradeArr[1] -= 1;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 17:
                     tradeArr[3] -= 1;
                     tradeArr[1] -= 2;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 18:
                     tradeArr[3] -= 1;
                     tradeArr[1] -= 2;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 19:
                     tradeArr[2] -= 3;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 20:
                     tradeArr[2] -= 3;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 21:
                     tradeArr[2] -= 3;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 22:
                     tradeArr[2] -= 2;
                     tradeArr[0] -= 1;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 23:
                     tradeArr[2] -= 2;
                     tradeArr[0] -= 1;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 24:
                     tradeArr[2] -= 2;
                     tradeArr[1] -= 1;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 25:
                     tradeArr[2] -= 2;
                     tradeArr[1] -= 1;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 26:
                     tradeArr[2] -= 1;
                     tradeArr[0] -= 2;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 27:
                     tradeArr[2] -= 1;
                     tradeArr[0] -= 2;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 28:
                     tradeArr[2] -= 1;
                     tradeArr[1] -= 2;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 29:
                     tradeArr[2] -= 1;
                     tradeArr[1] -= 2;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
                 case 30:
                     tradeArr[2] -= 1;
                     tradeArr[0] -= 1;
                     tradeArr[1] -= 1;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 31:
                     tradeArr[0] -= 3;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 32:
                     tradeArr[0] -= 3;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 33:
                     tradeArr[0] -= 3;
                     tradeArr[1] = 1;
-                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradeReward);
+                    if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
                     break;
                 case 34:
                     tradeArr[0] -= 2;
                     tradeArr[1] -= 1;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 35:
                     tradeArr[0] -= 2;
                     tradeArr[1] -= 1;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 36:
                     tradeArr[0] -= 1;
                     tradeArr[1] -= 2;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 37:
                     tradeArr[0] -= 1;
                     tradeArr[1] -= 2;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 38:
                     tradeArr[1] -= 3;
                     tradeArr[3] = 1;
-                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradeReward);
+                    if (__resources[3] > 1 || __resources[2] < 2) AddReward(badTradePunish);
                     break;
                 case 39:
                     tradeArr[1] -= 3;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradeReward);
+                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
                     break;
                 case 40:
                     tradeArr[1] -= 3;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradeReward);
+                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
                     break;
             }
 

@@ -434,7 +434,7 @@ public class AI : Agent
                 blocked_trades.AddRange(new int[] { 19, 22, 24, 26, 28, 30, 31, 34, 36, 38 });
             }
 
-            // block imposible trades
+            // block impossible trades
             if(__resources[3] < 3)
             {
                 blocked_trades.AddRange(new int[] { 1, 2, 3, 4 });
@@ -998,7 +998,9 @@ public class AI : Agent
             }
 
             if (traded_for != 1 || Math.Abs(traded_in) != 3 || illegal_trade)
+            {
                 if(trainingMode) AddReward(illegalTradePunish);
+            }
             else
                 MakeTrade(tradeArr);
             noTrade = false;
@@ -1378,8 +1380,8 @@ public class AI : Agent
             {
                 Relationships.connectionsRoadTiles.TryGetValue(legalCon[con], out List<int> temp);
                 if (LegalMoveConnector(legalCon[con]) &&
-                    (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil && 
-                    ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil : true)))
+                    (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil &&
+                    ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil : true)))
                 {
                     PlaceMoveBranch(legalCon[con]);
                     __myRoads.Add(legalCon[con]);

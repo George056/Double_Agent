@@ -27,6 +27,8 @@ public class BoardManager : MonoBehaviour
         public int yLoc;
     }
 
+    private IEnumerator coroutine;
+
     public GameObject[] resourceList;
     public GameObject[] nodes;
     public GameObject[] allBranches;
@@ -125,6 +127,8 @@ public class BoardManager : MonoBehaviour
     public Sprite USSRNodeSprite;
     public Sprite USSRBranchSprite;
 
+
+    public GameObject BlackoutPanel;
     public GameObject USImage;
     public GameObject USSRImage;
     public GameObject USMusic;
@@ -136,6 +140,7 @@ public class BoardManager : MonoBehaviour
     public AudioSource USLoss;
     public AudioSource USSRVictory;
     public AudioSource USSRLoss;
+    public AudioSource lightSwitch;
 
     [HideInInspector]
     public static bool new_board = true;
@@ -309,8 +314,16 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void SetupScene()
+    private IEnumerator TurnOnLight(float delay)
     {
+        yield return new WaitForSeconds(delay);
+        lightSwitch.Play(0);
+        yield return new WaitForSeconds(0.5f);
+        BlackoutPanel.SetActive(false);
+    }
+
+    public void SetupScene()
+    {   
         customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
         Debug.Log("CustomBoardSeed: " + customBoardSeed);
         new_board = true;
@@ -324,6 +337,11 @@ public class BoardManager : MonoBehaviour
             Shuffle(resourceList);
         }
         BoardSetUp(GameBoard);
+
+        // https://docs.unity3d.com/ScriptReference/Coroutine.html
+        coroutine = TurnOnLight(1.5f);
+        StartCoroutine(coroutine);
+
         AssignNodeResources();
         cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
         aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);

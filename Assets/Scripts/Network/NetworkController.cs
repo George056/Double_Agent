@@ -10,8 +10,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public GameObject networkPlayer;
 
-    public static List<int> nodesPlaced;
-    public static List<int> branchesPlaced;
+    public static int[] nodesPlaced;
+    public static int[] branchesPlaced;
     public static string gameBoardSeed = "";
 
     public static NetworkController NetController;
@@ -78,12 +78,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
         
     }
 
-    public void SetNodesPlaced(List<int> newNodesPlaced)
+    public void SetNodesPlaced(int[] newNodesPlaced)
     {
         nodesPlaced = newNodesPlaced;
     }
 
-    public void SetBranchesPlaced(List<int> newBranchesPlaced)
+    public void SetBranchesPlaced(int[] newBranchesPlaced)
     {
         branchesPlaced = newBranchesPlaced;
     }
@@ -106,12 +106,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
         playerTurn = b;
     }
 
-    public List<int> GetNodesPlaced()
+    public int[] GetNodesPlaced()
     {
         return nodesPlaced;
     }
 
-    public List<int> GetBranchesPlaced()
+    public int[] GetBranchesPlaced()
     {
         return branchesPlaced;
     }

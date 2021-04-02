@@ -20,7 +20,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
 
 
     [PunRPC]
-    public void RPC_SendMove(List<int> nodesPlaced, List<int> branchesPlaced)
+    public void RPC_SendMove(int[] nodesPlaced, int[] branchesPlaced)
     {
 
         networkController.SetNodesPlaced(nodesPlaced);
@@ -41,7 +41,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
 
 
 
-    public void SendMove(List<int> nodesPlaced, List<int> branchesPlaced)
+    public void SendMove(int[] nodesPlaced, int[] branchesPlaced)
     {
         photonView.RPC("RPC_SendMove", RpcTarget.All, nodesPlaced, branchesPlaced);
     }

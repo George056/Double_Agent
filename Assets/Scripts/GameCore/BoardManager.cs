@@ -1186,8 +1186,8 @@ public class BoardManager : MonoBehaviour
                 BtnToggle();
             }
 
-            networkController.SetNodesPlaced(nodesPlacedThisTurn);
-            networkController.SetBranchesPlaced(branchesPlacedThisTurn);
+            networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
+            networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
             networkController.SendMove();
 
         }
@@ -1267,8 +1267,11 @@ public class BoardManager : MonoBehaviour
 
     public void ReceiveMoveFromNetwork()
     {
-        List<int> networkNodes = networkController.GetNodesPlaced();
-        List<int> networkBranches = networkController.GetBranchesPlaced();
+        int[] tempNetworkNodes = networkController.GetNodesPlaced();
+        int[] tempNetworkBranches = networkController.GetBranchesPlaced();
+
+        List<int> networkNodes = new List<int>(tempNetworkNodes);
+        List<int> networkBranches = new List<int>(tempNetworkBranches);
 
         foreach(int node in networkNodes)
         {

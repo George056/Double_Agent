@@ -344,6 +344,7 @@ public class BoardManager : MonoBehaviour
             {
                 firstPlayer = (netPiece == Owner.US ? Owner.USSR : Owner.US);
                 activeSide = firstPlayer;
+                BtnToggle();
             }
             end = false;
             turnCount = 1;
@@ -1311,6 +1312,7 @@ public class BoardManager : MonoBehaviour
         inBuildMode = !inBuildMode;
         
         ReceiveMoveFromNetwork();
+        BtnToggle();
         BoardCheck();
     }
 

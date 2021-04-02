@@ -141,6 +141,8 @@ public class BoardManager : MonoBehaviour
     public AudioSource USSRVictory;
     public AudioSource USSRLoss;
     public AudioSource lightSwitch;
+    public AudioSource doorCreak;
+    public AudioSource doorClose;
 
     [HideInInspector]
     public static bool new_board = true;
@@ -316,6 +318,9 @@ public class BoardManager : MonoBehaviour
 
     private IEnumerator TurnOnLight(float delay)
     {
+        doorCreak.Play(0);
+        yield return new WaitForSeconds(1f);
+        doorClose.Play(0);
         yield return new WaitForSeconds(delay);
         lightSwitch.Play(0);
         yield return new WaitForSeconds(0.5f);

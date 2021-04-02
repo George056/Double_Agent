@@ -817,6 +817,8 @@ MonoBehaviour:
   USSRVictory: {fileID: 2031465931}
   USSRLoss: {fileID: 73225330}
   lightSwitch: {fileID: 1900318269}
+  doorCreak: {fileID: 234816230}
+  doorClose: {fileID: 851297545}
   tempResourceList:
   - {fileID: 0}
   - {fileID: 0}

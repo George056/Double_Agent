@@ -335,9 +335,16 @@ public class BoardManager : MonoBehaviour
                 inBuildMode = false;
             }
 
-
-            firstPlayer = netPiece;
-            activeSide = firstPlayer;
+            if (PlayerPrefs.GetInt("Host") == 1)
+            {
+                firstPlayer = netPiece;
+                activeSide = firstPlayer;
+            }
+            else
+            {
+                firstPlayer = (netPiece == Owner.US ? Owner.USSR : Owner.US);
+                activeSide = firstPlayer;
+            }
             end = false;
             turnCount = 1;
 
@@ -505,9 +512,12 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        if (activeSide == aiPiece)
+        if (PlayerPrefs.GetString("GameType") == "local")
         {
-            Debug.Log("AI placed node " + nodeNum);
+            if (activeSide == aiPiece)
+            {
+                Debug.Log("AI placed node " + nodeNum);
+            }
         }
     }
 
@@ -541,9 +551,13 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        if (activeSide == aiPiece)
+
+        if (PlayerPrefs.GetString("GameType") == "local")
         {
-            Debug.Log("AI placed branch " + branchNum);
+            if (activeSide == aiPiece)
+            {
+                Debug.Log("AI placed branch " + branchNum);
+            }
         }
     }
 
@@ -1165,7 +1179,8 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurn()
     {
-        if (turnCount != 2)
+
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
             if (activeSide == Owner.US)
             {
@@ -1177,17 +1192,15 @@ public class BoardManager : MonoBehaviour
             }
 
             inBuildMode = !inBuildMode;
-        }
+            
 
-        turnCount++;
+            turnCount++;
 
-        // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
-        BoardCheck();
+            // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
+            BoardCheck();
 
-        if (end) return;
+            if (end) return;
 
-        if (PlayerPrefs.GetString("GameType") == "net")
-        {
             if (turnCount == 3)
             {
                 localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
@@ -1209,6 +1222,27 @@ public class BoardManager : MonoBehaviour
         }
         else if (PlayerPrefs.GetString("GameType") == "local")
         {
+            if (turnCount != 2)
+            {
+                if (activeSide == Owner.US)
+                {
+                    activeSide = Owner.USSR;
+                }
+                else
+                {
+                    activeSide = Owner.US;
+                }
+
+                inBuildMode = !inBuildMode;
+            }
+
+            turnCount++;
+
+            // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
+            BoardCheck();
+
+            if (end) return;
+
             // if it is time for the player's second setup move, allocate resources for one branch and one node
             if (turnCount == 3)
             {
@@ -1262,26 +1296,27 @@ public class BoardManager : MonoBehaviour
 
     public void TurnReceived()
     {
+        Debug.Log("BM.TurnReceived() Called");
         turnCount++;
-        if (turnCount != 2)
+        
+        if (activeSide == Owner.US)
         {
-            if (activeSide == Owner.US)
-            {
-                activeSide = Owner.USSR;
-            }
-            else
-            {
-                activeSide = Owner.US;
-            }
-
-            inBuildMode = !inBuildMode;
+           activeSide = Owner.USSR;
         }
+        else
+        {
+           activeSide = Owner.US;
+        }
+
+        inBuildMode = !inBuildMode;
+        
         ReceiveMoveFromNetwork();
         BoardCheck();
     }
 
     public void ReceiveMoveFromNetwork()
     {
+        Debug.Log("BM.ReceiveMoveFromNetwork() called");
         int[] tempNetworkNodes = networkController.GetNodesPlaced();
         int[] tempNetworkBranches = networkController.GetBranchesPlaced();
 
@@ -1372,17 +1407,14 @@ public class BoardManager : MonoBehaviour
     public void StartNetworkGame()
     {
         string role = PlayerPrefs.GetInt("Host").ToString();
-        Debug.Log("Role: " + role);
         setNetworkManagerReference();
         if (PlayerPrefs.GetInt("Host") == 1)
         {
             customBoardSeed = GetRandomBoardSeed();
             networkController.SetBoardSeed(customBoardSeed);
-            Debug.Log("SetBoardSeedComplete");
             networkController.SendSeed();
-            Debug.Log("SendSeedComplete");
             SetupScene();
-            Debug.Log("SetupSceneShouldBeCalledByNow");
+
         }
         else
         {
@@ -1393,9 +1425,7 @@ public class BoardManager : MonoBehaviour
 
     public void ReceiveSeedFromNetwork()
     {
-        Debug.Log("ReceivingSeed");
         customBoardSeed = networkController.GetBoardSeed();
-        Debug.Log("Received Seed from Network: " + customBoardSeed);
         SetupScene();
     }
 }

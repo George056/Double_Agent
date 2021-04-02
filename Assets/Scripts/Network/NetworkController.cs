@@ -26,14 +26,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         NetController = this;
         PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
-        if (networkPlayer)
-        {
-            Debug.Log("Network Player Instantiated");
-        }
-        else
-        {
-            Debug.Log("Network Player not instantiated");
-        }
     }
 
     public void SetBoardManagerReference(BoardManager manager)
@@ -44,60 +36,54 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public IEnumerator WaitForTurn()
     {
+        Debug.Log("NetworkController.WaitforTurn() called");
         while (playerTurn == false)
             yield return null;
 
 
         playerTurn = false;
+        Debug.Log("NetworkController.WaitforTurn() playerTurn has been set to turn");
         boardManager.TurnReceived();
 
     }
 
     public IEnumerator WaitForSeed()
     {
-        Debug.Log("WaitForSeed called");
         while (gameBoardSeed == "")
         {
             yield return null;  
         }
 
-        Debug.Log("WaitForSeed got value: " + gameBoardSeed);
         boardManager.ReceiveSeedFromNetwork();
         
     }
 
     public void SendMove()
     {
+        Debug.Log("NetworkController.SendMove()");
         NetworkPlayer.networkPlayer.SendMove(nodesPlaced, branchesPlaced);
     }
 
     public void SendSeed()
     {
-        Debug.Log("NetworkController sending seed: " + gameBoardSeed);
         NetworkPlayer.networkPlayer.SendSeed(gameBoardSeed);
         
     }
 
     public void SetNodesPlaced(int[] newNodesPlaced)
     {
+        Debug.Log("SetNodesPlacedCalled");
         nodesPlaced = newNodesPlaced;
     }
 
     public void SetBranchesPlaced(int[] newBranchesPlaced)
     {
+        Debug.Log("SetBranchesPlacedCalled");
         branchesPlaced = newBranchesPlaced;
     }
 
     public void SetBoardSeed(string boardSeed)
     {
-        if (PlayerPrefs.GetInt("Host") == 1)
-        {
-            Debug.Log("Host called SetBoardSeed: " + boardSeed);
-        }
-        else
-        {
-            Debug.Log("Network Player called SetBoardSeed: " + boardSeed);
-        }
         gameBoardSeed = boardSeed;
     }
 

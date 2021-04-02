@@ -341,6 +341,9 @@ public class BoardManager : MonoBehaviour
         {
             Shuffle(resourceList);
         }
+        USMusic.GetComponent<AudioSource>().volume = 0;
+        USSRMusic.GetComponent<AudioSource>().volume = 0;
+
         BoardSetUp(GameBoard);
 
         // https://docs.unity3d.com/ScriptReference/Coroutine.html

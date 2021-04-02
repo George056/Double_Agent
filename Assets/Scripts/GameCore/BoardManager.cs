@@ -1287,7 +1287,7 @@ public class BoardManager : MonoBehaviour
     #endregion
     public void NetworkGame()
     {
-
+        networkController.SetPlayerTurn(false);
         if(activeSide == firstPlayer)
         {
             StartCoroutine(networkController.WaitForTurn());

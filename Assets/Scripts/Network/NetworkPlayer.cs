@@ -22,7 +22,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SendMove(int[] nodesPlaced, int[] branchesPlaced)
     {
-
+        Debug.Log("NetworkPlayer.RPC_SendMove()");
         networkController.SetNodesPlaced(nodesPlaced);
         networkController.SetBranchesPlaced(branchesPlaced);
         networkController.SetPlayerTurn(true);

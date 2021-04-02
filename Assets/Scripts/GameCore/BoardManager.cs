@@ -1342,13 +1342,13 @@ public class BoardManager : MonoBehaviour
     {
         if (activeSide == Owner.US)
         {
-            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
         }
         else
         {
-            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150); 
         }
 
     }
@@ -1357,13 +1357,13 @@ public class BoardManager : MonoBehaviour
     {
         if (activeSide == Owner.US)
         {
-            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0); 
         }
         else
         {
-            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
         }
     }
 

@@ -1278,7 +1278,6 @@ public class BoardManager : MonoBehaviour
         }
         ReceiveMoveFromNetwork();
         BoardCheck();
-        NetworkGame();
     }
 
     public void ReceiveMoveFromNetwork()

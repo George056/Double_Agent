@@ -1064,17 +1064,26 @@ public class BoardManager : MonoBehaviour
                     {
                         nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
                     }
-                    nodesPlacedThisTurn.Clear();
                     for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
                     {
                         allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
                     }
+                    if(PlayerPrefs.GetString("GameType") == "net")
+                    {
+                        networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
+                        networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                    }
+
                     branchesPlacedThisTurn.Clear();
+                    nodesPlacedThisTurn.Clear();
 
                     EndTurn();
                     // provide player with indication that opponent is taking turn
-                    /*if (turnCount != 3)*/
-                        /*player2.GetComponent<AI>().AIMove(turnCount);*/
+                    if (PlayerPrefs.GetString("GameType") == "local")
+                    {
+                        if (turnCount != 3)
+                            player2.GetComponent<AI>().AIMove(turnCount);
+                    }
                 }
             }
             else
@@ -1094,16 +1103,25 @@ public class BoardManager : MonoBehaviour
                 {
                     nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
                 }
-                nodesPlacedThisTurn.Clear();
                 for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
                 {
                     allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
                 }
+                if (PlayerPrefs.GetString("GameType") == "net")
+                {
+                    networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
+                    networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                }
                 branchesPlacedThisTurn.Clear();
+                nodesPlacedThisTurn.Clear();
 
                 EndTurn();
                 // provide player with indication that opponent is taking turn
-                /*player2.GetComponent<AI>().AIMove(turnCount);*/
+
+                if (PlayerPrefs.GetString("GameType") == "local")
+                {
+                    player2.GetComponent<AI>().AIMove(turnCount);
+                }
 
             }
         }
@@ -1185,10 +1203,8 @@ public class BoardManager : MonoBehaviour
             {
                 BtnToggle();
             }
-
-            networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
-            networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
             networkController.SendMove();
+            NetworkGame();
 
         }
         else if (PlayerPrefs.GetString("GameType") == "local")

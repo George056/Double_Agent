@@ -960,7 +960,8 @@ public class BoardManager : MonoBehaviour
                     EndTurn();
                     // provide player with indication that opponent is taking turn
                     if (turnCount != 3)
-                        player2.GetComponent<AI>().AIMove(turnCount);
+                        // player2.GetComponent<AI>().AIMove(turnCount);
+                        StartCoroutine(TimeStop());
                 }
             }
             else
@@ -989,7 +990,8 @@ public class BoardManager : MonoBehaviour
 
                 EndTurn();
                 // provide player with indication that opponent is taking turn
-                player2.GetComponent<AI>().AIMove(turnCount);
+                //player2.GetComponent<AI>().AIMove(turnCount);
+                StartCoroutine(TimeStop());
 
             }
         }
@@ -1066,7 +1068,8 @@ public class BoardManager : MonoBehaviour
         {
             if (firstPlayer == humanPiece)
             {
-                player2.GetComponent<AI>().AIMove(turnCount);
+                //player2.GetComponent<AI>().AIMove(turnCount);
+                StartCoroutine(TimeStop());
             }
             else
             {
@@ -1078,5 +1081,12 @@ public class BoardManager : MonoBehaviour
         {
             player2.GetComponent<AI>().EndOpener();
         }
+    }
+
+    IEnumerator TimeStop()
+    {
+        yield return new WaitForSeconds(1.0f);
+        player2.GetComponent<AI>().AIMove(turnCount);
+        Debug.Log("wait for 1s");
     }
 }

@@ -1310,6 +1310,7 @@ public class BoardManager : MonoBehaviour
         }
 
         inBuildMode = !inBuildMode;
+        Debug.Log("Build mode: " + inBuildMode);
         
         ReceiveMoveFromNetwork();
         BtnToggle();

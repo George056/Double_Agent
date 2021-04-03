@@ -807,8 +807,8 @@ MonoBehaviour:
   BlackoutPanel: {fileID: 1313762135}
   USImage: {fileID: 1992913583}
   USSRImage: {fileID: 955976219}
-  USMusic: {fileID: 396023532}
-  USSRMusic: {fileID: 867615559}
+  USMusic: {fileID: 396023533}
+  USSRMusic: {fileID: 867615560}
   PiecePlaced: {fileID: 507798944}
   defaultVolume: 0.5
   musicSlider: {fileID: 1358503158}
@@ -3103,7 +3103,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 101ec5b209413df4989dc1fae4ae74e9, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -7046,7 +7046,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &867615560
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7058,7 +7058,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 00583904b2a57344685ee6a7be0118aa, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1

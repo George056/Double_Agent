@@ -131,8 +131,8 @@ public class BoardManager : MonoBehaviour
     public GameObject BlackoutPanel;
     public GameObject USImage;
     public GameObject USSRImage;
-    public GameObject USMusic;
-    public GameObject USSRMusic;
+    public AudioSource USMusic;
+    public AudioSource USSRMusic;
     public AudioSource PiecePlaced;
     public float defaultVolume = 0.5f;
     public Slider musicSlider;
@@ -325,6 +325,15 @@ public class BoardManager : MonoBehaviour
         lightSwitch.Play(0);
         yield return new WaitForSeconds(0.5f);
         BlackoutPanel.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+        if (humanPiece == Owner.US)
+        {
+            USMusic.Play(0);
+        }
+        else
+        {
+            USSRMusic.Play(0);
+        }
     }
 
     public void SetupScene()
@@ -341,10 +350,11 @@ public class BoardManager : MonoBehaviour
         {
             Shuffle(resourceList);
         }
-        USMusic.GetComponent<AudioSource>().volume = 0;
-        USSRMusic.GetComponent<AudioSource>().volume = 0;
 
         BoardSetUp(GameBoard);
+
+        USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
         // https://docs.unity3d.com/ScriptReference/Coroutine.html
         coroutine = TurnOnLight(1.5f);
@@ -356,9 +366,6 @@ public class BoardManager : MonoBehaviour
         humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
         firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
         activeSide = firstPlayer;
-
-        USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-        USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
         end = false;
         turnCount = 1;
@@ -374,16 +381,16 @@ public class BoardManager : MonoBehaviour
             USImage.SetActive(true);
             USSRImage.SetActive(false);
 
-            USMusic.SetActive(true);
-            USSRMusic.SetActive(false);
+            //USMusic.SetActive(true);
+            //USSRMusic.SetActive(false);
         }
         else
         {
             USImage.SetActive(false);
             USSRImage.SetActive(true);
 
-            USSRMusic.SetActive(true);
-            USMusic.SetActive(false);
+            //USSRMusic.SetActive(true);
+            //USMusic.SetActive(false);
 
         }
 

@@ -818,7 +818,6 @@ public class BoardManager : MonoBehaviour
         if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
         {
             tradeButton.SetActive(false);
-            //buildButton.SetActive(false);
             endTurnButton.SetActive(false);
 
             if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
@@ -1024,8 +1023,8 @@ public class BoardManager : MonoBehaviour
     private void BtnToggle()
     {
         tradeButton.SetActive(!tradeButton.activeSelf);
-        //buildButton.SetActive(!buildButton.activeSelf);
-        endTurnButton.SetActive(!endTurnButton.activeSelf);
+        //endTurnButton.SetActive(!endTurnButton.activeSelf);
+        endTurnButton.GetComponent<Button>().interactable = !endTurnButton.GetComponent<Button>().interactable;
     }
 
     public void EndTurn()

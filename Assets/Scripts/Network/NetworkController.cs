@@ -69,6 +69,16 @@ public class NetworkController : MonoBehaviourPunCallbacks
         }
     }
 
+    public void SendUpdateResourcesInOpponentUI()
+    {
+        NetworkPlayer.networkPlayer.SendUpdateResourcesInOpponentUI(resources);
+    }
+
+    public void UpdateResourcesInOpponentUI(int [] newResources) 
+    {
+        List<int> newResourcesUpdate = new List<int>(newResources);
+        boardManager.UpdateOpponentResourcesInUI(newResourcesUpdate);
+    }
     public void SendSeed()
     {
         NetworkPlayer.networkPlayer.SendSeed(gameBoardSeed);

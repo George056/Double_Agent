@@ -116,9 +116,9 @@ MonoBehaviour:
   placementConfirmed: 0
   connectedToSetup: 0
   resources:
-  - {fileID: 8567565184321727926, guid: a38e91d294bccad40bbc7be4d6a318f1, type: 3}
-  - {fileID: 5015995889806251867, guid: 40b8748b66e00a343a80aa02e478512f, type: 3}
   - {fileID: 5015995889806251867, guid: 0840ee865cfd0b6469e6c4a60c619f6f, type: 3}
+  - {fileID: 5015995889806251867, guid: 460ac1ffc994a4f4e9fc163122698a5b, type: 3}
+  - {fileID: 8567565184321727926, guid: 6ce2a1a87403c8b44b1855daf3d282ca, type: 3}
 --- !u!58 &6375626238504660160
 CircleCollider2D:
   m_ObjectHideFlags: 0

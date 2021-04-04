@@ -123,6 +123,7 @@ public class BoardManager : MonoBehaviour
     public Sprite EmptyNodeSprite;
     public Sprite EmptyBranchSprite;
     public Sprite USNodeSprite;
+    public Sprite USNodeHighlightedSprite;
     public Sprite USBranchSprite;
     public Sprite USSRNodeSprite;
     public Sprite USSRBranchSprite;
@@ -454,13 +455,15 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
-            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
         }
         else
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
             //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
         }
 
@@ -526,8 +529,8 @@ public class BoardManager : MonoBehaviour
     public void UnplaceNode(int nodeNum)
     {
         nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
+        GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = EmptyNodeSprite;
         GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
-        //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = EmptyNodeSprite;
 
         nodesPlacedThisTurn.Remove(nodeNum);
 
@@ -958,6 +961,7 @@ public class BoardManager : MonoBehaviour
                     for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
                     {
                         nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
+                        nodes[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
                     }
                     nodesPlacedThisTurn.Clear();
                     for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
@@ -989,6 +993,7 @@ public class BoardManager : MonoBehaviour
                 for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
                 {
                     nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
+                    nodes[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
                 }
                 nodesPlacedThisTurn.Clear();
                 for (int i = 0; i < branchesPlacedThisTurn.Count; i++)

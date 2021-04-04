@@ -87,11 +87,15 @@ public class NodeInfo : MonoBehaviour
             {
                 if (GameObject.FindObjectOfType<BoardManager>().activeSide == Owner.US)
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
+                    //this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
+                    this.GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+                    this.GetComponent<SpriteRenderer>().sprite = GameObject.FindObjectOfType<BoardManager>().USNodeSprite;
                 }
                 else
                 {
                     this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
+                    //this.GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+                    //this.GetComponent<SpriteRenderer>().sprite = GameObject.FindObjectOfType<BoardManager>().USSRNodeSprite;
                 }
             }
         }
@@ -104,6 +108,8 @@ public class NodeInfo : MonoBehaviour
             if (GameObject.FindObjectOfType<BoardManager>().LegalUINodeMove(nodeOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
             {
+                //this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
+                this.GetComponent<SpriteRenderer>().sprite = GameObject.FindObjectOfType<BoardManager>().EmptyNodeSprite;
                 this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
             }
         }

@@ -1346,6 +1346,11 @@ public class BoardManager : MonoBehaviour
             localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }
 
+        if(turnCount > 3)
+        {
+            AllocateResources();
+        }
+
         ReceiveMoveFromNetwork();
         BtnToggle();
         BoardCheck();

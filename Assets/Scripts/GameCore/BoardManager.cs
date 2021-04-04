@@ -1229,7 +1229,8 @@ public class BoardManager : MonoBehaviour
             {
                 tradeButton.GetComponent<Button>().interactable = true;
             }
-            if (turnCount >= 4)
+            
+            if (turnCount >= 3)
             {
                 AllocateResources();
                 int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();

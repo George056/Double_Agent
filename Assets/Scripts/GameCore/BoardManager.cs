@@ -1224,10 +1224,7 @@ public class BoardManager : MonoBehaviour
 
             if (end) return;
 
-            if ( turnCount == 3)
-            {
-                localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
-            }
+
             if (turnCount >= 5)
             {
                 tradeButton.GetComponent<Button>().interactable = true;
@@ -1343,7 +1340,11 @@ public class BoardManager : MonoBehaviour
         {
             localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }
-        
+        if (turnCount == 3)
+        {
+            localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+        }
+
         ReceiveMoveFromNetwork();
         BtnToggle();
         BoardCheck();

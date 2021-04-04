@@ -110,14 +110,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 458f2c3e51b67d84bad0a288f39e99a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeOwner: 2
+  nodeOwner: 0
   nodeOrder: 13
-  isSetupNode: 0
-  placementConfirmed: 0
+  isSetupNode: 1
+  placementConfirmed: 1
   connectedToSetup: 0
   resources:
-  - {fileID: 5015995889806251867, guid: 40b8748b66e00a343a80aa02e478512f, type: 3}
-  - {fileID: 5015995889806251867, guid: 0840ee865cfd0b6469e6c4a60c619f6f, type: 3}
+  - {fileID: 5015995889806251867, guid: 75b50fe8253036d4d82a3bcb2d470dd3, type: 3}
+  - {fileID: 5015995889806251867, guid: ac47984d0877ee9458fed38a51ce5322, type: 3}
   - {fileID: 8567565184321727926, guid: 6ce2a1a87403c8b44b1855daf3d282ca, type: 3}
 --- !u!58 &-7748068651571355451
 CircleCollider2D:

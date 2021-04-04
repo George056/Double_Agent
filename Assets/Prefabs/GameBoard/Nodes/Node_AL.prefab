@@ -110,13 +110,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 458f2c3e51b67d84bad0a288f39e99a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeOwner: 2
+  nodeOwner: 1
   nodeOrder: 22
   isSetupNode: 0
-  placementConfirmed: 0
+  placementConfirmed: 1
   connectedToSetup: 0
   resources:
-  - {fileID: 5015995889806251867, guid: 460ac1ffc994a4f4e9fc163122698a5b, type: 3}
+  - {fileID: 8567565184321727926, guid: 06fafefeba5e24247b805744ef6fb7de, type: 3}
 --- !u!58 &5798188598012956954
 CircleCollider2D:
   m_ObjectHideFlags: 0

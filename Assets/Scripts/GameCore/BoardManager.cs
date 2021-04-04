@@ -455,14 +455,14 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
-            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeHighlightedSprite;
         }
         else
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
             //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
             //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
         }
@@ -495,12 +495,12 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
         }
         else
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
         }
 
         branchesPlacedThisTurn.Add(branchNum);
@@ -961,7 +961,11 @@ public class BoardManager : MonoBehaviour
                     for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
                     {
                         nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
-                        nodes[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                        
+                        if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                        {
+                            GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                        }
                     }
                     nodesPlacedThisTurn.Clear();
                     for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
@@ -993,7 +997,11 @@ public class BoardManager : MonoBehaviour
                 for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
                 {
                     nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
-                    nodes[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+
+                    if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                    {
+                        GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                    }
                 }
                 nodesPlacedThisTurn.Clear();
                 for (int i = 0; i < branchesPlacedThisTurn.Count; i++)

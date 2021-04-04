@@ -138,11 +138,11 @@ public class BranchInfo : MonoBehaviour
             {
                 if (GameObject.FindObjectOfType<BoardManager>().activeSide == Owner.US)
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
+                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
                 }
                 else
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
+                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
                 }
             }
         }

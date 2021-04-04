@@ -895,7 +895,14 @@ public class BoardManager : MonoBehaviour
 
         if (PlayerPrefs.GetString("GameType") == "net")
         {
+            if(localPlayer.GetComponent<Player>().__network_score >= 10 || localPlayer.GetComponent<Player>().__human_score >= 10)
+            {
+                tradeButton.SetActive(false);
+                endTurnButton.SetActive(false);
 
+                end = true;
+                UIEndGame();
+            }
         }
 
         else if (PlayerPrefs.GetString("GameType") == "local")
@@ -987,7 +994,15 @@ public class BoardManager : MonoBehaviour
 
         if (PlayerPrefs.GetString("GameType") == "net") 
         {
+            if (who == netPiece)
+            {
                 localPlayer.GetComponent<Player>().UpdateScore(score);
+                networkController.SetScore(score);
+            }
+            else
+            {
+                localPlayer.GetComponent<Player>().UpdateNetScore(score);
+            }
         }
 
         else if (PlayerPrefs.GetString("GameType") == "local")
@@ -1338,6 +1353,7 @@ public class BoardManager : MonoBehaviour
         {
             NetworkChangeBranchOwner(branch);
         }
+        networkController.ClearBranchesandNodes();
     }
 
     public void setNetworkManagerReference()

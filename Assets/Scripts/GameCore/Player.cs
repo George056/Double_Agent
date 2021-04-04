@@ -15,6 +15,9 @@ public class Player : MonoBehaviour
     public int __human_score;
 
     [HideInInspector]
+    public int __network_score;
+
+    [HideInInspector]
     [Tooltip("This is true if they have the longest network")]
     public bool __longest_net;
 
@@ -134,6 +137,12 @@ public class Player : MonoBehaviour
     {
         __human_score = newScore;
         GameObject.FindObjectOfType<BoardManager>().UpdatePlayerScoreInUI(__human_score);
+    }
+
+    public void UpdateNetScore(int newScore)
+    {
+        __network_score = newScore;
+        GameObject.FindObjectOfType<BoardManager>().UpdateOpponentScoreInUI(__network_score);
     }
 
     public void AddNode(int index)

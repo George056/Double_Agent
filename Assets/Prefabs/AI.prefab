@@ -87,7 +87,8 @@ MonoBehaviour:
   branchReward: 0.05
   illegalMovePunish: -0.1
   illegalTradePunish: -0.1
-  noMovePunish: -0.5
+  badTradePunish: -0.05
+  noMovePunish: -1
   totalReward: 0
   recordingExample: 0
   randAI: 1

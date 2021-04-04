@@ -997,7 +997,6 @@ public class BoardManager : MonoBehaviour
             if (who == netPiece)
             {
                 localPlayer.GetComponent<Player>().UpdateScore(score);
-                networkController.SetScore(score);
             }
             else
             {
@@ -1219,7 +1218,7 @@ public class BoardManager : MonoBehaviour
 
             if (end) return;
 
-            if (turnCount == 3)
+            if (turnCount == 2 || turnCount == 3)
             {
                 localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
             }
@@ -1227,13 +1226,16 @@ public class BoardManager : MonoBehaviour
             {
                 tradeButton.GetComponent<Button>().interactable = true;
             }
-            if (turnCount >= 5)
-                AllocateResources();
-            playerTraded = false;
-            if (turnCount != 3)
+            if (turnCount >= 4)
             {
-                BtnToggle();
+                AllocateResources();
+                int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
+                networkController.SetResources(tempResources);
             }
+            playerTraded = false;
+
+            BtnToggle();
+            
             networkController.SendMove();
             NetworkGame();
 
@@ -1341,9 +1343,11 @@ public class BoardManager : MonoBehaviour
         Debug.Log("BM.ReceiveMoveFromNetwork() called");
         int[] tempNetworkNodes = networkController.GetNodesPlaced();
         int[] tempNetworkBranches = networkController.GetBranchesPlaced();
+        int[] tempResources = networkController.GetResources();
 
         List<int> networkNodes = new List<int>(tempNetworkNodes);
         List<int> networkBranches = new List<int>(tempNetworkBranches);
+        List<int> networkResources = new List<int>(tempResources);
 
         foreach(int node in networkNodes)
         {
@@ -1353,7 +1357,8 @@ public class BoardManager : MonoBehaviour
         {
             NetworkChangeBranchOwner(branch);
         }
-        networkController.ClearBranchesandNodes();
+        UpdateOpponentResourcesInUI(networkResources);
+        networkController.ClearBranchesandNodesandResources();
     }
 
     public void setNetworkManagerReference()

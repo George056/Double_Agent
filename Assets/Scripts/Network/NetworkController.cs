@@ -12,8 +12,9 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public static int[] nodesPlaced;
     public static int[] branchesPlaced;
+    public static int[] resources;
     public static string gameBoardSeed = "";
-    public static int score;
+ 
 
     public static NetworkController NetController;
     
@@ -62,7 +63,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void SendMove()
     {
         Debug.Log("NetworkController.SendMove()");
-        NetworkPlayer.networkPlayer.SendMove(nodesPlaced, branchesPlaced, score);
+        NetworkPlayer.networkPlayer.SendMove(nodesPlaced, branchesPlaced, resources);
     }
 
     public void SendSeed()
@@ -93,6 +94,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
         playerTurn = b;
     }
 
+    public void SetResources(int[] newResources)
+    {
+        resources = newResources;
+    }
     public int[] GetNodesPlaced()
     {
         return nodesPlaced;
@@ -108,16 +113,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
         return gameBoardSeed;
     }
 
-    public void SetScore(int newScore)
+    public int[] GetResources()
     {
-        score = newScore;
+        return resources;
     }
 
-    public int GetScore()
-    {
-        return score;
-    }
-    public void ClearBranchesandNodes()
+    public void ClearBranchesandNodesandResources()
     {
         if (branchesPlaced != null && branchesPlaced.Length > 0 )
         {
@@ -127,6 +128,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
         if (nodesPlaced != null && nodesPlaced.Length > 0)
         {
             System.Array.Clear(nodesPlaced, 0, nodesPlaced.Length);
+        }
+        if(resources != null && resources.Length > 0)
+        {
+            System.Array.Clear(resources, 0, resources.Length);
         }
 
     }

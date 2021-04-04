@@ -20,12 +20,12 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
 
 
     [PunRPC]
-    public void RPC_SendMove(int[] nodesPlaced, int[] branchesPlaced, int score)
+    public void RPC_SendMove(int[] nodesPlaced, int[] branchesPlaced, int[] resources)
     {
         Debug.Log("NetworkPlayer.RPC_SendMove()");
         networkController.SetNodesPlaced(nodesPlaced);
         networkController.SetBranchesPlaced(branchesPlaced);
-        networkController.SetScore(score);
+        networkController.SetResources(resources);
         networkController.SetPlayerTurn(true);
     }
 
@@ -40,10 +40,10 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
 
 
 
-    public void SendMove(int[] nodesPlaced, int[] branchesPlaced, int score)
+    public void SendMove(int[] nodesPlaced, int[] branchesPlaced, int[] resources)
     {
         Debug.Log("NetworkPlayer.SendMove()");
-        photonView.RPC("RPC_SendMove", RpcTarget.All, nodesPlaced, branchesPlaced, score);
+        photonView.RPC("RPC_SendMove", RpcTarget.All, nodesPlaced, branchesPlaced, resources);
     }
 
     public void SendSeed(string gameBoardSeed)

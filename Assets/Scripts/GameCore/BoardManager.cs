@@ -472,12 +472,26 @@ public class BoardManager : MonoBehaviour
 
     public void UpdateOpponentResourcesInUI(List<int> resources)
     {
-        if (turnCount > 4)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            opponentCopperCount.text = resources[0].ToString();
-            opponentLumberCount.text = resources[1].ToString();
-            opponentLoyalistCount.text = resources[2].ToString();
-            opponentCoinCount.text = resources[3].ToString();
+            Debug.Log("Updated Resources: " + resources[0] + ", " + resources[1] + ", " + resources[2] + ", " + resources[3]);
+            if (turnCount >= 3)
+            {
+                opponentCopperCount.text = resources[0].ToString();
+                opponentLumberCount.text = resources[1].ToString();
+                opponentLoyalistCount.text = resources[2].ToString();
+                opponentCoinCount.text = resources[3].ToString();
+            }
+        }
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            if (turnCount > 4)
+            {
+                opponentCopperCount.text = resources[0].ToString();
+                opponentLumberCount.text = resources[1].ToString();
+                opponentLoyalistCount.text = resources[2].ToString();
+                opponentCoinCount.text = resources[3].ToString();
+            }
         }
     }
 

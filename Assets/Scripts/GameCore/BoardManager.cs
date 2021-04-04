@@ -448,12 +448,25 @@ public class BoardManager : MonoBehaviour
 
     public void UpdatePlayerResourcesInUI(List<int> resources)
     {
-        if (turnCount > 4)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            playerCopperCount.text = resources[0].ToString();
-            playerLumberCount.text = resources[1].ToString();
-            playerLoyalistCount.text = resources[2].ToString();
-            playerCoinCount.text = resources[3].ToString();
+            if (turnCount >= 3)
+            {
+                opponentCopperCount.text = resources[0].ToString();
+                opponentLumberCount.text = resources[1].ToString();
+                opponentLoyalistCount.text = resources[2].ToString();
+                opponentCoinCount.text = resources[3].ToString();
+            }
+        }
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            if (turnCount > 4)
+            {
+                playerCopperCount.text = resources[0].ToString();
+                playerLumberCount.text = resources[1].ToString();
+                playerLoyalistCount.text = resources[2].ToString();
+                playerCoinCount.text = resources[3].ToString();
+            }
         }
 
         // In trade window, display only resources of which the player currently has at least one

@@ -639,6 +639,7 @@ public class BoardManager : MonoBehaviour
             if (!found) { isLegal = false; }
         }
 
+        Debug.Log("LegalUINodeMove isLegal: " + isLegal);
         return isLegal;
     }
 
@@ -685,6 +686,7 @@ public class BoardManager : MonoBehaviour
             }
         }
 
+        Debug.Log("LegalUIBranchMove isLegal: " + isLegal);
         return isLegal;
     }
 
@@ -1299,6 +1301,7 @@ public class BoardManager : MonoBehaviour
     {
         Debug.Log("BM.TurnReceived() Called");
         turnCount++;
+        Debug.Log("Turn count: " + turnCount);
         
         if (activeSide == Owner.US)
         {
@@ -1311,6 +1314,7 @@ public class BoardManager : MonoBehaviour
 
         inBuildMode = !inBuildMode;
         Debug.Log("Build mode: " + inBuildMode);
+        Debug.Log("Active Side: " + activeSide);
         
         ReceiveMoveFromNetwork();
         BtnToggle();

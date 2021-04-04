@@ -21,6 +21,9 @@ public class Player : MonoBehaviour
     [Tooltip("This is true if they have the longest network")]
     public bool __longest_net;
 
+    [HideInInspector]
+    public bool __network_longest_net;
+
     public string userName;
 
     [Tooltip("A list of all human resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
@@ -37,6 +40,7 @@ public class Player : MonoBehaviour
         __player = (short)PlayerPrefs.GetInt("Human_Player", 0); // default to orange
         __piece_type = (Owner)PlayerPrefs.GetInt("Human_Piece", 0); // default to US
         __longest_net = false;
+        __network_longest_net = false;
         __owned_nodes = new List<int>();
         __owned_branches = new List<int>();
 
@@ -56,6 +60,17 @@ public class Player : MonoBehaviour
         UpdateScore(lowerScore, false, false);
     }
 
+    public void NetworkGetLongestNet()
+    {
+        __network_longest_net = true;
+    }
+    public void NetworkLoseLongestNet()
+    {
+        __network_longest_net = false;
+        int lowerScore = __network_score - 2;
+        UpdateNetScore(lowerScore);
+    }
+
     /// <summary>
     /// Sets if the player has the longest network
     /// </summary>
@@ -65,6 +80,10 @@ public class Player : MonoBehaviour
         __longest_net = netLength;
     }
 
+    public void NetworkSetLongest(bool netLength)
+    {
+        __network_longest_net = netLength;
+    }
     public void Loss()
     {
 

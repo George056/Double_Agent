@@ -946,10 +946,18 @@ public class BoardManager : MonoBehaviour
                 {
                     localPlayer.GetComponent<Player>().LoseLongestNet();
                 }
+                else
+                {
+                    localPlayer.GetComponent<Player>().NetworkLoseLongestNet();
+                }
 
                 if (cdl.longestNetOwner == netPiece)
                 {
                     localPlayer.GetComponent<Player>().GetLongestNet();
+                }
+                else
+                {
+                    localPlayer.GetComponent<Player>().NetworkGetLongestNet();
                 }
             }
         }

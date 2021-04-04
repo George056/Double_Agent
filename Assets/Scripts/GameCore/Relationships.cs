@@ -29,6 +29,10 @@ public class Relationships : MonoBehaviour
     public static Dictionary<int, List<int>> connectionsRoadTiles = new Dictionary<int, List<int>>();
 
     [HideInInspector]
+    [Tooltip("How tiles connect to nodes")]
+    public static Dictionary<int, List<int>> connectionsTileNodes = new Dictionary<int, List<int>>();
+
+    [HideInInspector]
     [Tooltip("See if the dictionaries have already been made")]
     public static bool built = false;
 
@@ -163,55 +167,69 @@ public class Relationships : MonoBehaviour
         connectionsNodeTiles.Add(23, new List<int>() { 12 });
 
 
-        connectionsTilesRoads.Add(0, new List<int>() {0,1 ,2 ,4});
-        connectionsTilesRoads.Add(1, new List<int>() {3,6 ,7 ,11});
-        connectionsTilesRoads.Add(2, new List<int>() {4,7 ,8 ,12});
-        connectionsTilesRoads.Add(3, new List<int>() {5,8 ,9 ,13});
-        connectionsTilesRoads.Add(4, new List<int>() {10,15 ,16 ,21});
-        connectionsTilesRoads.Add(5, new List<int>() {11,16 ,17 ,22});
-        connectionsTilesRoads.Add(6, new List<int>() {12,17 ,18 ,23});
-        connectionsTilesRoads.Add(7, new List<int>() {13,18 ,19 ,24});
-        connectionsTilesRoads.Add(8, new List<int>() {14,19 ,20 ,25});
-        connectionsTilesRoads.Add(9, new List<int>() {22,26 ,27 ,30});
-        connectionsTilesRoads.Add(10, new List<int>() {23,27 ,28 ,31});
-        connectionsTilesRoads.Add(11, new List<int>() {24,28 ,29 ,32});
-        connectionsTilesRoads.Add(12, new List<int>() {31,33 ,34 ,35});
+        connectionsTilesRoads.Add(0, new List<int>() { 0, 1, 2, 4 });
+        connectionsTilesRoads.Add(1, new List<int>() { 3, 6, 7, 11 });
+        connectionsTilesRoads.Add(2, new List<int>() { 4, 7, 8, 12 });
+        connectionsTilesRoads.Add(3, new List<int>() { 5, 8, 9, 13 });
+        connectionsTilesRoads.Add(4, new List<int>() { 10, 15, 16, 21 });
+        connectionsTilesRoads.Add(5, new List<int>() { 11, 16, 17, 22 });
+        connectionsTilesRoads.Add(6, new List<int>() { 12, 17, 18, 23 });
+        connectionsTilesRoads.Add(7, new List<int>() { 13, 18, 19, 24 });
+        connectionsTilesRoads.Add(8, new List<int>() { 14, 19, 20, 25 });
+        connectionsTilesRoads.Add(9, new List<int>() { 22, 26, 27, 30 });
+        connectionsTilesRoads.Add(10, new List<int>() { 23, 27, 28, 31 });
+        connectionsTilesRoads.Add(11, new List<int>() { 24, 28, 29, 32 });
+        connectionsTilesRoads.Add(12, new List<int>() { 31, 33, 34, 35 });
 
-        connectionsRoadTiles.Add(0, new List<int>() {0});
-        connectionsRoadTiles.Add(1, new List<int>() {0});
-        connectionsRoadTiles.Add(2, new List<int>() {0});
-        connectionsRoadTiles.Add(3, new List<int>() {1});
-        connectionsRoadTiles.Add(4, new List<int>() {0, 2});
-        connectionsRoadTiles.Add(5, new List<int>() {3});
-        connectionsRoadTiles.Add(6, new List<int>() {1});
-        connectionsRoadTiles.Add(7, new List<int>() {1, 2});
-        connectionsRoadTiles.Add(8, new List<int>() {2, 3});
-        connectionsRoadTiles.Add(9, new List<int>() {3});
-        connectionsRoadTiles.Add(10, new List<int>() {4});
-        connectionsRoadTiles.Add(11, new List<int>() {1, 5});
-        connectionsRoadTiles.Add(12, new List<int>() {2, 6});
-        connectionsRoadTiles.Add(13, new List<int>() {3, 7});
-        connectionsRoadTiles.Add(14, new List<int>() {8});
-        connectionsRoadTiles.Add(15, new List<int>() {4});
-        connectionsRoadTiles.Add(16, new List<int>() {4, 5});
-        connectionsRoadTiles.Add(17, new List<int>() {5, 6});
-        connectionsRoadTiles.Add(18, new List<int>() {6, 7});
-        connectionsRoadTiles.Add(19, new List<int>() {7, 8});
-        connectionsRoadTiles.Add(20, new List<int>() {8});
-        connectionsRoadTiles.Add(21, new List<int>() {4});
-        connectionsRoadTiles.Add(22, new List<int>() {5, 9});
-        connectionsRoadTiles.Add(23, new List<int>() {6, 10});
-        connectionsRoadTiles.Add(24, new List<int>() {7, 11});
-        connectionsRoadTiles.Add(25, new List<int>() {8}); 
-        connectionsRoadTiles.Add(26, new List<int>() {9});
-        connectionsRoadTiles.Add(27, new List<int>() {9, 10});
-        connectionsRoadTiles.Add(28, new List<int>() {10, 11});
-        connectionsRoadTiles.Add(29, new List<int>() {11}); 
-        connectionsRoadTiles.Add(30, new List<int>() {9});
-        connectionsRoadTiles.Add(31, new List<int>() {10, 12});
-        connectionsRoadTiles.Add(32, new List<int>() {11});
-        connectionsRoadTiles.Add(33, new List<int>() {12});
-        connectionsRoadTiles.Add(34, new List<int>() {12});
-        connectionsRoadTiles.Add(35, new List<int>() {12});
+        connectionsRoadTiles.Add(0, new List<int>() { 0 });
+        connectionsRoadTiles.Add(1, new List<int>() { 0 });
+        connectionsRoadTiles.Add(2, new List<int>() { 0 });
+        connectionsRoadTiles.Add(3, new List<int>() { 1 });
+        connectionsRoadTiles.Add(4, new List<int>() { 0, 2 });
+        connectionsRoadTiles.Add(5, new List<int>() { 3 });
+        connectionsRoadTiles.Add(6, new List<int>() { 1 });
+        connectionsRoadTiles.Add(7, new List<int>() { 1, 2 });
+        connectionsRoadTiles.Add(8, new List<int>() { 2, 3 });
+        connectionsRoadTiles.Add(9, new List<int>() { 3 });
+        connectionsRoadTiles.Add(10, new List<int>() { 4 });
+        connectionsRoadTiles.Add(11, new List<int>() { 1, 5 });
+        connectionsRoadTiles.Add(12, new List<int>() { 2, 6 });
+        connectionsRoadTiles.Add(13, new List<int>() { 3, 7 });
+        connectionsRoadTiles.Add(14, new List<int>() { 8 });
+        connectionsRoadTiles.Add(15, new List<int>() { 4 });
+        connectionsRoadTiles.Add(16, new List<int>() { 4, 5 });
+        connectionsRoadTiles.Add(17, new List<int>() { 5, 6 });
+        connectionsRoadTiles.Add(18, new List<int>() { 6, 7 });
+        connectionsRoadTiles.Add(19, new List<int>() { 7, 8 });
+        connectionsRoadTiles.Add(20, new List<int>() { 8 });
+        connectionsRoadTiles.Add(21, new List<int>() { 4 });
+        connectionsRoadTiles.Add(22, new List<int>() { 5, 9 });
+        connectionsRoadTiles.Add(23, new List<int>() { 6, 10 });
+        connectionsRoadTiles.Add(24, new List<int>() { 7, 11 });
+        connectionsRoadTiles.Add(25, new List<int>() { 8 });
+        connectionsRoadTiles.Add(26, new List<int>() { 9 });
+        connectionsRoadTiles.Add(27, new List<int>() { 9, 10 });
+        connectionsRoadTiles.Add(28, new List<int>() { 10, 11 });
+        connectionsRoadTiles.Add(29, new List<int>() { 11 });
+        connectionsRoadTiles.Add(30, new List<int>() { 9 });
+        connectionsRoadTiles.Add(31, new List<int>() { 10, 12 });
+        connectionsRoadTiles.Add(32, new List<int>() { 11 });
+        connectionsRoadTiles.Add(33, new List<int>() { 12 });
+        connectionsRoadTiles.Add(34, new List<int>() { 12 });
+        connectionsRoadTiles.Add(35, new List<int>() { 12 });
+
+        connectionsTileNodes.Add(0, new List<int>() { 0, 1, 3, 4 });
+        connectionsTileNodes.Add(1, new List<int>() { 2, 3, 7, 8 });
+        connectionsTileNodes.Add(2, new List<int>() { 3, 8, 4, 9 });
+        connectionsTileNodes.Add(3, new List<int>() { 4, 9, 5, 10 });
+        connectionsTileNodes.Add(4, new List<int>() { 6, 7, 12, 13 });
+        connectionsTileNodes.Add(5, new List<int>() { 7, 8, 13, 14 });
+        connectionsTileNodes.Add(6, new List<int>() { 8, 14, 9, 15 });
+        connectionsTileNodes.Add(7, new List<int>() { 9, 15, 10, 16 });
+        connectionsTileNodes.Add(8, new List<int>() { 10, 16, 11, 17 });
+        connectionsTileNodes.Add(9, new List<int>() { 13, 14, 18, 19 });
+        connectionsTileNodes.Add(10, new List<int>() { 14, 19, 15, 20 });
+        connectionsTileNodes.Add(11, new List<int>() { 15, 20, 16, 21 });
+        connectionsTileNodes.Add(12, new List<int>() { 19, 20, 22, 23 });
     }
 }

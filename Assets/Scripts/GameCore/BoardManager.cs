@@ -1259,6 +1259,7 @@ public class BoardManager : MonoBehaviour
             
             if (turnCount >= 3)
             {
+                AllocateResources();
                 int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
                 networkController.SetResources(tempResources);
             }
@@ -1375,9 +1376,6 @@ public class BoardManager : MonoBehaviour
         if(turnCount > 3)
         {
             AllocateResources();
-            networkController.SetResources(localPlayer.GetComponent<Player>().__resources.ToArray());
-            networkController.SendUpdateResourcesInOpponentUI();
-            networkController.ClearBranchesandNodesandResources();
         }
 
         ReceiveMoveFromNetwork();

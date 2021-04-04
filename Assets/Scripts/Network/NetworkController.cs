@@ -12,7 +12,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public static int[] nodesPlaced;
     public static int[] branchesPlaced;
-    public static int[] resources;
+    public static int[] resources = new int[] { 0, 0, 0, 0 };
     public static string gameBoardSeed = "";
  
 
@@ -63,7 +63,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void SendMove()
     {
         Debug.Log("NetworkController.SendMove()");
-        NetworkPlayer.networkPlayer.SendMove(nodesPlaced, branchesPlaced, resources);
+        if (resources != null)
+        {
+            NetworkPlayer.networkPlayer.SendMove(nodesPlaced, branchesPlaced, resources);
+        }
     }
 
     public void SendSeed()

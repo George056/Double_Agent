@@ -83,6 +83,7 @@ public class BoardManager : MonoBehaviour
     private static NetworkController networkController = new NetworkController();
    // private static NetworkPlayer networkPlayerClass = new NetworkPlayer();
     private bool netWorkTurn = true;
+    public static BoardManager boardManager;
 
 
     /*
@@ -1613,7 +1614,7 @@ public class BoardManager : MonoBehaviour
 
     public void StartNetworkGame()
     {
-        string role = PlayerPrefs.GetInt("Host").ToString();
+        boardManager = this;
         setNetworkManagerReference();
         if (PlayerPrefs.GetInt("Host") == 1)
         {

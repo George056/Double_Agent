@@ -1456,6 +1456,10 @@ public class BoardManager : MonoBehaviour
         if (turnCount > 1 || firstPlayer != netPiece)
         {
             StartCoroutine(networkController.WaitForTurn());
+            while(networkController.GetPlayerTurn() == false)
+            {
+                StartCoroutine(networkController.UpdateResourcesInOpponentUI());
+            }
         }
 
     }

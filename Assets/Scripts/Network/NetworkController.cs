@@ -118,6 +118,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
         return resources;
     }
 
+    public bool GetPlayerTurn()
+    {
+        return playerTurn;
+    }
+
     public void ClearBranchesandNodesandResources()
     {
         if (branchesPlaced != null && branchesPlaced.Length > 0 )
@@ -138,18 +143,24 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void SendUpdateResourcesInOpponentUI()
     {
-        NetworkPlayer.networkPlayer.UpdateResourcesinOpponentUI(resources);
+        NetworkPlayer.networkPlayer.SetUpdateResourcesinOpponentUI(resources);
     }
 
-    public void UpdateResourcesInOpponentUI(int[] newResources)
+    public IEnumerator UpdateResourcesInOpponentUI()
+    {
+        while (playerTurn == true || resources == null)
+            yield return null;
+
+        List<int> r = new List<int>(resources);
+        boardManager.UpdateOpponentResourcesInUI(r);
+        
+    }
+
+    public void SetUpdateResourcesInOpponentUI(int[] newResources)
     {
         if(playerTurn == false)
         {
-            if (newResources != null)
-            {
-                List<int> r = new List<int>(newResources);
-                boardManager.UpdateOpponentResourcesInUI(r);
-            }
+            resources = newResources;
         }
     }
 

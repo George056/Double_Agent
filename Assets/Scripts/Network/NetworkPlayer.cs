@@ -41,7 +41,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_UpdateResourcesinOpponentUI(int[] resources)
     {
-        networkController.UpdateResourcesInOpponentUI(resources);
+        networkController.SetUpdateResourcesInOpponentUI(resources);
     }
 
     public void SendMove(int[] nodesPlaced, int[] branchesPlaced, int[] resources)
@@ -50,7 +50,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
         photonView.RPC("RPC_SendMove", RpcTarget.All, nodesPlaced, branchesPlaced, resources);
     }
 
-    public void UpdateResourcesinOpponentUI(int[] resources)
+    public void SetUpdateResourcesinOpponentUI(int[] resources)
     {
         photonView.RPC("RPC_UpdateResourcesinOpponentUI", RpcTarget.All, resources);
     }

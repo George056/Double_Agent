@@ -1227,10 +1227,13 @@ public class BoardManager : MonoBehaviour
                     for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
                     {
                         nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
-                        
-                        if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+
+                        if (PlayerPrefs.GetString("GameType") == "local")
                         {
-                            GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                            if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                            {
+                                GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                            }
                         }
                     }
                     for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
@@ -1276,9 +1279,12 @@ public class BoardManager : MonoBehaviour
                 {
                     nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
 
-                    if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                    if (PlayerPrefs.GetString("GameType") == "local")
                     {
-                        GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                        if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                        {
+                            GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                        }
                     }
                 }
                 for (int i = 0; i < branchesPlacedThisTurn.Count; i++)

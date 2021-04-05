@@ -145,8 +145,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         if(playerTurn == false)
         {
-            List<int> r = new List<int>(newResources);
-            boardManager.UpdateOpponentResourcesInUI(r);
+            if (newResources != null)
+            {
+                List<int> r = new List<int>(newResources);
+                boardManager.UpdateOpponentResourcesInUI(r);
+            }
         }
     }
 

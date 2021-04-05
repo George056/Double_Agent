@@ -41,7 +41,7 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_UpdateResourcesinOpponentUI(int[] resources)
     {
-        networkController.SetUpdateResourcesInOpponentUI(resources);
+        networkController.UpdateResourcesInOpponentUI(resources);
     }
 
     public void SendMove(int[] nodesPlaced, int[] branchesPlaced, int[] resources)

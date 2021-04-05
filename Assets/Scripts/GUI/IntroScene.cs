@@ -13,7 +13,7 @@ public class IntroScene : MonoBehaviour
 
     IEnumerator LoadLevelAfterDelay()
     {
-        yield return new WaitForSeconds(8.0f);
+        yield return new WaitForSeconds(10.0f);
         SceneManager.LoadScene("MainMenuScene");
     }
 }

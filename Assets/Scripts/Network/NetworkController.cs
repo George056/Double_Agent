@@ -152,15 +152,17 @@ public class NetworkController : MonoBehaviourPunCallbacks
         if (boardManager)
         {
             Debug.Log("Board Manager Exists");
+            if (playerTurn == true && newResources.Length != 0)
+            {
+                List<int> r = new List<int>(newResources);
+                boardManager.UpdateOpponentResourcesInUI(r);
+            }
         }
 
-        if (playerTurn == false && newResources.Length != 0)
-        {
-            List<int> r = new List<int>(newResources);
-            boardManager.UpdateOpponentResourcesInUI(r);
-        }
+
         
     }
+
     public override void OnLeftRoom()
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2)

@@ -363,6 +363,13 @@ public class BoardManager : MonoBehaviour
             AssignNodeResources();
             cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
 
+            USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+
+            // https://docs.unity3d.com/ScriptReference/Coroutine.html
+            coroutine = TurnOnLight(1.5f);
+            StartCoroutine(coroutine);
+
 
             if (PlayerPrefs.GetInt("Host") == 1)
             {
@@ -387,8 +394,6 @@ public class BoardManager : MonoBehaviour
             end = false;
             turnCount = 1;
 
-            USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-            USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
             localPlayer = GameObject.FindGameObjectWithTag("Player");
 

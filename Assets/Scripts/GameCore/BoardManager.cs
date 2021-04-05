@@ -1489,28 +1489,7 @@ public class BoardManager : MonoBehaviour
             int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
             networkController.SetResources(tempResources);
         }
-        // disable/reenable Trade, Build, and End Turn buttons
-        if (turnCount != 3)
-        {
-            BtnToggle();
-        }
-        else
-        {
-            if (firstPlayer == humanPiece)
-            {
-                //player2.GetComponent<AI>().AIMove(turnCount);
-                StartCoroutine(TimeStop());
-            }
-            else
-            {
-                //human move
-            }
-        }
-        
-        if (turnCount == 5)
-        {
-            player2.GetComponent<AI>().EndOpener();
-        }
+       
     }
 
     IEnumerator TimeStop()

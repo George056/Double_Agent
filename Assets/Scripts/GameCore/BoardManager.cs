@@ -1112,7 +1112,7 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurnButtonClicked()
     {
-        if(turnCount > 4)
+        if (turnCount > 4 || (PlayerPrefs.GetString("GameType") == "net" && turnCount > 3))
             isSetupTurn = false;
 
         if (end) return;

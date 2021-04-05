@@ -42,9 +42,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
         while (playerTurn == false)
             yield return null;
 
-
-        playerTurn = false;
-        Debug.Log("NetworkController.WaitforTurn() playerTurn has been set to turn");
         boardManager.TurnReceived();
 
     }
@@ -137,6 +134,20 @@ public class NetworkController : MonoBehaviourPunCallbacks
             System.Array.Clear(resources, 0, resources.Length);
         }
 
+    }
+
+    public void SendUpdateResourcesInOpponentUI()
+    {
+        NetworkPlayer.networkPlayer.UpdateResourcesinOpponentUI(resources);
+    }
+
+    public void UpdateResourcesInOpponentUI(int[] newResources)
+    {
+        if(playerTurn == false)
+        {
+            List<int> r = new List<int>(newResources);
+            boardManager.UpdateOpponentResourcesInUI(r);
+        }
     }
 
     public override void OnLeftRoom()

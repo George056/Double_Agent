@@ -872,6 +872,9 @@ public class BoardManager : MonoBehaviour
             {
                 //Trade animation *********************************************************************************************************************************************** 
                 localPlayer.GetComponent<Player>().UpdateResources(resources);
+                int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
+                networkController.SetResources(tempResources);
+                networkController.SendUpdateResourcesInOpponentUI();
             }
         }
         else if (PlayerPrefs.GetString("GameType") == "local")
@@ -1238,6 +1241,8 @@ public class BoardManager : MonoBehaviour
                     {
                         networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
                         networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                        
+
                     }
 
                     branchesPlacedThisTurn.Clear();
@@ -1284,6 +1289,7 @@ public class BoardManager : MonoBehaviour
                 {
                     networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
                     networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                    networkController.SetResources(localPlayer.GetComponent<Player>().__resources.ToArray());
                 }
                 branchesPlacedThisTurn.Clear();
                 nodesPlacedThisTurn.Clear();
@@ -1344,10 +1350,6 @@ public class BoardManager : MonoBehaviour
         if (PlayerPrefs.GetString("GameType") == "net")
         {
             turnCount++;
-            if (turnCount >= 4)
-            {
-                tradeButton.GetComponent<Button>().interactable = true;
-            }
 
             if (activeSide == Owner.US)
             {
@@ -1476,6 +1478,11 @@ public class BoardManager : MonoBehaviour
             localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }
 
+        if (turnCount >= 4)
+        {
+            tradeButton.GetComponent<Button>().interactable = true;
+        }
+
 
         ReceiveMoveFromNetwork();
         BtnToggle();
@@ -1514,6 +1521,7 @@ public class BoardManager : MonoBehaviour
             AllocateResources();
             int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
             networkController.SetResources(tempResources);
+            networkController.SendUpdateResourcesInOpponentUI();
         }
        
     }

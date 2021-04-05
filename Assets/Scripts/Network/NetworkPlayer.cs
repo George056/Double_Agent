@@ -38,7 +38,11 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
         networkController.SetBoardSeed(gameBoardSeed);
     }
 
-
+    [PunRPC]
+    public void RPC_UpdateResourcesinOpponentUI(int[] resources)
+    {
+        networkController.UpdateResourcesInOpponentUI(resources);
+    }
 
     public void SendMove(int[] nodesPlaced, int[] branchesPlaced, int[] resources)
     {
@@ -46,6 +50,10 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
         photonView.RPC("RPC_SendMove", RpcTarget.All, nodesPlaced, branchesPlaced, resources);
     }
 
+    public void UpdateResourcesinOpponentUI(int[] resources)
+    {
+        photonView.RPC("RPC_UpdateResourcesinOpponentUI", RpcTarget.All, resources);
+    }
     public void SendSeed(string gameBoardSeed)
     {
         photonView.RPC("RPC_SendSeed", RpcTarget.All, gameBoardSeed);

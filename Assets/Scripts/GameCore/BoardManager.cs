@@ -1252,6 +1252,8 @@ public class BoardManager : MonoBehaviour
             // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
             BoardCheck();
 
+            networkController.SendMove();
+
             if (end) return;
 
 
@@ -1259,7 +1261,7 @@ public class BoardManager : MonoBehaviour
 
             BtnToggle();
             
-            networkController.SendMove();
+            
             NetworkGame();
 
         }

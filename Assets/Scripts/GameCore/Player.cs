@@ -106,6 +106,8 @@ public class Player : MonoBehaviour
         if (__resources[0] < 1) { canAfford = false; }
         if (__resources[1] < 1) { canAfford = false; }
 
+        Debug.Log("Can afford branch: " + canAfford);
+
         return canAfford;
     }
 

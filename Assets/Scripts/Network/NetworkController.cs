@@ -32,6 +32,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void SetBoardManagerReference(BoardManager manager)
     {
+        Debug.Log("Board Manager Set");
         boardManager = manager;
     }
 

@@ -875,6 +875,10 @@ public class BoardManager : MonoBehaviour
                 int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
                 networkController.SetResources(tempResources);
                 networkController.SendUpdateResourcesInOpponentUI();
+                if (activeSide != netPiece)
+                {
+                    StartCoroutine(networkController.UpdateResourcesInOpponentUI());
+                }
             }
         }
         else if (PlayerPrefs.GetString("GameType") == "local")
@@ -1456,10 +1460,7 @@ public class BoardManager : MonoBehaviour
         if (turnCount > 1 || firstPlayer != netPiece)
         {
             StartCoroutine(networkController.WaitForTurn());
-            while(networkController.GetPlayerTurn() == false)
-            {
-                StartCoroutine(networkController.UpdateResourcesInOpponentUI());
-            }
+
         }
 
     }
@@ -1532,6 +1533,11 @@ public class BoardManager : MonoBehaviour
             int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
             networkController.SetResources(tempResources);
             networkController.SendUpdateResourcesInOpponentUI();
+
+            if (activeSide != netPiece)
+            {
+                StartCoroutine(networkController.UpdateResourcesInOpponentUI());
+            }
         }
        
     }

@@ -154,6 +154,7 @@ public class BoardManager : MonoBehaviour
     public AudioSource lightSwitch;
     public AudioSource doorCreak;
     public AudioSource doorClose;
+    public AudioSource footsteps;
 
     [HideInInspector]
     public static bool new_board = true;
@@ -333,17 +334,20 @@ public class BoardManager : MonoBehaviour
         doorCreak.Play(0);
         yield return new WaitForSeconds(1f);
         doorClose.Play(0);
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(0.5f);
+        footsteps.Play(0);
+        yield return new WaitForSeconds(4f);
         lightSwitch.Play(0);
-        yield return new WaitForSeconds(0.5f);
-        BlackoutPanel.SetActive(false);
-        yield return new WaitForSeconds(0.5f);
         if (humanPiece == Owner.US)
         {
             USMusic.Play(0);
         }
-        else
+        yield return new WaitForSeconds(0.5f);
+        BlackoutPanel.SetActive(false);
+        
+        if (humanPiece == Owner.USSR)
         {
+            yield return new WaitForSeconds(0.5f);
             USSRMusic.Play(0);
         }
     }

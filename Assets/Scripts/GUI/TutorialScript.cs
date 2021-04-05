@@ -40,11 +40,11 @@ public class TutorialScript : MonoBehaviour
     public void TutorialBack()
     {
         TutorialSlides[slideNum].SetActive(false);
-        slideNum--;
-        if(slideNum == 0) //Hard code in array bounds
+        if (slideNum == 5) //Hard code the index of the last slide
         {
             NextButton.interactable = true;
         }
+        slideNum--;
         if(slideNum == 0)
         {
             BackButton.interactable = false;

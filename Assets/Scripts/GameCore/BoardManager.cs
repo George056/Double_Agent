@@ -27,6 +27,8 @@ public class BoardManager : MonoBehaviour
         public int yLoc;
     }
 
+    private IEnumerator coroutine;
+
     public GameObject[] resourceList;
     public GameObject[] nodes;
     public GameObject[] allBranches;
@@ -128,13 +130,29 @@ public class BoardManager : MonoBehaviour
     public GameObject firstSetupBranchImage;
     public GameObject secondSetupBranchImage;
 
+    public Sprite EmptyNodeSprite;
+    public Sprite EmptyBranchSprite;
+    public Sprite USNodeSprite;
+    public Sprite USBranchSprite;
+    public Sprite USSRNodeSprite;
+    public Sprite USSRBranchSprite;
+
+
+    public GameObject BlackoutPanel;
     public GameObject USImage;
     public GameObject USSRImage;
-    public GameObject USMusic;
-    public GameObject USSRMusic;
+    public AudioSource USMusic;
+    public AudioSource USSRMusic;
     public AudioSource PiecePlaced;
     public float defaultVolume = 0.5f;
     public Slider musicSlider;
+    public AudioSource USVictory;
+    public AudioSource USLoss;
+    public AudioSource USSRVictory;
+    public AudioSource USSRLoss;
+    public AudioSource lightSwitch;
+    public AudioSource doorCreak;
+    public AudioSource doorClose;
 
     [HideInInspector]
     public static bool new_board = true;
@@ -309,6 +327,26 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    private IEnumerator TurnOnLight(float delay)
+    {
+        doorCreak.Play(0);
+        yield return new WaitForSeconds(1f);
+        doorClose.Play(0);
+        yield return new WaitForSeconds(delay);
+        lightSwitch.Play(0);
+        yield return new WaitForSeconds(0.5f);
+        BlackoutPanel.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+        if (humanPiece == Owner.US)
+        {
+            USMusic.Play(0);
+        }
+        else
+        {
+            USSRMusic.Play(0);
+        }
+    }
+
     public void SetupScene()
     {
         Debug.Log("SetupSceneCalled");
@@ -358,26 +396,20 @@ public class BoardManager : MonoBehaviour
             {
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
-
-                USMusic.SetActive(true);
-                USSRMusic.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
-
-                USSRMusic.SetActive(true);
-                USMusic.SetActive(false);
             }
 
             NetworkGame();
         }
         else
         {
-            Debug.Log("Local game SetupScene");
             customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
             Debug.Log("CustomBoardSeed: " + customBoardSeed);
+            new_board = true;
             gridPositions.Clear();
             if (customBoardSeed != "")
             {
@@ -387,7 +419,16 @@ public class BoardManager : MonoBehaviour
             {
                 Shuffle(resourceList);
             }
+
             BoardSetUp(GameBoard);
+
+            USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+
+            // https://docs.unity3d.com/ScriptReference/Coroutine.html
+            coroutine = TurnOnLight(1.5f);
+            StartCoroutine(coroutine);
+
             AssignNodeResources();
             cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
             aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
@@ -395,11 +436,9 @@ public class BoardManager : MonoBehaviour
             firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
             activeSide = firstPlayer;
 
-            inBuildMode = true;
             end = false;
             turnCount = 1;
-            USMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-            USSRMusic.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            inBuildMode = (firstPlayer == humanPiece);
 
             //check to see if it is an AI or network game
             player1 = GameObject.FindGameObjectWithTag("Player");
@@ -411,16 +450,16 @@ public class BoardManager : MonoBehaviour
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
 
-                USMusic.SetActive(true);
-                USSRMusic.SetActive(false);
+                //USMusic.SetActive(true);
+                //USSRMusic.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
 
-                USSRMusic.SetActive(true);
-                USMusic.SetActive(false);
+                //USSRMusic.SetActive(true);
+                //USMusic.SetActive(false);
 
             }
 
@@ -428,11 +467,12 @@ public class BoardManager : MonoBehaviour
             if (firstPlayer == aiPiece)
             {
                 BtnToggle();
-                /*player2.GetComponent<AI>().AIMove(turnCount);*/
+                player2.GetComponent<AI>().AIMove(turnCount);
             }
         }
-
     }
+
+ 
 
     #region GameCore
 
@@ -516,11 +556,13 @@ public class BoardManager : MonoBehaviour
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(0, 26, 169, 255);
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
         }
         else
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(195, 49, 53, 255);
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
         }
 
         nodesPlacedThisTurn.Add(nodeNum);
@@ -593,6 +635,7 @@ public class BoardManager : MonoBehaviour
     {
         nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.Nil;
         GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(104, 118, 137, 255);
+        //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = EmptyNodeSprite;
 
         nodesPlacedThisTurn.Remove(nodeNum);
 
@@ -874,6 +917,39 @@ public class BoardManager : MonoBehaviour
 
     public void UIEndGame()
     {
+        if (humanPiece == Owner.US)
+        {
+            if (player1.GetComponent<Player>().__human_score >= 10)
+            { 
+                gameOverUSWin.SetActive(true);
+                USMusic.GetComponent<AudioSource>().volume = 0;
+                GameObject.FindObjectOfType<BoardManager>().USVictory.Play(0);
+
+            }
+            else 
+            { 
+                gameOverUSLoss.SetActive(true);
+                USMusic.GetComponent<AudioSource>().volume = 0;
+                GameObject.FindObjectOfType<BoardManager>().USLoss.Play(0);
+            }
+        }
+        else
+        {
+            if (player1.GetComponent<Player>().__human_score >= 10) 
+            { 
+                gameOverUSSRWin.SetActive(true);
+                USSRMusic.GetComponent<AudioSource>().volume = 0;
+                GameObject.FindObjectOfType<BoardManager>().USSRVictory.Play(0);
+            }
+            else 
+            { 
+                gameOverUSSRLoss.SetActive(true);
+                USSRMusic.GetComponent<AudioSource>().volume = 0;
+                GameObject.FindObjectOfType<BoardManager>().USSRLoss.Play(0);
+
+            }
+        }
+    
         if (PlayerPrefs.GetString("GameType") == "net")
         {
             if (netPiece == Owner.US)
@@ -1146,8 +1222,9 @@ public class BoardManager : MonoBehaviour
                     if (PlayerPrefs.GetString("GameType") == "local")
                     {
                         if (turnCount != 3)
-                            player2.GetComponent<AI>().AIMove(turnCount);
-                    }
+                            // player2.GetComponent<AI>().AIMove(turnCount);
+                            StartCoroutine(TimeStop());
+                    }                     
                 }
             }
             else
@@ -1155,6 +1232,7 @@ public class BoardManager : MonoBehaviour
                 // prompt player to place E & CL
                 SetupLegalPopup.SetActive(true);
             }
+
         }
         else // a regular turn
         {
@@ -1184,8 +1262,10 @@ public class BoardManager : MonoBehaviour
 
                 if (PlayerPrefs.GetString("GameType") == "local")
                 {
-                    player2.GetComponent<AI>().AIMove(turnCount);
+                    //player2.GetComponent<AI>().AIMove(turnCount);
+                    StartCoroutine(TimeStop());
                 }
+
 
             }
         }
@@ -1404,6 +1484,35 @@ public class BoardManager : MonoBehaviour
             int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
             networkController.SetResources(tempResources);
         }
+        // disable/reenable Trade, Build, and End Turn buttons
+        if (turnCount != 3)
+        {
+            BtnToggle();
+        }
+        else
+        {
+            if (firstPlayer == humanPiece)
+            {
+                //player2.GetComponent<AI>().AIMove(turnCount);
+                StartCoroutine(TimeStop());
+            }
+            else
+            {
+                //human move
+            }
+        }
+        
+        if (turnCount == 5)
+        {
+            player2.GetComponent<AI>().EndOpener();
+        }
+    }
+
+    IEnumerator TimeStop()
+    {
+        yield return new WaitForSeconds(1.0f);
+        player2.GetComponent<AI>().AIMove(turnCount);
+        Debug.Log("wait for 1s");
     }
 
     public void setNetworkManagerReference()

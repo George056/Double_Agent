@@ -8,6 +8,7 @@ public class PreGameMenu : MonoBehaviour
 {
     public InputField customBoardInput;
     public InputField userName;
+    public Toggle playerFirstToggle;
 
     /// <summary>
     /// This is used to set the difficulty of the AI
@@ -18,6 +19,20 @@ public class PreGameMenu : MonoBehaviour
         PlayerPrefs.SetInt("Difficulty", diff);
     }
 
+    public void SetPlayerOrder()
+    {
+        if (playerFirstToggle.isOn)
+        {
+            PlayerPrefs.SetInt("Human_Player", 0);
+            PlayerPrefs.SetInt("AI_Player", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Human_Player", 1);
+            PlayerPrefs.SetInt("AI_Player", 0);
+        }
+    }
+    
     /// <summary>
     /// Who will play first, the AI or human?
     /// </summary>

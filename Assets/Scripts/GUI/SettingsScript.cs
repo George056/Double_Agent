@@ -64,4 +64,12 @@ public class SettingsScript : MonoBehaviour
         PiecePlaced.volume = SoundEffectSlider.value;
         PlayerPrefs.SetFloat("SoundEffectsVolume", SoundEffectSlider.value);
     }
+
+    public void RestoreDefaults()
+    {
+        PlayerPrefs.SetFloat("MusicVolume", 0.5f);
+        PlayerPrefs.SetFloat("SoundEffectsVolume", 0.5f);
+        MusicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        SoundEffectSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume", 0.5f);
+    }
 }

@@ -205,6 +205,60 @@ public class AI : Agent
                 }
             }
 
+            List<int> nodes = new List<int>();
+            for (int i = 0; i < bm.nodes.Length; i++) nodes.Add(i);
+            foreach (int i in clamedNodes) nodes.Remove(i);
+
+            List<int> bad_nodes = new List<int>();
+            for (int i = 0; i < nodes.Count; ++i)
+            {
+                NodeInfo node = bm.nodes[nodes[i]].GetComponent<NodeInfo>();
+                int touching = node.resources.Count;
+                Relationships.connectionsNodeTiles.TryGetValue(nodes[i], out List<int> tiles);
+                int counter = 0;
+                if (touching == 1) bad_nodes.Add(i); // if only one resource gain
+                else
+                {
+                    int zero_count = 0;
+                    foreach (GameObject go_tile in node.resources)
+                    {
+                        if (go_tile.GetComponent<ResourceInfo>().depleted == true || go_tile.GetComponent<ResourceInfo>().nodeColor == ResourceInfo.Color.Empty) ++zero_count;
+                        else
+                        {
+                            Relationships.connectionsTileNodes.TryGetValue(tiles[counter], out List<int> node_connections);
+                            int count_on = 0;
+                            foreach (int n in node_connections)
+                            {
+                                if (bm.nodes[n].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) ++count_on;
+                            }
+                            if (count_on >= go_tile.GetComponent<ResourceInfo>().numOfResource) ++zero_count;
+                        }
+                        ++counter;
+                    }
+                    if (touching - zero_count <= 1) bad_nodes.Add(i); // if only one none depleted remove
+                }
+            }
+
+            List<int> branches = new List<int>();
+            for (int i = 0; i < bm.allBranches.Length; ++i) branches.Add(i);
+
+            List<int> bad_branches = new List<int>();
+            foreach (int node in bad_nodes)
+            {
+                Relationships.connectionsNode.TryGetValue(node, out List<int> touching_branches);
+                foreach (int branch in touching_branches)
+                {
+                    Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> touching_nodes);
+                    if ((bad_nodes.Contains(touching_nodes[0]) || clamedNodes.Contains(touching_nodes[0])) && (bad_nodes.Contains(touching_nodes[1]) || clamedNodes.Contains(touching_nodes[1])))
+                        bad_branches.Add(branch);
+                }
+            }
+
+            clamedNodes.AddRange(bad_nodes);
+            clamedNodes = clamedNodes.Distinct().ToList();
+            clamedBranches.AddRange(bad_branches);
+            clamedBranches = clamedBranches.Distinct().ToList();
+
             foreach (int i in clamedNodes)
             {
                 actionMasker.SetMask(i, new int[1] { 1 });
@@ -435,48 +489,56 @@ public class AI : Agent
             }
 
             // block impossible trades
-            if (__resources[3] < 3)
+            if (__resources[3] <= 3)
             {
                 blocked_trades.AddRange(new int[] { 1, 2, 3, 4 });
             }
-            if (__resources[3] < 2)
+            if (__resources[3] <= 2)
             {
                 blocked_trades.AddRange(new int[] { 5, 6, 7, 8, 9 });
             }
-            if (__resources[3] < 1)
+            if (__resources[3] <= 1)
             {
                 blocked_trades.AddRange(new int[] { 10, 11, 12, 13, 14, 15, 16, 17, 18 });
             }
 
-            if (__resources[2] < 3)
+            if (__resources[2] <= 3)
             {
                 blocked_trades.AddRange(new int[] { 19, 20, 21 });
             }
-            if (__resources[2] < 2)
+            if (__resources[2] <= 2)
             {
-                blocked_trades.AddRange(new int[] { 22, 23, 24, 25 });
+                blocked_trades.AddRange(new int[] { 10, 11, 22, 23, 24, 25 });
             }
-            if (__resources[2] < 1)
+            if (__resources[2] <= 1)
             {
-                blocked_trades.AddRange(new int[] { 26, 27, 28, 29, 30 });
+                blocked_trades.AddRange(new int[] { 4, 5, 12, 13, 26, 27, 28, 29, 30 });
             }
 
-            if (__resources[1] < 3)
+            if (__resources[1] <= 3)
             {
                 blocked_trades.AddRange(new int[] { 38, 39, 40 });
             }
+            if (__resources[1] <= 2)
+            {
+                blocked_trades.AddRange(new int[] { 17, 18, 28, 29, 36, 37 });
+            }
+            if (__resources[1] <= 1)
+            {
+                blocked_trades.AddRange(new int[] { 8, 9, 13, 16, 24, 25, 30, 34, 35 });
+            }
 
-            if (__resources[0] < 3)
+            if (__resources[0] <= 3)
             {
                 blocked_trades.AddRange(new int[] { 31, 32, 33 });
             }
-            if (__resources[0] < 2)
+            if (__resources[0] <= 2)
             {
-                blocked_trades.AddRange(new int[] { 34, 35 });
+                blocked_trades.AddRange(new int[] { 14, 15, 26, 27, 34, 35 });
             }
-            if (__resources[0] < 1)
+            if (__resources[0] <= 1)
             {
-                blocked_trades.AddRange(new int[] { 36, 37 });
+                blocked_trades.AddRange(new int[] { 6, 7, 12, 16, 22, 23, 30, 36, 37 });
             }
 
             blocked_trades = blocked_trades.Distinct().ToList();
@@ -1102,7 +1164,8 @@ public class AI : Agent
         foreach (GameObject tile in bm.resourceList)
         {
             ResourceInfo.Color color = tile.GetComponent<ResourceInfo>().nodeColor;
-            sensor.AddObservation((int)color);
+            int max_node = tile.GetComponent<ResourceInfo>().numOfResource;
+            sensor.AddObservation((int)color * 10 + max_node);
         }
 
         //observe board (60 observations)
@@ -1380,8 +1443,8 @@ public class AI : Agent
             {
                 Relationships.connectionsRoadTiles.TryGetValue(legalCon[con], out List<int> temp);
                 if (LegalMoveConnector(legalCon[con]) &&
-                    (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil &&
-                    ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil : true)))
+                    (bm.resourceList[temp[0]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil &&
+                    ((temp.Count > 1) ? bm.resourceList[temp[1]].GetComponent<ResourceInfo>().resoureTileOwner == Owner.Nil : true)))
                 {
                     PlaceMoveBranch(legalCon[con]);
                     __myRoads.Add(legalCon[con]);

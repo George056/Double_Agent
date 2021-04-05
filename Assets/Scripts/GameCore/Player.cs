@@ -15,8 +15,14 @@ public class Player : MonoBehaviour
     public int __human_score;
 
     [HideInInspector]
+    public int __network_score;
+
+    [HideInInspector]
     [Tooltip("This is true if they have the longest network")]
     public bool __longest_net;
+
+    [HideInInspector]
+    public bool __network_longest_net;
 
     public string userName;
 
@@ -34,6 +40,7 @@ public class Player : MonoBehaviour
         __player = (short)PlayerPrefs.GetInt("Human_Player", 0); // default to orange
         __piece_type = (Owner)PlayerPrefs.GetInt("Human_Piece", 0); // default to US
         __longest_net = false;
+        __network_longest_net = false;
         __owned_nodes = new List<int>();
         __owned_branches = new List<int>();
 
@@ -53,6 +60,17 @@ public class Player : MonoBehaviour
         UpdateScore(lowerScore, false, false);
     }
 
+    public void NetworkGetLongestNet()
+    {
+        __network_longest_net = true;
+    }
+    public void NetworkLoseLongestNet()
+    {
+        __network_longest_net = false;
+        int lowerScore = __network_score - 2;
+        UpdateNetScore(lowerScore);
+    }
+
     /// <summary>
     /// Sets if the player has the longest network
     /// </summary>
@@ -62,6 +80,10 @@ public class Player : MonoBehaviour
         __longest_net = netLength;
     }
 
+    public void NetworkSetLongest(bool netLength)
+    {
+        __network_longest_net = netLength;
+    }
     public void Loss()
     {
 
@@ -130,10 +152,16 @@ public class Player : MonoBehaviour
         GameObject.FindObjectOfType<BoardManager>().UpdatePlayerResourcesInUI(__resources);
     }
 
-    public void UpdateScore(int newScore, bool temp1, bool temp2)
+    public void UpdateScore(int newScore, bool temp1 = true, bool temp2 = true)
     {
         __human_score = newScore;
         GameObject.FindObjectOfType<BoardManager>().UpdatePlayerScoreInUI(__human_score);
+    }
+
+    public void UpdateNetScore(int newScore)
+    {
+        __network_score = newScore;
+        GameObject.FindObjectOfType<BoardManager>().UpdateOpponentScoreInUI(__network_score);
     }
 
     public void AddNode(int index)

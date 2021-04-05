@@ -59,7 +59,11 @@ public class BoardManager : MonoBehaviour
     private Owner humanPiece;
     [Tooltip("What piece is the first player")]
     private Owner firstPlayer;
+    [Tooltip("What piece is the networks")]
+    private Owner netPiece;
 
+
+   
     private GameObject player1;
     private GameObject player2;
 
@@ -72,7 +76,13 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverUSSRLoss;
   
 
+    public GameObject localPlayer;
+    public GameObject gameOverWindow;
     public GameObject SetupLegalPopup;
+
+    private static NetworkController networkController = new NetworkController();
+   // private static NetworkPlayer networkPlayerClass = new NetworkPlayer();
+    private bool netWorkTurn = true;
 
 
     /*
@@ -298,6 +308,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        Debug.Log("BoardSetUp complete");
     }
 
     void AssignNodeResources()
@@ -338,70 +349,138 @@ public class BoardManager : MonoBehaviour
     }
 
     public void SetupScene()
-    {   
-        customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
-        Debug.Log("CustomBoardSeed: " + customBoardSeed);
-        new_board = true;
-        gridPositions.Clear();
-        if (customBoardSeed != "")
+    {
+        Debug.Log("SetupSceneCalled");
+        if (PlayerPrefs.GetString("GameType", "") == "net")
         {
+            Debug.Log("Network game SetupScene");
+
+            netPiece = (Owner)PlayerPrefs.GetInt("Network_Piece", 0);
+            gridPositions.Clear();
+
             CustomizeBoardLayout();
+            Debug.Log("CustomizeBoardLayoutComplete");
+            BoardSetUp(GameBoard);
+            AssignNodeResources();
+            cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
+
+            USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+
+            // https://docs.unity3d.com/ScriptReference/Coroutine.html
+            coroutine = TurnOnLight(1.5f);
+            StartCoroutine(coroutine);
+
+
+            if (PlayerPrefs.GetInt("Host") == 1)
+            {
+                inBuildMode = true;
+            }
+            else
+            {
+                inBuildMode = false;
+            }
+
+            if (PlayerPrefs.GetInt("Host") == 1)
+            {
+                firstPlayer = netPiece;
+                activeSide = firstPlayer;
+            }
+            else
+            {
+                firstPlayer = (netPiece == Owner.US ? Owner.USSR : Owner.US);
+                activeSide = firstPlayer;
+                BtnToggle();
+            }
+            end = false;
+            turnCount = 1;
+
+
+            localPlayer = GameObject.FindGameObjectWithTag("Player");
+
+            if (netPiece == Owner.US)
+            {
+                USImage.SetActive(true);
+                USSRImage.SetActive(false);
+            }
+            else
+            {
+                USImage.SetActive(false);
+                USSRImage.SetActive(true);
+            }
+
+            NetworkGame();
         }
         else
         {
-            Shuffle(resourceList);
-        }
+            customBoardSeed = PlayerPrefs.GetString("CustomBoardSeed", "");
+            Debug.Log("CustomBoardSeed: " + customBoardSeed);
+            new_board = true;
+            gridPositions.Clear();
+            if (customBoardSeed != "")
+            {
+                CustomizeBoardLayout();
+            }
+            else
+            {
+                Shuffle(resourceList);
+            }
 
-        BoardSetUp(GameBoard);
+            BoardSetUp(GameBoard);
 
-        USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-        USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+            USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
-        // https://docs.unity3d.com/ScriptReference/Coroutine.html
-        coroutine = TurnOnLight(1.5f);
-        StartCoroutine(coroutine);
+            // https://docs.unity3d.com/ScriptReference/Coroutine.html
+            coroutine = TurnOnLight(1.5f);
+            StartCoroutine(coroutine);
 
-        AssignNodeResources();
-        cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
-        aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
-        humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
-        firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
-        activeSide = firstPlayer;
+            AssignNodeResources();
+            cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
+            aiPiece = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
+            humanPiece = (Owner)PlayerPrefs.GetInt("Human_Piece", 0);
+            firstPlayer = (PlayerPrefs.GetInt("AI_Player", 1) == 0) ? aiPiece : humanPiece;
+            activeSide = firstPlayer;
 
-        end = false;
-        turnCount = 1;
-        inBuildMode = (firstPlayer == humanPiece);
+            end = false;
+            turnCount = 1;
+            inBuildMode = (firstPlayer == humanPiece);
 
-        //check to see if it is an AI or network game
-        player1 = GameObject.FindGameObjectWithTag("Player");
-        player2 = GameObject.FindGameObjectWithTag("AI");
-        player2.GetComponent<AI>().SetOpener();
+            //check to see if it is an AI or network game
+            player1 = GameObject.FindGameObjectWithTag("Player");
+            player2 = GameObject.FindGameObjectWithTag("AI");
+            player2.GetComponent<AI>().SetOpener();
 
-        if (humanPiece == Owner.US)
-        {
-            USImage.SetActive(true);
-            USSRImage.SetActive(false);
+            if (humanPiece == Owner.US)
+            {
+                USImage.SetActive(true);
+                USSRImage.SetActive(false);
 
-            //USMusic.SetActive(true);
-            //USSRMusic.SetActive(false);
-        }
-        else
-        {
-            USImage.SetActive(false);
-            USSRImage.SetActive(true);
+                //USMusic.SetActive(true);
+                //USSRMusic.SetActive(false);
+            }
+            else
+            {
+                USImage.SetActive(false);
+                USSRImage.SetActive(true);
 
-            //USSRMusic.SetActive(true);
-            //USMusic.SetActive(false);
+                //USSRMusic.SetActive(true);
+                //USMusic.SetActive(false);
 
-        }
+            }
 
-        //make sure it is an AI game first
-        if (firstPlayer == aiPiece)
-        {
-            BtnToggle();
-            player2.GetComponent<AI>().AIMove(turnCount);
+            //make sure it is an AI game first
+            if (firstPlayer == aiPiece)
+            {
+                BtnToggle();
+                player2.GetComponent<AI>().AIMove(turnCount);
+            }
         }
     }
+
+ 
+
+    #region GameCore
 
     public void UpdatePlayerScoreInUI(int score)
     {
@@ -415,12 +494,25 @@ public class BoardManager : MonoBehaviour
 
     public void UpdatePlayerResourcesInUI(List<int> resources)
     {
-        if (turnCount > 4)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            playerCopperCount.text = resources[0].ToString();
-            playerLumberCount.text = resources[1].ToString();
-            playerLoyalistCount.text = resources[2].ToString();
-            playerCoinCount.text = resources[3].ToString();
+            if (turnCount >= 3)
+            {
+                playerCopperCount.text = resources[0].ToString();
+                playerLumberCount.text = resources[1].ToString();
+                playerLoyalistCount.text = resources[2].ToString();
+                playerCoinCount.text = resources[3].ToString();
+            }
+        }
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            if (turnCount > 4)
+            {
+                playerCopperCount.text = resources[0].ToString();
+                playerLumberCount.text = resources[1].ToString();
+                playerLoyalistCount.text = resources[2].ToString();
+                playerCoinCount.text = resources[3].ToString();
+            }
         }
 
         // In trade window, display only resources of which the player currently has at least one
@@ -439,12 +531,26 @@ public class BoardManager : MonoBehaviour
 
     public void UpdateOpponentResourcesInUI(List<int> resources)
     {
-        if (turnCount > 4)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            opponentCopperCount.text = resources[0].ToString();
-            opponentLumberCount.text = resources[1].ToString();
-            opponentLoyalistCount.text = resources[2].ToString();
-            opponentCoinCount.text = resources[3].ToString();
+            Debug.Log("Updated Resources: " + resources[0] + ", " + resources[1] + ", " + resources[2] + ", " + resources[3]);
+            if (turnCount >= 3)
+            {
+                opponentCopperCount.text = resources[0].ToString();
+                opponentLumberCount.text = resources[1].ToString();
+                opponentLoyalistCount.text = resources[2].ToString();
+                opponentCoinCount.text = resources[3].ToString();
+            }
+        }
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            if (turnCount > 4)
+            {
+                opponentCopperCount.text = resources[0].ToString();
+                opponentLumberCount.text = resources[1].ToString();
+                opponentLoyalistCount.text = resources[2].ToString();
+                opponentCoinCount.text = resources[3].ToString();
+            }
         }
     }
 
@@ -484,9 +590,12 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        if (activeSide == aiPiece)
+        if (PlayerPrefs.GetString("GameType") == "local")
         {
-            Debug.Log("AI placed node " + nodeNum);
+            if (activeSide == aiPiece)
+            {
+                Debug.Log("AI placed node " + nodeNum);
+            }
         }
     }
 
@@ -520,9 +629,13 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        if (activeSide == aiPiece)
+
+        if (PlayerPrefs.GetString("GameType") == "local")
         {
-            Debug.Log("AI placed branch " + branchNum);
+            if (activeSide == aiPiece)
+            {
+                Debug.Log("AI placed branch " + branchNum);
+            }
         }
     }
 
@@ -579,7 +692,7 @@ public class BoardManager : MonoBehaviour
 
         if (nodes[node].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) { isLegal = false; }
         
-        if (turnCount < 5)
+        if ((PlayerPrefs.GetString("GameType") == "local" && turnCount < 5) || (PlayerPrefs.GetString("GameType") == "net" && turnCount < 4))
         {
             // a node on a setup move must have an available adjacent branch that can also be claimed
             bool availableBranchFound = false;
@@ -614,8 +727,8 @@ public class BoardManager : MonoBehaviour
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
-        //*************************** THIS DOES NOT WORK YET (the if statement) *************************************************** 
-        if (turnCount < 5)
+
+        if ((PlayerPrefs.GetString("GameType") == "local" && turnCount < 5) || (PlayerPrefs.GetString("GameType") == "net" && turnCount < 4))
         {
             Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
             if (turnCount == 1 || turnCount == 2)
@@ -720,86 +833,170 @@ public class BoardManager : MonoBehaviour
 
         int traded_for = 0, traded_in = 0;
 
-        List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
-        for(int i = 0; i < 4; i++)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            if(resources[i] < 0)
+            List<int> heldResources = localPlayer.GetComponent<Player>().__resources;
+            for (int i = 0; i < 4; i++)
             {
-                if(heldResources[i] >= Math.Abs(resources[i]))
+                if (resources[i] < 0)
                 {
-                    makeTrade = true;
-                    traded_in += resources[i];
+                    if (heldResources[i] >= Math.Abs(resources[i]))
+                    {
+                        makeTrade = true;
+                        traded_in += resources[i];
+                    }
+                    else
+                    {
+                        makeTrade = false;
+                        break;
+                    }
                 }
                 else
                 {
-                    makeTrade = false;
-                    break;
+                    if (resources[i] < 2)
+                    {
+                        makeTrade = true;
+                        traded_for += resources[i];
+                    }
+                    else
+                    {
+                        makeTrade = false;
+                        break;
+                    }
                 }
             }
-            else
+
+            if (makeTrade && (traded_for != 1 || Math.Abs(traded_in) != 3)) makeTrade = false;
+
+            if (makeTrade)
             {
-                if(resources[i] < 2)
-                {
-                    makeTrade = true;
-                    traded_for += resources[i];
-                }
-                else
-                {
-                    makeTrade = false;
-                    break;
-                }
+                //Trade animation *********************************************************************************************************************************************** 
+                localPlayer.GetComponent<Player>().UpdateResources(resources);
             }
         }
-
-        if (makeTrade && (traded_for != 1 || Math.Abs(traded_in) != 3)) makeTrade = false;
-
-        if (makeTrade)
+        else if (PlayerPrefs.GetString("GameType") == "local")
         {
-            //Trade animation ***********************************************************************************************************************************************
-            if(who == aiPiece)
+            List<int> heldResources = (who == aiPiece) ? player2.GetComponent<AI>().__resources : player1.GetComponent<Player>().__resources;
+            for (int i = 0; i < 4; i++)
             {
-                player2.GetComponent<AI>().UpdateResources(resources);
-                Debug.Log("AI Traded: " + resources[0] + " red, " + resources[1] + " blue, " + resources[2] + " yellow, " + resources[3] + " green");
+                if (resources[i] < 0)
+                {
+                    if (heldResources[i] >= Math.Abs(resources[i]))
+                    {
+                        makeTrade = true;
+                        traded_in += resources[i];
+                    }
+                    else
+                    {
+                        makeTrade = false;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (resources[i] < 2)
+                    {
+                        makeTrade = true;
+                        traded_for += resources[i];
+                    }
+                    else
+                    {
+                        makeTrade = false;
+                        break;
+                    }
+                }
             }
-            else
-                player1.GetComponent<Player>().UpdateResources(resources);
+
+            if (makeTrade && (traded_for != 1 || Math.Abs(traded_in) != 3)) makeTrade = false;
+
+            if (makeTrade)
+            {
+                //Trade animation ***********************************************************************************************************************************************
+                if (who == aiPiece)
+                {
+                    player2.GetComponent<AI>().UpdateResources(resources);
+                    Debug.Log("AI Traded: " + resources[0] + " red, " + resources[1] + " blue, " + resources[2] + " yellow, " + resources[3] + " green");
+                }
+                else
+                    player1.GetComponent<Player>().UpdateResources(resources);
+            }
         }
     }
 
     public void UIEndGame()
     {
-        if (humanPiece == Owner.US)
+        if (PlayerPrefs.GetString("GameType") == "local")
         {
-            if (player1.GetComponent<Player>().__human_score >= 10)
-            { 
-                gameOverUSWin.SetActive(true);
-                USMusic.GetComponent<AudioSource>().volume = 0;
-                GameObject.FindObjectOfType<BoardManager>().USVictory.Play(0);
+            if (humanPiece == Owner.US)
+            {
+                if (player1.GetComponent<Player>().__human_score >= 10)
+                {
+                    gameOverUSWin.SetActive(true);
+                    USMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USVictory.Play(0);
 
+                }
+                else
+                {
+                    gameOverUSLoss.SetActive(true);
+                    USMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USLoss.Play(0);
+                }
             }
-            else 
-            { 
-                gameOverUSLoss.SetActive(true);
-                USMusic.GetComponent<AudioSource>().volume = 0;
-                GameObject.FindObjectOfType<BoardManager>().USLoss.Play(0);
+            else
+            {
+                if (player1.GetComponent<Player>().__human_score >= 10)
+                {
+                    gameOverUSSRWin.SetActive(true);
+                    USSRMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USSRVictory.Play(0);
+                }
+                else
+                {
+                    gameOverUSSRLoss.SetActive(true);
+                    USSRMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USSRLoss.Play(0);
+
+                }
             }
         }
-        else
-        {
-            if (player1.GetComponent<Player>().__human_score >= 10) 
-            { 
-                gameOverUSSRWin.SetActive(true);
-                USSRMusic.GetComponent<AudioSource>().volume = 0;
-                GameObject.FindObjectOfType<BoardManager>().USSRVictory.Play(0);
-            }
-            else 
-            { 
-                gameOverUSSRLoss.SetActive(true);
-                USSRMusic.GetComponent<AudioSource>().volume = 0;
-                GameObject.FindObjectOfType<BoardManager>().USSRLoss.Play(0);
 
+        else if (PlayerPrefs.GetString("GameType") == "net")
+        {
+            if (netPiece == Owner.US)
+            {
+                if (localPlayer.GetComponent<Player>().__human_score >= 10)
+                {
+                    gameOverUSWin.SetActive(true);
+                    USMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USVictory.Play(0);
+
+                }
+                else
+                {
+                    gameOverUSLoss.SetActive(true);
+                    USMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USLoss.Play(0);
+                }
+            }
+            else
+            {
+                if (localPlayer.GetComponent<Player>().__human_score >= 10)
+                {
+                    gameOverUSSRWin.SetActive(true);
+                    USSRMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USSRVictory.Play(0);
+                }
+                else
+                {
+                    gameOverUSSRLoss.SetActive(true);
+                    USSRMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USSRLoss.Play(0);
+
+                }
             }
         }
+
     }
 
     /// <summary>
@@ -818,16 +1015,32 @@ public class BoardManager : MonoBehaviour
 
         CalculateScore(who);
 
-        if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            tradeButton.SetActive(false);
-            endTurnButton.SetActive(false);
+            if(localPlayer.GetComponent<Player>().__network_score >= 10 || localPlayer.GetComponent<Player>().__human_score >= 10)
+            {
+                tradeButton.SetActive(false);
+                endTurnButton.SetActive(false);
 
-            if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
-            else player2.GetComponent<AI>().Win();
+                end = true;
+                UIEndGame();
+            }
+        }
 
-            end = true;
-            UIEndGame();
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
+            {
+                tradeButton.SetActive(false);
+                //buildButton.SetActive(false);
+                endTurnButton.SetActive(false);
+
+                if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
+                else player2.GetComponent<AI>().Win();
+
+                end = true;
+                UIEndGame();
+            }
         }
     }
 
@@ -848,25 +1061,51 @@ public class BoardManager : MonoBehaviour
             score = 2;
         }
 
-        // tell player of a change in longest net holder
-        if (cdl.longestNetOwner != oldLongest)
-        {
-            if (oldLongest == aiPiece && player2.GetComponent<AI>().trainingMode)
+        if (PlayerPrefs.GetString("GameType") == "net") {
+            if (cdl.longestNetOwner != oldLongest)
             {
-                player2.GetComponent<AI>().LoseLongestNet();
-            }
-            else if(oldLongest == humanPiece)
-            {
-                player1.GetComponent<Player>().LoseLongestNet();
-            }
+                if (oldLongest == netPiece)
+                {
+                    localPlayer.GetComponent<Player>().LoseLongestNet();
+                }
+                else
+                {
+                    localPlayer.GetComponent<Player>().NetworkLoseLongestNet();
+                }
 
-            if (cdl.longestNetOwner == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
-            {
-                player2.GetComponent<AI>().GetLongestNet();
+                if (cdl.longestNetOwner == netPiece)
+                {
+                    localPlayer.GetComponent<Player>().GetLongestNet();
+                }
+                else
+                {
+                    localPlayer.GetComponent<Player>().NetworkGetLongestNet();
+                }
             }
-            else if(cdl.longestNetOwner == humanPiece)
+        }
+
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+        // tell player of a change in longest net holder
+            if (cdl.longestNetOwner != oldLongest) 
             {
-                player1.GetComponent<Player>().GetLongestNet();
+                if (oldLongest == aiPiece && player2.GetComponent<AI>().trainingMode)
+                {
+                    player2.GetComponent<AI>().LoseLongestNet();
+                }
+                else if (oldLongest == humanPiece)
+                {
+                    player1.GetComponent<Player>().LoseLongestNet();
+                }
+
+                if (cdl.longestNetOwner == aiPiece && GameObject.FindGameObjectWithTag("AI").GetComponent<AI>().trainingMode)
+                {
+                    player2.GetComponent<AI>().GetLongestNet();
+                }
+                else if (cdl.longestNetOwner == humanPiece)
+                {
+                    player1.GetComponent<Player>().GetLongestNet();
+                }
             }
         }
 
@@ -882,16 +1121,32 @@ public class BoardManager : MonoBehaviour
             if (tile.GetComponent<ResourceInfo>().resoureTileOwner == who) score++;
         }
 
-        if(who == aiPiece)
-        {
-            player2.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
-        }
-        else
-        {
-            player1.GetComponent<Player>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
 
-            //if an AI game
-            player2.GetComponent<AI>().__human_score = score;
+        if (PlayerPrefs.GetString("GameType") == "net") 
+        {
+            if (who == netPiece)
+            {
+                localPlayer.GetComponent<Player>().UpdateScore(score);
+            }
+            else
+            {
+                localPlayer.GetComponent<Player>().UpdateNetScore(score);
+            }
+        }
+
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            if (who == aiPiece)
+            {
+                player2.GetComponent<AI>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+            }
+            else
+            {
+                player1.GetComponent<Player>().UpdateScore(score, cdl.longestNetOwner == aiPiece && oldLongest != aiPiece, oldLongest == aiPiece && cdl.longestNetOwner != aiPiece);
+
+                //if an AI game
+                player2.GetComponent<AI>().__human_score = score;
+            }
         }
     }
 
@@ -929,13 +1184,21 @@ public class BoardManager : MonoBehaviour
         }
 
         //assign the new resources
-        if(activeSide == aiPiece)
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            player2.GetComponent<AI>().UpdateResources(allocation);
+            localPlayer.GetComponent<Player>().UpdateResources(allocation);
         }
-        else
+
+        else if (PlayerPrefs.GetString("GameType") == "local")
         {
-            player1.GetComponent<Player>().UpdateResources(allocation);
+            if (activeSide == aiPiece)
+            {
+                player2.GetComponent<AI>().UpdateResources(allocation);
+            }
+            else
+            {
+                player1.GetComponent<Player>().UpdateResources(allocation);
+            }
         }
     }
 
@@ -946,7 +1209,7 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurnButtonClicked()
     {
-        if(turnCount > 4)
+        if (turnCount > 4 || (PlayerPrefs.GetString("GameType") == "net" && turnCount > 3))
             isSetupTurn = false;
 
         if (end) return;
@@ -967,18 +1230,27 @@ public class BoardManager : MonoBehaviour
                             GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
                         }
                     }
-                    nodesPlacedThisTurn.Clear();
                     for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
                     {
                         allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
                     }
+                    if(PlayerPrefs.GetString("GameType") == "net")
+                    {
+                        networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
+                        networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                    }
+
                     branchesPlacedThisTurn.Clear();
+                    nodesPlacedThisTurn.Clear();
 
                     EndTurn();
                     // provide player with indication that opponent is taking turn
-                    if (turnCount != 3)
-                        // player2.GetComponent<AI>().AIMove(turnCount);
-                        StartCoroutine(TimeStop());
+                    if (PlayerPrefs.GetString("GameType") == "local")
+                    {
+                        if (turnCount != 3)
+                            // player2.GetComponent<AI>().AIMove(turnCount);
+                            StartCoroutine(TimeStop());
+                    }                     
                 }
             }
             else
@@ -986,6 +1258,7 @@ public class BoardManager : MonoBehaviour
                 // prompt player to place E & CL
                 SetupLegalPopup.SetActive(true);
             }
+
         }
         else // a regular turn
         {
@@ -1003,17 +1276,27 @@ public class BoardManager : MonoBehaviour
                         GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
                     }
                 }
-                nodesPlacedThisTurn.Clear();
                 for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
                 {
                     allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
                 }
+                if (PlayerPrefs.GetString("GameType") == "net")
+                {
+                    networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
+                    networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                }
                 branchesPlacedThisTurn.Clear();
+                nodesPlacedThisTurn.Clear();
 
                 EndTurn();
                 // provide player with indication that opponent is taking turn
-                //player2.GetComponent<AI>().AIMove(turnCount);
-                StartCoroutine(TimeStop());
+
+                if (PlayerPrefs.GetString("GameType") == "local")
+                {
+                    //player2.GetComponent<AI>().AIMove(turnCount);
+                    StartCoroutine(TimeStop());
+                }
+
 
             }
         }
@@ -1023,12 +1306,27 @@ public class BoardManager : MonoBehaviour
         bool islegal = true;
         // player1.GetComponent<Player>().UpdateResources
         List<int> tempPlayerResources;
-        for (int i = 0; i < player1.GetComponent<Player>().__resources.Count; i++)
+
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
-            if (player1.GetComponent<Player>().__resources[i] != 0)
+            for (int i = 0; i < localPlayer.GetComponent<Player>().__resources.Count; i++)
             {
-                islegal = false;
-                break;
+                if (localPlayer.GetComponent<Player>().__resources[i] != 0)
+                {
+                    islegal = false;
+                    break;
+                }
+            }
+        }
+        else if (PlayerPrefs.GetString("GameType") == "local")
+        {
+            for (int i = 0; i < player1.GetComponent<Player>().__resources.Count; i++)
+            {
+                if (player1.GetComponent<Player>().__resources[i] != 0)
+                {
+                    islegal = false;
+                    break;
+                }
             }
         }
         return islegal;
@@ -1042,8 +1340,15 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurn()
     {
-        if (turnCount != 2)
+
+        if (PlayerPrefs.GetString("GameType") == "net")
         {
+            turnCount++;
+            if (turnCount >= 4)
+            {
+                tradeButton.GetComponent<Button>().interactable = true;
+            }
+
             if (activeSide == Owner.US)
             {
                 activeSide = Owner.USSR;
@@ -1054,55 +1359,163 @@ public class BoardManager : MonoBehaviour
             }
 
             inBuildMode = !inBuildMode;
-        }
+            
+            // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
+            BoardCheck();
 
-        turnCount++;
+            networkController.SendMove();
 
-        // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
-        BoardCheck();
-
-        if (end) return;
-
-        // if it is time for the player's second setup move, allocate resources for one branch and one node
-        if (turnCount == 3)
-        {
-            player1.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
-        }
-
-        if (turnCount == 5)
-        {
-            tradeButton.GetComponent<Button>().interactable = true;
-        }
-
-        // if not opener move, allocate resources to appropriate player
-        if (turnCount >= 5)
-            AllocateResources();
-
-        playerTraded = false;
+            if (end) return;
 
 
-        // disable/reenable Trade, Build, and End Turn buttons
-        if (turnCount != 3)
-        {
+            playerTraded = false;
+
             BtnToggle();
+            
+            
+            NetworkGame();
+
         }
-        else
+        else if (PlayerPrefs.GetString("GameType") == "local")
         {
-            if (firstPlayer == humanPiece)
+            if (turnCount != 2)
             {
-                //player2.GetComponent<AI>().AIMove(turnCount);
-                StartCoroutine(TimeStop());
+                if (activeSide == Owner.US)
+                {
+                    activeSide = Owner.USSR;
+                }
+                else
+                {
+                    activeSide = Owner.US;
+                }
+
+                inBuildMode = !inBuildMode;
+            }
+
+            turnCount++;
+
+            // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
+            BoardCheck();
+
+            if (end) return;
+
+            // if it is time for the player's second setup move, allocate resources for one branch and one node
+            if (turnCount == 3)
+            {
+                player1.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+            }
+
+            if (turnCount == 5)
+            {
+                tradeButton.GetComponent<Button>().interactable = true;
+            }
+
+            // if not opener move, allocate resources to appropriate player
+            if (turnCount >= 5)
+                AllocateResources();
+
+            playerTraded = false;
+
+
+            // disable/reenable Trade, Build, and End Turn buttons
+            if (turnCount != 3)
+            {
+                BtnToggle();
             }
             else
             {
-                //human move
+                if (firstPlayer == humanPiece)
+                {
+                    player2.GetComponent<AI>().AIMove(turnCount);
+                }
+                else
+                {
+                    //human move
+                }
+            }
+
+            if (turnCount == 5)
+            {
+                player2.GetComponent<AI>().EndOpener();
             }
         }
-        
-        if (turnCount == 5)
+    }
+    #endregion
+    public void NetworkGame()
+    {
+        networkController.SetPlayerTurn(false);
+
+        if (turnCount > 1 || firstPlayer != netPiece)
         {
-            player2.GetComponent<AI>().EndOpener();
+            StartCoroutine(networkController.WaitForTurn());
         }
+
+    }
+
+    public void TurnReceived()
+    {
+        Debug.Log("BM.TurnReceived() Called");
+        turnCount++;
+        Debug.Log("Turn count: " + turnCount);
+        
+        if (activeSide == Owner.US)
+        {
+           activeSide = Owner.USSR;
+        }
+        else
+        {
+           activeSide = Owner.US;
+        }
+
+        inBuildMode = !inBuildMode;
+        Debug.Log("Build mode: " + inBuildMode);
+        Debug.Log("Active Side: " + activeSide);
+
+        if(turnCount == 2 || turnCount == 3)
+        {
+            localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+        }
+
+
+        ReceiveMoveFromNetwork();
+        BtnToggle();
+        BoardCheck();
+    }
+
+    public void ReceiveMoveFromNetwork()
+    {
+        Debug.Log("BM.ReceiveMoveFromNetwork() called");
+        int[] tempNetworkNodes = networkController.GetNodesPlaced();
+        int[] tempNetworkBranches = networkController.GetBranchesPlaced();
+        
+
+        List<int> networkNodes = new List<int>(tempNetworkNodes);
+        List<int> networkBranches = new List<int>(tempNetworkBranches);
+
+        if (turnCount > 3)
+        {
+            int[] tempResources = networkController.GetResources();
+            List<int> networkResources = new List<int>(tempResources);
+            UpdateOpponentResourcesInUI(networkResources);
+        }
+
+        foreach (int node in networkNodes)
+        {
+            NetworkChangeNodeOwner(node);
+        }
+        foreach(int branch in networkBranches)
+        {
+            NetworkChangeBranchOwner(branch);
+        }
+        
+        networkController.ClearBranchesandNodesandResources();
+        if (turnCount > 3)
+        {
+            AllocateResources();
+            int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
+            networkController.SetResources(tempResources);
+        }
+       
     }
 
     IEnumerator TimeStop()
@@ -1111,4 +1524,102 @@ public class BoardManager : MonoBehaviour
         player2.GetComponent<AI>().AIMove(turnCount);
         Debug.Log("wait for 1s");
     }
+
+    public void setNetworkManagerReference()
+    {
+        networkController.SetBoardManagerReference(this);
+    }
+
+    public void NetworkChangeNodeOwner(int nodeNum)
+    {
+        if (activeSide == Owner.US)
+        {
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+        }
+        else
+        {
+            nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150); 
+        }
+
+    }
+
+    public void NetworkChangeBranchOwner(int branchNum)
+    {
+        if (activeSide == Owner.US)
+        {
+            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0); 
+        }
+        else
+        {
+            allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+        }
+    }
+
+    public string GetRandomBoardSeed()
+    {
+        string boardSeed = "";
+        int randNum;
+        string temp;
+        List<string> boardSeedComponents = new List<string>() 
+        {
+            "Y1",
+            "Y2",
+            "Y3",
+            "G1",
+            "G2",
+            "G3",
+            "R1",
+            "R2",
+            "R3",
+            "B1",
+            "B2",
+            "B3",
+            "ES"
+        };
+
+        for(int i = 0; i < boardSeedComponents.Count; i++)
+        {
+            temp = boardSeedComponents[i];
+            randNum = Random.Range(0, boardSeedComponents.Count);
+            boardSeedComponents[i] = boardSeedComponents[randNum];
+            boardSeedComponents[randNum] = temp;
+        }
+
+        for(int i = 0; i < boardSeedComponents.Count; i++)
+        {
+            boardSeed = boardSeed + boardSeedComponents[i];
+        }        
+        return boardSeed;
+    }
+
+    public void StartNetworkGame()
+    {
+        string role = PlayerPrefs.GetInt("Host").ToString();
+        setNetworkManagerReference();
+        if (PlayerPrefs.GetInt("Host") == 1)
+        {
+            customBoardSeed = GetRandomBoardSeed();
+            networkController.SetBoardSeed(customBoardSeed);
+            networkController.SendSeed();
+            SetupScene();
+
+        }
+        else
+        {
+            Debug.Log("Waiting for seed");
+            StartCoroutine(networkController.WaitForSeed());
+        }
+    }
+
+    public void ReceiveSeedFromNetwork()
+    {
+        customBoardSeed = networkController.GetBoardSeed();
+        SetupScene();
+    }
 }
+
+

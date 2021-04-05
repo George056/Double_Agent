@@ -102,9 +102,13 @@ public class BranchInfo : MonoBehaviour
             }
             else if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().CanAffordBranch())
             {
+                Debug.Log("Can afford branch " + branchOrder);
+                
                 if (GameObject.FindObjectOfType<BoardManager>().LegalUIBranchMove(branchOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                     GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
                 {
+                    Debug.Log("Branch " + branchOrder + " is legal move");
+
                     GameObject.FindObjectOfType<BoardManager>().PiecePlaced.Play(0);
 
                     GameObject.FindObjectOfType<BoardManager>().ChangeBranchOwner(branchOrder);

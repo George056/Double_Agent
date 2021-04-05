@@ -85,12 +85,16 @@ public class PreGameMenu : MonoBehaviour
 
     public void PlayGame()
     {
+        PlayerPrefs.SetString("GameType", "local");
         PlayerPrefs.SetString("CustomBoardSeed", customBoardInput.text);
         SceneManager.LoadScene("PVP");
     }
     
     public void OnlinePlay()
     {
+        PlayerPrefs.SetInt("Network_Player", 0);
+        PlayerPrefs.SetInt("Network_Piece", 0);
+        PlayerPrefs.SetString("GameType", "net");
         PlayerPrefs.SetString("UserName", userName.text);
         SceneManager.LoadScene("Lobby");
     }

@@ -89,13 +89,26 @@ public class CheckDataList : MonoBehaviour
                 BM.resourceList[i].GetComponent<ResourceInfo>().resoureTileOwner = tempBranchOwner[0];
                 int x = BM.ResourceInfoList[i].xLoc;
                 int y = BM.ResourceInfoList[i].yLoc;
-                if (tempBranchOwner[0] == (Owner)PlayerPrefs.GetInt("Human_Piece", 0))
-                {
-                    GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Human_Player", 0) == 0) ? USSRCaptured : USCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                if (PlayerPrefs.GetString("GameType") == "net") {
+                    if (tempBranchOwner[0] == (Owner)PlayerPrefs.GetInt("Network_Piece", 0))
+                    {
+                        GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Network_Player", 0) == 0) ? USSRCaptured : USCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    }
+                    else
+                    {
+                        GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Network_Player", 0) == 0) ? USCaptured : USSRCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    }
                 }
-                else
+                else if (PlayerPrefs.GetString("GameType") == "local")
                 {
-                    GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Human_Player", 0) == 0) ? USCaptured : USSRCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    if (tempBranchOwner[0] == (Owner)PlayerPrefs.GetInt("Human_Piece", 0))
+                    {
+                        GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Human_Player", 0) == 0) ? USSRCaptured : USCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    }
+                    else
+                    {
+                        GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Human_Player", 0) == 0) ? USCaptured : USSRCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                    }
                 }
             }
         }

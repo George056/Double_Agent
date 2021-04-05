@@ -452,10 +452,10 @@ public class BoardManager : MonoBehaviour
         {
             if (turnCount >= 3)
             {
-                opponentCopperCount.text = resources[0].ToString();
-                opponentLumberCount.text = resources[1].ToString();
-                opponentLoyalistCount.text = resources[2].ToString();
-                opponentCoinCount.text = resources[3].ToString();
+                playerCopperCount.text = resources[0].ToString();
+                playerLumberCount.text = resources[1].ToString();
+                playerLoyalistCount.text = resources[2].ToString();
+                playerCoinCount.text = resources[3].ToString();
             }
         }
         else if (PlayerPrefs.GetString("GameType") == "local")
@@ -1238,13 +1238,13 @@ public class BoardManager : MonoBehaviour
                 tradeButton.GetComponent<Button>().interactable = true;
             }
 
-            if (turnCount >= 3)
+/*            if (turnCount >= 3)
             {
                 AllocateResources();
                 int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
                 networkController.SetResources(tempResources);
             }
-
+*/
             if (activeSide == Owner.US)
             {
                 activeSide = Owner.USSR;
@@ -1376,10 +1376,6 @@ public class BoardManager : MonoBehaviour
             localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }
 
-        if (turnCount > 3)
-        {
-            AllocateResources();
-        }
 
         ReceiveMoveFromNetwork();
         BtnToggle();
@@ -1413,6 +1409,12 @@ public class BoardManager : MonoBehaviour
         }
         
         networkController.ClearBranchesandNodesandResources();
+        if (turnCount > 3)
+        {
+            AllocateResources();
+            int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
+            networkController.SetResources(tempResources);
+        }
     }
 
     public void setNetworkManagerReference()

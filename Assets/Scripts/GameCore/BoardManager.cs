@@ -1232,6 +1232,19 @@ public class BoardManager : MonoBehaviour
 
         if (PlayerPrefs.GetString("GameType") == "net")
         {
+            turnCount++;
+            if (turnCount >= 5)
+            {
+                tradeButton.GetComponent<Button>().interactable = true;
+            }
+
+            if (turnCount >= 3)
+            {
+                AllocateResources();
+                int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
+                networkController.SetResources(tempResources);
+            }
+
             if (activeSide == Owner.US)
             {
                 activeSide = Owner.USSR;
@@ -1244,7 +1257,7 @@ public class BoardManager : MonoBehaviour
             inBuildMode = !inBuildMode;
             
 
-            turnCount++;
+            
 
             // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
             BoardCheck();
@@ -1252,17 +1265,7 @@ public class BoardManager : MonoBehaviour
             if (end) return;
 
 
-            if (turnCount >= 5)
-            {
-                tradeButton.GetComponent<Button>().interactable = true;
-            }
-            
-            if (turnCount >= 3)
-            {
-                AllocateResources();
-                int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
-                networkController.SetResources(tempResources);
-            }
+
             playerTraded = false;
 
             BtnToggle();
@@ -1373,10 +1376,10 @@ public class BoardManager : MonoBehaviour
             localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }
 
-        if(turnCount > 3)
+/*        if(turnCount > 3)
         {
             AllocateResources();
-        }
+        }*/
 
         ReceiveMoveFromNetwork();
         BtnToggle();
@@ -1388,13 +1391,19 @@ public class BoardManager : MonoBehaviour
         Debug.Log("BM.ReceiveMoveFromNetwork() called");
         int[] tempNetworkNodes = networkController.GetNodesPlaced();
         int[] tempNetworkBranches = networkController.GetBranchesPlaced();
-        int[] tempResources = networkController.GetResources();
+        
 
         List<int> networkNodes = new List<int>(tempNetworkNodes);
         List<int> networkBranches = new List<int>(tempNetworkBranches);
-        List<int> networkResources = new List<int>(tempResources);
 
-        foreach(int node in networkNodes)
+        if (turnCount > 3)
+        {
+            int[] tempResources = networkController.GetResources();
+            List<int> networkResources = new List<int>(tempResources);
+            UpdateOpponentResourcesInUI(networkResources);
+        }
+
+        foreach (int node in networkNodes)
         {
             NetworkChangeNodeOwner(node);
         }
@@ -1402,7 +1411,7 @@ public class BoardManager : MonoBehaviour
         {
             NetworkChangeBranchOwner(branch);
         }
-        UpdateOpponentResourcesInUI(networkResources);
+        
         networkController.ClearBranchesandNodesandResources();
     }
 

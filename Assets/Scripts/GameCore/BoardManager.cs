@@ -1342,10 +1342,12 @@ public class BoardManager : MonoBehaviour
     public void NetworkGame()
     {
         networkController.SetPlayerTurn(false);
-        if(activeSide == firstPlayer)
+
+        if (turnCount > 1 || firstPlayer != netPiece)
         {
             StartCoroutine(networkController.WaitForTurn());
         }
+
     }
 
     public void TurnReceived()

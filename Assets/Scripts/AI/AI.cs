@@ -162,7 +162,7 @@ public class AI : Agent
         if (loss || win) return;
 
         //make move
-        if (randAI)
+        if (randAI || __difficulty == Difficulty.Easy)
         {
             RandomAIMove();
             bm.EndTurn();

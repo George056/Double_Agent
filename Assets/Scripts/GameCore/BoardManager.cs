@@ -922,65 +922,78 @@ public class BoardManager : MonoBehaviour
 
     public void UIEndGame()
     {
-        if (humanPiece == Owner.US)
-        {
-            if (player1.GetComponent<Player>().__human_score >= 10)
-            { 
-                gameOverUSWin.SetActive(true);
-                USMusic.GetComponent<AudioSource>().volume = 0;
-                GameObject.FindObjectOfType<BoardManager>().USVictory.Play(0);
-
-            }
-            else 
-            { 
-                gameOverUSLoss.SetActive(true);
-                USMusic.GetComponent<AudioSource>().volume = 0;
-                GameObject.FindObjectOfType<BoardManager>().USLoss.Play(0);
-            }
-        }
-        else
-        {
-            if (player1.GetComponent<Player>().__human_score >= 10) 
-            { 
-                gameOverUSSRWin.SetActive(true);
-                USSRMusic.GetComponent<AudioSource>().volume = 0;
-                GameObject.FindObjectOfType<BoardManager>().USSRVictory.Play(0);
-            }
-            else 
-            { 
-                gameOverUSSRLoss.SetActive(true);
-                USSRMusic.GetComponent<AudioSource>().volume = 0;
-                GameObject.FindObjectOfType<BoardManager>().USSRLoss.Play(0);
-
-            }
-        }
-    
-        if (PlayerPrefs.GetString("GameType") == "net")
-        {
-            if (netPiece == Owner.US)
-            {
-                if (localPlayer.GetComponent<Player>().__human_score >= 10) { gameOverUSWin.SetActive(true); }
-                else { gameOverUSLoss.SetActive(true); }
-            }
-            else
-            {
-                if (localPlayer.GetComponent<Player>().__human_score >= 10) { gameOverUSSRWin.SetActive(true); }
-                else { gameOverUSSRLoss.SetActive(true); }
-            }
-        }
-        else if (PlayerPrefs.GetString("GameType") == "local")
+        if (PlayerPrefs.GetString("GameType") == "local")
         {
             if (humanPiece == Owner.US)
             {
-                if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSWin.SetActive(true); }
-                else { gameOverUSLoss.SetActive(true); }
+                if (player1.GetComponent<Player>().__human_score >= 10)
+                {
+                    gameOverUSWin.SetActive(true);
+                    USMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USVictory.Play(0);
+
+                }
+                else
+                {
+                    gameOverUSLoss.SetActive(true);
+                    USMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USLoss.Play(0);
+                }
             }
             else
             {
-                if (player1.GetComponent<Player>().__human_score >= 10) { gameOverUSSRWin.SetActive(true); }
-                else { gameOverUSSRLoss.SetActive(true); }
+                if (player1.GetComponent<Player>().__human_score >= 10)
+                {
+                    gameOverUSSRWin.SetActive(true);
+                    USSRMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USSRVictory.Play(0);
+                }
+                else
+                {
+                    gameOverUSSRLoss.SetActive(true);
+                    USSRMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USSRLoss.Play(0);
+
+                }
             }
         }
+
+        else if (PlayerPrefs.GetString("GameType") == "net")
+        {
+            if (netPiece == Owner.US)
+            {
+                if (localPlayer.GetComponent<Player>().__human_score >= 10)
+                {
+                    gameOverUSWin.SetActive(true);
+                    USMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USVictory.Play(0);
+
+                }
+                else
+                {
+                    gameOverUSLoss.SetActive(true);
+                    USMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USLoss.Play(0);
+                }
+            }
+            else
+            {
+                if (localPlayer.GetComponent<Player>().__human_score >= 10)
+                {
+                    gameOverUSSRWin.SetActive(true);
+                    USSRMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USSRVictory.Play(0);
+                }
+                else
+                {
+                    gameOverUSSRLoss.SetActive(true);
+                    USSRMusic.GetComponent<AudioSource>().volume = 0;
+                    GameObject.FindObjectOfType<BoardManager>().USSRLoss.Play(0);
+
+                }
+            }
+        }
+
     }
 
     /// <summary>

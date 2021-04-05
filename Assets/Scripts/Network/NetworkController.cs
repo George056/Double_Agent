@@ -43,6 +43,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
         while (playerTurn == false)
             yield return null;
 
+        playerTurn = false;
         boardManager.TurnReceived();
 
     }
@@ -152,15 +153,19 @@ public class NetworkController : MonoBehaviourPunCallbacks
         if (boardManager)
         {
             Debug.Log("Board Manager Exists");
-            if (playerTurn == true && newResources.Length != 0)
-            {
-                List<int> r = new List<int>(newResources);
-                boardManager.UpdateOpponentResourcesInUI(r);
-            }
+
+        }
+        else if (!boardManager)
+        {
+            Debug.Log("Board Manger does not exist");
         }
 
+        if (playerTurn == false && newResources.Length != 0)
+        {
+            List<int> r = new List<int>(newResources);
+            boardManager.UpdateOpponentResourcesInUI(r);
+        }
 
-        
     }
 
     public override void OnLeftRoom()

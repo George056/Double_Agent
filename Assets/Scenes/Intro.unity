@@ -202,7 +202,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Alliance: Cold War Conflict'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4ba3fe1708e62e640b348f4d5406ee8f, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 1832719785620278158, guid: 4ba3fe1708e62e640b348f4d5406ee8f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -562,7 +562,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: The Battle for Europe Begins...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4ba3fe1708e62e640b348f4d5406ee8f, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 1832719785620278158, guid: 4ba3fe1708e62e640b348f4d5406ee8f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2041,7 +2041,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: SKIP
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4ba3fe1708e62e640b348f4d5406ee8f, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: 1832719785620278158, guid: 4ba3fe1708e62e640b348f4d5406ee8f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

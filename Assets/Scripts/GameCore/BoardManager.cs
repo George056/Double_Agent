@@ -676,8 +676,8 @@ public class BoardManager : MonoBehaviour
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
-        //*************************** THIS DOES NOT WORK YET (the if statement) *************************************************** 
-        if (turnCount < 5)
+
+        if (turnCount < 5 || (PlayerPrefs.GetString("GameType") == "net" && turnCount < 4))
         {
             Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
             if (turnCount == 1 || turnCount == 2)
@@ -1233,7 +1233,7 @@ public class BoardManager : MonoBehaviour
         if (PlayerPrefs.GetString("GameType") == "net")
         {
             turnCount++;
-            if (turnCount >= 5)
+            if (turnCount >= 4)
             {
                 tradeButton.GetComponent<Button>().interactable = true;
             }

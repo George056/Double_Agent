@@ -641,7 +641,7 @@ public class BoardManager : MonoBehaviour
 
         if (nodes[node].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) { isLegal = false; }
         
-        if (turnCount < 5)
+        if ((PlayerPrefs.GetString("GameType") == "local" && turnCount < 5) || (PlayerPrefs.GetString("GameType") == "net" && turnCount < 4))
         {
             // a node on a setup move must have an available adjacent branch that can also be claimed
             bool availableBranchFound = false;
@@ -677,7 +677,7 @@ public class BoardManager : MonoBehaviour
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
 
-        if (turnCount < 5 || (PlayerPrefs.GetString("GameType") == "net" && turnCount < 4))
+        if ((PlayerPrefs.GetString("GameType") == "local" && turnCount < 5) || (PlayerPrefs.GetString("GameType") == "net" && turnCount < 4))
         {
             Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
             if (turnCount == 1 || turnCount == 2)
@@ -1238,13 +1238,6 @@ public class BoardManager : MonoBehaviour
                 tradeButton.GetComponent<Button>().interactable = true;
             }
 
-/*            if (turnCount >= 3)
-            {
-                AllocateResources();
-                int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
-                networkController.SetResources(tempResources);
-            }
-*/
             if (activeSide == Owner.US)
             {
                 activeSide = Owner.USSR;
@@ -1256,14 +1249,10 @@ public class BoardManager : MonoBehaviour
 
             inBuildMode = !inBuildMode;
             
-
-            
-
             // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
             BoardCheck();
 
             if (end) return;
-
 
 
             playerTraded = false;

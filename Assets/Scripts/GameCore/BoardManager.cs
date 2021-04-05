@@ -1369,11 +1369,7 @@ public class BoardManager : MonoBehaviour
         Debug.Log("Build mode: " + inBuildMode);
         Debug.Log("Active Side: " + activeSide);
 
-        if(turnCount == 2)
-        {
-            localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
-        }
-        if (turnCount == 3)
+        if(turnCount == 2 || turnCount == 3)
         {
             localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }

@@ -255,7 +255,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             MaxPlayers = 2
         };
 
-        roomName = PlayerPrefs.GetString("UserName", "");
+        roomName = PlayerPrefs.GetString("UserName");
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 

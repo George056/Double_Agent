@@ -8,6 +8,7 @@ public class PreGameMenu : MonoBehaviour
 {
     public InputField customBoardInput;
     public InputField userName;
+    public string userNameText;
     public Toggle playerFirstToggle;
 
     /// <summary>
@@ -90,12 +91,16 @@ public class PreGameMenu : MonoBehaviour
         SceneManager.LoadScene("PVP");
     }
     
+    public void SetUserName()
+    {
+        userNameText = userName.text;
+        PlayerPrefs.SetString("UserName", userNameText);
+    }
     public void OnlinePlay()
     {
         PlayerPrefs.SetInt("Network_Player", 0);
         PlayerPrefs.SetInt("Network_Piece", 0);
         PlayerPrefs.SetString("GameType", "net");
-        PlayerPrefs.SetString("UserName", userName.text);
         SceneManager.LoadScene("Lobby");
     }
 }

@@ -8,9 +8,9 @@ public class RoomButton : MonoBehaviour
     public Text nameText;
     public string roomName;
 
-    public void SetRoom()
+    public void SetRoom(string name)
     {
-        nameText.text = PlayerPrefs.GetString("UserName");
+        nameText.text = name;
     }
 
     public void JoinRoomOnClick()

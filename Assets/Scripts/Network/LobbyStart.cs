@@ -201,7 +201,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             GameObject tempListing = Instantiate(roomListing, lobbyPanel);
             RoomButton tempButton = tempListing.GetComponent<RoomButton>();
             tempButton.roomName = room.Name;
-            tempButton.SetRoom();
+            tempButton.SetRoom(room.Name);
 
             roomListEntries.Add(room.Name, tempListing);
         }

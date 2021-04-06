@@ -2,18 +2,6 @@
     "Node_AI": {
         "checkpoints": [
             {
-                "steps": 66311,
-                "file_path": "results\\node_009\\Node_AI\\Node_AI-66311.onnx",
-                "reward": null,
-                "creation_time": 1617583651.7892647
-            },
-            {
-                "steps": 66761,
-                "file_path": "results\\node_009\\Node_AI\\Node_AI-66761.onnx",
-                "reward": null,
-                "creation_time": 1617583777.7558193
-            },
-            {
                 "steps": 67211,
                 "file_path": "results\\node_009\\Node_AI\\Node_AI-67211.onnx",
                 "reward": null,
@@ -30,13 +18,25 @@
                 "file_path": "results\\node_009\\Node_AI\\Node_AI-68111.onnx",
                 "reward": null,
                 "creation_time": 1617584083.0009787
+            },
+            {
+                "steps": 68561,
+                "file_path": "results\\node_009\\Node_AI\\Node_AI-68561.onnx",
+                "reward": null,
+                "creation_time": 1617735756.7954829
+            },
+            {
+                "steps": 69011,
+                "file_path": "results\\node_009\\Node_AI\\Node_AI-69011.onnx",
+                "reward": null,
+                "creation_time": 1617736162.1697183
             }
         ],
         "final_checkpoint": {
-            "steps": 68111,
+            "steps": 69011,
             "file_path": "results\\node_009\\Node_AI.onnx",
             "reward": null,
-            "creation_time": 1617584083.0009787
+            "creation_time": 1617736162.1697183
         }
     },
     "metadata": {

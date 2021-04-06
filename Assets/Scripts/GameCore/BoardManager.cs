@@ -60,7 +60,7 @@ public class BoardManager : MonoBehaviour
     [Tooltip("What piece is the first player")]
     private Owner firstPlayer;
     [Tooltip("What piece is the networks")]
-    private Owner netPiece;
+    [HideInInspector] public Owner netPiece;
 
 
    
@@ -83,6 +83,7 @@ public class BoardManager : MonoBehaviour
     private static NetworkController networkController = new NetworkController();
    // private static NetworkPlayer networkPlayerClass = new NetworkPlayer();
     private bool netWorkTurn = true;
+    public static BoardManager boardManager;
 
 
     /*
@@ -154,6 +155,7 @@ public class BoardManager : MonoBehaviour
     public AudioSource lightSwitch;
     public AudioSource doorCreak;
     public AudioSource doorClose;
+    public AudioSource footsteps;
 
     [HideInInspector]
     public static bool new_board = true;
@@ -334,17 +336,20 @@ public class BoardManager : MonoBehaviour
         doorCreak.Play(0);
         yield return new WaitForSeconds(1f);
         doorClose.Play(0);
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(0.5f);
+        footsteps.Play(0);
+        yield return new WaitForSeconds(4f);
         lightSwitch.Play(0);
-        yield return new WaitForSeconds(0.5f);
-        BlackoutPanel.SetActive(false);
-        yield return new WaitForSeconds(0.5f);
         if (humanPiece == Owner.US)
         {
             USMusic.Play(0);
         }
-        else
+        yield return new WaitForSeconds(0.5f);
+        BlackoutPanel.SetActive(false);
+        
+        if (humanPiece == Owner.USSR)
         {
+            yield return new WaitForSeconds(0.5f);
             USSRMusic.Play(0);
         }
     }
@@ -899,6 +904,9 @@ public class BoardManager : MonoBehaviour
             {
                 //Trade animation *********************************************************************************************************************************************** 
                 localPlayer.GetComponent<Player>().UpdateResources(resources);
+                int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
+                networkController.SetResources(tempResources);
+                networkController.SendUpdateResourcesInOpponentUI();
             }
         }
         else if (PlayerPrefs.GetString("GameType") == "local")
@@ -1251,10 +1259,13 @@ public class BoardManager : MonoBehaviour
                     for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
                     {
                         nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
-                        
-                        if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+
+                        if (PlayerPrefs.GetString("GameType") == "local")
                         {
-                            GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                            if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                            {
+                                GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                            }
                         }
                     }
                     for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
@@ -1265,6 +1276,8 @@ public class BoardManager : MonoBehaviour
                     {
                         networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
                         networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                        
+
                     }
 
                     branchesPlacedThisTurn.Clear();
@@ -1298,9 +1311,12 @@ public class BoardManager : MonoBehaviour
                 {
                     nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
 
-                    if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                    if (PlayerPrefs.GetString("GameType") == "local")
                     {
-                        GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                        if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                        {
+                            GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                        }
                     }
                 }
                 for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
@@ -1311,6 +1327,7 @@ public class BoardManager : MonoBehaviour
                 {
                     networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
                     networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                    networkController.SetResources(localPlayer.GetComponent<Player>().__resources.ToArray());
                 }
                 branchesPlacedThisTurn.Clear();
                 nodesPlacedThisTurn.Clear();
@@ -1371,10 +1388,6 @@ public class BoardManager : MonoBehaviour
         if (PlayerPrefs.GetString("GameType") == "net")
         {
             turnCount++;
-            if (turnCount >= 4)
-            {
-                tradeButton.GetComponent<Button>().interactable = true;
-            }
 
             if (activeSide == Owner.US)
             {
@@ -1475,6 +1488,7 @@ public class BoardManager : MonoBehaviour
         if (turnCount > 1 || firstPlayer != netPiece)
         {
             StartCoroutine(networkController.WaitForTurn());
+
         }
 
     }
@@ -1501,6 +1515,11 @@ public class BoardManager : MonoBehaviour
         if(turnCount == 2 || turnCount == 3)
         {
             localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+        }
+
+        if (turnCount >= 4)
+        {
+            tradeButton.GetComponent<Button>().interactable = true;
         }
 
 
@@ -1541,6 +1560,7 @@ public class BoardManager : MonoBehaviour
             AllocateResources();
             int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();
             networkController.SetResources(tempResources);
+            networkController.SendUpdateResourcesInOpponentUI();
         }
        
     }
@@ -1625,7 +1645,7 @@ public class BoardManager : MonoBehaviour
 
     public void StartNetworkGame()
     {
-        string role = PlayerPrefs.GetInt("Host").ToString();
+        boardManager = this;
         setNetworkManagerReference();
         if (PlayerPrefs.GetInt("Host") == 1)
         {

@@ -172,6 +172,7 @@ public class BoardManager : MonoBehaviour
     public int firstSetupNode = -1;
     public int secondSetupNode = -1;
 
+    public SceneController SC;
     int GetTileIndex(string code)
     {
         int index = 0;
@@ -347,7 +348,33 @@ public class BoardManager : MonoBehaviour
             USSRMusic.Play(0);
         }
     }
+    public void TurnLightsOff()
+    {
+        coroutine =TurnOffLight(1.5f);
+        StartCoroutine(coroutine);
+    }
+    private IEnumerator TurnOffLight(float delay)
+    {
+        if (humanPiece == Owner.US)
+        {
+            USMusic.Pause();
+        }
+        else
+        {
+            USSRMusic.Pause();
+        }
+        yield return new WaitForSeconds(0.5f);
+        lightSwitch.Play(0);
+        BlackoutPanel.SetActive(true);
+        yield return new WaitForSeconds(delay);
+        doorCreak.Play(0);
+        yield return new WaitForSeconds(0.5f);
+        doorClose.Play(0);
+        yield return new WaitForSeconds(1f);
+        //Debug.Log("turning off the lights");
+        SC.LoadScene("MainMenuScene");
 
+    }
     public void SetupScene()
     {
         Debug.Log("SetupSceneCalled");

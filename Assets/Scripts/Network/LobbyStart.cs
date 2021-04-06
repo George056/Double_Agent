@@ -257,6 +257,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         };
 
         roomName = PlayerPrefs.GetString("UserName");
+        Debug.Log("Create Room roomName: " + roomName);
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 

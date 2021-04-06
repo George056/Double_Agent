@@ -164,7 +164,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
             Debug.Log("Board Manger does not exist");
         }
 
-        if (playerTurn == false && newResources.Length != 0)
+        if (playerTurn == true && newResources.Length != 0)
         {
             List<int> r = new List<int>(newResources);
             BoardManager.boardManager.UpdateOpponentResourcesInUI(r);

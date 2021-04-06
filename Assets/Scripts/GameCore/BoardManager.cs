@@ -60,7 +60,7 @@ public class BoardManager : MonoBehaviour
     [Tooltip("What piece is the first player")]
     private Owner firstPlayer;
     [Tooltip("What piece is the networks")]
-    private Owner netPiece;
+    [HideInInspector] public Owner netPiece;
 
 
    

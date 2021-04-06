@@ -33,11 +33,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void SetBoardManagerReference(BoardManager manager)
     {
         boardManager = manager;
-
-        if (boardManager)
-        {
-            Debug.Log("Board manager Set");
-        }
     }
 
 
@@ -154,15 +149,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void UpdateResourcesInOpponentUI(int[] newResources)
     {
-        if (boardManager)
-        {
-            Debug.Log("Board Manager Exists");
-
-        }
-        else if (!boardManager)
-        {
-            Debug.Log("Board Manger does not exist");
-        }
 
         if (playerTurn == false && newResources.Length != 0 && BoardManager.boardManager.activeSide != BoardManager.boardManager.netPiece)
         {

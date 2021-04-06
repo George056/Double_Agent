@@ -94,6 +94,7 @@ public class PreGameMenu : MonoBehaviour
     public void SetUserName()
     {
         userNameText = userName.text;
+        PlayerPrefs.DeleteKey("UserName");
         PlayerPrefs.SetString("UserName", userNameText);
     }
     public void OnlinePlay()

@@ -94,6 +94,7 @@ public class PreGameMenu : MonoBehaviour
     public void SetUserName()
     {
         GameInfo.user_name = userName.text;
+        Debug.Log("UserName: " + GameInfo.user_name);
     }
     public void OnlinePlay()
     {

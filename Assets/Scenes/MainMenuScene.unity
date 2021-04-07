@@ -6552,7 +6552,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2128395038}
         m_TargetAssemblyTypeName: PreGameMenu, Assembly-CSharp
         m_MethodName: SetUserName
-        m_Mode: 5
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8597,6 +8597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customBoardInput: {fileID: 1437112895}
   userName: {fileID: 0}
+  userNameText: 
   playerFirstToggle: {fileID: 324910421}
 --- !u!1 &1371433163
 GameObject:
@@ -14601,6 +14602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   customBoardInput: {fileID: 0}
   userName: {fileID: 1083593464}
+  userNameText: 
   playerFirstToggle: {fileID: 0}
 --- !u!114 &2128395039
 MonoBehaviour:

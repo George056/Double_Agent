@@ -589,7 +589,14 @@ public class BoardManager : MonoBehaviour
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
             //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeHighlightedSprite;
+            if (activeSide == humanPiece)
+            {
+                GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeHighlightedSprite;
+            }
+            else
+            {
+                GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+            }
         }
         else
         {

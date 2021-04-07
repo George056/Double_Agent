@@ -202,7 +202,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             RoomButton tempButton = tempListing.GetComponent<RoomButton>();
             tempButton.roomName = room.Name;
             Debug.Log("RoomName: " + room.Name);
-            tempButton.SetRoom(room.Name);
+            tempButton.SetRoom();
 
             roomListEntries.Add(room.Name, tempListing);
         }

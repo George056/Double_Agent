@@ -8,9 +8,9 @@ public class RoomButton : MonoBehaviour
     public Text nameText;
     public string roomName;
 
-    public void SetRoom(string name)
+    public void SetRoom()
     {
-        nameText.text = name;
+        nameText.text = roomName;
     }
 
     public void JoinRoomOnClick()

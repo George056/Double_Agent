@@ -1261,6 +1261,13 @@ public class BoardManager : MonoBehaviour
                                 GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
                             }
                         }
+                        else if (GameInfo.game_type == "net")
+                        {
+                            if (localPlayer.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                            {
+                                GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                            }
+                        }
                     }
                     for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
                     {
@@ -1308,6 +1315,13 @@ public class BoardManager : MonoBehaviour
                     if (GameInfo.game_type == "local")
                     {
                         if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                        {
+                            GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                        }
+                    }
+                    else if (GameInfo.game_type == "net")
+                    {
+                        if (localPlayer.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
                         {
                             GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
                         }

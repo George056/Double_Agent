@@ -136,8 +136,11 @@ public class BoardManager : MonoBehaviour
     public Sprite USNodeSprite;
     public Sprite USNodeHighlightedSprite;
     public Sprite USBranchSprite;
+    public Sprite USBranchHighlightedSprite;
     public Sprite USSRNodeSprite;
+    public Sprite USSRNodeHighlightedSprite;
     public Sprite USSRBranchSprite;
+    public Sprite USSRBranchHighlightedSprite;
 
 
     public GameObject BlackoutPanel;
@@ -368,10 +371,12 @@ public class BoardManager : MonoBehaviour
         {
             USSRMusic.Pause();
         }
-        yield return new WaitForSeconds(0.5f);
         lightSwitch.Play(0);
+        yield return new WaitForSeconds(0.5f);
         BlackoutPanel.SetActive(true);
         yield return new WaitForSeconds(delay);
+        footsteps.Play(0);
+        yield return new WaitForSeconds(4f);
         doorCreak.Play(0);
         yield return new WaitForSeconds(0.5f);
         doorClose.Play(0);
@@ -601,9 +606,9 @@ public class BoardManager : MonoBehaviour
         else
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
-            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
         }
 
         nodesPlacedThisTurn.Add(nodeNum);
@@ -637,12 +642,18 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
+            //GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
+
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USBranchSprite;
         }
         else
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
+            //GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
+
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USSRBranchSprite;
         }
 
         branchesPlacedThisTurn.Add(branchNum);
@@ -699,6 +710,7 @@ public class BoardManager : MonoBehaviour
     public void UnplaceBranch(int branchNum)
     {
         allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.Nil;
+        GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = EmptyBranchSprite;
         GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(156, 167, 176, 255);
 
         if (activeSide == humanPiece && isSetupTurn)

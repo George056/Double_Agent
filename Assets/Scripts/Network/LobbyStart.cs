@@ -108,7 +108,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             MaxPlayers = 2
         };
 
-        roomName = PlayerPrefs.GetString("UserName", "");
+        roomName = GameInfo.user_name;
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 
@@ -201,6 +201,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             GameObject tempListing = Instantiate(roomListing, lobbyPanel);
             RoomButton tempButton = tempListing.GetComponent<RoomButton>();
             tempButton.roomName = room.Name;
+            Debug.Log("RoomName: " + room.Name);
             tempButton.SetRoom();
 
             roomListEntries.Add(room.Name, tempListing);
@@ -255,7 +256,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             MaxPlayers = 2
         };
 
-        roomName = PlayerPrefs.GetString("UserName", "");
+        roomName = GameInfo.user_name;
+        Debug.Log("Create Room roomName: " + roomName);
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 
@@ -270,14 +272,14 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void OnCreateGameButtonClicked()
     {
         // Set Host to 1 for if player is host
-        PlayerPrefs.SetInt("Host", 1);
+        GameInfo.host = true;
         CreateRoom();
 
     }
     public void OnJoinGameButtonClicked()
     {
         //Set host to 0 if player is not host
-        PlayerPrefs.SetInt("Host", 0);
+        GameInfo.host = false;
         CreateOrJoinCanvas.gameObject.SetActive(false);
         RoomLobbyListCanvas.gameObject.SetActive(true);
 

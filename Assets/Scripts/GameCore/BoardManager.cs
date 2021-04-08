@@ -592,7 +592,6 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
-            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
             if (activeSide == humanPiece)
             {
@@ -606,9 +605,15 @@ public class BoardManager : MonoBehaviour
         else
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
-            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeHighlightedSprite;
+            if (activeSide == humanPiece)
+            {
+                GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeHighlightedSprite;
+            }
+            else
+            {
+                GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
+            }
         }
 
         nodesPlacedThisTurn.Add(nodeNum);
@@ -642,18 +647,31 @@ public class BoardManager : MonoBehaviour
         if (activeSide == Owner.US)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
-            //GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
-
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USBranchHighlightedSprite;
+
+            if (activeSide == humanPiece)
+            {
+                GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USBranchHighlightedSprite;
+            }
+            else
+            {
+                GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USBranchSprite;
+            }
+
         }
         else
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
-            //GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
-
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USSRBranchHighlightedSprite;
+
+            if (activeSide == humanPiece)
+            {
+                GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USSRBranchHighlightedSprite;
+            }
+            else
+            {
+                GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USSRBranchSprite;
+            }
         }
 
         branchesPlacedThisTurn.Add(branchNum);
@@ -1255,6 +1273,64 @@ public class BoardManager : MonoBehaviour
     //    inBuildMode = true;
     //}
 
+    public void ConfirmPiecePlacement()
+    {
+        for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
+        {
+            nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
+
+            if (GameInfo.game_type == "local")
+            {
+                if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                {
+                    GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                }
+                else if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.USSR)
+                {
+                    GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
+                }
+            }
+            else if (GameInfo.game_type == "net")
+            {
+                if (localPlayer.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
+                {
+                    GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+                }
+                else if (localPlayer.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.USSR)
+                {
+                    GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
+                }
+            }
+        }
+        for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
+        {
+            allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
+
+            if (GameInfo.game_type == "local")
+            {
+                if (player1.GetComponent<Player>().__owned_branches.Contains(branchesPlacedThisTurn[i]) && activeSide == Owner.US)
+                {
+                    GameObject.FindGameObjectsWithTag("Branch")[branchesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USBranchSprite;
+                }
+                else if (player1.GetComponent<Player>().__owned_branches.Contains(branchesPlacedThisTurn[i]) && activeSide == Owner.USSR)
+                {
+                    GameObject.FindGameObjectsWithTag("Branch")[branchesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USSRBranchSprite;
+                }
+            }
+            else if (GameInfo.game_type == "net")
+            {
+                if (localPlayer.GetComponent<Player>().__owned_branches.Contains(branchesPlacedThisTurn[i]) && activeSide == Owner.US)
+                {
+                    GameObject.FindGameObjectsWithTag("Branch")[branchesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USBranchSprite;
+                }
+                else if (localPlayer.GetComponent<Player>().__owned_branches.Contains(branchesPlacedThisTurn[i]) && activeSide == Owner.USSR)
+                {
+                    GameObject.FindGameObjectsWithTag("Branch")[branchesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USSRBranchSprite;
+                }
+            }
+        }
+    }
+
     public void EndTurnButtonClicked()
     {
         if (turnCount > 4 || (GameInfo.game_type == "net" && turnCount > 3))
@@ -1269,35 +1345,12 @@ public class BoardManager : MonoBehaviour
                 // prompt player to confirm submission
                 if (true) // user confirmed turn submission
                 {
-                    for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
-                    {
-                        nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
-
-                        if (GameInfo.game_type == "local")
-                        {
-                            if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
-                            {
-                                GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
-                            }
-                        }
-                        else if (GameInfo.game_type == "net")
-                        {
-                            if (localPlayer.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
-                            {
-                                GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
-                            }
-                        }
-                    }
-                    for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
-                    {
-                        allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
-                    }
+                    ConfirmPiecePlacement();
+                    
                     if(GameInfo.game_type == "net")
                     {
                         networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
                         networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
-                        
-
                     }
 
                     branchesPlacedThisTurn.Clear();
@@ -1308,8 +1361,10 @@ public class BoardManager : MonoBehaviour
                     if (GameInfo.game_type == "local")
                     {
                         if (turnCount != 3)
+                        {
                             // player2.GetComponent<AI>().AIMove(turnCount);
                             StartCoroutine(TimeStop());
+                        }
                     }                     
                 }
             }
@@ -1327,29 +1382,8 @@ public class BoardManager : MonoBehaviour
             {
                 Debug.Log("Player confirmed submission; turn ending");
 
-                for (int i = 0; i < nodesPlacedThisTurn.Count; i++)
-                {
-                    nodes[nodesPlacedThisTurn[i]].GetComponent<NodeInfo>().placementConfirmed = true;
-
-                    if (GameInfo.game_type == "local")
-                    {
-                        if (player1.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
-                        {
-                            GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
-                        }
-                    }
-                    else if (GameInfo.game_type == "net")
-                    {
-                        if (localPlayer.GetComponent<Player>().__owned_nodes.Contains(nodesPlacedThisTurn[i]) && activeSide == Owner.US)
-                        {
-                            GameObject.FindGameObjectsWithTag("Node")[nodesPlacedThisTurn[i]].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
-                        }
-                    }
-                }
-                for (int i = 0; i < branchesPlacedThisTurn.Count; i++)
-                {
-                    allBranches[branchesPlacedThisTurn[i]].GetComponent<BranchInfo>().placementConfirmed = true;
-                }
+                ConfirmPiecePlacement();
+                
                 if (GameInfo.game_type == "net")
                 {
                     networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
@@ -1367,8 +1401,6 @@ public class BoardManager : MonoBehaviour
                     //player2.GetComponent<AI>().AIMove(turnCount);
                     StartCoroutine(TimeStop());
                 }
-
-
             }
         }
     }
@@ -1606,30 +1638,36 @@ public class BoardManager : MonoBehaviour
 
     public void NetworkChangeNodeOwner(int nodeNum)
     {
+        GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
         if (activeSide == Owner.US)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeSprite;
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0);
         }
         else
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150); 
+            GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeSprite;
+            //GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150); 
         }
 
     }
 
     public void NetworkChangeBranchOwner(int branchNum)
     {
+        GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
         if (activeSide == Owner.US)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0); 
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USSRBranchSprite;
+            //GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(200, 0, 0); 
         }
         else
         {
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
-            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
+            GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USBranchSprite;
+            //GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 150);
         }
     }
 

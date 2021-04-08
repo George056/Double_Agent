@@ -89,25 +89,25 @@ public class CheckDataList : MonoBehaviour
                 BM.resourceList[i].GetComponent<ResourceInfo>().resoureTileOwner = tempBranchOwner[0];
                 int x = BM.ResourceInfoList[i].xLoc;
                 int y = BM.ResourceInfoList[i].yLoc;
-                if (PlayerPrefs.GetString("GameType") == "net") {
-                    if (tempBranchOwner[0] == (Owner)PlayerPrefs.GetInt("Network_Piece", 0))
+                if (GameInfo.game_type == "net") {
+                    if (tempBranchOwner[0] == (Owner)GameInfo.network_piece)
                     {
-                        GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Network_Player", 0) == 0) ? USSRCaptured : USCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                        GameObject instance = GameObject.Instantiate((GameInfo.network_player == 0) ? USSRCaptured : USCaptured, new Vector3(x, y, 0f), Quaternion.identity);
                     }
                     else
                     {
-                        GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Network_Player", 0) == 0) ? USCaptured : USSRCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                        GameObject instance = GameObject.Instantiate((GameInfo.network_player == 0) ? USCaptured : USSRCaptured, new Vector3(x, y, 0f), Quaternion.identity);
                     }
                 }
-                else if (PlayerPrefs.GetString("GameType") == "local")
+                else if (GameInfo.game_type == "local")
                 {
-                    if (tempBranchOwner[0] == (Owner)PlayerPrefs.GetInt("Human_Piece", 0))
+                    if (tempBranchOwner[0] == (Owner)GameInfo.human_piece)
                     {
-                        GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Human_Player", 0) == 0) ? USSRCaptured : USCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                        GameObject instance = GameObject.Instantiate((GameInfo.human_player == 0) ? USSRCaptured : USCaptured, new Vector3(x, y, 0f), Quaternion.identity);
                     }
                     else
                     {
-                        GameObject instance = GameObject.Instantiate((PlayerPrefs.GetInt("Human_Player", 0) == 0) ? USCaptured : USSRCaptured, new Vector3(x, y, 0f), Quaternion.identity);
+                        GameObject instance = GameObject.Instantiate((GameInfo.human_player == 0) ? USCaptured : USSRCaptured, new Vector3(x, y, 0f), Quaternion.identity);
                     }
                 }
             }

@@ -1296,7 +1296,7 @@ public class AI : Agent
     /// </summary>
     void GetDifficulty()
     {
-        __difficulty = (Difficulty)PlayerPrefs.GetInt("Difficulty", 0);
+        __difficulty = (Difficulty)GameInfo.game_diff;
     }
 
     /// <summary>
@@ -1305,7 +1305,7 @@ public class AI : Agent
     /// </summary>
     void GetPlayer()
     {
-        __player = (short)PlayerPrefs.GetInt("AI_Player", 1);
+        __player = (short)GameInfo.ai_player;
     }
 
     /// <summary>
@@ -1314,7 +1314,7 @@ public class AI : Agent
     /// </summary>
     void GetPiece()
     {
-        __piece_type = (Owner)PlayerPrefs.GetInt("AI_Piece", 1);
+        __piece_type = (Owner)GameInfo.ai_piece;
     }
 
     /// <summary>

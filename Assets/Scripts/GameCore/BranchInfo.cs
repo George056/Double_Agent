@@ -142,11 +142,15 @@ public class BranchInfo : MonoBehaviour
             {
                 if (GameObject.FindObjectOfType<BoardManager>().activeSide == Owner.US)
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
+                    //this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(43, 56, 107, 255);
+                    this.GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+                    this.GetComponent<SpriteRenderer>().sprite = GameObject.FindObjectOfType<BoardManager>().USBranchSprite;
                 }
                 else
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
+                    //this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
+                    this.GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+                    this.GetComponent<SpriteRenderer>().sprite = GameObject.FindObjectOfType<BoardManager>().USSRBranchSprite;
                 }
             }
         }
@@ -159,6 +163,7 @@ public class BranchInfo : MonoBehaviour
             if (GameObject.FindObjectOfType<BoardManager>().LegalUIBranchMove(branchOrder, GameObject.FindObjectOfType<BoardManager>().activeSide,
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().__owned_branches))
             {
+                this.GetComponent<SpriteRenderer>().sprite = GameObject.FindObjectOfType<BoardManager>().EmptyBranchSprite;
                 this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(156, 167, 176, 255);
             }
         }

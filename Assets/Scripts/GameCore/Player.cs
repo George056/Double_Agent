@@ -37,8 +37,8 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        __player = (short)PlayerPrefs.GetInt("Human_Player", 0); // default to orange
-        __piece_type = (Owner)PlayerPrefs.GetInt("Human_Piece", 0); // default to US
+        __player = (short)GameInfo.human_player; // default to orange
+        __piece_type = (Owner)GameInfo.human_piece; // default to US
         __longest_net = false;
         __network_longest_net = false;
         __owned_nodes = new List<int>();

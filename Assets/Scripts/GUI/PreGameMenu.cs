@@ -8,7 +8,17 @@ public class PreGameMenu : MonoBehaviour
 {
     public InputField customBoardInput;
     public InputField userName;
+    public string userNameText;
     public Toggle playerFirstToggle;
+    public bool USAlly = true;
+    public GameObject allyToggle;
+    public Sprite US;
+    public Sprite USSR;
+
+    public int Diff = 0;
+    public GameObject DiffToggle;
+    public Sprite easy;
+    public Sprite hard;
 
     /// <summary>
     /// This is used to set the difficulty of the AI
@@ -16,20 +26,20 @@ public class PreGameMenu : MonoBehaviour
     /// <param name="diff">What is the difficulty of the AI (0 = Easy, 1 = hard)</param>
     public void SetDifficulty(int diff)
     {
-        PlayerPrefs.SetInt("Difficulty", diff);
+       GameInfo.game_diff = diff;
     }
 
     public void SetPlayerOrder()
     {
         if (playerFirstToggle.isOn)
         {
-            PlayerPrefs.SetInt("Human_Player", 0);
-            PlayerPrefs.SetInt("AI_Player", 1);
+            GameInfo.human_player = 0;
+            GameInfo.ai_player = 1;
         }
         else
         {
-            PlayerPrefs.SetInt("Human_Player", 1);
-            PlayerPrefs.SetInt("AI_Player", 0);
+            GameInfo.human_player = 1;
+            GameInfo.ai_player = 0;
         }
     }
     
@@ -41,13 +51,13 @@ public class PreGameMenu : MonoBehaviour
     {
         if (first)
         {
-            PlayerPrefs.SetInt("Human_Player", 0);
-            PlayerPrefs.SetInt("AI_Player", 1);
+            GameInfo.human_player = 0;
+            GameInfo.ai_player = 1;
         }
         else
         {
-            PlayerPrefs.SetInt("Human_Player", 1);
-            PlayerPrefs.SetInt("AI_Player", 0);
+            GameInfo.human_player = 1;
+            GameInfo.ai_player = 0;
         } 
     }
 
@@ -59,13 +69,13 @@ public class PreGameMenu : MonoBehaviour
     {
         if(owner == Owner.US)
         {
-            PlayerPrefs.SetInt("Human_Piece", (int)owner);
-            PlayerPrefs.SetInt("AI_Piece", (int)owner + 1);
+            GameInfo.human_piece = (int)owner;
+            GameInfo.ai_piece = (int)owner + 1;
         }
         else
         {
-            PlayerPrefs.SetInt("Human_Piece", (int)owner); 
-            PlayerPrefs.SetInt("AI_Piece", (int)owner - 1);
+            GameInfo.human_piece = (int)owner;
+            GameInfo.ai_piece = (int)owner - 1;
         }
     }
 
@@ -73,29 +83,70 @@ public class PreGameMenu : MonoBehaviour
     {
         if (US)
         {
-            PlayerPrefs.SetInt("Human_Piece", 0);
-            PlayerPrefs.SetInt("AI_Piece", 1);
+            GameInfo.human_piece = 0;
+            GameInfo.ai_piece = 1;
         }
         else
         {
-            PlayerPrefs.SetInt("Human_Piece", 1);
-            PlayerPrefs.SetInt("AI_Piece", 0);
+            GameInfo.human_piece = 1;
+            GameInfo.ai_piece = 0;
         }
     }
 
     public void PlayGame()
     {
-        PlayerPrefs.SetString("GameType", "local");
-        PlayerPrefs.SetString("CustomBoardSeed", customBoardInput.text);
+        GameInfo.game_type = "local";
+        GameInfo.custom_board_seed = customBoardInput.text;
+        ChooseAlly(USAlly);
+        SetDifficulty(Diff);
         SceneManager.LoadScene("PVP");
     }
     
+    public void SetUserName()
+    {
+        GameInfo.user_name = userName.text;
+        Debug.Log("UserName: " + GameInfo.user_name);
+    }
     public void OnlinePlay()
     {
-        PlayerPrefs.SetInt("Network_Player", 0);
-        PlayerPrefs.SetInt("Network_Piece", 0);
-        PlayerPrefs.SetString("GameType", "net");
-        PlayerPrefs.SetString("UserName", userName.text);
+        GameInfo.network_player = 0;
+        GameInfo.network_piece = 0;
+        GameInfo.game_type = "net";
         SceneManager.LoadScene("Lobby");
+    }
+
+    public void ChooseSideToggle()
+    {
+        USAlly = !USAlly;
+        
+        if (USAlly)
+        {
+            allyToggle.GetComponent<Image>().sprite = US;
+        }
+        else
+        {
+            allyToggle.GetComponent<Image>().sprite = USSR;
+        }
+    }
+
+    public void ChooseDiffToggle()
+    {
+        if(Diff == 1)
+        {
+            Diff = 0;
+        }
+        else
+        {
+            Diff = 1;
+        }
+        
+        if (Diff == 0)
+        {
+            DiffToggle.GetComponent<Image>().sprite = easy;
+        }
+        else
+        {
+            DiffToggle.GetComponent<Image>().sprite = hard;
+        }
     }
 }

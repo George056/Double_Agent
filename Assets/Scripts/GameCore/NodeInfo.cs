@@ -93,9 +93,9 @@ public class NodeInfo : MonoBehaviour
                 }
                 else
                 {
-                    this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
-                    //this.GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-                    //this.GetComponent<SpriteRenderer>().sprite = GameObject.FindObjectOfType<BoardManager>().USSRNodeSprite;
+                    //this.GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(107, 31, 37, 255);
+                    this.GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
+                    this.GetComponent<SpriteRenderer>().sprite = GameObject.FindObjectOfType<BoardManager>().USSRNodeSprite;
                 }
             }
         }

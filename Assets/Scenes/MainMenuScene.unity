@@ -9663,7 +9663,7 @@ MonoBehaviour:
   userNameText: 
   playerFirstToggle: {fileID: 324910421}
   USAlly: 1
-  allyToggle: {fileID: 1292607786}
+  allyToggle: {fileID: 1761851462}
   US: {fileID: 21300000, guid: 4813ae6156877db4982622f517fe921f, type: 3}
   USSR: {fileID: 21300000, guid: 856b02200053f3440a96255dba573712, type: 3}
   Diff: 0

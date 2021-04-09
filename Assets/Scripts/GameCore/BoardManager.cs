@@ -343,17 +343,36 @@ public class BoardManager : MonoBehaviour
         footsteps.Play(0);
         yield return new WaitForSeconds(4f);
         lightSwitch.Play(0);
-        if (humanPiece == Owner.US)
+
+        if (GameInfo.game_type == "local")
         {
-            USMusic.Play(0);
-        }
-        yield return new WaitForSeconds(0.5f);
-        BlackoutPanel.SetActive(false);
-        
-        if (humanPiece == Owner.USSR)
-        {
+            if (humanPiece == Owner.US)
+            {
+                USMusic.Play(0);
+            }
             yield return new WaitForSeconds(0.5f);
-            USSRMusic.Play(0);
+            BlackoutPanel.SetActive(false);
+
+            if (humanPiece == Owner.USSR)
+            {
+                yield return new WaitForSeconds(0.5f);
+                USSRMusic.Play(0);
+            }
+        }
+        else if (GameInfo.game_type == "net")
+        {
+            if (netPiece == Owner.US)
+            {
+                USMusic.Play(0);
+            }
+            yield return new WaitForSeconds(0.5f);
+            BlackoutPanel.SetActive(false);
+
+            if (netPiece == Owner.USSR)
+            {
+                yield return new WaitForSeconds(0.5f);
+                USSRMusic.Play(0);
+            }
         }
     }
     public void TurnLightsOff()
@@ -363,13 +382,28 @@ public class BoardManager : MonoBehaviour
     }
     private IEnumerator TurnOffLight(float delay)
     {
-        if (humanPiece == Owner.US)
+
+        if (GameInfo.game_type == "local")
         {
-            USMusic.Pause();
+            if (humanPiece == Owner.US)
+            {
+                USMusic.Pause();
+            }
+            else
+            {
+                USSRMusic.Pause();
+            }
         }
-        else
+        else if (GameInfo.game_type == "net")
         {
-            USSRMusic.Pause();
+            if (netPiece == Owner.US)
+            {
+                USMusic.Pause();
+            }
+            else
+            {
+                USSRMusic.Pause();
+            }
         }
         lightSwitch.Play(0);
         yield return new WaitForSeconds(0.5f);
@@ -393,6 +427,7 @@ public class BoardManager : MonoBehaviour
             Debug.Log("Network game SetupScene");
 
             netPiece = (Owner)GameInfo.network_piece;
+            Debug.Log("netPice = " + netPiece);
             gridPositions.Clear();
 
             CustomizeBoardLayout();
@@ -422,6 +457,8 @@ public class BoardManager : MonoBehaviour
                 activeSide = firstPlayer;
                 BtnToggle();
             }
+
+            Debug.Log("Active Side = " + activeSide);
 
             end = false;
             turnCount = 1;
@@ -593,7 +630,7 @@ public class BoardManager : MonoBehaviour
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            if (activeSide == humanPiece)
+            if ((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece))
             {
                 GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeHighlightedSprite;
             }
@@ -606,7 +643,7 @@ public class BoardManager : MonoBehaviour
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            if (activeSide == humanPiece)
+            if ((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece))
             {
                 GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeHighlightedSprite;
             }
@@ -618,7 +655,7 @@ public class BoardManager : MonoBehaviour
 
         nodesPlacedThisTurn.Add(nodeNum);
 
-        if (activeSide == humanPiece && isSetupTurn)
+        if (((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece)) && isSetupTurn)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().isSetupNode = true;
             if (turnCount == 1 || turnCount == 2)
@@ -649,7 +686,7 @@ public class BoardManager : MonoBehaviour
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
 
-            if (activeSide == humanPiece)
+            if ((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece))
             {
                 GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USBranchHighlightedSprite;
             }
@@ -664,7 +701,7 @@ public class BoardManager : MonoBehaviour
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
 
-            if (activeSide == humanPiece)
+            if ((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece))
             {
                 GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USSRBranchHighlightedSprite;
             }
@@ -676,7 +713,7 @@ public class BoardManager : MonoBehaviour
 
         branchesPlacedThisTurn.Add(branchNum);
 
-        if (activeSide == humanPiece && isSetupTurn)
+        if (((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece)) && isSetupTurn)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = true;
             if (turnCount == 1 || turnCount == 2)
@@ -709,7 +746,7 @@ public class BoardManager : MonoBehaviour
 
         nodesPlacedThisTurn.Remove(nodeNum);
 
-        if (activeSide == humanPiece && isSetupTurn)
+        if (((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece)) && isSetupTurn)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().isSetupNode = false;
             if (turnCount == 1 || turnCount == 2)
@@ -731,7 +768,7 @@ public class BoardManager : MonoBehaviour
         GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = EmptyBranchSprite;
         GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(156, 167, 176, 255);
 
-        if (activeSide == humanPiece && isSetupTurn)
+        if (((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece)) && isSetupTurn)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = false;
             if (turnCount == 1 || turnCount == 2)
@@ -790,6 +827,9 @@ public class BoardManager : MonoBehaviour
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
+        Debug.Log("IsLegal1: " + isLegal);
+        Debug.Log("LegalUIBranch branch: " + branch + ", Active Side: " + activeSide);
+
 
         if ((GameInfo.game_type == "local" && turnCount < 5) || (GameInfo.game_type == "net" && turnCount < 4))
         {
@@ -802,6 +842,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (adjacentNodes[0] != secondSetupNode && adjacentNodes[1] != secondSetupNode) { isLegal = false; }
             }
+            Debug.Log("IsLegal2: " + isLegal);
         }
         else
         {
@@ -825,7 +866,7 @@ public class BoardManager : MonoBehaviour
                     isLegal = false;
             }
         }
-
+        Debug.Log("IsLegal3: " + isLegal);
         return isLegal;
     }
 

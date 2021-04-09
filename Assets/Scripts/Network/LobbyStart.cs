@@ -15,6 +15,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public GameObject JoinGameButton;
     public GameObject roomListing;
     public GameObject startButton;
+    public GameObject waitingForPlayerText;
+    public GameObject waitingForHostText;
 
     public Transform lobbyPanel;
 
@@ -33,6 +35,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         roomListEntries = new Dictionary<string, GameObject>();
 
         PhotonNetwork.AutomaticallySyncScene = true;
+        LoadingCanvas.gameObject.SetActive(true);
 
     }
     void Start()
@@ -135,7 +138,15 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         RoomLobbyListCanvas.gameObject.SetActive(false);
 
         WaitingForPlayerCanvas.gameObject.SetActive(true);
-        startButton.gameObject.SetActive(true);
+
+        if (GameInfo.host == false)
+        {
+            waitingForHostText.gameObject.SetActive(true);
+        }
+        else if(GameInfo.host == true)
+        {
+            waitingForPlayerText.gameObject.SetActive(true);
+        }
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -217,6 +228,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
             if (PhotonNetwork.LocalPlayer.IsMasterClient)
             {
+                waitingForPlayerText.gameObject.SetActive(false);
                 startButton.SetActive(true);
             }
         }

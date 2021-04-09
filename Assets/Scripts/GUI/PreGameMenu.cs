@@ -11,7 +11,9 @@ public class PreGameMenu : MonoBehaviour
     public string userNameText;
     public Toggle playerFirstToggle;
     public bool USAlly = true;
+    public bool USAllyNetwork = true;
     public GameObject allyToggle;
+    public GameObject allyToggleNetwork;
     public Sprite US;
     public Sprite USSR;
 
@@ -93,6 +95,18 @@ public class PreGameMenu : MonoBehaviour
         }
     }
 
+    public void ChooseAllyNetwork (bool US)
+    {
+        if (US)
+        {
+            GameInfo.network_piece = 0;
+        }
+        else
+        {
+            GameInfo.network_piece = 1;
+        }
+    }
+
     public void PlayGame()
     {
         GameInfo.game_type = "local";
@@ -110,7 +124,8 @@ public class PreGameMenu : MonoBehaviour
     public void OnlinePlay()
     {
         GameInfo.network_player = 0;
-        GameInfo.network_piece = 0;
+        ChooseAllyNetwork(USAllyNetwork);
+        Debug.Log("PregameMenu Net Piece = " + GameInfo.network_piece);
         GameInfo.game_type = "net";
         SceneManager.LoadScene("Lobby");
     }
@@ -126,6 +141,22 @@ public class PreGameMenu : MonoBehaviour
         else
         {
             allyToggle.GetComponent<Image>().sprite = USSR;
+        }
+    }
+
+    public void ChooseSideToggleNetwork()
+    {
+        USAllyNetwork = !USAllyNetwork;
+
+        Debug.Log("USAllyNetwork: " + USAllyNetwork);
+
+        if (USAllyNetwork)
+        {
+            allyToggleNetwork.GetComponent<Image>().sprite = US;
+        }
+        else
+        {
+            allyToggleNetwork.GetComponent<Image>().sprite = USSR;
         }
     }
 

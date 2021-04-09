@@ -87,13 +87,11 @@ public class PreGameMenu : MonoBehaviour
         {
             GameInfo.human_piece = 0;
             GameInfo.ai_piece = 1;
-            GameInfo.network_piece = 0;
         }
         else
         {
             GameInfo.human_piece = 1;
             GameInfo.ai_piece = 0;
-            GameInfo.network_piece = 1;
         }
     }
 
@@ -126,7 +124,8 @@ public class PreGameMenu : MonoBehaviour
     public void OnlinePlay()
     {
         GameInfo.network_player = 0;
-        ChooseAllyNetwork(USAlly);
+        ChooseAllyNetwork(USAllyNetwork);
+        Debug.Log("PregameMenu Net Piece = " + GameInfo.network_piece);
         GameInfo.game_type = "net";
         SceneManager.LoadScene("Lobby");
     }
@@ -148,6 +147,8 @@ public class PreGameMenu : MonoBehaviour
     public void ChooseSideToggleNetwork()
     {
         USAllyNetwork = !USAllyNetwork;
+
+        Debug.Log("USAllyNetwork: " + USAllyNetwork);
 
         if (USAllyNetwork)
         {

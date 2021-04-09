@@ -343,17 +343,36 @@ public class BoardManager : MonoBehaviour
         footsteps.Play(0);
         yield return new WaitForSeconds(4f);
         lightSwitch.Play(0);
-        if (humanPiece == Owner.US)
+
+        if (GameInfo.game_type == "local")
         {
-            USMusic.Play(0);
-        }
-        yield return new WaitForSeconds(0.5f);
-        BlackoutPanel.SetActive(false);
-        
-        if (humanPiece == Owner.USSR)
-        {
+            if (humanPiece == Owner.US)
+            {
+                USMusic.Play(0);
+            }
             yield return new WaitForSeconds(0.5f);
-            USSRMusic.Play(0);
+            BlackoutPanel.SetActive(false);
+
+            if (humanPiece == Owner.USSR)
+            {
+                yield return new WaitForSeconds(0.5f);
+                USSRMusic.Play(0);
+            }
+        }
+        else if (GameInfo.game_type == "net")
+        {
+            if (netPiece == Owner.US)
+            {
+                USMusic.Play(0);
+            }
+            yield return new WaitForSeconds(0.5f);
+            BlackoutPanel.SetActive(false);
+
+            if (netPiece == Owner.USSR)
+            {
+                yield return new WaitForSeconds(0.5f);
+                USSRMusic.Play(0);
+            }
         }
     }
     public void TurnLightsOff()
@@ -363,13 +382,28 @@ public class BoardManager : MonoBehaviour
     }
     private IEnumerator TurnOffLight(float delay)
     {
-        if (humanPiece == Owner.US)
+
+        if (GameInfo.game_type == "local")
         {
-            USMusic.Pause();
+            if (humanPiece == Owner.US)
+            {
+                USMusic.Pause();
+            }
+            else
+            {
+                USSRMusic.Pause();
+            }
         }
-        else
+        else if (GameInfo.game_type == "net")
         {
-            USSRMusic.Pause();
+            if (netPiece == Owner.US)
+            {
+                USMusic.Pause();
+            }
+            else
+            {
+                USSRMusic.Pause();
+            }
         }
         lightSwitch.Play(0);
         yield return new WaitForSeconds(0.5f);

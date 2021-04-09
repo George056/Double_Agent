@@ -85,11 +85,13 @@ public class PreGameMenu : MonoBehaviour
         {
             GameInfo.human_piece = 0;
             GameInfo.ai_piece = 1;
+            GameInfo.network_piece = 0;
         }
         else
         {
             GameInfo.human_piece = 1;
             GameInfo.ai_piece = 0;
+            GameInfo.network_piece = 1;
         }
     }
 
@@ -111,6 +113,7 @@ public class PreGameMenu : MonoBehaviour
     {
         GameInfo.network_player = 0;
         GameInfo.network_piece = 0;
+        ChooseAlly(USAlly);
         GameInfo.game_type = "net";
         SceneManager.LoadScene("Lobby");
     }

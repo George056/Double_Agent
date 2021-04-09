@@ -564,7 +564,7 @@ public class BoardManager : MonoBehaviour
     {
         if (GameInfo.game_type == "net")
         {
-            if (turnCount >= 3)
+            if (turnCount > 4)
             {
                 playerCopperCount.text = resources[0].ToString();
                 playerLumberCount.text = resources[1].ToString();
@@ -602,7 +602,7 @@ public class BoardManager : MonoBehaviour
         if (GameInfo.game_type == "net")
         {
             Debug.Log("Updated Resources: " + resources[0] + ", " + resources[1] + ", " + resources[2] + ", " + resources[3]);
-            if (turnCount >= 3)
+            if (turnCount >= 4)
             {
                 opponentCopperCount.text = resources[0].ToString();
                 opponentLumberCount.text = resources[1].ToString();
@@ -792,7 +792,7 @@ public class BoardManager : MonoBehaviour
 
         if (nodes[node].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) { isLegal = false; }
         
-        if ((GameInfo.game_type == "local" && turnCount < 5) || (GameInfo.game_type == "net" && turnCount < 4))
+        if ( turnCount < 5)
         {
             // a node on a setup move must have an available adjacent branch that can also be claimed
             bool availableBranchFound = false;
@@ -831,7 +831,7 @@ public class BoardManager : MonoBehaviour
         Debug.Log("LegalUIBranch branch: " + branch + ", Active Side: " + activeSide);
 
 
-        if ((GameInfo.game_type == "local" && turnCount < 5) || (GameInfo.game_type == "net" && turnCount < 4))
+        if (turnCount < 5)
         {
             Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
             if (turnCount == 1 || turnCount == 2)
@@ -1374,7 +1374,7 @@ public class BoardManager : MonoBehaviour
 
     public void EndTurnButtonClicked()
     {
-        if (turnCount > 4 || (GameInfo.game_type == "net" && turnCount > 3))
+        if (turnCount > 4)
             isSetupTurn = false;
 
         if (end) return;
@@ -1487,33 +1487,42 @@ public class BoardManager : MonoBehaviour
 
         if (GameInfo.game_type == "net")
         {
-            turnCount++;
-
-            if (activeSide == Owner.US)
+            if (turnCount == 2)
             {
-                activeSide = Owner.USSR;
+                localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
+                turnCount++;
             }
             else
             {
-                activeSide = Owner.US;
+                turnCount++;
+
+
+                if (activeSide == Owner.US)
+                {
+                    activeSide = Owner.USSR;
+                }
+                else
+                {
+                    activeSide = Owner.US;
+                }
+
+                inBuildMode = !inBuildMode;
+
+                // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
+                BoardCheck();
+
+                networkController.SendMove();
+
+                if (end) return;
+
+
+                playerTraded = false;
+
+                BtnToggle();
+
+
+                NetworkGame();
             }
-
-            inBuildMode = !inBuildMode;
-            
-            // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
-            BoardCheck();
-
-            networkController.SendMove();
-
-            if (end) return;
-
-
-            playerTraded = false;
-
-            BtnToggle();
-            
-            
-            NetworkGame();
 
         }
         else if (GameInfo.game_type == "local")
@@ -1612,12 +1621,12 @@ public class BoardManager : MonoBehaviour
         Debug.Log("Build mode: " + inBuildMode);
         Debug.Log("Active Side: " + activeSide);
 
-        if(turnCount == 2 || turnCount == 3)
+        if(turnCount == 4)
         {
             localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
         }
 
-        if (turnCount >= 4)
+        if (turnCount >= 5)
         {
             tradeButton.GetComponent<Button>().interactable = true;
         }
@@ -1638,7 +1647,7 @@ public class BoardManager : MonoBehaviour
         List<int> networkNodes = new List<int>(tempNetworkNodes);
         List<int> networkBranches = new List<int>(tempNetworkBranches);
 
-        if (turnCount > 3)
+        if (turnCount > 4)
         {
             int[] tempResources = networkController.GetResources();
             List<int> networkResources = new List<int>(tempResources);
@@ -1655,7 +1664,7 @@ public class BoardManager : MonoBehaviour
         }
         
         networkController.ClearBranchesandNodesandResources();
-        if (turnCount > 3)
+        if (turnCount > 5)
         {
             AllocateResources();
             int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();

@@ -862,8 +862,8 @@ MonoBehaviour:
   JoinGameButton: {fileID: 1909662431}
   roomListing: {fileID: 249017075009241652, guid: 2458d4f081a3a1d4b8ef6151d3d3cbc2, type: 3}
   startButton: {fileID: 783478749}
-  waitingForPlayerText: {fileID: 0}
-  waitingForHostText: {fileID: 925042623}
+  waitingForPlayerText: {fileID: 925042623}
+  waitingForHostText: {fileID: 1417071589}
   lobbyPanel: {fileID: 460655585}
   CreateOrJoinCanvas: {fileID: 2135486787}
   LoadingCanvas: {fileID: 303315013}

@@ -35,6 +35,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         roomListEntries = new Dictionary<string, GameObject>();
 
         PhotonNetwork.AutomaticallySyncScene = true;
+        LoadingCanvas.gameObject.SetActive(true);
 
     }
     void Start()

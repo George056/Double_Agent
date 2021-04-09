@@ -828,6 +828,7 @@ public class BoardManager : MonoBehaviour
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
         Debug.Log("IsLegal1: " + isLegal);
+        Debug.Log("LegalUIBranch branch: " + branch + ", Active Side: " + activeSide);
 
 
         if ((GameInfo.game_type == "local" && turnCount < 5) || (GameInfo.game_type == "net" && turnCount < 4))

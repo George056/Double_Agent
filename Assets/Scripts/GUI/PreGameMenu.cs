@@ -112,7 +112,6 @@ public class PreGameMenu : MonoBehaviour
     public void OnlinePlay()
     {
         GameInfo.network_player = 0;
-        GameInfo.network_piece = 0;
         ChooseAlly(USAlly);
         GameInfo.game_type = "net";
         SceneManager.LoadScene("Lobby");

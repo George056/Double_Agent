@@ -65,7 +65,7 @@ public class TutorialScript : MonoBehaviour
         //    BackButton.interactable = false;
         //}
         //TutorialSlides[slideNum].SetActive(true);
-        StartCoroutine(MovePicBack(defaultPos, targetPos, 1000));
+        StartCoroutine(MovePicBack(defaultPos, targetPos, 1700));
 
     }
 
@@ -82,7 +82,7 @@ public class TutorialScript : MonoBehaviour
         //    NextButton.interactable = false;
         //}
         //TutorialSlides[slideNum].SetActive(true);
-        StartCoroutine(MovePicNext(defaultPos, targetPos, 1000));
+        StartCoroutine(MovePicNext(defaultPos, targetPos, 1700));
     }
     private IEnumerator MovePicNext(Vector3 deafultPos, Vector3 targetPos, float speed)
     {

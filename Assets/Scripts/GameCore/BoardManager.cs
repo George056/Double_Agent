@@ -677,6 +677,8 @@ public class BoardManager : MonoBehaviour
                 Debug.Log("AI placed node " + nodeNum);
             }
         }
+        Debug.Log("FirstSetupNode: " + firstSetupNode);
+        Debug.Log("SecondSetupNode: " + secondSetupNode);
     }
 
     public void ChangeBranchOwner(int branchNum)

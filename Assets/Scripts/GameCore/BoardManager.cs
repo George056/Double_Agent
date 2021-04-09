@@ -1676,7 +1676,7 @@ public class BoardManager : MonoBehaviour
         }
         
         networkController.ClearBranchesandNodesandResources();
-        if (turnCount > 5)
+        if (turnCount >= 5)
         {
             AllocateResources();
             int[] tempResources = localPlayer.GetComponent<Player>().__resources.ToArray();

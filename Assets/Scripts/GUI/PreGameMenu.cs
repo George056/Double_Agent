@@ -149,7 +149,7 @@ public class PreGameMenu : MonoBehaviour
     {
         USAllyNetwork = !USAllyNetwork;
 
-        if (USAlly)
+        if (USAllyNetwork)
         {
             allyToggleNetwork.GetComponent<Image>().sprite = US;
         }

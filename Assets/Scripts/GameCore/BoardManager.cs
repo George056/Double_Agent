@@ -393,6 +393,7 @@ public class BoardManager : MonoBehaviour
             Debug.Log("Network game SetupScene");
 
             netPiece = (Owner)GameInfo.network_piece;
+            Debug.Log("netPice = " + netPiece);
             gridPositions.Clear();
 
             CustomizeBoardLayout();

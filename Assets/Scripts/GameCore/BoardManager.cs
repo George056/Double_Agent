@@ -1392,10 +1392,17 @@ public class BoardManager : MonoBehaviour
                     {
                         networkController.SetNodesPlaced(nodesPlacedThisTurn.ToArray());
                         networkController.SetBranchesPlaced(branchesPlacedThisTurn.ToArray());
+                        if (turnCount != 2)
+                        {
+                            branchesPlacedThisTurn.Clear();
+                            nodesPlacedThisTurn.Clear();
+                        }
                     }
-
-                    branchesPlacedThisTurn.Clear();
-                    nodesPlacedThisTurn.Clear();
+                    else if (GameInfo.game_type == "local")
+                    {
+                        branchesPlacedThisTurn.Clear();
+                        nodesPlacedThisTurn.Clear();
+                    }
 
                     EndTurn();
                     // provide player with indication that opponent is taking turn

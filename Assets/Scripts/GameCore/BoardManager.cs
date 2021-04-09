@@ -424,6 +424,8 @@ public class BoardManager : MonoBehaviour
                 BtnToggle();
             }
 
+            Debug.Log("Active Side = " + activeSide);
+
             end = false;
             turnCount = 1;
 
@@ -791,6 +793,8 @@ public class BoardManager : MonoBehaviour
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
+        Debug.Log("IsLegal1: " + isLegal);
+
 
         if ((GameInfo.game_type == "local" && turnCount < 5) || (GameInfo.game_type == "net" && turnCount < 4))
         {
@@ -803,6 +807,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (adjacentNodes[0] != secondSetupNode && adjacentNodes[1] != secondSetupNode) { isLegal = false; }
             }
+            Debug.Log("IsLegal2: " + isLegal);
         }
         else
         {
@@ -826,7 +831,7 @@ public class BoardManager : MonoBehaviour
                     isLegal = false;
             }
         }
-
+        Debug.Log("IsLegal3: " + isLegal);
         return isLegal;
     }
 

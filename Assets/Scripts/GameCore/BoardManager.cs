@@ -630,7 +630,7 @@ public class BoardManager : MonoBehaviour
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.US;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            if (activeSide == humanPiece)
+            if ((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece))
             {
                 GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USNodeHighlightedSprite;
             }
@@ -643,7 +643,7 @@ public class BoardManager : MonoBehaviour
         {
             nodes[nodeNum].GetComponent<NodeInfo>().nodeOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
-            if (activeSide == humanPiece)
+            if ((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece))
             {
                 GameObject.FindGameObjectsWithTag("Node")[nodeNum].GetComponent<SpriteRenderer>().sprite = USSRNodeHighlightedSprite;
             }
@@ -655,7 +655,7 @@ public class BoardManager : MonoBehaviour
 
         nodesPlacedThisTurn.Add(nodeNum);
 
-        if (activeSide == humanPiece && isSetupTurn)
+        if (((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece)) && isSetupTurn)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().isSetupNode = true;
             if (turnCount == 1 || turnCount == 2)
@@ -686,7 +686,7 @@ public class BoardManager : MonoBehaviour
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.US;
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
 
-            if (activeSide == humanPiece)
+            if ((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece))
             {
                 GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USBranchHighlightedSprite;
             }
@@ -701,7 +701,7 @@ public class BoardManager : MonoBehaviour
             allBranches[branchNum].GetComponent<BranchInfo>().branchOwner = Owner.USSR;
             GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = UnityEngine.Color.white;
 
-            if (activeSide == humanPiece)
+            if ((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece))
             {
                 GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = USSRBranchHighlightedSprite;
             }
@@ -713,7 +713,7 @@ public class BoardManager : MonoBehaviour
 
         branchesPlacedThisTurn.Add(branchNum);
 
-        if (activeSide == humanPiece && isSetupTurn)
+        if (((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece)) && isSetupTurn)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = true;
             if (turnCount == 1 || turnCount == 2)
@@ -746,7 +746,7 @@ public class BoardManager : MonoBehaviour
 
         nodesPlacedThisTurn.Remove(nodeNum);
 
-        if (activeSide == humanPiece && isSetupTurn)
+        if (((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece)) && isSetupTurn)
         {
             nodes[nodeNum].GetComponent<NodeInfo>().isSetupNode = false;
             if (turnCount == 1 || turnCount == 2)
@@ -768,7 +768,7 @@ public class BoardManager : MonoBehaviour
         GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().sprite = EmptyBranchSprite;
         GameObject.FindGameObjectsWithTag("Branch")[branchNum].GetComponent<SpriteRenderer>().color = new UnityEngine.Color32(156, 167, 176, 255);
 
-        if (activeSide == humanPiece && isSetupTurn)
+        if (((GameInfo.game_type == "local" && activeSide == humanPiece) || (GameInfo.game_type == "net" && activeSide == netPiece)) && isSetupTurn)
         {
             allBranches[branchNum].GetComponent<BranchInfo>().isSetupBranch = false;
             if (turnCount == 1 || turnCount == 2)

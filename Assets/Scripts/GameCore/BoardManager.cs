@@ -1605,7 +1605,12 @@ public class BoardManager : MonoBehaviour
     public void TurnReceived()
     {
         Debug.Log("BM.TurnReceived() Called");
+        if(turnCount == 2)
+        {
+            turnCount++;
+        }
         turnCount++;
+        
         Debug.Log("Turn count: " + turnCount);
         
         if (activeSide == Owner.US)

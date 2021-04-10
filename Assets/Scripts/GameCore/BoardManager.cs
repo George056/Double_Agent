@@ -1244,14 +1244,6 @@ public class BoardManager : MonoBehaviour
                 localPlayer.GetComponent<Player>().UpdateNetScore(score);
             }
 
-          /*  if (calculateScoreCount == 1)
-            {
-                who = (who == Owner.US ? Owner.USSR : Owner.US);
-                calculateScoreCount = 2;
-                CalculateScore(who);
-            }
-
-            calculateScoreCount = 1;*/
         }
 
         else if (GameInfo.game_type == "local")

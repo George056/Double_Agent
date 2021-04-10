@@ -787,6 +787,8 @@ MonoBehaviour:
   localPlayer: {fileID: 0}
   gameOverWindow: {fileID: 0}
   SetupLegalPopup: {fileID: 475490674}
+  USSetupIndicator: {fileID: 203590675}
+  USSRSetupIndicator: {fileID: 2032143842}
   USTelegram: {fileID: 7400000, guid: c2fb2d01031566e4ebae6b147ae656ca, type: 2}
   playerCopperCount: {fileID: 256051832}
   playerLumberCount: {fileID: 2108787453}
@@ -11510,7 +11512,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1313762136
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17126,6 +17128,7 @@ GameObject:
   - component: {fileID: 2032143843}
   - component: {fileID: 2032143845}
   - component: {fileID: 2032143844}
+  - component: {fileID: 2032143846}
   m_Layer: 5
   m_Name: USSRTelegram
   m_TagString: Untagged
@@ -17195,6 +17198,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2032143842}
   m_CullTransparentMesh: 1
+--- !u!95 &2032143846
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2032143842}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5a954e6a883ffd347a8158e1376ddd7e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2042572448
 GameObject:
   m_ObjectHideFlags: 0

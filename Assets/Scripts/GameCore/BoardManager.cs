@@ -80,6 +80,9 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverWindow;
     public GameObject SetupLegalPopup;
 
+    public GameObject USSetupIndicator;
+    public GameObject USSRSetupIndicator;
+
     public AnimationClip USTelegram;
 
     private static NetworkController networkController = new NetworkController();
@@ -472,11 +475,17 @@ public class BoardManager : MonoBehaviour
             {
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
+
+                USSetupIndicator.SetActive(true);
+                USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
+
+                USSetupIndicator.SetActive(false);
+                USSRSetupIndicator.SetActive(true);
             }
 
             NetworkGame();
@@ -526,16 +535,16 @@ public class BoardManager : MonoBehaviour
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
 
-                //USMusic.SetActive(true);
-                //USSRMusic.SetActive(false);
+                USSetupIndicator.SetActive(true);
+                USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
 
-                //USSRMusic.SetActive(true);
-                //USMusic.SetActive(false);
+                USSetupIndicator.SetActive(false);
+                USSRSetupIndicator.SetActive(true);
 
             }
 

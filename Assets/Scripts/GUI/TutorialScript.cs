@@ -10,7 +10,8 @@ public class TutorialScript : MonoBehaviour
     public GameObject[] TutorialSlides = new GameObject[6];
     public Button BackButton;
     public Button NextButton;
-    int slideNum = 0;
+    private int slideNum = 0;
+    private int timesCount = 0;
     public GameObject[] TutorialSlidesTest = new GameObject[4];
     private Vector3 defaultPos;
     private Vector3 targetPos = new Vector3(150, 613, 0);
@@ -99,13 +100,22 @@ public class TutorialScript : MonoBehaviour
             TutorialSlidesTest[slideNum].transform.position = Vector3.Lerp(deafultPos, targetPos, frac);
             yield return null;
         }
-        //Debug.Log("new pos: " + TutorialSlidesTest[0].transform.position);
+
+        //rotate
+        timesCount = 0;
+        while(timesCount < 15)
+        {
+            TutorialSlidesTest[slideNum].transform.Rotate(new Vector3(0, 0, 1));
+            timesCount++;
+            yield return null;
+        }
+
         tempSlideNum = slideNum;
         tempIndex = 1;
         for (int i = 0; i < TutorialSlidesTest.Length; i++)
         {
             TutorialSlidesTest[tempSlideNum].transform.SetSiblingIndex(tempIndex);
-            Debug.Log("slide " + tempSlideNum + " 's siblingIndex is " + TutorialSlidesTest[tempSlideNum].transform.GetSiblingIndex());
+            //Debug.Log("slide " + tempSlideNum + " 's siblingIndex is " + TutorialSlidesTest[tempSlideNum].transform.GetSiblingIndex());
             tempIndex++;
             if (tempSlideNum == 0)
             {
@@ -152,13 +162,21 @@ public class TutorialScript : MonoBehaviour
             yield return null;
         }
         //Debug.Log("new pos: " + TutorialSlidesTest[0].transform.position);
+        timesCount = 0;
+        while (timesCount < 15)
+        {
+            TutorialSlidesTest[slideNum - 1].transform.Rotate(new Vector3(0, 0, -1));
+            timesCount++;
+            yield return null;
+        }
+
 
         tempSlideNum = slideNum - 1;
         tempIndex = TutorialSlidesTest.Length;
         for (int i = 0; i < TutorialSlidesTest.Length; i++)
         {
             TutorialSlidesTest[tempSlideNum].transform.SetSiblingIndex(tempIndex);
-            Debug.Log("slide " + tempSlideNum + " 's siblingIndex is " + TutorialSlidesTest[tempSlideNum].transform.GetSiblingIndex());
+           // Debug.Log("slide " + tempSlideNum + " 's siblingIndex is " + TutorialSlidesTest[tempSlideNum].transform.GetSiblingIndex());
             tempIndex--;
             if (tempSlideNum == TutorialSlidesTest.Length - 1)
             {

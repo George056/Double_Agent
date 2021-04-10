@@ -46,6 +46,10 @@ public class TutorialScript : MonoBehaviour
         {
             TutorialSlidesTest[i].transform.SetSiblingIndex(TutorialSlidesTest.Length - i);
             Debug.Log("slide " + i + " 's siblingIndex is " + TutorialSlidesTest[i].transform.GetSiblingIndex());
+            TutorialSlidesTest[i].transform.position = defaultPos;
+
+            //https://answers.unity.com/questions/1187850/how-do-i-make-gameobjecttransformrotationz-equal-t.html
+            TutorialSlidesTest[i].transform.rotation = Quaternion.Euler(0,0,0);
         }
 
         NextButton.interactable = true;
@@ -66,7 +70,7 @@ public class TutorialScript : MonoBehaviour
         //    BackButton.interactable = false;
         //}
         //TutorialSlides[slideNum].SetActive(true);
-        StartCoroutine(MovePicBack(defaultPos, targetPos, 1700));
+        StartCoroutine(MovePicBack(defaultPos, targetPos, 4000));
 
     }
 
@@ -83,12 +87,21 @@ public class TutorialScript : MonoBehaviour
         //    NextButton.interactable = false;
         //}
         //TutorialSlides[slideNum].SetActive(true);
-        StartCoroutine(MovePicNext(defaultPos, targetPos, 1700));
+        StartCoroutine(MovePicNext(defaultPos, targetPos, 4000));
     }
     private IEnumerator MovePicNext(Vector3 deafultPos, Vector3 targetPos, float speed)
     {
         BackButton.interactable = false;
         NextButton.interactable = false;
+
+        TutorialSlidesTest[slideNum].transform.Rotate(new Vector3(0, 0, 15));
+        //timesCount = 0;
+        //while (timesCount < 15)
+        //{
+        //    TutorialSlidesTest[slideNum].transform.Rotate(new Vector3(0, 0, 1));
+        //    timesCount++;
+        //    yield return null;
+        //}
 
         float startTime = Time.time;
         float length = Vector3.Distance(deafultPos, targetPos);
@@ -101,14 +114,7 @@ public class TutorialScript : MonoBehaviour
             yield return null;
         }
 
-        //rotate
-        timesCount = 0;
-        while(timesCount < 15)
-        {
-            TutorialSlidesTest[slideNum].transform.Rotate(new Vector3(0, 0, 1));
-            timesCount++;
-            yield return null;
-        }
+        yield return new WaitForSeconds(0.075f);
 
         tempSlideNum = slideNum;
         tempIndex = 1;
@@ -125,6 +131,16 @@ public class TutorialScript : MonoBehaviour
                 tempSlideNum--;
         }
 
+        TutorialSlidesTest[slideNum].transform.Rotate(new Vector3(0, 0, -15));
+        //timesCount = 0;
+        //while (timesCount < 15)
+        //{
+        //    TutorialSlidesTest[slideNum].transform.Rotate(new Vector3(0, 0, -1));
+        //    timesCount++;
+        //    yield return null;
+        //}
+
+
         startTime = Time.time;
         length = Vector3.Distance(deafultPos, targetPos);
         frac = 0f;
@@ -136,13 +152,14 @@ public class TutorialScript : MonoBehaviour
             yield return null;
 
         }
+
         slideNum++;
         BackButton.interactable = true;
         if (slideNum < TutorialSlidesTest.Length - 1)
         {
             NextButton.interactable = true;
         }
-        //Debug.Log("new pos: " + TutorialSlidesTest[0].transform.position);
+
     }
 
     private IEnumerator MovePicBack(Vector3 deafultPos, Vector3 targetPos, float speed)
@@ -150,6 +167,8 @@ public class TutorialScript : MonoBehaviour
 
         BackButton.interactable = false;
         NextButton.interactable = false;
+
+        TutorialSlidesTest[slideNum - 1].transform.Rotate(new Vector3(0, 0, 15));
 
         float startTime = Time.time;
         float length = Vector3.Distance(deafultPos, targetPos);
@@ -162,14 +181,17 @@ public class TutorialScript : MonoBehaviour
             yield return null;
         }
         //Debug.Log("new pos: " + TutorialSlidesTest[0].transform.position);
-        timesCount = 0;
-        while (timesCount < 15)
-        {
-            TutorialSlidesTest[slideNum - 1].transform.Rotate(new Vector3(0, 0, -1));
-            timesCount++;
-            yield return null;
-        }
+        //timesCount = 0;
+        //while (timesCount < 15)
+        //{
+        //    TutorialSlidesTest[slideNum - 1].transform.Rotate(new Vector3(0, 0, -1));
+        //    timesCount++;
+        //    yield return null;
+        //}
 
+        yield return new WaitForSeconds(0.075f);
+
+        TutorialSlidesTest[slideNum - 1].transform.Rotate(new Vector3(0, 0, -15));
 
         tempSlideNum = slideNum - 1;
         tempIndex = TutorialSlidesTest.Length;

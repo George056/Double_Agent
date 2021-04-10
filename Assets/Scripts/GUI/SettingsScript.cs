@@ -46,6 +46,10 @@ public class SettingsScript : MonoBehaviour
     {
         USMusic.volume = MusicSlider.value;
         USSRMusic.volume = MusicSlider.value;
+        USWin.volume = MusicSlider.value;
+        USDefeat.volume = MusicSlider.value;
+        USSRWin.volume = MusicSlider.value;
+        USSRDefeat.volume = MusicSlider.value;
         PlayerPrefs.SetFloat("MusicVolume", MusicSlider.value);
     }
 
@@ -56,10 +60,6 @@ public class SettingsScript : MonoBehaviour
         GameDoorCreak.volume = SoundEffectSlider.value;
         USCapture.volume = SoundEffectSlider.value;
         USSRCapture.volume = SoundEffectSlider.value;
-        USWin.volume = SoundEffectSlider.value;
-        USDefeat.volume = SoundEffectSlider.value;
-        USSRWin.volume = SoundEffectSlider.value;
-        USSRDefeat.volume = SoundEffectSlider.value;
         LightClick.volume = SoundEffectSlider.value;
         PiecePlaced.volume = SoundEffectSlider.value;
         PlayerPrefs.SetFloat("SoundEffectsVolume", SoundEffectSlider.value);

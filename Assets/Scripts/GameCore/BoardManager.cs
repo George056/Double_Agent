@@ -80,6 +80,8 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverWindow;
     public GameObject SetupLegalPopup;
 
+    public AnimationClip USTelegram;
+
     private static NetworkController networkController = new NetworkController();
    // private static NetworkPlayer networkPlayerClass = new NetworkPlayer();
     private bool netWorkTurn = true;
@@ -1549,6 +1551,11 @@ public class BoardManager : MonoBehaviour
 
                 inBuildMode = !inBuildMode;
             }
+
+            //if (activeSide == humanPiece && turnCount < 5)
+            //{
+            //    USTelegram.Play();
+            //}
 
             turnCount++;
 

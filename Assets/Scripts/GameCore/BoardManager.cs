@@ -477,16 +477,16 @@ public class BoardManager : MonoBehaviour
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
 
-                USSetupIndicator.SetActive(true);
-                USSRSetupIndicator.SetActive(false);
+                //USSetupIndicator.SetActive(true);
+                //USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
 
-                USSetupIndicator.SetActive(false);
-                USSRSetupIndicator.SetActive(true);
+                //USSetupIndicator.SetActive(false);
+                //USSRSetupIndicator.SetActive(true);
             }
 
             NetworkGame();
@@ -536,16 +536,16 @@ public class BoardManager : MonoBehaviour
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
 
-                USSetupIndicator.SetActive(true);
-                USSRSetupIndicator.SetActive(false);
+                //USSetupIndicator.SetActive(true);
+                //USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
 
-                USSetupIndicator.SetActive(false);
-                USSRSetupIndicator.SetActive(true);
+                //USSetupIndicator.SetActive(false);
+                //USSRSetupIndicator.SetActive(true);
 
             }
 

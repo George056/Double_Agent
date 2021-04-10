@@ -83,6 +83,7 @@ public class BoardManager : MonoBehaviour
     private static NetworkController networkController = new NetworkController();
    // private static NetworkPlayer networkPlayerClass = new NetworkPlayer();
     private bool netWorkTurn = true;
+    public int calculateScoreCount = 1;
     public static BoardManager boardManager;
 
 
@@ -1177,9 +1178,10 @@ public class BoardManager : MonoBehaviour
                 {
                     localPlayer.GetComponent<Player>().LoseLongestNet();
                 }
-                else
+                else if(oldLongest != Owner.Nil)
                 {
                     localPlayer.GetComponent<Player>().NetworkLoseLongestNet();
+                   
                 }
 
                 if (cdl.longestNetOwner == netPiece)
@@ -1241,6 +1243,15 @@ public class BoardManager : MonoBehaviour
             {
                 localPlayer.GetComponent<Player>().UpdateNetScore(score);
             }
+
+          /*  if (calculateScoreCount == 1)
+            {
+                who = (who == Owner.US ? Owner.USSR : Owner.US);
+                calculateScoreCount = 2;
+                CalculateScore(who);
+            }
+
+            calculateScoreCount = 1;*/
         }
 
         else if (GameInfo.game_type == "local")
@@ -1506,7 +1517,7 @@ public class BoardManager : MonoBehaviour
             {
                 turnCount++;
 
-                BoardCheck();
+                
 
                 if (activeSide == Owner.US)
                 {
@@ -1517,7 +1528,8 @@ public class BoardManager : MonoBehaviour
                     activeSide = Owner.US;
                 }
 
-                inBuildMode = !inBuildMode;            
+                inBuildMode = !inBuildMode;
+                BoardCheck();
                 networkController.SendMove();
                 if (end) return;
                 playerTraded = false;

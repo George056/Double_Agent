@@ -9,6 +9,7 @@ public class MainMenuScript : MonoBehaviour
     void Start()
     {
         GameObject.FindObjectOfType<SettingsScript>().MusicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        //GameObject.FindObjectOfType<SettingsScript>().SoundEffectSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume", 0.5f);
     }
 
     // Update is called once per frame

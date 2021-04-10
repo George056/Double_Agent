@@ -1500,11 +1500,13 @@ public class BoardManager : MonoBehaviour
             {
                 localPlayer.GetComponent<Player>().UpdateResources(new List<int>(4) { 1, 1, 2, 2 });
                 turnCount++;
+                BoardCheck();
             }
             else
             {
                 turnCount++;
 
+                BoardCheck();
 
                 if (activeSide == Owner.US)
                 {
@@ -1515,21 +1517,11 @@ public class BoardManager : MonoBehaviour
                     activeSide = Owner.US;
                 }
 
-                inBuildMode = !inBuildMode;
-
-                // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
-                BoardCheck();
-
+                inBuildMode = !inBuildMode;            
                 networkController.SendMove();
-
                 if (end) return;
-
-
                 playerTraded = false;
-
                 BtnToggle();
-
-
                 NetworkGame();
             }
 

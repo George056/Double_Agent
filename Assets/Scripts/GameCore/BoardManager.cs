@@ -5,6 +5,7 @@ using System;
 using Random = UnityEngine.Random;
 using TMPro;
 using UnityEngine.UI;
+using Photon.Pun;
 
 /// <summary>
 /// The owner value for a node, branch, or tile, if not owned the value is Nil
@@ -417,6 +418,14 @@ public class BoardManager : MonoBehaviour
         doorClose.Play(0);
         yield return new WaitForSeconds(1f);
         //Debug.Log("turning off the lights");
+        if(GameInfo.game_type == "net")
+        {
+            PhotonNetwork.AutomaticallySyncScene = false;
+
+            PhotonNetwork.LeaveRoom();
+
+            PhotonNetwork.Disconnect();
+        }
         SC.LoadScene("MainMenuScene");
 
     }

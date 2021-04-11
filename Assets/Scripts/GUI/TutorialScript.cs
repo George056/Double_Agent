@@ -20,13 +20,13 @@ public class TutorialScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //for (int i = 0; i < TutorialSlidesTest.Length; i++)
-        //{
-        //    TutorialSlidesTest[i].transform.SetSiblingIndex(TutorialSlidesTest.Length - i);
-        //    Debug.Log("slide " + i + " 's siblingIndex is " + TutorialSlidesTest[i].transform.GetSiblingIndex());
-        //}
-        //defaultPos = TutorialSlidesTest[0].transform.position; // (960.0, 613.1, 0.0)
-        //Debug.Log("defaultPos is: " + defaultPos);
+        for (int i = 0; i < TutorialSlidesTest.Length; i++)
+        {
+            TutorialSlidesTest[i].transform.SetSiblingIndex(TutorialSlidesTest.Length - i);
+            Debug.Log("slide " + i + " 's siblingIndex is " + TutorialSlidesTest[i].transform.GetSiblingIndex());
+        }
+        defaultPos = TutorialSlidesTest[0].transform.position; // (960.0, 613.1, 0.0)
+        Debug.Log("defaultPos is: " + defaultPos);
     }
 
     // Update is called once per frame
@@ -37,20 +37,21 @@ public class TutorialScript : MonoBehaviour
 
     public void ResetTutorial()
     {
-        TutorialSlides[0].SetActive(true);
-        for (int i = 1; i < 6; i++) // hard code in array bounds
-        {
-            TutorialSlides[i].SetActive(false);
-        }
-        //for (int i = 0; i < TutorialSlidesTest.Length; i++)
+        //TutorialSlides[0].SetActive(true);
+        //for (int i = 1; i < 6; i++) // hard code in array bounds
         //{
-        //    TutorialSlidesTest[i].transform.SetSiblingIndex(TutorialSlidesTest.Length - i);
-        //    Debug.Log("slide " + i + " 's siblingIndex is " + TutorialSlidesTest[i].transform.GetSiblingIndex());
-        //    TutorialSlidesTest[i].transform.position = defaultPos;
-
-        //    //https://answers.unity.com/questions/1187850/how-do-i-make-gameobjecttransformrotationz-equal-t.html
-        //    TutorialSlidesTest[i].transform.rotation = Quaternion.Euler(0,0,0);
+        //    TutorialSlides[i].SetActive(false);
         //}
+
+        for (int i = 0; i < TutorialSlidesTest.Length; i++)
+        {
+            TutorialSlidesTest[i].transform.SetSiblingIndex(TutorialSlidesTest.Length - i);
+            Debug.Log("slide " + i + " 's siblingIndex is " + TutorialSlidesTest[i].transform.GetSiblingIndex());
+            TutorialSlidesTest[i].transform.position = defaultPos;
+
+            //https://answers.unity.com/questions/1187850/how-do-i-make-gameobjecttransformrotationz-equal-t.html
+            TutorialSlidesTest[i].transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
 
         NextButton.interactable = true;
         BackButton.interactable = false;
@@ -59,35 +60,36 @@ public class TutorialScript : MonoBehaviour
 
     public void TutorialBack()
     {
-        TutorialSlides[slideNum].SetActive(false);
-        if (slideNum == 5) //Hard code the index of the last slide
-        {
-            NextButton.interactable = true;
-        }
-        slideNum--;
-        if (slideNum == 0)
-        {
-            BackButton.interactable = false;
-        }
-        TutorialSlides[slideNum].SetActive(true);
-        //StartCoroutine(MovePicBack(defaultPos, targetPos, 4000));
-
+        //TutorialSlides[slideNum].SetActive(false);
+        //if (slideNum == 5) //Hard code the index of the last slide
+        //{
+        //    NextButton.interactable = true;
+        //}
+        //slideNum--;
+        //if (slideNum == 0)
+        //{
+        //    BackButton.interactable = false;
+        //}
+        //TutorialSlides[slideNum].SetActive(true);
+                
+        StartCoroutine(MovePicBack(defaultPos, targetPos, 4000));
     }
 
     public void TutorialNext()
     {
-        TutorialSlides[slideNum].SetActive(false);
-        if (slideNum == 0)
-        {
-            BackButton.interactable = true;
-        }
-        slideNum++;
-        if (slideNum == 5) //Hard code in array bounds
-        {
-            NextButton.interactable = false;
-        }
-        TutorialSlides[slideNum].SetActive(true);
-        //StartCoroutine(MovePicNext(defaultPos, targetPos, 4000));
+        //TutorialSlides[slideNum].SetActive(false);
+        //if (slideNum == 0)
+        //{
+        //    BackButton.interactable = true;
+        //}
+        //slideNum++;
+        //if (slideNum == 5) //Hard code in array bounds
+        //{
+        //    NextButton.interactable = false;
+        //}
+        //TutorialSlides[slideNum].SetActive(true);
+
+        StartCoroutine(MovePicNext(defaultPos, targetPos, 4000));
     }
     private IEnumerator MovePicNext(Vector3 deafultPos, Vector3 targetPos, float speed)
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
 
@@ -13,10 +14,16 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public GameObject CreateGameButton;
     public GameObject JoinGameButton;
+    public GameObject createOrJoinGameBackButton;
+    public GameObject unintentionalDisconnectBackButton;
     public GameObject roomListing;
     public GameObject startButton;
     public GameObject waitingForPlayerText;
     public GameObject waitingForHostText;
+    public GameObject playerLeftText;
+    public GameObject hostLeftText;
+    public GameObject waitingForPlayerBackButton;
+    public GameObject lobbyListBackButton;
 
     public Transform lobbyPanel;
 
@@ -24,6 +31,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public Canvas LoadingCanvas;
     public Canvas RoomLobbyListCanvas;
     public Canvas WaitingForPlayerCanvas;
+    public Canvas UnintentionalDisconnectCanvas;
 
     private Dictionary<string, RoomInfo> cachedRoomList;
     private Dictionary<string, GameObject> roomListEntries;
@@ -55,7 +63,15 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     void Update()
     {
-        
+        if(PhotonNetwork.NetworkClientState == ClientState.Disconnected && intentionalDisconnect == false)
+        {
+            CreateOrJoinCanvas.gameObject.SetActive(false);
+            LoadingCanvas.gameObject.SetActive(false);
+            RoomLobbyListCanvas.gameObject.SetActive(false);
+            WaitingForPlayerCanvas.gameObject.SetActive(false);
+
+            UnintentionalDisconnectCanvas.gameObject.SetActive(true);
+        }
     }
 
     IEnumerator DisconnectReconnect()
@@ -229,6 +245,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             if (PhotonNetwork.LocalPlayer.IsMasterClient)
             {
                 waitingForPlayerText.gameObject.SetActive(false);
+                playerLeftText.gameObject.SetActive(false);
                 startButton.SetActive(true);
             }
         }
@@ -236,18 +253,29 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
-        PhotonNetwork.CurrentRoom.IsOpen = true;
-        PhotonNetwork.CurrentRoom.IsVisible = false;
+       if(PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            if(GameInfo.host == false)
+            {
+                waitingForHostText.gameObject.SetActive(false);
+                hostLeftText.gameObject.SetActive(true);
+            }
+            else
+            {
+                startButton.gameObject.SetActive(false);
+                playerLeftText.gameObject.SetActive(true);
+                PhotonNetwork.CurrentRoom.IsOpen = true;
+                PhotonNetwork.CurrentRoom.IsVisible = true;
+            }
+        }
     }
 
     public override void OnLeftRoom()
     {
         LoadingCanvas.gameObject.SetActive(false);
         RoomLobbyListCanvas.gameObject.SetActive(false);
+        WaitingForPlayerCanvas.gameObject.SetActive(false);
         CreateOrJoinCanvas.gameObject.SetActive(true);
-
-        CreateGameButton.gameObject.SetActive(true);
-        JoinGameButton.gameObject.SetActive(true);
 
         PhotonNetwork.LeaveLobby();
     }
@@ -282,15 +310,13 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     }
 
     public void OnCreateGameButtonClicked()
-    {
-        // Set Host to 1 for if player is host
+    {        
         GameInfo.host = true;
         CreateRoom();
 
     }
     public void OnJoinGameButtonClicked()
     {
-        //Set host to 0 if player is not host
         GameInfo.host = false;
         CreateOrJoinCanvas.gameObject.SetActive(false);
         RoomLobbyListCanvas.gameObject.SetActive(true);
@@ -301,5 +327,42 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void OnStartButtonClicked()
     {
         PhotonNetwork.LoadLevel("PVP");
+    }
+
+    public void onCreateOrJoinBackButtonClicked()
+    {
+        intentionalDisconnect = true;
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("MainMenuScene");
+    }
+    
+    public void onWaitingForPlayersBackButtonClicked()
+    {
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.IsVisible = false;
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+
+            PhotonNetwork.LeaveRoom(); 
+        }
+        else
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
+        startButton.gameObject.SetActive(false);
+        intentionalDisconnect = true;
+        PhotonNetwork.Disconnect();
+    }
+
+    public void onUnintentionalDisconnectBackButton()
+    {
+        SceneManager.LoadScene("MainMenuScene");
+    }
+
+    public void onLobbyListBackButtonClicked()
+    {
+        RoomLobbyListCanvas.gameObject.setActive(false);
+        CreateOrJoinCanvas.gameObject.setActive(true);
     }
 }

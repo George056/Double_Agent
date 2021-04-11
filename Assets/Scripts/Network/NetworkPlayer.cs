@@ -32,9 +32,10 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SendSeed(string gameBoardSeed)
     {
-        if (photonView.IsMine)
+        if (GameInfo.host == true) 
             return;
 
+        Debug.Log("RPC_SendSeed called");
         networkController.SetBoardSeed(gameBoardSeed);
     }
 

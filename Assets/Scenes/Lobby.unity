@@ -1206,7 +1206,7 @@ MonoBehaviour:
   CreateGameButton: {fileID: 1999626848}
   JoinGameButton: {fileID: 1909662431}
   createOrJoinGameBackButton: {fileID: 1069301756}
-  unintentionalDisconnectBackButton: {fileID: 0}
+  unintentionalDisconnectBackButton: {fileID: 1486603194}
   roomListing: {fileID: 249017075009241652, guid: 2458d4f081a3a1d4b8ef6151d3d3cbc2, type: 3}
   startButton: {fileID: 783478749}
   waitingForPlayerText: {fileID: 925042623}
@@ -1218,7 +1218,7 @@ MonoBehaviour:
   LoadingCanvas: {fileID: 303315013}
   RoomLobbyListCanvas: {fileID: 1213505167}
   WaitingForPlayerCanvas: {fileID: 322003451}
-  UnintentionalDisconnectCanvas: {fileID: 0}
+  UnintentionalDisconnectCanvas: {fileID: 1963048158}
 --- !u!4 &551651608
 Transform:
   m_ObjectHideFlags: 0

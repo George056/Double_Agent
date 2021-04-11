@@ -23,6 +23,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public GameObject playerLeftText;
     public GameObject hostLeftText;
     public GameObject waitingForPlayerBackButton;
+    public GameObject lobbyListBackButton;
 
     public Transform lobbyPanel;
 
@@ -357,5 +358,11 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void onUnintentionalDisconnectBackButton()
     {
         SceneManager.LoadScene("MainMenuScene");
+    }
+
+    public void onLobbyListBackButtonClicked()
+    {
+        RoomLobbyListCanvas.gameObject.setActive(false);
+        CreateOrJoinCanvas.gameObject.setActive(true);
     }
 }

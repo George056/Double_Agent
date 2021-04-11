@@ -944,7 +944,8 @@ public class BoardManager : MonoBehaviour
         bool isLegal = true;
         List<int> connectedTiles;
 
-        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
+        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { 
+            isLegal = false; }
 
         // if this is not a Setup Move
         if (isLegal && myBranches.Count >= 2)
@@ -978,8 +979,6 @@ public class BoardManager : MonoBehaviour
                 isLegal = false;
             if (!isLegal) break;
         }
-
-        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
         return isLegal;
     }

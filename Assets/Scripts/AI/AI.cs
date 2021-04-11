@@ -1378,10 +1378,9 @@ public class AI : Agent
         do
         {
             positionCon = Random.Range(0, 36);
-            Debug.Log("AI checked: " + positionCon);
-        } while (!LegalMoveConnector(positionCon) && blocked_branches.Contains(positionCon));//exit when a legal move is found
+        } 
+        while (!LegalMoveConnector(positionCon) && !blocked_branches.Contains(positionCon));//exit when a legal move is found
         PlaceMoveBranch(positionCon);
-        Debug.Log("AI Move: " + positionCon);
         __myRoads.Add(positionCon);
         return positionCon;
     }

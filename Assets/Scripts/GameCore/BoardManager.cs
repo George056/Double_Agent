@@ -347,6 +347,8 @@ public class BoardManager : MonoBehaviour
 
     private IEnumerator TurnOnLight(float delay)
     {
+        Debug.Log("TurnOnLight called");
+        
         doorCreak.Play(0);
         yield return new WaitForSeconds(1f);
         doorClose.Play(0);
@@ -354,6 +356,8 @@ public class BoardManager : MonoBehaviour
         footsteps.Play(0);
         yield return new WaitForSeconds(4f);
         lightSwitch.Play(0);
+
+        Debug.Log("Sound effects played");
 
         if (GameInfo.game_type == "local")
         {
@@ -460,6 +464,8 @@ public class BoardManager : MonoBehaviour
     public void SetupScene()
     {
         SetVolume();
+
+        Debug.Log("Game type: " + GameInfo.game_type); 
 
         Debug.Log("SetupSceneCalled");
         if (GameInfo.game_type == "net")
@@ -1835,6 +1841,7 @@ public class BoardManager : MonoBehaviour
 
     public void ReceiveSeedFromNetwork()
     {
+        Debug.Log("Received Seed");
         customBoardSeed = networkController.GetBoardSeed();
         SetupScene();
     }

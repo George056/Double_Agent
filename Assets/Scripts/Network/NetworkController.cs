@@ -54,6 +54,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
             yield return null;  
         }
 
+        Debug.Log("Gameboard Seed = " + gameBoardSeed);
         boardManager.ReceiveSeedFromNetwork();
         
     }

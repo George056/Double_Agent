@@ -349,6 +349,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             PhotonNetwork.LeaveRoom();
         }
 
+        startButton.gameObject.SetActive(false);
         intentionalDisconnect = true;
         PhotonNetwork.Disconnect();
     }

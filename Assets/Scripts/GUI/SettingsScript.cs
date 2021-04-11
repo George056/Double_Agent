@@ -13,17 +13,17 @@ public class SettingsScript : MonoBehaviour
     public AudioSource MainMusic;
     public AudioSource USMusic;
     public AudioSource USSRMusic;
-    public AudioSource ButtonClick;
-    public AudioSource GameDoorClose;
-    public AudioSource GameDoorCreak;
-    public AudioSource USCapture;
-    public AudioSource USSRCapture;
     public AudioSource USWin;
     public AudioSource USDefeat;
     public AudioSource USSRWin;
     public AudioSource USSRDefeat;
+
+    public AudioSource ButtonClick;
+    public AudioSource GameDoorClose;
+    public AudioSource GameDoorCreak;
     public AudioSource LightClick;
     public AudioSource PiecePlaced;
+    public AudioSource Footsteps;
 
     void Awake()
     {
@@ -58,10 +58,9 @@ public class SettingsScript : MonoBehaviour
         ButtonClick.volume = SoundEffectSlider.value;
         GameDoorClose.volume = SoundEffectSlider.value;
         GameDoorCreak.volume = SoundEffectSlider.value;
-        USCapture.volume = SoundEffectSlider.value;
-        USSRCapture.volume = SoundEffectSlider.value;
         LightClick.volume = SoundEffectSlider.value;
         PiecePlaced.volume = SoundEffectSlider.value;
+        Footsteps.volume = SoundEffectSlider.value;
         PlayerPrefs.SetFloat("SoundEffectsVolume", SoundEffectSlider.value);
     }
 

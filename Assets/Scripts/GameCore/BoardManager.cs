@@ -152,19 +152,23 @@ public class BoardManager : MonoBehaviour
     public GameObject BlackoutPanel;
     public GameObject USImage;
     public GameObject USSRImage;
+
+    public float defaultVolume = 0.5f;
+    //public Slider musicSlider;
+
     public AudioSource USMusic;
     public AudioSource USSRMusic;
-    public AudioSource PiecePlaced;
-    public float defaultVolume = 0.5f;
-    public Slider musicSlider;
     public AudioSource USVictory;
     public AudioSource USLoss;
     public AudioSource USSRVictory;
     public AudioSource USSRLoss;
+
     public AudioSource lightSwitch;
     public AudioSource doorCreak;
     public AudioSource doorClose;
     public AudioSource footsteps;
+    public AudioSource PiecePlaced;
+    public AudioSource buttonClicked;
 
     [HideInInspector]
     public static bool new_board = true;
@@ -425,8 +429,29 @@ public class BoardManager : MonoBehaviour
         SC.LoadScene("MainMenuScene");
 
     }
+
+    public void SetVolume()
+    {
+        USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USVictory.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USLoss.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USSRVictory.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USSRLoss.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+
+        lightSwitch.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        doorCreak.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        doorClose.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        footsteps.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        PiecePlaced.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        buttonClicked.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+    }
+
+
     public void SetupScene()
     {
+        SetVolume();
+
         Debug.Log("SetupSceneCalled");
         if (GameInfo.game_type == "net")
         {
@@ -441,9 +466,6 @@ public class BoardManager : MonoBehaviour
             BoardSetUp(GameBoard);
             AssignNodeResources();
             cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
-
-            USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-            USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
             // https://docs.unity3d.com/ScriptReference/Coroutine.html
             coroutine = TurnOnLight(1.5f);
@@ -507,9 +529,6 @@ public class BoardManager : MonoBehaviour
             }
 
             BoardSetUp(GameBoard);
-
-            USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-            USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
             // https://docs.unity3d.com/ScriptReference/Coroutine.html
             coroutine = TurnOnLight(1.5f);

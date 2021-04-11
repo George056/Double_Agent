@@ -22,6 +22,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public GameObject waitingForHostText;
     public GameObject playerLeftText;
     public GameObject hostLeftText;
+    public GameObject waitingForPlayerBackButton;
 
     public Transform lobbyPanel;
 

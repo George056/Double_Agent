@@ -877,7 +877,7 @@ public class BoardManager : MonoBehaviour
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
-        Debug.Log("IsLegal1: " + isLegal);
+        //Debug.Log("IsLegal1: " + isLegal);
         Debug.Log("LegalUIBranch branch: " + branch + ", Active Side: " + activeSide);
 
 
@@ -892,7 +892,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (adjacentNodes[0] != secondSetupNode && adjacentNodes[1] != secondSetupNode) { isLegal = false; }
             }
-            Debug.Log("IsLegal2: " + isLegal);
+            //Debug.Log("IsLegal2: " + isLegal);
         }
         else
         {
@@ -916,7 +916,7 @@ public class BoardManager : MonoBehaviour
                     isLegal = false;
             }
         }
-        Debug.Log("IsLegal3: " + isLegal);
+        //Debug.Log("IsLegal3: " + isLegal);
         return isLegal;
     }
 
@@ -947,7 +947,7 @@ public class BoardManager : MonoBehaviour
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
         // if this is not a Setup Move
-        if (myBranches.Count >= 2)
+        if (isLegal && myBranches.Count >= 2)
         {
             // check all the branches connected to the one you want to place
             Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
@@ -960,14 +960,14 @@ public class BoardManager : MonoBehaviour
             }
 
             if (!found) { isLegal = false; }
+        }
 
-            // a branch on a setup move must have an available adjacent node that can also be claimed
-            if(turnCount == 3 || turnCount == 4)
-            {
-                Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
-                if (LegalNodeMove(adjacentNodes[0], activeSide, myBranches) || LegalNodeMove(adjacentNodes[1], activeSide, myBranches)) isLegal = true;
-                else isLegal = false;
-            }
+        // a branch on a setup move must have an available adjacent node that can also be claimed
+        if (isLegal && (turnCount == 3 || turnCount == 4))
+        {
+            Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
+            if (LegalNodeMove(adjacentNodes[0], activeSide, myBranches) || LegalNodeMove(adjacentNodes[1], activeSide, myBranches)) ;
+            else isLegal = false;
         }
 
         // a branch cannot be placed inside a multicaptured square owned by opponent
@@ -976,7 +976,10 @@ public class BoardManager : MonoBehaviour
         {
             if (resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil && resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != activeSide)
                 isLegal = false;
+            if (!isLegal) break;
         }
+
+        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
         return isLegal;
     }

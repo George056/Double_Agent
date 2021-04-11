@@ -499,16 +499,16 @@ public class BoardManager : MonoBehaviour
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
 
-                //USSetupIndicator.SetActive(true);
-                //USSRSetupIndicator.SetActive(false);
+                USSetupIndicator.SetActive(true);
+                USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
 
-                //USSetupIndicator.SetActive(false);
-                //USSRSetupIndicator.SetActive(true);
+                USSetupIndicator.SetActive(false);
+                USSRSetupIndicator.SetActive(true);
             }
 
             NetworkGame();
@@ -555,17 +555,16 @@ public class BoardManager : MonoBehaviour
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
 
-                //USSetupIndicator.SetActive(true);
-                //USSRSetupIndicator.SetActive(false);
+                USSetupIndicator.SetActive(true);
+                USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
 
-                //USSetupIndicator.SetActive(false);
-                //USSRSetupIndicator.SetActive(true);
-
+                USSetupIndicator.SetActive(false);
+                USSRSetupIndicator.SetActive(true);
             }
 
             //make sure it is an AI game first
@@ -759,6 +758,9 @@ public class BoardManager : MonoBehaviour
                 secondSetupBranch = branchNum;
                 secondSetupBranchImage.SetActive(false);
             }
+
+            USSetupIndicator.SetActive(false);
+            USSRSetupIndicator.SetActive(false);
         }
 
 

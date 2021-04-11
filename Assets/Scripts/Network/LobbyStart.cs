@@ -362,7 +362,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void onLobbyListBackButtonClicked()
     {
-        RoomLobbyListCanvas.gameObject.setActive(false);
-        CreateOrJoinCanvas.gameObject.setActive(true);
+        RoomLobbyListCanvas.gameObject.SetActive(false);
+        CreateOrJoinCanvas.gameObject.SetActive(true);
     }
 }

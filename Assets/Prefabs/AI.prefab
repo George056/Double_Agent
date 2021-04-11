@@ -79,12 +79,12 @@ MonoBehaviour:
   __player: 0
   __piece_type: 0
   trainingMode: 1
-  longestNetReward: 0.02
-  captureReward: 0.01
-  nodeRBReward: 0.02
-  nodeGYReward: 0.04
-  nodeGrayReward: 0.01
-  branchReward: 0.05
+  longestNetReward: 0.2
+  captureReward: 0.1
+  nodeRBReward: 0.2
+  nodeGYReward: 0.4
+  nodeGrayReward: 0.1
+  branchReward: 0.5
   illegalMovePunish: -0.1
   illegalTradePunish: -0.1
   badTradePunish: -0.05

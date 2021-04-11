@@ -99,6 +99,9 @@ public class AI : Agent
     [Tooltip("This is used to say the last turn that a mask was generated")]
     private int lastUpdateTurn;
 
+    [Tooltip("This is when the last move was made")]
+    private int lastMoveTurn;
+
     [Tooltip("The active BoardManager")]
     private BoardManager bm;
 
@@ -127,6 +130,7 @@ public class AI : Agent
         loss = false;
         win = false;
         setup = true;
+        lastMoveTurn = 0;
     }
 
     public void EndOpener()
@@ -721,6 +725,8 @@ public class AI : Agent
     {
         Debug.Log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&AI Move Requested");
         if (randAI) return;
+        if (lastMoveTurn == turn && !heuristic) return; // only make one "move" per turn
+        lastMoveTurn = turn;
 
         bool noTrade = true;
         bool noBranch = true;
@@ -741,6 +747,7 @@ public class AI : Agent
                     ++placed_branches;
                     if (trainingMode)
                         AddReward(branchReward);
+                    if (opener) break;
                 }
                 else if (trainingMode)
                 {
@@ -791,6 +798,7 @@ public class AI : Agent
                                 totalReward += nodeGrayReward * ((c.GetComponent<ResourceInfo>().resoureTileOwner == __piece_type) ? 2 : 1);
                             }
                         }
+                    if (opener) break;
                 }
                 else if (trainingMode)
                 {

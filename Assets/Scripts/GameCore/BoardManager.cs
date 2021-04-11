@@ -878,7 +878,7 @@ public class BoardManager : MonoBehaviour
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
         //Debug.Log("IsLegal1: " + isLegal);
-        Debug.Log("LegalUIBranch branch: " + branch + ", Active Side: " + activeSide);
+        //Debug.Log("LegalUIBranch branch: " + branch + ", Active Side: " + activeSide);
 
 
         if (turnCount < 5)

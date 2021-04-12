@@ -160,6 +160,7 @@ public class AI : Agent
         else if (__ai_score >= 10) Win();
 
         if (loss || win) return;
+        if (turn == lastUpdateTurn) return;
 
         //make move
         if (randAI)
@@ -181,7 +182,7 @@ public class AI : Agent
     public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
     {
         if (randAI) return;
-        if (turn == lastUpdateTurn) return;
+        //if (turn == lastUpdateTurn) return;
         lastUpdateTurn = turn;
 
         if (opener)
@@ -1158,7 +1159,7 @@ public class AI : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         if (randAI) return;
-        if (bm.activeSide != __piece_type) return;
+        //if (bm.activeSide != __piece_type) return;
 
         // observe tiles (13 observations)
         foreach (GameObject tile in bm.resourceList)

@@ -465,7 +465,7 @@ MonoBehaviour:
   USMusic: {fileID: 396023532}
   USSRMusic: {fileID: 867615559}
   defaultVolume: 0.5
-  musicSlider: {fileID: 1358503158}
+  musicSlider: {fileID: 0}
   tempResourceList:
   - {fileID: 0}
   - {fileID: 0}
@@ -7861,8 +7861,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SettingsWindow: {fileID: 1333850751}
   MusicSlider: {fileID: 1358503158}
-  Music1: {fileID: 396023533}
-  Music2: {fileID: 867615560}
+  Music1: {fileID: 0}
+  Music2: {fileID: 0}
 --- !u!1 &1358503156
 GameObject:
   m_ObjectHideFlags: 0

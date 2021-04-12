@@ -341,9 +341,10 @@ public class BoardManager : MonoBehaviour
 
     private void Update()
     {
-        if(last_turn != turn)
+        if(last_turn != turnCount)
         {
-            if(!end && activeSide == humanPiece)
+            last_turn = turnCount;
+            if (!end && activeSide == humanPiece)
             {
                 new_board = false;
                 Debug.Log("Turn: " + turnCount);
@@ -355,7 +356,6 @@ public class BoardManager : MonoBehaviour
                 Debug.Log("Turn: " + turnCount);
                 player2.GetComponent<AI>().AIMove(turnCount);
             }
-            last_turn = turn;
         }
     }
 

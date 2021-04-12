@@ -7,12 +7,11 @@ using UnityEngine.UI;
 
 public class TutorialScript : MonoBehaviour
 {
-    public GameObject[] TutorialSlides = new GameObject[6];
     public Button BackButton;
     public Button NextButton;
     private int slideNum = 0;
     private int timesCount = 0;
-    public GameObject[] TutorialSlidesTest = new GameObject[4];
+    public GameObject[] TutorialSlidesTest = new GameObject[13];
     private Vector3 defaultPos;
     private Vector3 targetPos = new Vector3(150, 613, 0);
     private int tempIndex;

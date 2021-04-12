@@ -435,6 +435,8 @@ public class BoardManager : MonoBehaviour
         {
             PhotonNetwork.AutomaticallySyncScene = false;
 
+            PhotonNetwork.DestroyAll();
+
             PhotonNetwork.LeaveRoom();
 
             PhotonNetwork.Disconnect();

@@ -42,6 +42,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void InstantiateNetworkPlayer()
     {
         PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        Debug.Log("qq Network player instantiated");
     }
 
 

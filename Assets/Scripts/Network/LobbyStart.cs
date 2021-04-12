@@ -48,10 +48,10 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     }
     void Start()
     {
-        if (PhotonNetwork.IsConnected)
+   /*     if (PhotonNetwork.IsConnected)
         {
             StartCoroutine(DisconnectReconnect());
-        }
+        }*/
 
         PhotonNetwork.ConnectUsingSettings();
 
@@ -127,7 +127,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
             MaxPlayers = 2
         };
 
-        roomName = GameInfo.user_name;
+        roomName = GameInfo.user_name + Random.Range(0, 100);
         PhotonNetwork.CreateRoom(roomName, roomOps);
     }
 

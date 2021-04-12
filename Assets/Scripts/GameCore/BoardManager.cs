@@ -354,7 +354,7 @@ public class BoardManager : MonoBehaviour
         doorClose.Play(0);
         yield return new WaitForSeconds(0.5f);
         footsteps.Play(0);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         lightSwitch.Play(0);
 
         Debug.Log("Sound effects played");
@@ -392,7 +392,7 @@ public class BoardManager : MonoBehaviour
     }
     public void TurnLightsOff()
     {
-        coroutine =TurnOffLight(1.5f);
+        coroutine =TurnOffLight(.5f);
         StartCoroutine(coroutine);
     }
     private IEnumerator TurnOffLight(float delay)
@@ -425,9 +425,9 @@ public class BoardManager : MonoBehaviour
         BlackoutPanel.SetActive(true);
         yield return new WaitForSeconds(delay);
         footsteps.Play(0);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         doorCreak.Play(0);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         doorClose.Play(0);
         yield return new WaitForSeconds(1f);
         //Debug.Log("turning off the lights");
@@ -1828,23 +1828,37 @@ public class BoardManager : MonoBehaviour
         setNetworkManagerReference();
         if (GameInfo.host == true)
         {
-            customBoardSeed = GetRandomBoardSeed();
-            networkController.SetBoardSeed(customBoardSeed);
-            networkController.SendSeed();
-            SetupScene();
+            Debug.Log("zz Waiting for guest player to load");
+            StartCoroutine(networkController.WaitForOtherPlayersLoaded());          
 
         }
         else
         {
-            Debug.Log("Waiting for seed");
+            Debug.Log("qq Starting to instantiate network player");
+            networkController.InstantiateNetworkPlayer();
+            Debug.Log("qq Player has loaded");
+            networkController.PlayerHasLoaded();
+            Debug.Log("qq Waiting for seed");
             StartCoroutine(networkController.WaitForSeed());
         }
     }
 
     public void ReceiveSeedFromNetwork()
-    {
-        Debug.Log("Received Seed");
+    {    
         customBoardSeed = networkController.GetBoardSeed();
+        Debug.Log("qq Received Seed: " + customBoardSeed);
+        SetupScene();
+    }
+
+    public void OtherPlayersHaveLoaded()
+    {
+        Debug.Log("zz OtherPlayersHaveLoaded called");
+        customBoardSeed = GetRandomBoardSeed();
+        Debug.Log("zz Generated board seed: " + customBoardSeed);
+        networkController.SetBoardSeed(customBoardSeed);
+        Debug.Log("zz Board manager has set network controller seed");
+        networkController.SendSeed();
+        Debug.Log("zz Board manager has sent seed");
         SetupScene();
     }
 }

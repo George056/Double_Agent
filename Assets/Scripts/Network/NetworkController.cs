@@ -23,16 +23,26 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
 
     private static bool playerTurn = false;
+    private static bool playersLoaded = false;
 
     private void Awake()
     {
         NetController = this;
-        PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        if (GameInfo.host == true)
+        {
+            PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        }
     }
 
     public void SetBoardManagerReference(BoardManager manager)
     {
         boardManager = manager;
+    }
+
+    public void InstantiateNetworkPlayer()
+    {
+        PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        Debug.Log("qq Network player instantiated");
     }
 
 
@@ -54,9 +64,21 @@ public class NetworkController : MonoBehaviourPunCallbacks
             yield return null;  
         }
 
-        Debug.Log("Gameboard Seed = " + gameBoardSeed);
+        Debug.Log("qq Wait for seed has received gameboard seed: " + gameBoardSeed);
         boardManager.ReceiveSeedFromNetwork();
         
+    }
+
+    public IEnumerator WaitForOtherPlayersLoaded()
+    {
+        Debug.Log("NetworkController WaitingForOtherPlayersLoaded");
+        while (playersLoaded == false)
+        {
+            yield return null;
+        }
+
+        Debug.Log("PlayersLoaded set to true");
+        boardManager.OtherPlayersHaveLoaded();
     }
 
     public void SendMove()
@@ -70,10 +92,22 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void SendSeed()
     {
+        Debug.Log("zz Network controller send seed has been called with seed: " + gameBoardSeed);
         NetworkPlayer.networkPlayer.SendSeed(gameBoardSeed);
         
     }
 
+    public void PlayerHasLoaded()
+    {
+        Debug.Log("qq Network controller player has loaded");
+        bool load = true;
+        NetworkPlayer.networkPlayer.PlayerHasLoaded(load);
+    }
+
+    public void SetPlayerLoaded(bool loaded)
+    {
+        playersLoaded = loaded;
+    }
     public void SetNodesPlaced(int[] newNodesPlaced)
     {
         Debug.Log("SetNodesPlacedCalled");
@@ -89,6 +123,20 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public void SetBoardSeed(string boardSeed)
     {
         gameBoardSeed = boardSeed;
+
+        if(GameInfo.host == true)
+        {
+            Debug.Log("zz Network Controller set seed: " + gameBoardSeed);
+        }
+        else
+        {
+            Debug.Log("qq Network Controller set seed: " + gameBoardSeed);
+        }
+
+        /*if (GameInfo.host == true)
+        {
+            BoardManager.boardManager.SetupScene();
+        }*/
     }
 
     public void SetPlayerTurn(bool b)
@@ -159,7 +207,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     }
 
-    public override void OnLeftRoom()
+    /*public override void OnLeftRoom()
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
         {
@@ -172,5 +220,5 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-    }
+    }*/
 }

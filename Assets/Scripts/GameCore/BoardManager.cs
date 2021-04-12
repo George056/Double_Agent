@@ -1838,6 +1838,7 @@ public class BoardManager : MonoBehaviour
             networkController.InstantiateNetworkPlayer();
             Debug.Log("qq Player has loaded");
             networkController.PlayerHasLoaded();
+            networkController.SetBoardSeed("");
             Debug.Log("qq Waiting for seed");
             StartCoroutine(networkController.WaitForSeed());
         }

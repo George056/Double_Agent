@@ -1828,23 +1828,35 @@ public class BoardManager : MonoBehaviour
         setNetworkManagerReference();
         if (GameInfo.host == true)
         {
-            customBoardSeed = GetRandomBoardSeed();
-            networkController.SetBoardSeed(customBoardSeed);
-            networkController.SendSeed();
-            SetupScene();
+            Debug.Log("zz Waiting for guest player to load");
+            StartCoroutine(networkController.WaitForOtherPlayersLoaded());          
 
         }
         else
         {
-            Debug.Log("Waiting for seed");
+            Debug.Log("qq Player has loaded");
+            networkController.PlayerHasLoaded();
+            Debug.Log("qq Waiting for seed");
             StartCoroutine(networkController.WaitForSeed());
         }
     }
 
     public void ReceiveSeedFromNetwork()
-    {
-        Debug.Log("Received Seed");
+    {    
         customBoardSeed = networkController.GetBoardSeed();
+        Debug.Log("qq Received Seed: " + customBoardSeed);
+        SetupScene();
+    }
+
+    public void OtherPlayersHaveLoaded()
+    {
+        Debug.Log("zz OtherPlayersHaveLoaded called");
+        customBoardSeed = GetRandomBoardSeed();
+        Debug.Log("zz Generated board seed: " + customBoardSeed);
+        networkController.SetBoardSeed(customBoardSeed);
+        Debug.Log("zz Board manager has set network controller seed");
+        networkController.SendSeed();
+        Debug.Log("zz Board manager has sent seed");
         SetupScene();
     }
 }

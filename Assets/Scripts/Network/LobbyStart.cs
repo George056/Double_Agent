@@ -326,6 +326,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void OnStartButtonClicked()
     {
+        PhotonNetwork.DestroyAll();
         PhotonNetwork.LoadLevel("PVP");
     }
 

@@ -116,6 +116,8 @@ public class BoardManager : MonoBehaviour
 
     [HideInInspector]
     public static bool new_board = true;
+    
+    private int last_turn;
 
     private string customBoardSeed;
     public GameObject[] tempResourceList = new GameObject[13];
@@ -304,6 +306,7 @@ public class BoardManager : MonoBehaviour
 
         end = false;
         turnCount = 1;
+        last_turn = 0;
 
         //check to see if it is an AI or network game
         player1 = GameObject.FindGameObjectWithTag("AI_helper");
@@ -338,17 +341,21 @@ public class BoardManager : MonoBehaviour
 
     private void Update()
     {
-        if(!end && activeSide == humanPiece)
+        if(last_turn != turn)
         {
-            new_board = false;
-            Debug.Log("Turn: " + turnCount);
-            player1.GetComponent<AI>().AIMove(turnCount);
-        }
-        else if(!end && activeSide == aiPiece)
-        {
-            new_board = false;
-            Debug.Log("Turn: " + turnCount);
-            player2.GetComponent<AI>().AIMove(turnCount);
+            if(!end && activeSide == humanPiece)
+            {
+                new_board = false;
+                Debug.Log("Turn: " + turnCount);
+                player1.GetComponent<AI>().AIMove(turnCount);
+            }
+            else if(!end && activeSide == aiPiece)
+            {
+                new_board = false;
+                Debug.Log("Turn: " + turnCount);
+                player2.GetComponent<AI>().AIMove(turnCount);
+            }
+            last_turn = turn;
         }
     }
 

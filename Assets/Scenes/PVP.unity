@@ -11551,8 +11551,32 @@ PrefabInstance:
       value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: branchReward
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: nodeGYReward
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: nodeRBReward
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: trainingMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: captureReward
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: nodeGrayReward
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491496307634840289, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
+      propertyPath: longestNetReward
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8056974288518276843, guid: d21fc8fe21a0d6c48b37ea28cbbc3fa7, type: 3}
       propertyPath: m_Model

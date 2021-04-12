@@ -81,6 +81,11 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverWindow;
     public GameObject SetupLegalPopup;
 
+    public GameObject USSetupIndicator;
+    public GameObject USSRSetupIndicator;
+
+    public AnimationClip USTelegram;
+
     private static NetworkController networkController = new NetworkController();
    // private static NetworkPlayer networkPlayerClass = new NetworkPlayer();
     private bool netWorkTurn = true;
@@ -148,19 +153,23 @@ public class BoardManager : MonoBehaviour
     public GameObject BlackoutPanel;
     public GameObject USImage;
     public GameObject USSRImage;
+
+    public float defaultVolume = 0.5f;
+    //public Slider musicSlider;
+
     public AudioSource USMusic;
     public AudioSource USSRMusic;
-    public AudioSource PiecePlaced;
-    public float defaultVolume = 0.5f;
-    public Slider musicSlider;
     public AudioSource USVictory;
     public AudioSource USLoss;
     public AudioSource USSRVictory;
     public AudioSource USSRLoss;
+
     public AudioSource lightSwitch;
     public AudioSource doorCreak;
     public AudioSource doorClose;
     public AudioSource footsteps;
+    public AudioSource PiecePlaced;
+    public AudioSource buttonClicked;
 
     [HideInInspector]
     public static bool new_board = true;
@@ -338,6 +347,8 @@ public class BoardManager : MonoBehaviour
 
     private IEnumerator TurnOnLight(float delay)
     {
+        Debug.Log("TurnOnLight called");
+        
         doorCreak.Play(0);
         yield return new WaitForSeconds(1f);
         doorClose.Play(0);
@@ -345,6 +356,8 @@ public class BoardManager : MonoBehaviour
         footsteps.Play(0);
         yield return new WaitForSeconds(4f);
         lightSwitch.Play(0);
+
+        Debug.Log("Sound effects played");
 
         if (GameInfo.game_type == "local")
         {
@@ -429,8 +442,31 @@ public class BoardManager : MonoBehaviour
         SC.LoadScene("MainMenuScene");
 
     }
+
+    public void SetVolume()
+    {
+        USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USVictory.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USLoss.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USSRVictory.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+        USSRLoss.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
+
+        lightSwitch.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        doorCreak.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        doorClose.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        footsteps.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        PiecePlaced.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+        buttonClicked.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+    }
+
+
     public void SetupScene()
     {
+        SetVolume();
+
+        Debug.Log("Game type: " + GameInfo.game_type); 
+
         Debug.Log("SetupSceneCalled");
         if (GameInfo.game_type == "net")
         {
@@ -445,9 +481,6 @@ public class BoardManager : MonoBehaviour
             BoardSetUp(GameBoard);
             AssignNodeResources();
             cdl = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CheckDataList>();
-
-            USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-            USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
             // https://docs.unity3d.com/ScriptReference/Coroutine.html
             coroutine = TurnOnLight(1.5f);
@@ -480,11 +513,17 @@ public class BoardManager : MonoBehaviour
             {
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
+
+                USSetupIndicator.SetActive(true);
+                USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
+
+                USSetupIndicator.SetActive(false);
+                USSRSetupIndicator.SetActive(true);
             }
 
             NetworkGame();
@@ -505,9 +544,6 @@ public class BoardManager : MonoBehaviour
             }
 
             BoardSetUp(GameBoard);
-
-            USMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
-            USSRMusic.volume = PlayerPrefs.GetFloat("MusicVolume", defaultVolume);
 
             // https://docs.unity3d.com/ScriptReference/Coroutine.html
             coroutine = TurnOnLight(1.5f);
@@ -534,17 +570,16 @@ public class BoardManager : MonoBehaviour
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
 
-                //USMusic.SetActive(true);
-                //USSRMusic.SetActive(false);
+                USSetupIndicator.SetActive(true);
+                USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
 
-                //USSRMusic.SetActive(true);
-                //USMusic.SetActive(false);
-
+                USSetupIndicator.SetActive(false);
+                USSRSetupIndicator.SetActive(true);
             }
 
             //make sure it is an AI game first
@@ -738,6 +773,9 @@ public class BoardManager : MonoBehaviour
                 secondSetupBranch = branchNum;
                 secondSetupBranchImage.SetActive(false);
             }
+
+            USSetupIndicator.SetActive(false);
+            USSRSetupIndicator.SetActive(false);
         }
 
 
@@ -839,8 +877,8 @@ public class BoardManager : MonoBehaviour
 
         if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
 
-        Debug.Log("IsLegal1: " + isLegal);
-        Debug.Log("LegalUIBranch branch: " + branch + ", Active Side: " + activeSide);
+        //Debug.Log("IsLegal1: " + isLegal);
+        //Debug.Log("LegalUIBranch branch: " + branch + ", Active Side: " + activeSide);
 
 
         if (turnCount < 5)
@@ -854,7 +892,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (adjacentNodes[0] != secondSetupNode && adjacentNodes[1] != secondSetupNode) { isLegal = false; }
             }
-            Debug.Log("IsLegal2: " + isLegal);
+            //Debug.Log("IsLegal2: " + isLegal);
         }
         else
         {
@@ -878,7 +916,7 @@ public class BoardManager : MonoBehaviour
                     isLegal = false;
             }
         }
-        Debug.Log("IsLegal3: " + isLegal);
+        //Debug.Log("IsLegal3: " + isLegal);
         return isLegal;
     }
 
@@ -906,10 +944,11 @@ public class BoardManager : MonoBehaviour
         bool isLegal = true;
         List<int> connectedTiles;
 
-        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { isLegal = false; }
+        if (allBranches[branch].GetComponent<BranchInfo>().branchOwner != Owner.Nil) { 
+            isLegal = false; }
 
         // if this is not a Setup Move
-        if (myBranches.Count >= 2)
+        if (isLegal && myBranches.Count >= 2)
         {
             // check all the branches connected to the one you want to place
             Relationships.connectionsRoad.TryGetValue(branch, out List<int> connectedBranches);
@@ -922,14 +961,14 @@ public class BoardManager : MonoBehaviour
             }
 
             if (!found) { isLegal = false; }
+        }
 
-            // a branch on a setup move must have an available adjacent node that can also be claimed
-            if(turnCount == 3 || turnCount == 4)
-            {
-                Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
-                if (LegalNodeMove(adjacentNodes[0], activeSide, myBranches) || LegalNodeMove(adjacentNodes[1], activeSide, myBranches)) isLegal = true;
-                else isLegal = false;
-            }
+        // a branch on a setup move must have an available adjacent node that can also be claimed
+        if (isLegal && (turnCount == 3 || turnCount == 4))
+        {
+            Relationships.connectionsRoadNode.TryGetValue(branch, out List<int> adjacentNodes);
+            if (LegalNodeMove(adjacentNodes[0], activeSide, myBranches) || LegalNodeMove(adjacentNodes[1], activeSide, myBranches)) ;
+            else isLegal = false;
         }
 
         // a branch cannot be placed inside a multicaptured square owned by opponent
@@ -938,6 +977,7 @@ public class BoardManager : MonoBehaviour
         {
             if (resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != Owner.Nil && resourceList[tile].GetComponent<ResourceInfo>().resoureTileOwner != activeSide)
                 isLegal = false;
+            if (!isLegal) break;
         }
 
         return isLegal;
@@ -1555,6 +1595,11 @@ public class BoardManager : MonoBehaviour
                 inBuildMode = !inBuildMode;
             }
 
+            //if (activeSide == humanPiece && turnCount < 5)
+            //{
+            //    USTelegram.Play();
+            //}
+
             turnCount++;
 
             // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
@@ -1783,22 +1828,35 @@ public class BoardManager : MonoBehaviour
         setNetworkManagerReference();
         if (GameInfo.host == true)
         {
-            customBoardSeed = GetRandomBoardSeed();
-            networkController.SetBoardSeed(customBoardSeed);
-            networkController.SendSeed();
-            SetupScene();
+            Debug.Log("zz Waiting for guest player to load");
+            StartCoroutine(networkController.WaitForOtherPlayersLoaded());          
 
         }
         else
         {
-            Debug.Log("Waiting for seed");
+            Debug.Log("qq Player has loaded");
+            networkController.PlayerHasLoaded();
+            Debug.Log("qq Waiting for seed");
             StartCoroutine(networkController.WaitForSeed());
         }
     }
 
     public void ReceiveSeedFromNetwork()
-    {
+    {    
         customBoardSeed = networkController.GetBoardSeed();
+        Debug.Log("qq Received Seed: " + customBoardSeed);
+        SetupScene();
+    }
+
+    public void OtherPlayersHaveLoaded()
+    {
+        Debug.Log("zz OtherPlayersHaveLoaded called");
+        customBoardSeed = GetRandomBoardSeed();
+        Debug.Log("zz Generated board seed: " + customBoardSeed);
+        networkController.SetBoardSeed(customBoardSeed);
+        Debug.Log("zz Board manager has set network controller seed");
+        networkController.SendSeed();
+        Debug.Log("zz Board manager has sent seed");
         SetupScene();
     }
 }

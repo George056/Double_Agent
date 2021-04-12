@@ -32,9 +32,16 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RPC_SendSeed(string gameBoardSeed)
     {
-        if (photonView.IsMine)
-            return;
 
+        if (GameInfo.host == true)
+        {
+            Debug.Log("zz RPC_send seed has been called, returning to board manager");
+            return;
+        }
+        else
+        {
+            Debug.Log("qq RPC_send seed has been called with seed: " + gameBoardSeed);
+        }
         networkController.SetBoardSeed(gameBoardSeed);
     }
 
@@ -42,6 +49,13 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     public void RPC_UpdateResourcesinOpponentUI(int[] resources)
     {
         networkController.UpdateResourcesInOpponentUI(resources);
+    }
+
+    [PunRPC]
+    public void RPC_PlayerHasLoaded(bool playerLoaded)
+    {
+        Debug.Log("zz qq RPC_PlayerHasLoaded called");
+        networkController.SetPlayerLoaded(playerLoaded);
     }
 
     public void SendMove(int[] nodesPlaced, int[] branchesPlaced, int[] resources)
@@ -56,8 +70,20 @@ public class NetworkPlayer : MonoBehaviourPunCallbacks
     }
     public void SendSeed(string gameBoardSeed)
     {
+        if(GameInfo.host == true)
+        {
+            Debug.Log("zz Network Player send seed has been called with seed: " + gameBoardSeed);
+        }
+        else
+        {
+            Debug.Log("qq Network Player send seed has been called with seed: " + gameBoardSeed);
+        }
         photonView.RPC("RPC_SendSeed", RpcTarget.All, gameBoardSeed);
     }
 
-
+    public void PlayerHasLoaded(bool loaded)
+    {
+        Debug.Log("qq Network Player player has loaded: " + loaded);
+        photonView.RPC("RPC_PlayerHasLoaded", RpcTarget.All, loaded);
+    }
 }

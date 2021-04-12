@@ -1860,6 +1860,7 @@ public class BoardManager : MonoBehaviour
         Debug.Log("zz Board manager has set network controller seed");
         networkController.SendSeed();
         Debug.Log("zz Board manager has sent seed");
+        networkController.SetBoardSeed("");
         SetupScene();
     }
 }

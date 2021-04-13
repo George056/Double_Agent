@@ -113,6 +113,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         {
             PhotonNetwork.AutomaticallySyncScene = true;
         }
+        
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)

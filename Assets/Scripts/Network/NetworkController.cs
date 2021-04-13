@@ -25,13 +25,12 @@ public class NetworkController : MonoBehaviourPunCallbacks
     private static bool playerTurn = false;
     private static bool playersLoaded = false;
 
-    private void Awake()
+    private void Start()
     {
         NetController = this;
-        if (GameInfo.host == true) 
-        {
-           GameObject player = PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
-        }
+    
+        GameObject player = PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+        
     }
 
     public void SetBoardManagerReference(BoardManager manager)

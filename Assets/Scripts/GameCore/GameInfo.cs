@@ -21,4 +21,6 @@ public class GameInfo
     public static string user_name;
 
     public static bool host;
+
+    public static bool first_game = true;
 }

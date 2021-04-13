@@ -465,6 +465,8 @@ public class BoardManager : MonoBehaviour
     {
         SetVolume();
 
+        GameInfo.first_game = false;
+
         Debug.Log("Game type: " + GameInfo.game_type); 
 
         Debug.Log("SetupSceneCalled");

@@ -28,7 +28,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     private void Awake()
     {
         NetController = this;
-        if (GameInfo.host == true)
+        if (GameInfo.host == true && GameInfo.first_game == true) 
         {
             PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
         }
@@ -41,8 +41,11 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void InstantiateNetworkPlayer()
     {
-        PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
-        Debug.Log("qq Network player instantiated");
+        if (GameInfo.first_game == true)
+        {
+            PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+            Debug.Log("qq Network player instantiated");
+        }
     }
 
 

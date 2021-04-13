@@ -1835,18 +1835,17 @@ public class BoardManager : MonoBehaviour
         setNetworkManagerReference();
         if (GameInfo.host == true)
         {
+            networkController.InstantiateNetworkPlayer();
             Debug.Log("zz Waiting for guest player to load");
             StartCoroutine(networkController.WaitForOtherPlayersLoaded());          
 
         }
         else
         {
-            StartCoroutine(NetTimeStop());
-            Debug.Log("qq Player has loaded");
-            /*networkController.InstantiateNetworkPlayer();*/
-            networkController.PlayerHasLoaded();
             Debug.Log("qq Starting to instantiate network player");
-            
+            networkController.InstantiateNetworkPlayer();
+            Debug.Log("qq Player has loaded");
+            networkController.PlayerHasLoaded();          
             Debug.Log("qq Waiting for seed");
             StartCoroutine(networkController.WaitForSeed());
         }

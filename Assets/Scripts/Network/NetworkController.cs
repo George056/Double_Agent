@@ -29,7 +29,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         NetController = this;
     
-        GameObject player = PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+       // GameObject player = PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
         
     }
 

@@ -354,7 +354,7 @@ public class BoardManager : MonoBehaviour
         doorClose.Play(0);
         yield return new WaitForSeconds(0.5f);
         footsteps.Play(0);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         lightSwitch.Play(0);
 
         Debug.Log("Sound effects played");
@@ -392,7 +392,7 @@ public class BoardManager : MonoBehaviour
     }
     public void TurnLightsOff()
     {
-        coroutine =TurnOffLight(1.5f);
+        coroutine =TurnOffLight(.5f);
         StartCoroutine(coroutine);
     }
     private IEnumerator TurnOffLight(float delay)
@@ -425,9 +425,9 @@ public class BoardManager : MonoBehaviour
         BlackoutPanel.SetActive(true);
         yield return new WaitForSeconds(delay);
         footsteps.Play(0);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         doorCreak.Play(0);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         doorClose.Play(0);
         yield return new WaitForSeconds(1f);
         //Debug.Log("turning off the lights");

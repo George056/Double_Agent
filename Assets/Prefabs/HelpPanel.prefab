@@ -750,7 +750,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Win the game by being the first to reach 10 points.  Earn:\n     + 1 Point
+  m_text: "The first player to earn 10 points wins.  Players earn:\n     + 1 Point
     for each embassy built\n     + 1 Point for each region captured\n     + 2 Points
     for having the longest network of \t\t      \n          communication lines"
   m_isRightToLeft: 0
@@ -2704,7 +2704,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -8, y: -38.517}
+  m_AnchoredPosition: {x: 0, y: -0.000061035156}
   m_SizeDelta: {x: -238.04, y: -105.44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4168445283904081660

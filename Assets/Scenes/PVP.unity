@@ -11433,7 +11433,7 @@ PrefabInstance:
     - target: {fileID: 5265945514283563562, guid: 489eb689252279845b465451e78daff5, type: 3}
       propertyPath: networkPlayer
       value: 
-      objectReference: {fileID: 8839940536126958509, guid: ffbfcf72412f9404c9c6eab64f654e12, type: 3}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 489eb689252279845b465451e78daff5, type: 3}
 --- !u!1 &1163215265

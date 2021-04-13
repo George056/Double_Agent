@@ -8,7 +8,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     [SerializeField] private PhotonView photonView;
     [SerializeField] private BoardManager boardManager;
 
-    public GameObject networkPlayer;
+    // public GameObject networkPlayer;
 
     public static int[] nodesPlaced;
     public static int[] branchesPlaced;
@@ -28,9 +28,9 @@ public class NetworkController : MonoBehaviourPunCallbacks
     private void Awake()
     {
         NetController = this;
-        if (GameInfo.host == true && GameInfo.first_game == true) 
+        if (GameInfo.host == true) 
         {
-            PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+           GameObject player = PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
         }
     }
 
@@ -41,11 +41,9 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     public void InstantiateNetworkPlayer()
     {
-        if (GameInfo.first_game == true)
-        {
-            PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
+           GameObject player = PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
             Debug.Log("qq Network player instantiated");
-        }
+        
     }
 
 

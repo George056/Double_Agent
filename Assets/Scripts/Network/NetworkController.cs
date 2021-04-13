@@ -207,8 +207,9 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     }
 
-    /*public override void OnLeftRoom()
+    public override void OnLeftRoom()
     {
+        Debug.Log("qq zz NetworkController OnLeftRoomCalled");
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
@@ -217,8 +218,4 @@ public class NetworkController : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnJoinedRoom()
-    {
-        base.OnJoinedRoom();
-    }*/
 }

@@ -101,6 +101,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnJoinedLobby()
     {
+        Debug.Log("OnJoinedLobby");
         CreateGameButton.SetActive(true);
         JoinGameButton.SetActive(true);
         LoadingCanvas.gameObject.SetActive(false);
@@ -118,6 +119,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     {
         base.OnCreateRoomFailed(returnCode, message);
 
+        Debug.Log("OnCreateRoomfailed");
         RoomOptions roomOps = new RoomOptions()
         {
             EmptyRoomTtl = 1,
@@ -134,7 +136,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         base.OnJoinRoomFailed(returnCode, message);
-
+        Debug.Log("OnJoinRoomfailed");
         if (RoomLobbyListCanvas.gameObject.activeSelf)
         {
             RoomLobbyListCanvas.gameObject.SetActive(false);
@@ -155,6 +157,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
         WaitingForPlayerCanvas.gameObject.SetActive(true);
 
+        Debug.Log("OnJoinedRoom");
         if (GameInfo.host == false)
         {
             waitingForHostText.gameObject.SetActive(true);
@@ -175,6 +178,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     private void ClearRoomListView()
     {
+        Debug.Log("ClearRoomListView");
         foreach (GameObject entry in roomListEntries.Values)
         {
             Destroy(entry.gameObject);
@@ -184,14 +188,17 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     private void UpdateRoomListView()
     {
+        Debug.Log("UpdateRoomListView1");
         foreach(RoomInfo item in cachedRoomList.Values)
         {
+            Debug.Log("UpdateRoomListView2");
             ListRoom(item);
         }
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        Debug.Log("OnRoomListUpdate");
         ClearRoomListView();
         UpdateCachedRoomList(roomList);
         UpdateRoomListView();
@@ -199,30 +206,36 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     private void UpdateCachedRoomList(List<RoomInfo> roomList)
     {
+        Debug.Log("UpdateCachedRoomList1");
         foreach (RoomInfo roomInfo in roomList)
         {
-            if(!roomInfo.IsOpen || !roomInfo.IsVisible || roomInfo.RemovedFromList)
+            Debug.Log("UpdateCachedRoomList2");
+            if (!roomInfo.IsOpen || !roomInfo.IsVisible || roomInfo.RemovedFromList)
             {
+                Debug.Log("UpdateCachedRoomList3");
                 if (cachedRoomList.ContainsKey(roomInfo.Name))
                 {
                     cachedRoomList.Remove(roomInfo.Name);
                 }
+                Debug.Log("UpdateCachedRoomList4");
                 continue;
             }
 
             if (cachedRoomList.ContainsKey(roomInfo.Name))
             {
+                Debug.Log("UpdateCachedRoomList5");
                 cachedRoomList[roomInfo.Name] = roomInfo;
             }
             else
             {
+                Debug.Log("UpdateCachedRoomList6");
                 cachedRoomList.Add(roomInfo.Name, roomInfo);
             }
         }
     }
     public void ListRoom(RoomInfo room)
     {
-
+        Debug.Log("ListRoom");
         if (room.IsOpen && room.IsVisible)
         {
             GameObject tempListing = Instantiate(roomListing, lobbyPanel);
@@ -237,7 +250,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        if(PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        Debug.Log("OnPlayerEnteredRoom");
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.CurrentRoom.IsVisible = false;
@@ -253,7 +267,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
-       if(PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        Debug.Log("OnPlayerLeftRoom");
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
             if(GameInfo.host == false)
             {
@@ -287,6 +302,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     public void CreateRoom()
     {
+        Debug.Log("CreateRoom");
         RoomOptions roomOps = new RoomOptions()
         {
             EmptyRoomTtl = 1,

@@ -1747,6 +1747,11 @@ public class BoardManager : MonoBehaviour
         Debug.Log("wait for 1s");
     }
 
+    IEnumerator NetTimeStop()
+    {
+        yield return new WaitForSeconds(3.0f);
+    }
+
     public void setNetworkManagerReference()
     {
         networkController.SetBoardManagerReference(this);
@@ -1836,11 +1841,12 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-           
+            StartCoroutine(NetTimeStop());
             Debug.Log("qq Player has loaded");
+            /*networkController.InstantiateNetworkPlayer();*/
             networkController.PlayerHasLoaded();
             Debug.Log("qq Starting to instantiate network player");
-            // networkController.InstantiateNetworkPlayer();
+            
             Debug.Log("qq Waiting for seed");
             StartCoroutine(networkController.WaitForSeed());
         }

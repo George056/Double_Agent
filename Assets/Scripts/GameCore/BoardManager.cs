@@ -1554,22 +1554,9 @@ public class BoardManager : MonoBehaviour
                     activeSide = Owner.US;
                 }
 
-                if (activeSide == netPiece)
-                {
-                    if (turnCount < 5)
-                    {
-                        SetupTurnTelegram.SetActive(true);
-                    }
-                    else
-                    {
-                        YourTurnTelegram.SetActive(true);
-                    }
-                }
-                else
-                {
-                    SetupTurnTelegram.SetActive(false);
-                    YourTurnTelegram.SetActive(false);
-                }
+
+                SetupTurnTelegram.SetActive(false);
+                YourTurnTelegram.SetActive(false);
 
                 inBuildMode = !inBuildMode;
                 BoardCheck();
@@ -1713,6 +1700,16 @@ public class BoardManager : MonoBehaviour
         if (turnCount >= 5)
         {
             tradeButton.GetComponent<Button>().interactable = true;
+        }
+
+
+        if (turnCount < 5)
+        {
+            SetupTurnTelegram.SetActive(true);
+        }
+        else
+        {
+            YourTurnTelegram.SetActive(true);
         }
 
 

@@ -1834,8 +1834,8 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-           // Debug.Log("qq Starting to instantiate network player");
-            // networkController.InstantiateNetworkPlayer();
+            Debug.Log("qq Starting to instantiate network player");
+            networkController.InstantiateNetworkPlayer();
             Debug.Log("qq Player has loaded");
             networkController.PlayerHasLoaded();
             Debug.Log("qq Waiting for seed");

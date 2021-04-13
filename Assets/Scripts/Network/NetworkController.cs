@@ -25,7 +25,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     private static bool playerTurn = false;
     private static bool playersLoaded = false;
 
-    private void Start()
+    private void Awake()
     {
         NetController = this;
     

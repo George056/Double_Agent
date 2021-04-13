@@ -81,10 +81,8 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverWindow;
     public GameObject SetupLegalPopup;
 
-    public GameObject USSetupIndicator;
-    public GameObject USSRSetupIndicator;
-
-    public AnimationClip USTelegram;
+    public GameObject SetupTurnTelegram;
+    public GameObject YourTurnTelegram;
 
     private static NetworkController networkController = new NetworkController();
    // private static NetworkPlayer networkPlayerClass = new NetworkPlayer();
@@ -501,6 +499,7 @@ public class BoardManager : MonoBehaviour
                 firstPlayer = (netPiece == Owner.US ? Owner.USSR : Owner.US);
                 activeSide = firstPlayer;
                 BtnToggle();
+                SetupTurnTelegram.SetActive(false);
             }
 
             Debug.Log("Active Side = " + activeSide);
@@ -515,17 +514,11 @@ public class BoardManager : MonoBehaviour
             {
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
-
-                USSetupIndicator.SetActive(true);
-                USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
-
-                USSetupIndicator.SetActive(false);
-                USSRSetupIndicator.SetActive(true);
             }
 
             NetworkGame();
@@ -571,17 +564,11 @@ public class BoardManager : MonoBehaviour
             {
                 USImage.SetActive(true);
                 USSRImage.SetActive(false);
-
-                USSetupIndicator.SetActive(true);
-                USSRSetupIndicator.SetActive(false);
             }
             else
             {
                 USImage.SetActive(false);
                 USSRImage.SetActive(true);
-
-                USSetupIndicator.SetActive(false);
-                USSRSetupIndicator.SetActive(true);
             }
 
             //make sure it is an AI game first
@@ -775,9 +762,6 @@ public class BoardManager : MonoBehaviour
                 secondSetupBranch = branchNum;
                 secondSetupBranchImage.SetActive(false);
             }
-
-            USSetupIndicator.SetActive(false);
-            USSRSetupIndicator.SetActive(false);
         }
 
 
@@ -1546,8 +1530,7 @@ public class BoardManager : MonoBehaviour
     }
 
     public void EndTurn()
-    {
-
+    {   
         if (GameInfo.game_type == "net")
         {
             if (turnCount == 2)
@@ -1571,6 +1554,23 @@ public class BoardManager : MonoBehaviour
                     activeSide = Owner.US;
                 }
 
+                if (activeSide == netPiece)
+                {
+                    if (turnCount < 5)
+                    {
+                        SetupTurnTelegram.SetActive(true);
+                    }
+                    else
+                    {
+                        YourTurnTelegram.SetActive(true);
+                    }
+                }
+                else
+                {
+                    SetupTurnTelegram.SetActive(false);
+                    YourTurnTelegram.SetActive(false);
+                }
+
                 inBuildMode = !inBuildMode;
                 BoardCheck();
                 networkController.SendMove();
@@ -1583,6 +1583,7 @@ public class BoardManager : MonoBehaviour
         }
         else if (GameInfo.game_type == "local")
         {
+            
             if (turnCount != 2)
             {
                 if (activeSide == Owner.US)
@@ -1597,12 +1598,29 @@ public class BoardManager : MonoBehaviour
                 inBuildMode = !inBuildMode;
             }
 
-            //if (activeSide == humanPiece && turnCount < 5)
-            //{
-            //    USTelegram.Play();
-            //}
-
             turnCount++;
+
+            Debug.Log("TurnCount = " + turnCount);
+
+            if (activeSide == humanPiece)
+            {
+                if (turnCount < 5)
+                {
+                    Debug.Log("Should display Setup Turn");
+                    SetupTurnTelegram.SetActive(true);
+                }
+                else
+                {
+                    Debug.Log("Should display Your Turn");
+
+                    YourTurnTelegram.SetActive(true);
+                }
+            }
+            else
+            {
+                SetupTurnTelegram.SetActive(false);
+                YourTurnTelegram.SetActive(false);
+            }
 
             // Perform GameBoard Check - check for depleted / captured squares, longest network, and update scores
             BoardCheck();

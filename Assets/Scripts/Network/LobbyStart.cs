@@ -188,8 +188,10 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     private void UpdateRoomListView()
     {
+        Debug.Log("UpdateRoomListView1");
         foreach(RoomInfo item in cachedRoomList.Values)
         {
+            Debug.Log("UpdateRoomListView2");
             ListRoom(item);
         }
     }
@@ -204,24 +206,29 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 
     private void UpdateCachedRoomList(List<RoomInfo> roomList)
     {
-        Debug.Log("UpdateCachedRoomList");
+        Debug.Log("UpdateCachedRoomList1");
         foreach (RoomInfo roomInfo in roomList)
         {
-            if(!roomInfo.IsOpen || !roomInfo.IsVisible || roomInfo.RemovedFromList)
+            Debug.Log("UpdateCachedRoomList2");
+            if (!roomInfo.IsOpen || !roomInfo.IsVisible || roomInfo.RemovedFromList)
             {
+                Debug.Log("UpdateCachedRoomList3");
                 if (cachedRoomList.ContainsKey(roomInfo.Name))
                 {
                     cachedRoomList.Remove(roomInfo.Name);
                 }
+                Debug.Log("UpdateCachedRoomList4");
                 continue;
             }
 
             if (cachedRoomList.ContainsKey(roomInfo.Name))
             {
+                Debug.Log("UpdateCachedRoomList5");
                 cachedRoomList[roomInfo.Name] = roomInfo;
             }
             else
             {
+                Debug.Log("UpdateCachedRoomList6");
                 cachedRoomList.Add(roomInfo.Name, roomInfo);
             }
         }

@@ -133,10 +133,10 @@ public class BoardManager : MonoBehaviour
     public TextMeshProUGUI playerScore;
     public TextMeshProUGUI opponentScore;
 
-    public GameObject firstSetupNodeImage;
-    public GameObject secondSetupNodeImage;
-    public GameObject firstSetupBranchImage;
-    public GameObject secondSetupBranchImage;
+    public GameObject USNode;
+    public GameObject USBranch;
+    public GameObject USSRNode;
+    public GameObject USSRBranch;
 
     public Sprite EmptyNodeSprite;
     public Sprite EmptyBranchSprite;
@@ -462,6 +462,29 @@ public class BoardManager : MonoBehaviour
         buttonClicked.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
     }
 
+    public void SetUSGame()
+    {
+        USImage.SetActive(true);
+        USSRImage.SetActive(false);
+
+        USNode.SetActive(true);
+        USSRNode.SetActive(false);
+
+        USBranch.SetActive(true);
+        USSRBranch.SetActive(false);
+    }
+
+    public void SetUSSRGame()
+    {
+        USImage.SetActive(false);
+        USSRImage.SetActive(true);
+
+        USNode.SetActive(false);
+        USSRNode.SetActive(true);
+
+        USBranch.SetActive(false);
+        USSRBranch.SetActive(true);
+    }
 
     public void SetupScene()
     {
@@ -516,13 +539,11 @@ public class BoardManager : MonoBehaviour
 
             if (netPiece == Owner.US)
             {
-                USImage.SetActive(true);
-                USSRImage.SetActive(false);
+                SetUSGame();
             }
             else
             {
-                USImage.SetActive(false);
-                USSRImage.SetActive(true);
+                SetUSSRGame();
             }
 
             NetworkGame();
@@ -566,13 +587,11 @@ public class BoardManager : MonoBehaviour
 
             if (humanPiece == Owner.US)
             {
-                USImage.SetActive(true);
-                USSRImage.SetActive(false);
+                SetUSGame();
             }
             else
             {
-                USImage.SetActive(false);
-                USSRImage.SetActive(true);
+                SetUSSRGame();
             }
 
             //make sure it is an AI game first
@@ -699,12 +718,10 @@ public class BoardManager : MonoBehaviour
             if (turnCount == 1 || turnCount == 2)
             {
                 firstSetupNode = nodeNum;
-                firstSetupNodeImage.SetActive(false);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
                 secondSetupNode = nodeNum;
-                secondSetupNodeImage.SetActive(false);
             }
         }
 
@@ -759,12 +776,10 @@ public class BoardManager : MonoBehaviour
             if (turnCount == 1 || turnCount == 2)
             {
                 firstSetupBranch = branchNum;
-                firstSetupBranchImage.SetActive(false);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
                 secondSetupBranch = branchNum;
-                secondSetupBranchImage.SetActive(false);
             }
         }
 
@@ -792,12 +807,10 @@ public class BoardManager : MonoBehaviour
             if (turnCount == 1 || turnCount == 2)
             {
                 firstSetupNode = -1;
-                firstSetupNodeImage.SetActive(true);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
                 secondSetupNode = -1;
-                secondSetupNodeImage.SetActive(true);
             }
         }
     }
@@ -814,12 +827,10 @@ public class BoardManager : MonoBehaviour
             if (turnCount == 1 || turnCount == 2)
             {
                 firstSetupBranch = -1;
-                firstSetupBranchImage.SetActive(true);
             }
             else if (turnCount == 3 || turnCount == 4)
             {
                 secondSetupBranch = -1;
-                secondSetupBranchImage.SetActive(true);
             }
         }
 

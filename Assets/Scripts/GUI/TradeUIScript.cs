@@ -15,6 +15,7 @@ public class TradeUIScript : MonoBehaviour
     private int totalTradeCount = 0;
 
     public GameObject tradeWindow;
+    public GameObject exchangeRatePanel;
 
     List<int> tradeList = new List<int>(4) { 0, 0, 0, 0 };
 
@@ -52,9 +53,27 @@ public class TradeUIScript : MonoBehaviour
 
     public void toggleTradeWindow()
     {
+        Debug.Log("toggleTradeWindow called - playerTraded = " + GameObject.FindObjectOfType<BoardManager>().playerTraded);
         if (!GameObject.FindObjectOfType<BoardManager>().playerTraded)
         {
-            tradeWindow.SetActive(!tradeWindow.activeSelf);
+            if(!exchangeRatePanel.activeSelf)
+            {
+                tradeWindow.SetActive(!tradeWindow.activeSelf);
+            }
+            else if (exchangeRatePanel.activeSelf)
+            {
+                exchangeRatePanel.SetActive(false);
+                tradeWindow.SetActive(!tradeWindow.activeSelf);
+            }
+        }
+    }
+
+    public void toggleKeyWindow()
+    {
+        exchangeRatePanel.SetActive(!exchangeRatePanel.activeSelf);
+        if(tradeWindow.activeSelf)
+        {
+            tradeWindow.SetActive(false);
         }
     }
 

@@ -162,6 +162,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
         waitingForPlayerText.gameObject.SetActive(false);
         waitingForHostText.gameObject.SetActive(false);
+        playerLeftText.gameObject.SetActive(false);
+        hostLeftText.gameObject.SetActive(false);
         WaitingForPlayerCanvas.gameObject.SetActive(true);
 
         Debug.Log("OnJoinedRoom");

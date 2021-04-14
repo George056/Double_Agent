@@ -23,4 +23,6 @@ public class GameInfo
     public static bool host;
 
     public static bool first_game = true;
+
+    public static bool pregame_menu_first_visit = true;
 }

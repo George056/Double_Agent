@@ -25,6 +25,13 @@ public class PreGameMenu : MonoBehaviour
     public Sprite easy;
     public Sprite hard;
 
+    private void Awake()
+    {
+        if (GameInfo.pregame_menu_first_visit != true)
+        {
+            userName.text = GameInfo.user_name;
+        }
+    }
     /// <summary>
     /// This is used to set the difficulty of the AI
     /// </summary>
@@ -133,6 +140,7 @@ public class PreGameMenu : MonoBehaviour
 
         if (CheckUserName(GameInfo.user_name))
         {
+            GameInfo.pregame_menu_first_visit = false;
             SceneManager.LoadScene("Lobby");
         }
     }

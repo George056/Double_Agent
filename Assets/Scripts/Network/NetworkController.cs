@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,20 +18,36 @@ public class NetworkController : MonoBehaviourPunCallbacks
  
 
     public static NetworkController NetController;
-    
 
 
 
 
+    private static bool playerLeft = false;
     private static bool playerTurn = false;
     private static bool playersLoaded = false;
 
     private void Awake()
     {
         NetController = this;
-    
-       // GameObject player = PhotonNetwork.Instantiate("networkPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
-        
+        playerLeft = false;
+    }
+
+    private void Update()
+    {
+        if (GameInfo.game_type == "net")
+        {
+            if (PhotonNetwork.NetworkClientState == ClientState.Disconnected)
+            {
+                Debug.Log("network disconnect");
+                boardManager.PlayerDisconnected();
+            }
+            else if (PhotonNetwork.IsConnected && PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeft == false)
+            {
+                boardManager.PlayerLeft();
+                playerLeft = true;
+            }
+
+        }
     }
 
     public void SetBoardManagerReference(BoardManager manager)
@@ -207,7 +224,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
 
     }
 
-    public override void OnLeftRoom()
+    /*public override void OnLeftRoom()
     {
         Debug.Log("qq zz NetworkController OnLeftRoomCalled");
         if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
@@ -216,6 +233,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.CurrentRoom.EmptyRoomTtl = 10;
         }
-    }
+    }*/
 
 }

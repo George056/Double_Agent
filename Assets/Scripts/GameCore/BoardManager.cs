@@ -1871,6 +1871,16 @@ public class BoardManager : MonoBehaviour
         networkController.SetBoardSeed("");
         SetupScene();
     }
+
+    public void PlayerDisconnected()
+    {
+
+    }
+
+    public void PlayerLeft()
+    {
+
+    }
 }
 
 

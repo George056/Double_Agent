@@ -52,6 +52,7 @@ public class TradeUIScript : MonoBehaviour
 
     public void toggleTradeWindow()
     {
+        Debug.Log("toggleTradeWindow called - playerTraded = " + GameObject.FindObjectOfType<BoardManager>().playerTraded);
         if (!GameObject.FindObjectOfType<BoardManager>().playerTraded)
         {
             tradeWindow.SetActive(!tradeWindow.activeSelf);

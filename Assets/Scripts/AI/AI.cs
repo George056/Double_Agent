@@ -155,6 +155,8 @@ public class AI : Agent
 
         this.turn = turn;
 
+        Debug.Log("AI called on turn " + this.turn + " AI check");
+
         Debug.Log("AI Resources: " + __resources[0] + ", " + __resources[1] + ", " + __resources[2] + ", " + __resources[3]);
 
         if (this.turn < 5) SetOpener();
@@ -168,11 +170,13 @@ public class AI : Agent
         //make move
         if (randAI || __difficulty == Difficulty.Easy)
         {
+            Debug.Log("Easy AI call" + " AI check");
             RandomAIMove();
             bm.EndTurn();
         }
         else
         {
+            Debug.Log("NN AI call" + " AI check");
             //for adding a reward use AddReward() want it to be about 1 at the end of a game
             RequestDecision();
         }
@@ -184,6 +188,7 @@ public class AI : Agent
     /// <param name="actionMasker">Masks possible values of the neural net</param>
     public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
     {
+        Debug.Log("Set masks" + " AI check");
         if (randAI) return;
         if (turn == lastUpdateTurn) return;
         lastUpdateTurn = turn;
@@ -724,9 +729,11 @@ public class AI : Agent
     public override void OnActionReceived(float[] vectorAction)
     {
         Debug.Log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&AI Move Requested");
+        if (this.turn == 0) ++this.turn;
+        Debug.Log("Last move: " + lastMoveTurn + " This turn: " + this.turn + " AI check");
         if (randAI) return;
-        if (lastMoveTurn == turn && !heuristic) return; // only make one "move" per turn
-        lastMoveTurn = turn;
+        if (lastMoveTurn == this.turn && !heuristic) return; // only make one "move" per turn
+        lastMoveTurn = this.turn;
 
         bool noTrade = true;
         bool noBranch = true;
@@ -738,9 +745,10 @@ public class AI : Agent
         {
             if (vectorAction[i + 24] == 1)
             {
-                noBranch = false;
+                
                 if (LegalMoveConnector(i) && (!opener || placed_branches <= 0))
                 {
+                    noBranch = false;
                     Debug.Log("Connector: " + i);
                     PlaceMoveBranch(i);
                     __myRoads.Add(i);
@@ -762,9 +770,10 @@ public class AI : Agent
         {
             if (vectorAction[i] == 1)
             {
-                noNode = false;
+                
                 if (LegalMoveNode(i) && (!opener || placed_nodes <= 0))
                 {
+                    noNode = false;
                     Debug.Log("Node: " + i);
                     PlaceMoveNode(i);
                     __myNodes.Add(i);
@@ -1111,13 +1120,17 @@ public class AI : Agent
             }
         }
 
-        if ((noNode && noBranch && noTrade) && !opener && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode && !heuristic)
+        if(noBranch && (__resources[0] >= 1 && __resources[1] >= 1)) RandomBranches(Math.Min(__resources[0], __resources[1]));
+
+        if (noNode && (__resources[2] >= 2 && __resources[3] >= 2)) RandomNodes(Math.Min(__resources[2] / 2, __resources[3] / 2));
+
+        /*if ((noNode && noBranch && noTrade) && !opener && (TotalResourceCount() >= 3 || (__resources[0] >= 1 && __resources[1] >= 1) || (__resources[2] >= 2 && __resources[3] >= 2)) && trainingMode && !heuristic)
         {
             AddReward(noMovePunish);
             if (SumResources() > 10) AddReward(noMovePunish * 10.0f);
             RandomBranches(Math.Min(__resources[0], __resources[1]));
             RandomNodes(Math.Min(__resources[2] / 2, __resources[3] / 2));
-        }
+        }*/
 
         __myNodes = __myNodes.Distinct().ToList();
         __myRoads = __myRoads.Distinct().ToList();
@@ -1165,6 +1178,7 @@ public class AI : Agent
     /// <param name="sensor">The vector sensor</param>
     public override void CollectObservations(VectorSensor sensor)
     {
+        Debug.Log("Collect observations" + " AI check");
         if (randAI) return;
         if (bm.activeSide != __piece_type) return;
 

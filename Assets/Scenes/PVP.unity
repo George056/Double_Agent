@@ -4502,7 +4502,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Your opponent has forfeited the game
+  m_text: Your opponent has left the game.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4ba3fe1708e62e640b348f4d5406ee8f, type: 2}
   m_sharedMaterial: {fileID: 1832719785620278158, guid: 4ba3fe1708e62e640b348f4d5406ee8f, type: 2}
@@ -13299,7 +13299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1313762136
 RectTransform:
   m_ObjectHideFlags: 0

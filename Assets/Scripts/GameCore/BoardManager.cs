@@ -461,6 +461,12 @@ public class BoardManager : MonoBehaviour
         footsteps.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
         PiecePlaced.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
         buttonClicked.volume = PlayerPrefs.GetFloat("SoundEffectsVolume", defaultVolume);
+
+        Debug.Log("After setting volume: US Win volume = " + USVictory.volume);
+        Debug.Log("After setting volume: US Loss volume = " + USLoss.volume);
+        Debug.Log("After setting volume: USSR Win volume = " + USSRVictory.volume);
+        Debug.Log("After setting volume: USSR Loss volume = " + USSRLoss.volume);
+
     }
 
     public void SetUSGame()
@@ -1086,6 +1092,8 @@ public class BoardManager : MonoBehaviour
 
     public void UIEndGame()
     {
+        SetVolume();
+
         inBuildMode = false;
         tradeButton.GetComponent<Button>().interactable = false;
         keyButton.GetComponent<Button>().interactable = false;

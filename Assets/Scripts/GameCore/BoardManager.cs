@@ -38,6 +38,7 @@ public class BoardManager : MonoBehaviour
     public Owner activeSide;
 
     public GameObject tradeButton;
+    public GameObject keyButton;
     public GameObject endTurnButton;
 
     public bool inBuildMode;
@@ -1087,6 +1088,7 @@ public class BoardManager : MonoBehaviour
     {
         inBuildMode = false;
         tradeButton.GetComponent<Button>().interactable = false;
+        keyButton.GetComponent<Button>().interactable = false;
         endTurnButton.GetComponent<Button>().interactable = false;
 
         if (GameInfo.game_type == "local")

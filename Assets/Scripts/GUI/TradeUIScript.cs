@@ -59,6 +59,7 @@ public class TradeUIScript : MonoBehaviour
             if(!exchangeRatePanel.activeSelf)
             {
                 tradeWindow.SetActive(!tradeWindow.activeSelf);
+                ResetTradeWindow();
             }
             else if (exchangeRatePanel.activeSelf)
             {

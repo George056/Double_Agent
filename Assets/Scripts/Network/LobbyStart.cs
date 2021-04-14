@@ -160,6 +160,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         RoomLobbyListCanvas.gameObject.SetActive(false);
 
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+        waitingForPlayerText.gameObject.SetActive(false);
+        waitingForHostText.gameObject.SetActive(false);
         WaitingForPlayerCanvas.gameObject.SetActive(true);
 
         Debug.Log("OnJoinedRoom");
@@ -333,6 +335,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void OnCreateGameButtonClicked()
     {        
         GameInfo.host = true;
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        waitingForHostText.gameObject.SetActive(false);
         CreateRoom();
 
     }
@@ -363,6 +367,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         {
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.CurrentRoom.IsOpen = false;
+
 
             PhotonNetwork.LeaveRoom(); 
         }

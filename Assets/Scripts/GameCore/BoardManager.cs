@@ -1074,6 +1074,10 @@ public class BoardManager : MonoBehaviour
 
     public void UIEndGame()
     {
+        inBuildMode = false;
+        tradeButton.GetComponent<Button>().interactable = false;
+        endTurnButton.GetComponent<Button>().interactable = false;
+
         if (GameInfo.game_type == "local")
         {
             if (humanPiece == Owner.US)
@@ -1168,8 +1172,8 @@ public class BoardManager : MonoBehaviour
         {
             if(localPlayer.GetComponent<Player>().__network_score >= 10 || localPlayer.GetComponent<Player>().__human_score >= 10)
             {
-                tradeButton.SetActive(false);
-                endTurnButton.SetActive(false);
+                //tradeButton.SetActive(false);
+                //endTurnButton.SetActive(false);
 
                 end = true;
                 UIEndGame();
@@ -1180,9 +1184,8 @@ public class BoardManager : MonoBehaviour
         {
             if (player2.GetComponent<AI>().__ai_score >= 10 || player1.GetComponent<Player>().__human_score >= 10)
             {
-                tradeButton.SetActive(false);
-                //buildButton.SetActive(false);
-                endTurnButton.SetActive(false);
+                //tradeButton.SetActive(false);
+                //endTurnButton.SetActive(false);
 
                 if (player1.GetComponent<Player>().__human_score >= 10) player2.GetComponent<AI>().Loss();
                 else player2.GetComponent<AI>().Win();
@@ -1530,6 +1533,7 @@ public class BoardManager : MonoBehaviour
     {
         tradeButton.SetActive(!tradeButton.activeSelf);
         //endTurnButton.SetActive(!endTurnButton.activeSelf);
+        //tradeButton.GetComponent<Button>().interactable = !tradeButton.GetComponent<Button>().interactable;
         endTurnButton.GetComponent<Button>().interactable = !endTurnButton.GetComponent<Button>().interactable;
     }
 

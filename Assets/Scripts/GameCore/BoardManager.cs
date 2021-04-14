@@ -349,10 +349,10 @@ public class BoardManager : MonoBehaviour
     {
         Debug.Log("TurnOnLight called");
         
-        doorCreak.Play(0);
-        yield return new WaitForSeconds(1f);
+        //doorCreak.Play(0);
+        //yield return new WaitForSeconds(.5f);
         doorClose.Play(0);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.75f);
         footsteps.Play(0);
         yield return new WaitForSeconds(2f);
         lightSwitch.Play(0);

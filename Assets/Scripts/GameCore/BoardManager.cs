@@ -75,6 +75,8 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverUSLoss;
     public GameObject gameOverUSSRWin;
     public GameObject gameOverUSSRLoss;
+    public GameObject playerLeftPopup;
+    public GameObject playerDisconnectedPopup;
   
 
     public GameObject localPlayer;
@@ -1889,12 +1891,28 @@ public class BoardManager : MonoBehaviour
 
     public void PlayerDisconnected()
     {
-
+        if(activeSide == netPiece)
+        {
+            BtnToggle();
+            playerDisconnectedPopup.gameObject.SetActive(true);
+        }
+        else
+        {
+            playerDisconnectedPopup.gameObject.SetActive(true);
+        }
     }
 
     public void PlayerLeft()
     {
-
+        if (activeSide == netPiece)
+        {
+            BtnToggle();
+            playerLeftPopup.gameObject.SetActive(true);
+        }
+        else
+        {
+            playerLeftPopup.gameObject.SetActive(true);
+        }
     }
 }
 

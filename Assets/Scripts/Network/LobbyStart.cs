@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
@@ -32,6 +33,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public Canvas RoomLobbyListCanvas;
     public Canvas WaitingForPlayerCanvas;
     public Canvas UnintentionalDisconnectCanvas;
+
+    public TextMeshProUGUI roomNameText;
 
     private Dictionary<string, RoomInfo> cachedRoomList;
     private Dictionary<string, GameObject> roomListEntries;
@@ -156,6 +159,11 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         CreateOrJoinCanvas.gameObject.SetActive(false);
         RoomLobbyListCanvas.gameObject.SetActive(false);
 
+        roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+        waitingForPlayerText.gameObject.SetActive(false);
+        waitingForHostText.gameObject.SetActive(false);
+        playerLeftText.gameObject.SetActive(false);
+        hostLeftText.gameObject.SetActive(false);
         WaitingForPlayerCanvas.gameObject.SetActive(true);
 
         Debug.Log("OnJoinedRoom");
@@ -329,6 +337,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public void OnCreateGameButtonClicked()
     {        
         GameInfo.host = true;
+        CreateOrJoinCanvas.gameObject.SetActive(false);
+        waitingForHostText.gameObject.SetActive(false);
         CreateRoom();
 
     }
@@ -359,6 +369,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         {
             PhotonNetwork.CurrentRoom.IsVisible = false;
             PhotonNetwork.CurrentRoom.IsOpen = false;
+
 
             PhotonNetwork.LeaveRoom(); 
         }

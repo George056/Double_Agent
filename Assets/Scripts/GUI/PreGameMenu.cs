@@ -17,6 +17,9 @@ public class PreGameMenu : MonoBehaviour
     public Sprite US;
     public Sprite USSR;
 
+    public GameObject userNameTooLong;
+    public GameObject userNameEmpty;
+
     public int Diff = 0;
     public GameObject DiffToggle;
     public Sprite easy;
@@ -127,7 +130,11 @@ public class PreGameMenu : MonoBehaviour
         ChooseAllyNetwork(USAllyNetwork);
         Debug.Log("PregameMenu Net Piece = " + GameInfo.network_piece);
         GameInfo.game_type = "net";
-        SceneManager.LoadScene("Lobby");
+
+        if (CheckUserName(GameInfo.user_name))
+        {
+            SceneManager.LoadScene("Lobby");
+        }
     }
 
     public void ChooseSideToggle()
@@ -179,5 +186,28 @@ public class PreGameMenu : MonoBehaviour
         {
             DiffToggle.GetComponent<Image>().sprite = hard;
         }
+    }
+
+    public bool CheckUserName(string name)
+    {
+        bool userNameOkay = false;
+        if(name.Trim() == "")
+        {
+            userNameEmpty.gameObject.SetActive(true);
+            userNameTooLong.gameObject.SetActive(false);
+        }
+        else if(name.Trim().Length > 15)
+        {
+            userNameTooLong.gameObject.SetActive(true);
+            userNameEmpty.gameObject.SetActive(false);           
+        }
+        else
+        {
+            userNameOkay = true;
+            userNameTooLong.gameObject.SetActive(false);
+            userNameEmpty.gameObject.SetActive(false);
+        }
+
+        return userNameOkay;
     }
 }

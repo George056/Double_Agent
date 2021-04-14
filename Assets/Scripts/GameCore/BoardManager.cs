@@ -411,6 +411,8 @@ public class BoardManager : MonoBehaviour
         }
         else if (GameInfo.game_type == "net")
         {
+            playerDisconnectedPopup.gameObject.SetActive(false);
+            playerLeftPopup.gameObject.SetActive(false);
             if (netPiece == Owner.US)
             {
                 USMusic.Pause();

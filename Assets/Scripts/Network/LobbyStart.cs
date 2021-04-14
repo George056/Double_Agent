@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
 {
@@ -32,6 +33,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public Canvas RoomLobbyListCanvas;
     public Canvas WaitingForPlayerCanvas;
     public Canvas UnintentionalDisconnectCanvas;
+
+    public TextMeshProUGUI roomNameText;
 
     private Dictionary<string, RoomInfo> cachedRoomList;
     private Dictionary<string, GameObject> roomListEntries;
@@ -156,6 +159,7 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         CreateOrJoinCanvas.gameObject.SetActive(false);
         RoomLobbyListCanvas.gameObject.SetActive(false);
 
+        roomNameText.text = PhotonNetwork.CurrentRoom.Name;
         WaitingForPlayerCanvas.gameObject.SetActive(true);
 
         Debug.Log("OnJoinedRoom");

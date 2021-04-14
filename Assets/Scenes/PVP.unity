@@ -864,6 +864,7 @@ MonoBehaviour:
   gameOverUSLoss: {fileID: 1374983589}
   gameOverUSSRWin: {fileID: 1242013362}
   gameOverUSSRLoss: {fileID: 44211553}
+  mainMenuButton: {fileID: 243532133}
   localPlayer: {fileID: 0}
   gameOverWindow: {fileID: 0}
   SetupLegalPopup: {fileID: 475490674}

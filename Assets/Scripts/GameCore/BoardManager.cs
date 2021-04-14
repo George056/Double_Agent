@@ -75,7 +75,8 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverUSLoss;
     public GameObject gameOverUSSRWin;
     public GameObject gameOverUSSRLoss;
-  
+
+    public GameObject mainMenuButton;
 
     public GameObject localPlayer;
     public GameObject gameOverWindow;
@@ -1084,6 +1085,8 @@ public class BoardManager : MonoBehaviour
     {
         if (GameInfo.game_type == "local")
         {
+            mainMenuButton.SetActive(false);
+            
             if (humanPiece == Owner.US)
             {
                 if (player1.GetComponent<Player>().__human_score >= 10)

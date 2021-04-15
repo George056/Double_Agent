@@ -1355,13 +1355,15 @@ public class AI : Agent
         }
         else
         {
+            int currentRoads = __myRoads.Count;
+            int currentNoads = __myNodes.Count;
             int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
             int maxBranches = Math.Min(__resources[0], __resources[1]);
 
             RandomBranches(maxBranches);
             RandomNodes(maxNodes);
 
-            List<int> trade = MakeTrade();
+            List<int> trade = MakeTrade((currentRoads == __myRoads.Count && maxBranches != 0) ? 1 : 0, (currentNodes == __myNodes.Count && maxNodes != 0) ? 1 : 0);
             if (trade != null)
             {
                 MakeTrade(trade);

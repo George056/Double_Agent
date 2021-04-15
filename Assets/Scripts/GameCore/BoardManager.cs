@@ -41,6 +41,9 @@ public class BoardManager : MonoBehaviour
     public GameObject keyButton;
     public GameObject endTurnButton;
 
+    public GameObject longestNetworkUS;
+    public GameObject longestNetworkUSSR;
+
     public bool inBuildMode;
     public bool playerTraded = false;
 
@@ -1324,6 +1327,22 @@ public class BoardManager : MonoBehaviour
                 //if an AI game
                 player2.GetComponent<AI>().__human_score = score;
             }
+        }
+
+       if(cdl.longestNetOwner == Owner.Nil)
+        {
+            longestNetworkUS.SetActive(false);
+            longestNetworkUSSR.SetActive(false);
+        }
+       else if(cdl.longestNetOwner == Owner.US)
+        {
+            longestNetworkUS.SetActive(true);
+            longestNetworkUSSR.SetActive(false);
+        }
+       else if(cdl.longestNetOwner == Owner.USSR)
+        {
+            longestNetworkUS.SetActive(false);
+            longestNetworkUSSR.SetActive(true);
         }
     }
 

@@ -907,6 +907,7 @@ public class AI : Agent
         resources = resources.Distinct().ToList();
         if (resources.Contains(ResourceInfo.Color.Empty)) resources.Remove(ResourceInfo.Color.Empty);
 
+        Debug.Log("Looking for a node");
         foreach (int i in nodesToSearch)
         {
             NodeInfo node = bm.nodes[i].GetComponent<NodeInfo>();
@@ -940,19 +941,24 @@ public class AI : Agent
         if (node >= 3 && node <= 10)
         {
             branches.RemoveAt(0);
-            if (node == 3 || node == 7) branches.RemoveAt(0);
-            else if (node == 4 || node == 10) branches.RemoveAt(1);
+            if ((node == 3 || node == 7) && branches.Count > 1) branches.RemoveAt(0);
+            else if ((node == 4 || node == 10) && branches.Count > 1) branches.RemoveAt(1);
         }
         else if (node >= 12 && node <= 20)
         {
             branches.RemoveAt(3);
-            if (node == 13 || node == 19) branches.RemoveAt(1);
-            else if (node == 16 || node == 20) branches.RemoveAt(2);
+            if ((node == 13 || node == 19) && branches.Count > 1) branches.RemoveAt(1);
+            else if ((node == 16 || node == 20) && branches.Count > 1) branches.RemoveAt(2);
         }
-        do
-        {
-            result = Random.Range(0, branches.Count);
-        } while (!LegalMoveConnector(branches[result]));
+        Debug.Log("Looking for a branch connected to: " + node);
+        foreach (int b in branches) Debug.Log(b);
+        if (branches.Count > 1)
+            do
+            {
+                result = Random.Range(0, branches.Count);
+                Debug.Log("Trying branch: " + result);
+            } while (!LegalMoveConnector(branches[result]));
+        else result = 0;
         return branches[result];
     }
 

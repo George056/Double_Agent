@@ -1363,7 +1363,7 @@ public class AI : Agent
             RandomBranches(maxBranches);
             RandomNodes(maxNodes);
 
-            List<int> trade = MakeTrade((currentRoads == __myRoads.Count && maxBranches != 0) ? 1 : 0, (currentNodes == __myNodes.Count && maxNodes != 0) ? 1 : 0);
+            List<int> trade = MakeTrade((currentRoads == __myRoads.Count && maxBranches != 0) ? 1 : 0, (currentNoads == __myNodes.Count && maxNodes != 0) ? 1 : 0);
             if (trade != null)
             {
                 MakeTrade(trade);
@@ -1528,7 +1528,13 @@ public class AI : Agent
         }
     }
 
-    List<int> MakeTrade()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="branchMod">if 1 don't trade for a branch</param>
+    /// <param name="nodeMod">if 1 don't trade for a node</param>
+    /// <returns></returns>
+    List<int> MakeTrade(int branchMod, int nodeMod)
     {
         int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
         int maxCons = Math.Min(__resources[0], __resources[1]);
@@ -1544,7 +1550,7 @@ public class AI : Agent
             {
                 blocked = 0;
 
-                if (__resources[0] == 0 && __resources[1] != 0)
+                if (__resources[0] == 0 && __resources[1] != 0 && branchMod == 0)
                 {
                     if (__resources[1] > 1 && traded < 3)
                     {
@@ -1568,7 +1574,7 @@ public class AI : Agent
                     }
                     else blocked++;
                 }
-                else if (__resources[1] == 0 && __resources[0] != 0)
+                else if (__resources[1] == 0 && __resources[0] != 0 && branchMod == 0)
                 {
                     if (__resources[0] > 1 && traded < 3)
                     {
@@ -1592,7 +1598,7 @@ public class AI : Agent
                     }
                     else blocked++;
                 }
-                else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2))
+                else if (((__resources[2] % 2) == 1 || (__resources[2] == 0)) && (__resources[3] >= 2) && nodeMod == 0)
                 {
                     if (__resources[0] > 0 && traded < 3)
                     {
@@ -1616,7 +1622,7 @@ public class AI : Agent
                     }
                     else blocked++;
                 }
-                else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2)
+                else if (((__resources[3] % 2 == 1) || (__resources[3] == 0)) && __resources[2] >= 2 && nodeMod == 0)
                 {
                     if (__resources[0] > 0 && traded < 3)
                     {

@@ -41,7 +41,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
                 Debug.Log("network disconnect");
                 boardManager.PlayerDisconnected();
             }
-            else if (PhotonNetwork.IsConnected && PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeft == false)
+            else if (PhotonNetwork.IsConnected && PhotonNetwork.CurrentRoom.PlayerCount < 2 && playerLeft == false && boardManager.getEnd() == false)
             {
                 boardManager.PlayerLeft();
                 playerLeft = true;

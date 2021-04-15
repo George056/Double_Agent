@@ -1968,6 +1968,11 @@ public class BoardManager : MonoBehaviour
         exitConfirmationPopup.SetActive(!exitConfirmationPopup.activeSelf);
         settingsPopup.SetActive(false);
     }
+
+    public bool getEnd()
+    {
+        return end;
+    }
 }
 
 

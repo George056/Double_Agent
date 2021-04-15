@@ -1575,7 +1575,14 @@ public class BoardManager : MonoBehaviour
     }
     private void BtnToggle()
     {
-        tradeButton.SetActive(!tradeButton.activeSelf);
+        if ((GameInfo.game_type == "local" && activeSide == aiPiece && !isSetupTurn) || (GameInfo.game_type == "net" && activeSide == (netPiece == Owner.US ? Owner.US : Owner.USSR) && !isSetupTurn))
+        {
+            tradeButton.GetComponent<Button>().interactable = false;
+        }
+        else if((GameInfo.game_type == "local" && activeSide == humanPiece && !isSetupTurn) || (GameInfo.game_type == "net" && activeSide == (netPiece == Owner.US ? Owner.USSR : Owner.US) && !isSetupTurn))
+        {
+            tradeButton.GetComponent<Button>().interactable = true;
+        }
         //endTurnButton.SetActive(!endTurnButton.activeSelf);
         //tradeButton.GetComponent<Button>().interactable = !tradeButton.GetComponent<Button>().interactable;
         endTurnButton.GetComponent<Button>().interactable = !endTurnButton.GetComponent<Button>().interactable;

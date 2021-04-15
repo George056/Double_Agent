@@ -13762,7 +13762,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SettingsWindow: {fileID: 1333850751}
-  exitConfirmation: {fileID: 0}
+  exitConfirmation: {fileID: 1556847301}
   MusicSlider: {fileID: 1358503158}
   SoundEffectSlider: {fileID: 698662195}
   MainMusic: {fileID: 0}

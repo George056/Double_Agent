@@ -250,8 +250,17 @@ public class AI : Agent
             NodeInfo node = bm.nodes[i].GetComponent<NodeInfo>();
             List<ResourceInfo.Color> tiles = new List<ResourceInfo.Color>();
             tiles = GetColors(node.nodeOrder);
-            if (tiles.Contains(ResourceInfo.Color.Empty)) tiles.Remove(ResourceInfo.Color.Empty);
+
+            Relationships.connectionsNodeTiles.TryGetValue(node.nodeOrder, out List<int> tilesNums);
+            counter = 0;
+            foreach (int j in tilesNums)
+            {
+                int temp = NodesTillDep(j);
+                if (temp < 1) resources[counter] = ResourceInfo.Color.Empty;
+            }
+
             tiles = tiles.Distinct().ToList();
+            if (tiles.Contains(ResourceInfo.Color.Empty)) tiles.Remove(ResourceInfo.Color.Empty);
             if (resources.Count < tiles.Count && LegalMoveNode(node.nodeOrder)) // doesn't work because we do not have the branch
             {
                 bestNode = node.nodeOrder;

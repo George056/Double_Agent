@@ -78,6 +78,8 @@ public class BoardManager : MonoBehaviour
     public GameObject gameOverUSSRLoss;
     public GameObject playerLeftPopup;
     public GameObject playerDisconnectedPopup;
+    public GameObject exitConfirmationPopup;
+    public GameObject settingsPopup;
   
 
     public GameObject localPlayer;
@@ -1940,6 +1942,12 @@ public class BoardManager : MonoBehaviour
         {
             playerLeftPopup.gameObject.SetActive(true);
         }
+    }
+
+    public void toggleBackButtonConfirmation()
+    {
+        exitConfirmationPopup.SetActive(!exitConfirmationPopup.activeSelf);
+        settingsPopup.SetActive(false);
     }
 }
 

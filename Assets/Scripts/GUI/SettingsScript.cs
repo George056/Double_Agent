@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class SettingsScript : MonoBehaviour
 {
     public GameObject SettingsWindow;
+    public GameObject exitConfirmation;
 
     public Slider MusicSlider;
     public Slider SoundEffectSlider;
@@ -34,6 +35,8 @@ public class SettingsScript : MonoBehaviour
     public void ToggleSettingsWindow()
     {
         SettingsWindow.SetActive(!SettingsWindow.activeSelf);
+        exitConfirmation.SetActive(false);
+
     }
 
     public void ChangeMainMusicVolume()

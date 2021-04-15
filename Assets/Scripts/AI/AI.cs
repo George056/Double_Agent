@@ -1385,15 +1385,15 @@ public class AI : Agent
         }
         else
         {
-            int currentRoads = __myRoads.Count;
-            int currentNoads = __myNodes.Count;
+            int oldRoads = __myRoads.Count;
+            int oldNoads = __myNodes.Count;
             int maxNodes = Math.Min(__resources[2] / 2, __resources[3] / 2);
             int maxBranches = Math.Min(__resources[0], __resources[1]);
 
             RandomBranches(maxBranches);
             RandomNodes(maxNodes);
 
-            List<int> trade = MakeTrade((currentRoads == __myRoads.Count && maxBranches != 0) ? 1 : 0, (currentNoads == __myNodes.Count && maxNodes != 0) ? 1 : 0);
+            List<int> trade = MakeTrade((oldRoads == __myRoads.Count && maxBranches != 0) ? 1 : 0, (oldNoads == __myNodes.Count && maxNodes != 0) ? 1 : 0);
             if (trade != null)
             {
                 MakeTrade(trade);
@@ -1402,6 +1402,10 @@ public class AI : Agent
 
     }
 
+    /// <summary>
+    /// Selects a single branch during the opening segment
+    /// </summary>
+    /// <returns>The selected branch</returns>
     int OpenerBranch()
     {
         List<int> var_branches = new List<int>(new int[] { 1, 3, 2, 5, 6, 10, 9, 14, 21, 26, 25, 29, 30, 33, 32, 34 });
@@ -1442,6 +1446,10 @@ public class AI : Agent
         return positionCon;
     }
 
+    /// <summary>
+    /// Selects a single node attached to the passed branch.
+    /// </summary>
+    /// <param name="positionCon">The branch the node is attached to</param>
     void OpenerNode(int positionCon)
     {
 

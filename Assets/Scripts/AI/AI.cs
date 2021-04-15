@@ -1345,7 +1345,7 @@ public class AI : Agent
     /// </summary>
     private void RandomAIMove()
     {
-        if (turn == 0) ++turn;
+        if (turn == 0) turn = bm.turnCount;
         if (bm.turnCount < 5) SetOpener();
         else EndOpener();
         if (opener)

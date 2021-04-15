@@ -740,19 +740,19 @@ public class AI : Agent
             List<int> blocked_trades = new List<int>();
 
             // block bad trades
-            if (__resources[0] > 10 || __resources[1] == 0)
+            if (__resources[0] > 10 || (__resources[1] == 0 && __resources[0] > 0))
             {
                 blocked_trades.AddRange(new int[] { 2, 4, 9, 10, 13, 18, 20, 25, 29, 40 });
             }
-            if (__resources[1] > 10 || __resources[0] == 0)
+            if (__resources[1] > 10 || (__resources[0] == 0 && __resources[1] > 0))
             {
                 blocked_trades.AddRange(new int[] { 3, 5, 7, 11, 12, 15, 21, 23, 27, 33 });
             }
-            if (__resources[2] > 10 || __resources[3] == 0)
+            if (__resources[2] > 10 || (__resources[3] == 0 && __resources[2] > 0))
             {
                 blocked_trades.AddRange(new int[] { 1, 6, 8, 14, 16, 17, 32, 35, 37, 39 });
             }
-            if (__resources[3] > 10 || __resources[2] < 2)
+            if (__resources[3] > 10 || (__resources[2] < 2 && __resources[3] > 0))
             {
                 blocked_trades.AddRange(new int[] { 19, 22, 24, 26, 28, 30, 31, 34, 36, 38 });
             }

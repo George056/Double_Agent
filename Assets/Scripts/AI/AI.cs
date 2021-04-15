@@ -1436,11 +1436,17 @@ public class AI : Agent
             }
         }
 
+        List<int> searchedBranches = new List<int>();
+
+        for (int i = 0; i < 36; ++i) searchedBranches.Add(i);
+
+        foreach (int i in blocked_branches) searchedBranches.Remove(i);
+
         do
         {
-            positionCon = Random.Range(0, 36);
+            positionCon = Random.Range(0, searchedBranches.Count);
         } 
-        while (!LegalMoveConnector(positionCon) && blocked_branches.Contains(positionCon));//exit when a legal move is found
+        while (!LegalMoveConnector(searchedBranches[positionCon]));//exit when a legal move is found
         PlaceMoveBranch(positionCon);
         __myRoads.Add(positionCon);
         return positionCon;

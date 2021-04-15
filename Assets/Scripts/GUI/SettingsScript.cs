@@ -36,7 +36,6 @@ public class SettingsScript : MonoBehaviour
     {
         SettingsWindow.SetActive(!SettingsWindow.activeSelf);
         exitConfirmation.SetActive(false);
-
     }
 
     public void ChangeMainMusicVolume()

@@ -34,10 +34,20 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public Canvas WaitingForPlayerCanvas;
     public Canvas UnintentionalDisconnectCanvas;
 
+    private IEnumerator coroutine;
     public TextMeshProUGUI roomNameText;
 
     private Dictionary<string, RoomInfo> cachedRoomList;
     private Dictionary<string, GameObject> roomListEntries;
+
+    public AudioSource mainMusic;
+
+    private IEnumerator playLobbyMusic(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        mainMusic.Play(0);
+    }
+
     private void Awake()
     {
         room = this;
@@ -48,6 +58,8 @@ public class LobbyStart : MonoBehaviourPunCallbacks, ILobbyCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
         LoadingCanvas.gameObject.SetActive(true);
 
+        coroutine = playLobbyMusic(8.5f);
+        StartCoroutine(coroutine);
     }
     void Start()
     {

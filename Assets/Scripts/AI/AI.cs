@@ -198,6 +198,11 @@ public class AI : Agent
         return results;
     }
 
+    bool LegalMoveNodeFirst(int location)
+    {
+        return (opener || __resources[2] > 1 && __resources[3] > 1) ? bm.LegalUINodeMove(location, __piece_type, __myRoads) : false;
+    }
+
     /// <summary>
     /// This checks how many more nodes the tile can have before it is depleted
     /// </summary>
@@ -207,7 +212,7 @@ public class AI : Agent
     {
         int result = 0;
         ResourceInfo tileInfo = bm.resourceList[tile].GetComponent<ResourceInfo>();
-        if (tileInfo.depleted) return result;
+        if (tileInfo.depleted || tileInfo.nodeColor == ResourceInfo.Color.Empty) return result;
         Relationships.connectionsTileNodes.TryGetValue(tile, out List<int> connectedNodes);
         List<NodeInfo> nodeInfos = new List<NodeInfo>();
         for(int i = 0; i < connectedNodes.Count; ++i)
@@ -261,7 +266,7 @@ public class AI : Agent
 
             tiles = tiles.Distinct().ToList();
             if (tiles.Contains(ResourceInfo.Color.Empty)) tiles.Remove(ResourceInfo.Color.Empty);
-            if (resources.Count < tiles.Count && LegalMoveNode(node.nodeOrder)) // doesn't work because we do not have the branch
+            if (resources.Count < tiles.Count && LegalMoveNodeFirst(node.nodeOrder)) // doesn't work because we do not have the branch
             {
                 bestNode = node.nodeOrder;
                 resources = tiles;

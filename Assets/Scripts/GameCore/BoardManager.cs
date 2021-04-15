@@ -526,6 +526,40 @@ public class BoardManager : MonoBehaviour
         return isLegal;
     }
 
+    public bool LegalUINodeMove(int node, Owner activeSide, List<int> myBranches)
+    {
+        bool isLegal = true;
+
+        if (nodes[node].GetComponent<NodeInfo>().nodeOwner != Owner.Nil) { isLegal = false; }
+
+        if (turnCount < 5)
+        {
+            // a node on a setup move must have an available adjacent branch that can also be claimed
+            bool availableBranchFound = false;
+            Relationships.connectionsNode.TryGetValue(node, out List<int> adjacentBranches);
+            foreach (int i in adjacentBranches)
+            {
+                if (allBranches[i].GetComponent<BranchInfo>().branchOwner == Owner.Nil)
+                    availableBranchFound = true;
+            }
+            if (!availableBranchFound) { isLegal = false; }
+        }
+        else
+        {
+            Relationships.connectionsNode.TryGetValue(node, out List<int> connectedBranches);
+            bool found = false;
+            foreach (int i in connectedBranches)
+            {
+                found = myBranches.Contains(i);
+                if (found) break;
+            }
+
+            if (!found) { isLegal = false; }
+        }
+
+        return isLegal;
+    }
+
     public void Trade(List<int> resources, Owner who)
     {
         bool makeTrade = false;

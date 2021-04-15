@@ -1,0 +1,48 @@
+{
+    "Node_AI": {
+        "checkpoints": [
+            {
+                "steps": 3851,
+                "file_path": "results\\node_010\\Node_AI\\Node_AI-3851.onnx",
+                "reward": null,
+                "creation_time": 1618457744.9661884
+            },
+            {
+                "steps": 4501,
+                "file_path": "results\\node_010\\Node_AI\\Node_AI-4501.onnx",
+                "reward": null,
+                "creation_time": 1618457862.1243412
+            },
+            {
+                "steps": 5151,
+                "file_path": "results\\node_010\\Node_AI\\Node_AI-5151.onnx",
+                "reward": null,
+                "creation_time": 1618457976.988138
+            },
+            {
+                "steps": 5151,
+                "file_path": "results\\node_010\\Node_AI\\Node_AI-5151.onnx",
+                "reward": null,
+                "creation_time": 1618461104.9959168
+            },
+            {
+                "steps": 5201,
+                "file_path": "results\\node_010\\Node_AI\\Node_AI-5201.onnx",
+                "reward": null,
+                "creation_time": 1618461157.470468
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5201,
+            "file_path": "results\\node_010\\Node_AI.onnx",
+            "reward": null,
+            "creation_time": 1618461157.470468
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1",
+        "tensorflow_version": -1
+    }
+}

@@ -2,12 +2,6 @@
     "Node_AI": {
         "checkpoints": [
             {
-                "steps": 50943,
-                "file_path": "results\\node_008\\Node_AI\\Node_AI-50943.onnx",
-                "reward": null,
-                "creation_time": 1617502372.014477
-            },
-            {
                 "steps": 51393,
                 "file_path": "results\\node_008\\Node_AI\\Node_AI-51393.onnx",
                 "reward": null,
@@ -30,13 +24,19 @@
                 "file_path": "results\\node_008\\Node_AI\\Node_AI-53593.onnx",
                 "reward": null,
                 "creation_time": 1617504122.8988037
+            },
+            {
+                "steps": 55043,
+                "file_path": "results\\node_008\\Node_AI\\Node_AI-55043.onnx",
+                "reward": null,
+                "creation_time": 1618455376.339506
             }
         ],
         "final_checkpoint": {
-            "steps": 53593,
+            "steps": 55043,
             "file_path": "results\\node_008\\Node_AI.onnx",
             "reward": null,
-            "creation_time": 1617504122.8988037
+            "creation_time": 1618455376.339506
         }
     },
     "metadata": {

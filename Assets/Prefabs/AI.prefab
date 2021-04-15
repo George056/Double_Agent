@@ -88,7 +88,7 @@ MonoBehaviour:
   illegalMovePunish: -0.1
   illegalTradePunish: -0.1
   badTradePunish: -0.05
-  noMovePunish: -1
+  noMovePunish: -0.5
   totalReward: 0
   recordingExample: 0
-  randAI: 1
+  randAI: 0

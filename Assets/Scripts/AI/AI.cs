@@ -61,6 +61,9 @@ public class AI : Agent
     [Tooltip("Gray node reward")]
     public float branchReward = 0.05f;
 
+    [Tooltip("Trade reward")]
+    public float tradeReward = 0.1f;
+
     [Tooltip("The punishment for making an illegal move")]
     public float illegalMovePunish = -0.1f;
 
@@ -170,9 +173,79 @@ public class AI : Agent
         }
         else
         {
-            //for adding a reward use AddReward() want it to be about 1 at the end of a game
             RequestDecision();
         }
+    }
+
+    List<ResourceInfo.Color> GetColors(int node)
+    {
+        List<ResourceInfo.Color> results = new List<ResourceInfo.Color>();
+        foreach (var c in bm.nodes[node].GetComponent<NodeInfo>().resources)
+        {
+            results.Add(c.GetComponent<ResourceInfo>().nodeColor);
+        }
+        return results;
+    }
+
+    int SmartNode()
+    {
+        List<int> nodesToSearch = new List<int>(new int[] { 3, 4, 7, 8, 9, 10, 13, 14, 15, 16, 19, 20 });
+        int bestNode = -1;
+        List<ResourceInfo.Color> resources = new List<ResourceInfo.Color>();
+        resources = resources.Distinct().ToList();
+        if(bm.turnCount <= 2)
+        {
+            bestNode = nodesToSearch[0];
+            resources = GetColors(bestNode);
+
+            foreach (int i in nodesToSearch)
+            {
+                NodeInfo node = bm.nodes[i].GetComponent<NodeInfo>();
+                List<ResourceInfo.Color> tiles = new List<ResourceInfo.Color>();
+                tiles = GetColors(node.nodeOrder);
+                tiles = tiles.Distinct().ToList();
+                if(resources.Count < tiles.Count && LegalMoveNode(node.nodeOrder))
+                {
+                    bestNode = node.nodeOrder;
+                    resources = tiles;
+                }
+            }
+        }
+        else
+        {
+            foreach(var node in bm.nodes)
+            {
+                if (node.GetComponent<NodeInfo>().nodeOwner != Owner.Nil) nodesToSearch.Remove(node.GetComponent<NodeInfo>().nodeOrder);
+            }
+            bestNode = nodesToSearch[0];
+            resources = GetColors(bestNode);
+            foreach (int i in nodesToSearch)
+            {
+                NodeInfo node = bm.nodes[i].GetComponent<NodeInfo>();
+                List<ResourceInfo.Color> tiles = new List<ResourceInfo.Color>();
+                tiles = GetColors(node.nodeOrder);
+                tiles = tiles.Distinct().ToList();
+                if (resources.Count < tiles.Count && LegalMoveNode(node.nodeOrder))
+                {
+                    bestNode = node.nodeOrder;
+                    resources = tiles;
+                }
+            }
+
+        }
+
+        return bestNode;
+    }
+
+    int SmartBranch(int node)
+    {
+        int result = -1;
+        Relationships.connectionsNode.TryGetValue(node, out List<int> branches);
+        do
+        {
+            result = Random.Range(0, branches.Count);
+        } while (!LegalMoveConnector(branches[result]));
+        return result;
     }
 
     /// <summary>
@@ -814,53 +887,62 @@ public class AI : Agent
                 case 1:
                     tradeArr[3] -= 3;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
+                    if (__resources[2] > 1 || __resources[3] < 5) AddReward(badTradePunish);
+                    else if (__resources[3] > 5 && __resources[2] % 2 == 1) AddReward(tradeReward);
                     break;
                 case 2:
                     tradeArr[3] -= 3;
                     tradeArr[0] = 1;
                     if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
+                    else if (__resources[1] > 0) AddReward(tradeReward);
                     break;
                 case 3:
                     tradeArr[3] -= 3;
                     tradeArr[1] = 1;
                     if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
+                    else if (__resources[0] > 0) AddReward(tradeReward);
                     break;
                 case 4:
                     tradeArr[3] -= 2;
                     tradeArr[2] -= 1;
                     tradeArr[0] = 1;
                     if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
+                    else if (__resources[1] > 0) AddReward(tradeReward);
                     break;
                 case 5:
                     tradeArr[3] -= 2;
                     tradeArr[2] -= 1;
                     tradeArr[1] = 1;
                     if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
+                    else if (__resources[0] > 0) AddReward(tradeReward);
                     break;
                 case 6:
                     tradeArr[3] -= 2;
                     tradeArr[0] -= 1;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
+                    if (__resources[2] > 1 || __resources[3] < 4) AddReward(badTradePunish);
+                    else if (__resources[3] > 4 && __resources[2] % 2 == 1) AddReward(tradeReward);
                     break;
                 case 7:
                     tradeArr[3] -= 2;
                     tradeArr[0] -= 1;
                     tradeArr[1] = 1;
                     if (__resources[1] > 1 || __resources[0] < 1) AddReward(badTradePunish);
+                    else if (__resources[0] > 2) AddReward(tradeReward);
                     break;
                 case 8:
                     tradeArr[3] -= 2;
                     tradeArr[1] -= 1;
                     tradeArr[2] = 1;
-                    if (__resources[2] > 1 || __resources[3] < 2) AddReward(badTradePunish);
+                    if (__resources[2] > 1 || __resources[3] < 4) AddReward(badTradePunish);
+                    else if (__resources[3] > 4 && __resources[2] % 2 == 1) AddReward(tradeReward);
                     break;
                 case 9:
                     tradeArr[3] -= 2;
                     tradeArr[1] -= 1;
                     tradeArr[0] = 1;
-                    if (__resources[0] > 1 || __resources[1] < 1) AddReward(badTradePunish);
+                    if (__resources[0] > 1 || __resources[1] < 2) AddReward(badTradePunish);
+                    else if (__resources[1] > 2) AddReward(tradeReward);
                     break;
                 case 10:
                     tradeArr[3] -= 1;
@@ -1392,7 +1474,7 @@ public class AI : Agent
 
         int positionNode;
 
-        positionNode = Random.Range(0, 1);
+        positionNode = Random.Range(0, 2);
         Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
         if ((!blocked_nodes.Contains(temp[positionNode]) && !blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])) || 
             (blocked_nodes.Contains(temp[positionNode]) && blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])) || 

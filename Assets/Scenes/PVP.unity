@@ -816,6 +816,8 @@ MonoBehaviour:
   tradeButton: {fileID: 292137698}
   keyButton: {fileID: 1591945149}
   endTurnButton: {fileID: 924871812}
+  tradeWindow: {fileID: 446080589}
+  exchangeWindow: {fileID: 1444593225}
   longestNetworkUS: {fileID: 1270985267}
   longestNetworkUSSR: {fileID: 593152392}
   inBuildMode: 0

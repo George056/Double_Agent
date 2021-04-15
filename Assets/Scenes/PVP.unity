@@ -816,6 +816,8 @@ MonoBehaviour:
   tradeButton: {fileID: 292137698}
   keyButton: {fileID: 1591945149}
   endTurnButton: {fileID: 924871812}
+  tradeWindow: {fileID: 446080589}
+  exchangeWindow: {fileID: 1444593225}
   longestNetworkUS: {fileID: 1270985267}
   longestNetworkUSSR: {fileID: 593152392}
   inBuildMode: 0
@@ -14500,7 +14502,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 768, y: -4.474}
+  m_AnchoredPosition: {x: 768, y: -4.473999}
   m_SizeDelta: {x: -1587, y: -813.072}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1444593227

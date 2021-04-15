@@ -40,6 +40,8 @@ public class BoardManager : MonoBehaviour
     public GameObject tradeButton;
     public GameObject keyButton;
     public GameObject endTurnButton;
+    public GameObject tradeWindow;
+    public GameObject exchangeWindow;
 
     public GameObject longestNetworkUS;
     public GameObject longestNetworkUSSR;
@@ -1580,7 +1582,10 @@ public class BoardManager : MonoBehaviour
     }
 
     public void EndTurn()
-    {   
+    {
+        tradeWindow.SetActive(false);
+        exchangeWindow.SetActive(false);
+        
         if (GameInfo.game_type == "net")
         {
             if (turnCount == 2)

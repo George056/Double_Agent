@@ -21,6 +21,7 @@ public enum Difficulty
 /// </summary>
 public class AI : Agent
 {
+    #region Variables
     [Tooltip("A list of all AI resources with indexes 0 = red, 1 = blue, 2 = yellow, and 3 = green.")]
     public List<int> __resources = new List<int>(4) { 0, 0, 0, 0 };
 
@@ -38,7 +39,7 @@ public class AI : Agent
     [Tooltip("The piece does the AI play, 0 = US, 1 = USSR")]
     public Owner __piece_type;
 
-    // Variables for training {
+    #region TrainingVariables
 
     [Tooltip("Whether this is in training mode or not")]
     public bool trainingMode;
@@ -79,7 +80,7 @@ public class AI : Agent
     [Tooltip("This is set true if we are recording an example to show the AI, Logically used with trainingMode")]
     public bool recordingExample = false;
 
-    // } End variables for training
+    #endregion
 
     [Tooltip("This holds the numeric ID of the roads that have been captured")]
     private List<int> __myRoads;
@@ -112,6 +113,11 @@ public class AI : Agent
 
     private bool heuristic = false;
 
+    #endregion
+    
+    /// <summary>
+    /// This sets up the AI
+    /// </summary>
     private void Awake()
     {
         opener = true;
@@ -131,6 +137,33 @@ public class AI : Agent
         win = false;
         setup = true;
         lastMoveTurn = 0;
+    }
+
+    /// <summary>
+    /// This finds and sets the difficulty based on the PlayerPref Difficulty
+    /// Defaults to easy
+    /// </summary>
+    void GetDifficulty()
+    {
+        __difficulty = (Difficulty)GameInfo.game_diff;
+    }
+
+    /// <summary>
+    /// This finds and sets the player position based on the PlayerPref AI_Player
+    /// Defaults to player 2 (purple)
+    /// </summary>
+    void GetPlayer()
+    {
+        __player = (short)GameInfo.ai_player;
+    }
+
+    /// <summary>
+    /// Find out what "color" piece you based on the PlayerPref AI_Piece
+    /// Defaults to USSR
+    /// </summary>
+    void GetPiece()
+    {
+        __piece_type = (Owner)GameInfo.ai_piece;
     }
 
     public void EndOpener()
@@ -181,6 +214,186 @@ public class AI : Agent
             RequestDecision();
         }
     }
+
+    private void Add(int amount, ref List<int> lst)
+    {
+        for (int i = 0; i < lst.Count; ++i)
+        {
+            lst[i] += amount;
+        }
+    }
+
+    #region Score
+
+    public void GetLongestNet()
+    {
+        AddReward(longestNetReward);
+        totalReward += longestNetReward;
+    }
+
+    public void LoseLongestNet()
+    {
+        AddReward(-longestNetReward);
+        totalReward -= longestNetReward;
+        __ai_score -= 2;
+    }
+
+    public void CapturedTile(Color c)
+    {
+        if (c == Color.blue || c == Color.red)
+        {
+            AddReward(2 * captureReward);
+            totalReward += 2 * captureReward;
+        }
+        else if (c == Color.green || c == Color.yellow)
+        {
+            AddReward(4 * captureReward);
+            totalReward += 4 * captureReward;
+        }
+        else //if gray
+        {
+            AddReward(captureReward);
+            totalReward += captureReward;
+        }
+    }
+
+    public void UpdateScore(int score, bool longestGet, bool longestLost)
+    {
+        AddReward((score - ((longestGet) ? 2 : 0)) - (__ai_score - ((longestLost) ? 2 : 0)));
+        totalReward += (score - ((longestGet) ? 2 : 0)) - (__ai_score - ((longestLost) ? 2 : 0));
+        __ai_score = score;
+        bm.UpdateOpponentScoreInUI(__ai_score);
+    }
+
+    public void Loss()
+    {
+        if (totalReward > 0) AddReward(-totalReward);
+        else if (totalReward < 0) AddReward(totalReward);
+        AddReward(-1);
+        loss = true;
+    }
+
+    public void Win()
+    {
+        AddReward((totalReward < 1) ? (1.0f - totalReward) + 1.0f : 1.0f);
+    }
+
+    #endregion
+
+    #region Resources
+
+    public void UpdateResources(List<int> update)
+    {
+        Debug.Log("AI Earned Resources: " + update[0] + ", " + update[1] + ", " + update[2] + ", " + update[3]);
+        for (int i = 0; i < __resources.Count; i++)
+        {
+            __resources[i] += update[i];
+        }
+        bm.UpdateOpponentResourcesInUI(__resources);
+    }
+
+    private int TotalResourceCount()
+    {
+        int result = 0;
+        foreach (int i in __resources) result += i;
+        return result;
+    }
+
+    int SumResources()
+    {
+        int sum = 0;
+        foreach (int i in __resources)
+        {
+            sum += i;
+        }
+        return sum;
+    }
+
+    #endregion
+
+    #region Moves
+
+    private void MakeTrade(List<int> trade)
+    {
+        bm.Trade(trade, __piece_type);
+    }
+
+    private bool LegalMoveNode(int location)
+    {
+        return (opener || __resources[2] > 1 && __resources[3] > 1) ? bm.LegalNodeMove(location, __piece_type, __myRoads) : false;
+    }
+
+    private bool LegalMoveConnector(int location)
+    {
+        return (opener || __resources[0] > 0 && __resources[1] > 0) ? bm.LegalBranchMove(location, __piece_type, __myRoads) : false;
+    }
+
+    /// <summary>
+    /// Captures the node
+    /// </summary>
+    /// <param name="location">The node to be captured</param>
+    private void PlaceMoveNode(int location)
+    {
+        bm.ChangeNodeOwner(location);
+        if (!opener)
+        {
+            __resources[2] -= 2;
+            __resources[3] -= 2;
+
+            bm.UpdateOpponentResourcesInUI(__resources);
+        }
+    }
+
+    /// <summary>
+    /// Captures the branch
+    /// </summary>
+    /// <param name="location">The branch to capture</param>
+    private void PlaceMoveBranch(int location)
+    {
+        bm.ChangeBranchOwner(location);
+        if (!opener)
+        {
+            __resources[0] -= 1;
+            __resources[1] -= 1;
+
+            bm.UpdateOpponentResourcesInUI(__resources);
+        }
+    }
+
+    #endregion
+
+    #region NN
+
+    /// <summary>
+    /// This initializes the AI
+    /// </summary>
+    public override void Initialize()
+    {
+        Awake();
+        //if not in training mode, no max step
+        if (!trainingMode) MaxStep = 0;
+    }
+
+    /// <summary>
+    /// Reset the agent when an episode begins
+    /// </summary>
+    public override void OnEpisodeBegin()
+    {
+        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        if (!BoardManager.new_board) LoadNewScene();
+        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
+        if (!setup) Awake();
+        __ai_score = 0;
+        __human_score = 0;
+    }
+
+    public static void LoadNewScene()
+    {
+        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Game Over; New Board$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        SceneManager.LoadScene("PVP");
+    }
+
+    #region Observations
 
     /// <summary>
     /// This makes the already claimed nodes be impossible to be chosen by the neural net
@@ -556,105 +769,72 @@ public class AI : Agent
         }
     }
 
-    private void Add(int amount, ref List<int> lst)
-    {
-        for (int i = 0; i < lst.Count; ++i)
-        {
-            lst[i] += amount;
-        }
-    }
-
-    public void GetLongestNet()
-    {
-        AddReward(longestNetReward);
-        totalReward += longestNetReward;
-    }
-
-    public void LoseLongestNet()
-    {
-        AddReward(-longestNetReward);
-        totalReward -= longestNetReward;
-        __ai_score -= 2;
-    }
-
-    public void CapturedTile(Color c)
-    {
-        if (c == Color.blue || c == Color.red)
-        {
-            AddReward(2 * captureReward);
-            totalReward += 2 * captureReward;
-        }
-        else if (c == Color.green || c == Color.yellow)
-        {
-            AddReward(4 * captureReward);
-            totalReward += 4 * captureReward;
-        }
-        else //if gray
-        {
-            AddReward(captureReward);
-            totalReward += captureReward;
-        }
-    }
-
-    public void UpdateScore(int score, bool longestGet, bool longestLost)
-    {
-        AddReward((score - ((longestGet) ? 2 : 0)) - (__ai_score - ((longestLost) ? 2 : 0)));
-        totalReward += (score - ((longestGet) ? 2 : 0)) - (__ai_score - ((longestLost) ? 2 : 0));
-        __ai_score = score;
-        bm.UpdateOpponentScoreInUI(__ai_score);
-    }
-
-    public void Loss()
-    {
-        if (totalReward > 0) AddReward(-totalReward);
-        else if (totalReward < 0) AddReward(totalReward);
-        AddReward(-1);
-        loss = true;
-    }
-
-    public void Win()
-    {
-        AddReward((totalReward < 1) ? (1.0f - totalReward) + 1.0f : 1.0f);
-    }
-
     /// <summary>
-    /// This initializes the AI
+    /// Collect vector observations from the environment
     /// </summary>
-    public override void Initialize()
+    /// <param name="sensor">The vector sensor</param>
+    public override void CollectObservations(VectorSensor sensor)
     {
-        Awake();
-        //if not in training mode, no max step
-        if (!trainingMode) MaxStep = 0;
-    }
+        Debug.Log("Collect observations" + " AI check");
+        if (randAI) return;
+        if (bm.activeSide != __piece_type) return;
 
-    public void UpdateResources(List<int> update)
-    {
-        Debug.Log("AI Earned Resources: " + update[0] + ", " + update[1] + ", " + update[2] + ", " + update[3]);
-        for (int i = 0; i < __resources.Count; i++)
+        // observe tiles (13 observations)
+        foreach (GameObject tile in bm.resourceList)
         {
-            __resources[i] += update[i];
+            ResourceInfo.Color color = tile.GetComponent<ResourceInfo>().nodeColor;
+            int max_node = tile.GetComponent<ResourceInfo>().numOfResource;
+            sensor.AddObservation((int)color * 10 + max_node);
         }
-        bm.UpdateOpponentResourcesInUI(__resources);
+
+        //observe board (60 observations)
+        //sensor.AddObservation();
+        //Debug.Log("observe nodes");
+        foreach (GameObject node in bm.nodes)
+        {
+            List<int> observations = new List<int>(7) { 0, 0, 0, 0, 0, 0, 0 };// node owner; # tiles AI captured; gray count; red count; blue count; yellow count; green count;
+            NodeInfo nodeTemp = node.GetComponent<NodeInfo>();
+
+            observations[0] = ((int)nodeTemp.nodeOwner == 2) ? 0 : (int)nodeTemp.nodeOwner + 1;
+
+            foreach (GameObject tile in nodeTemp.resources)
+            {
+                ResourceInfo tileTemp = tile.GetComponent<ResourceInfo>();
+                if (tileTemp.resoureTileOwner == __piece_type) observations[1] += 1;
+                if (tileTemp.depleted == true || tileTemp.nodeColor == ResourceInfo.Color.Empty || (tileTemp.resoureTileOwner != Owner.Nil) && (tileTemp.resoureTileOwner != __piece_type)) observations[2] += 1;
+                else if (tileTemp.nodeColor == ResourceInfo.Color.Red) observations[3] += 1;
+                else if (tileTemp.nodeColor == ResourceInfo.Color.Blue) observations[4] += 1;
+                else if (tileTemp.nodeColor == ResourceInfo.Color.Yellow) observations[5] += 1;
+                else if (tileTemp.nodeColor == ResourceInfo.Color.Green) observations[6] += 1;
+            }
+            int observation = 0;
+            for (int i = (int)10E5, j = 0; j < observations.Count; i /= 10, j++)
+            {
+                observation += i * observations[j];
+            }
+            sensor.AddObservation(observation);
+        }
+
+        //Debug.Log("Observe branches");
+        foreach (GameObject branch in bm.allBranches)
+        {
+            sensor.AddObservation(((int)branch.GetComponent<BranchInfo>().branchOwner == 2) ? 0 : (int)branch.GetComponent<BranchInfo>().branchOwner + 1);
+        }
+
+        //observe if opener (1 observation)
+        sensor.AddObservation(opener);
+
+        //Debug.Log("Observe resources");
+        //observe resources (4 observations)
+        foreach (int i in __resources)
+        {
+            sensor.AddObservation(i);
+        }
+        //Debug.Log("End observations");
     }
 
-    /// <summary>
-    /// Reset the agent when an episode begins
-    /// </summary>
-    public override void OnEpisodeBegin()
-    {
-        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Episode Begin$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        if (!BoardManager.new_board) LoadNewScene();
-        //GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().InitGame();
-        if (!setup) Awake();
-        __ai_score = 0;
-        __human_score = 0;
-    }
+    #endregion
 
-    public static void LoadNewScene()
-    {
-        Debug.Log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Game Over; New Board$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        SceneManager.LoadScene("PVP");
-    }
 
     /// <summary>
     /// <para>Called when an action is received</para>
@@ -1162,80 +1342,6 @@ public class AI : Agent
         bm.EndTurn();
     }
 
-    int SumResources()
-    {
-        int sum = 0;
-        foreach (int i in __resources)
-        {
-            sum += i;
-        }
-        return sum;
-    }
-
-    /// <summary>
-    /// Collect vector observations from the environment
-    /// </summary>
-    /// <param name="sensor">The vector sensor</param>
-    public override void CollectObservations(VectorSensor sensor)
-    {
-        Debug.Log("Collect observations" + " AI check");
-        if (randAI) return;
-        if (bm.activeSide != __piece_type) return;
-
-        // observe tiles (13 observations)
-        foreach (GameObject tile in bm.resourceList)
-        {
-            ResourceInfo.Color color = tile.GetComponent<ResourceInfo>().nodeColor;
-            int max_node = tile.GetComponent<ResourceInfo>().numOfResource;
-            sensor.AddObservation((int)color * 10 + max_node);
-        }
-
-        //observe board (60 observations)
-        //sensor.AddObservation();
-        //Debug.Log("observe nodes");
-        foreach (GameObject node in bm.nodes)
-        {
-            List<int> observations = new List<int>(7) { 0, 0, 0, 0, 0, 0, 0 };// node owner; # tiles AI captured; gray count; red count; blue count; yellow count; green count;
-            NodeInfo nodeTemp = node.GetComponent<NodeInfo>();
-
-            observations[0] = ((int)nodeTemp.nodeOwner == 2) ? 0 : (int)nodeTemp.nodeOwner + 1;
-
-            foreach (GameObject tile in nodeTemp.resources)
-            {
-                ResourceInfo tileTemp = tile.GetComponent<ResourceInfo>();
-                if (tileTemp.resoureTileOwner == __piece_type) observations[1] += 1;
-                if (tileTemp.depleted == true || tileTemp.nodeColor == ResourceInfo.Color.Empty || (tileTemp.resoureTileOwner != Owner.Nil) && (tileTemp.resoureTileOwner != __piece_type)) observations[2] += 1;
-                else if (tileTemp.nodeColor == ResourceInfo.Color.Red) observations[3] += 1;
-                else if (tileTemp.nodeColor == ResourceInfo.Color.Blue) observations[4] += 1;
-                else if (tileTemp.nodeColor == ResourceInfo.Color.Yellow) observations[5] += 1;
-                else if (tileTemp.nodeColor == ResourceInfo.Color.Green) observations[6] += 1;
-            }
-            int observation = 0;
-            for (int i = (int)10E5, j = 0; j < observations.Count; i /= 10, j++)
-            {
-                observation += i * observations[j];
-            }
-            sensor.AddObservation(observation);
-        }
-
-        //Debug.Log("Observe branches");
-        foreach (GameObject branch in bm.allBranches)
-        {
-            sensor.AddObservation(((int)branch.GetComponent<BranchInfo>().branchOwner == 2) ? 0 : (int)branch.GetComponent<BranchInfo>().branchOwner + 1);
-        }
-
-        //observe if opener (1 observation)
-        sensor.AddObservation(opener);
-
-        //Debug.Log("Observe resources");
-        //observe resources (4 observations)
-        foreach (int i in __resources)
-        {
-            sensor.AddObservation(i);
-        }
-        //Debug.Log("End observations");
-    }
-
     /// <summary>
     /// When behavior type is set to "Heuristic Only" on the agent's Behavior Parameters,
     /// this function will be called. Its return values will be fed into
@@ -1258,86 +1364,10 @@ public class AI : Agent
             RandomAIMove();
     }
 
-    private void MakeTrade(List<int> trade)
-    {
-        bm.Trade(trade, __piece_type);
-    }
+    #endregion
 
-    private bool LegalMoveNode(int location)
-    {
-        return (opener || __resources[2] > 1 && __resources[3] > 1) ? bm.LegalNodeMove(location, __piece_type, __myRoads) : false;
-    }
 
-    private bool LegalMoveConnector(int location)
-    {
-        return (opener || __resources[0] > 0 && __resources[1] > 0) ? bm.LegalBranchMove(location, __piece_type, __myRoads) : false;
-    }
-
-    private int TotalResourceCount()
-    {
-        int result = 0;
-        foreach (int i in __resources) result += i;
-        return result;
-    }
-
-    /// <summary>
-    /// Captures the node
-    /// </summary>
-    /// <param name="location">The node to be captured</param>
-    private void PlaceMoveNode(int location)
-    {
-        bm.ChangeNodeOwner(location);
-        if (!opener)
-        {
-            __resources[2] -= 2;
-            __resources[3] -= 2;
-
-            bm.UpdateOpponentResourcesInUI(__resources);
-        }
-    }
-
-    /// <summary>
-    /// Captures the branch
-    /// </summary>
-    /// <param name="location">The branch to capture</param>
-    private void PlaceMoveBranch(int location)
-    {
-        bm.ChangeBranchOwner(location);
-        if (!opener)
-        {
-            __resources[0] -= 1;
-            __resources[1] -= 1;
-
-            bm.UpdateOpponentResourcesInUI(__resources);
-        }
-    }
-
-    /// <summary>
-    /// This finds and sets the difficulty based on the PlayerPref Difficulty
-    /// Defaults to easy
-    /// </summary>
-    void GetDifficulty()
-    {
-        __difficulty = (Difficulty)GameInfo.game_diff;
-    }
-
-    /// <summary>
-    /// This finds and sets the player position based on the PlayerPref AI_Player
-    /// Defaults to player 2 (purple)
-    /// </summary>
-    void GetPlayer()
-    {
-        __player = (short)GameInfo.ai_player;
-    }
-
-    /// <summary>
-    /// Find out what "color" piece you based on the PlayerPref AI_Piece
-    /// Defaults to USSR
-    /// </summary>
-    void GetPiece()
-    {
-        __piece_type = (Owner)GameInfo.ai_piece;
-    }
+    #region RandomAI
 
     /// <summary>
     /// This function makes a random AI move and places it.
@@ -1406,7 +1436,7 @@ public class AI : Agent
         {
             positionCon = Random.Range(0, 36);
         } 
-        while (!LegalMoveConnector(positionCon) && !blocked_branches.Contains(positionCon));//exit when a legal move is found
+        while (!LegalMoveConnector(positionCon) && blocked_branches.Contains(positionCon));//exit when a legal move is found
         PlaceMoveBranch(positionCon);
         __myRoads.Add(positionCon);
         return positionCon;
@@ -1681,5 +1711,7 @@ public class AI : Agent
 
         return null;
     }
+
+    #endregion
 
 }

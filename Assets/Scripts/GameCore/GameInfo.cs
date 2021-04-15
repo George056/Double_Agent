@@ -18,7 +18,7 @@ public class GameInfo
 
     public static string custom_board_seed;
 
-    public static string user_name;
+    public static string user_name = "";
 
     public static bool host;
 

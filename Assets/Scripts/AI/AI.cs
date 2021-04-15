@@ -1419,7 +1419,7 @@ public class AI : Agent
 
         int positionNode;
 
-        positionNode = Random.Range(0, 1);
+        positionNode = Random.Range(0, 2);
         Relationships.connectionsRoadNode.TryGetValue(positionCon, out var temp);
         if ((!blocked_nodes.Contains(temp[positionNode]) && !blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])) ||
             (blocked_nodes.Contains(temp[positionNode]) && blocked_nodes.Contains(temp[(positionNode == 0) ? 1 : 0])) ||

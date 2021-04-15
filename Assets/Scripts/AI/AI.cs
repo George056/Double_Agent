@@ -209,11 +209,58 @@ public class AI : Agent
         }
         else
         {
-            Debug.Log("NN AI call" + " AI check");
-            //for adding a reward use AddReward() want it to be about 1 at the end of a game
-            RequestDecision();
+            if (opener)
+            {
+                int node = SmartNode();
+                int branch = SmartBranch(node);
+                __myNodes.Add(node);
+                __myRoads.Add(branch);
+                PlaceMoveBranch(branch);
+                PlaceMoveNode(node);
+                bm.EndTurn();
+            }
+            else
+                RequestDecision();
         }
     }
+
+    List<ResourceInfo.Color> GetColors(int node)
+    {
+        List<ResourceInfo.Color> results = new List<ResourceInfo.Color>();
+        foreach (var c in bm.nodes[node].GetComponent<NodeInfo>().resources)
+        {
+            results.Add(c.GetComponent<ResourceInfo>().nodeColor);
+        }
+        return results;
+    }
+
+    bool LegalMoveNodeFirst(int location)
+    {
+        return (opener || __resources[2] > 1 && __resources[3] > 1) ? bm.LegalUINodeMove(location, __piece_type, __myRoads) : false;
+    }
+
+    /// <summary>
+    /// This checks how many more nodes the tile can have before it is depleted
+    /// </summary>
+    /// <param name="tile">The tile to check</param>
+    /// <returns></returns>
+    int NodesTillDep(int tile)
+    {
+        int result = 0;
+        ResourceInfo tileInfo = bm.resourceList[tile].GetComponent<ResourceInfo>();
+        if (tileInfo.depleted || tileInfo.nodeColor == ResourceInfo.Color.Empty) return result;
+        Relationships.connectionsTileNodes.TryGetValue(tile, out List<int> connectedNodes);
+        List<NodeInfo> nodeInfos = new List<NodeInfo>();
+        for (int i = 0; i < connectedNodes.Count; ++i)
+        {
+            nodeInfos.Add(bm.nodes[connectedNodes[i]].GetComponent<NodeInfo>());
+        }
+        int counter = 0;
+        foreach (NodeInfo node in nodeInfos) if (node.nodeOwner != Owner.Nil) ++counter;
+        result = tileInfo.numOfResource - counter;
+        return result;
+    }
+
 
     private void Add(int amount, ref List<int> lst)
     {
@@ -835,6 +882,79 @@ public class AI : Agent
 
     #endregion
 
+    int SmartNode()
+    {
+        List<int> nodesToSearch = new List<int>(new int[] { 3, 4, 7, 8, 9, 10, 13, 14, 15, 16, 19, 20 });
+        int bestNode = -1;
+        List<ResourceInfo.Color> resources = new List<ResourceInfo.Color>();
+        foreach (var node in bm.nodes)
+        {
+            if (node.GetComponent<NodeInfo>().nodeOwner != Owner.Nil) nodesToSearch.Remove(node.GetComponent<NodeInfo>().nodeOrder);
+        }
+
+        bestNode = nodesToSearch[0];
+        resources = GetColors(bestNode);
+
+        Relationships.connectionsNodeTiles.TryGetValue(bestNode, out List<int> tilesNum);
+
+        int counter = 0;
+        foreach (int i in tilesNum)
+        {
+            int temp = NodesTillDep(i);
+            if (temp < 1) resources[counter] = ResourceInfo.Color.Empty;
+        }
+
+        resources = resources.Distinct().ToList();
+        if (resources.Contains(ResourceInfo.Color.Empty)) resources.Remove(ResourceInfo.Color.Empty);
+
+        foreach (int i in nodesToSearch)
+        {
+            NodeInfo node = bm.nodes[i].GetComponent<NodeInfo>();
+            List<ResourceInfo.Color> tiles = new List<ResourceInfo.Color>();
+            tiles = GetColors(node.nodeOrder);
+
+            Relationships.connectionsNodeTiles.TryGetValue(node.nodeOrder, out List<int> tilesNums);
+            counter = 0;
+            foreach (int j in tilesNums)
+            {
+                int temp = NodesTillDep(j);
+                if (temp < 1) resources[counter] = ResourceInfo.Color.Empty;
+            }
+
+            tiles = tiles.Distinct().ToList();
+            if (tiles.Contains(ResourceInfo.Color.Empty)) tiles.Remove(ResourceInfo.Color.Empty);
+            if (resources.Count < tiles.Count && LegalMoveNodeFirst(node.nodeOrder)) // doesn't work because we do not have the branch
+            {
+                bestNode = node.nodeOrder;
+                resources = tiles;
+            }
+        }
+
+        return bestNode;
+    }
+
+    int SmartBranch(int node)
+    {
+        int result = -1;
+        Relationships.connectionsNode.TryGetValue(node, out List<int> branches);
+        if (node >= 3 && node <= 10)
+        {
+            branches.RemoveAt(0);
+            if (node == 3 || node == 7) branches.RemoveAt(0);
+            else if (node == 4 || node == 10) branches.RemoveAt(1);
+        }
+        else if (node >= 12 && node <= 20)
+        {
+            branches.RemoveAt(3);
+            if (node == 13 || node == 19) branches.RemoveAt(1);
+            else if (node == 16 || node == 20) branches.RemoveAt(2);
+        }
+        do
+        {
+            result = Random.Range(0, branches.Count);
+        } while (!LegalMoveConnector(branches[result]));
+        return branches[result];
+    }
 
     /// <summary>
     /// <para>Called when an action is received</para>
